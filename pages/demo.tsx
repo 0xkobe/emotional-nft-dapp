@@ -4,15 +4,23 @@ import { formatEther } from '@ethersproject/units'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useEffect, useState } from 'react'
+import useContract from '../hooks/useContract'
 
 export const connector = new InjectedConnector({})
+
+const abi = require('../abi.json')
+const addresses = {
+  3: '0xbA6cB96fca05fD1819957c1C1dCfC2f50d12Bf0E',
+}
 
 export default function Demo() {
   const { library, chainId, account, activate, deactivate, active, error } =
     useWeb3React<Web3Provider>()
+  const { contract, error: contractError } = useContract(addresses, abi)
 
   const [balance, setBalance] = useState<BigNumber>()
   const [blockNumber, setBlockNumber] = useState<number>()
+  const [owner, setOwner] = useState<string>()
 
   // Activate wallet if already authorized
   useEffect((): any => {
@@ -74,6 +82,12 @@ export default function Demo() {
     }
   }, [library, chainId])
 
+  useEffect(() => {
+    setOwner(undefined)
+    if (!contract) return
+    contract.callStatic.owner().then(setOwner)
+  }, [contract])
+
   return (
     <>
       <ul>
@@ -92,6 +106,20 @@ export default function Demo() {
         <li>
           <strong>Balance: </strong>
           <span>{balance && `Ξ${formatEther(balance)}`}</span>
+        </li>
+        <li>
+          <strong>Contract: </strong>
+          <span>
+            {contract
+              ? contract.address
+              : contractError
+              ? contractError.toString()
+              : 'n/a'}
+          </span>
+        </li>
+        <li>
+          <strong>Contract's owner: </strong>
+          <span>{owner}</span>
         </li>
       </ul>
 
