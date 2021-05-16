@@ -10,6 +10,39 @@ export const backgrounds = [
     "background/02_noon_boat.png",
 ]
 
+export const artists = {
+    clive: {
+        name: "Clive Almeida",
+        Wallet: "0x74f1bE0eD391e59c70d93cA6C79eA5c57a83604C",
+        meta: `artstation.com/clive_almeida`
+    },
+    rogan: {
+        name: "Rogan X",
+        Wallet: "0x2Ffa60A14Dd2eb156d64390D545B819e40fC87F2 (roganx.eth)",
+        meta: `https://omnil.ink/roganx`
+    },
+    keili: {
+        name: "Keili Major Artist",
+        Wallet: "majorart.eth",
+        meta: `https://linktr.ee/majorart`
+    },
+    jatin: {
+        name: "Jatin Pathi",
+        Wallet: "0x300da191248a500b2174aeD992d6697BF97F9139",
+        meta: `https://jatinpathi.com/; https://www.artstation.com/forever_3vil`
+    },
+    mehak: {
+        name: "Mehak Jain",
+        Wallet: "0x4147948b11ce851082f85fd7b56b76ae3a583560",
+        meta: `https://tryshowtime.com/MehakJain`
+    },
+    debbie: {
+        name: "Debbie H Digitial",
+        Wallet: "0xb2225441D8b19Ef1FA914C46099ff550aa3454a9",
+        meta: `https://linktr.ee/debbiehdigital; https://twitter.com/DebbieHdigital`
+    }
+}
+
 export const characters = [
     {
         name: "Diamond Bull",
@@ -20,6 +53,7 @@ export const characters = [
            "characters/bull/diamond/normal.png",
            "characters/bull/diamond/rest.png"
         ],
+        artist: artists.clive,
     },
     {
         name: "Bronze Bull",
@@ -30,6 +64,7 @@ export const characters = [
            "characters/bull/bronze/normal.png",
            "characters/bull/bronze/rest.png"
         ],
+        artist: artists.clive,
     },
     {
         name: "Silver Bull",
@@ -40,6 +75,7 @@ export const characters = [
            "characters/bull/silver/normal.png",
            "characters/bull/silver/rest.png"
         ],
+        artist: artists.clive,
     },
     {
         name: "Golden Bull",
@@ -50,6 +86,7 @@ export const characters = [
             "characters/bull/gold/normal.png",
             "characters/bull/gold/rest.png"
          ],
+         artist: artists.clive,
     },
     {
         name: "Platium Bull",
@@ -60,6 +97,7 @@ export const characters = [
             "characters/bull/platium/normal.png",
             "characters/bull/platium/rest.png"
          ],
+         artist: artists.clive,
     },
     {
         name: "Diamond Bear",
@@ -70,6 +108,7 @@ export const characters = [
            "characters/bear/diamond/normal.png",
            "characters/bear/diamond/rest.png"
         ],
+        artist: artists.rogan
     },
     {
         name: "Bronze Bear",
@@ -80,6 +119,7 @@ export const characters = [
             "characters/bear/bronze/normal.png",
             "characters/bear/bronze/rest.png"
          ],
+         artist: artists.rogan
     },
     {
         name: "Silver Bear",
@@ -90,6 +130,7 @@ export const characters = [
            "characters/bear/silver/normal.png",
            "characters/bear/silver/rest.png"
         ],
+        artist: artists.rogan
     },
     {
         name: "Golden Bear",
@@ -100,6 +141,7 @@ export const characters = [
             "characters/bear/gold/normal.png",
             "characters/bear/gold/rest.png"
         ],
+        artist: artists.rogan
     },
     {
         name: "Platium Bear",
@@ -110,6 +152,7 @@ export const characters = [
             "characters/bear/platium/normal.png",
             "characters/bear/platium/rest.png"
         ],
+        artist: artists.rogan
     },
     {
         name: "Diamond Whale",
@@ -120,6 +163,7 @@ export const characters = [
             "characters/whale/diamond/normal.png",
             "characters/whale/diamond/rest.png"
         ],
+        artist: artists.keili
     },
     {
         name: "Bronze Whale",
@@ -130,6 +174,7 @@ export const characters = [
             "characters/whale/bronze/normal.png",
             "characters/whale/bronze/rest.png"
         ],
+        artist: artists.keili
     },
     {
         name: "Silver Whale",
@@ -140,6 +185,7 @@ export const characters = [
             "characters/whale/silver/normal.png",
             "characters/whale/silver/rest.png"
         ],
+        artist: artists.keili
     },
     {
         name: "Golden Whale",
@@ -150,6 +196,7 @@ export const characters = [
             "characters/whale/gold/normal.png",
             "characters/whale/gold/rest.png"
         ],
+        artist: artists.keili
     },
     {
         name: "Platium Whale",
@@ -160,6 +207,7 @@ export const characters = [
             "characters/whale/platium/normal.png",
             "characters/whale/platium/rest.png"
         ],
+        artist: artists.keili
     },
     {
         name: "Diamond Dragon",
@@ -170,6 +218,7 @@ export const characters = [
             "characters/dragon/diamond/normal.png",
             "characters/dragon/diamond/rest.png"
         ],
+        artist: artists.jatin
     },
     {
         name: "Bronze Dragon",
@@ -180,6 +229,7 @@ export const characters = [
             "characters/dragon/bronze/normal.png",
             "characters/dragon/bronze/rest.png"
         ],
+        artist: artists.jatin
     },
     {
         name: "Silver Dragon",
@@ -190,6 +240,7 @@ export const characters = [
             "characters/dragon/silver/normal.png",
             "characters/dragon/silver/rest.png"
         ],
+        artist: artists.jatin
     },
     {
         name: "Golden Dragon",
@@ -200,6 +251,7 @@ export const characters = [
             "characters/dragon/gold/normal.png",
             "characters/dragon/gold/rest.png"
         ],
+        artist: artists.jatin
     },
     {
         name: "Platium Dragon",
@@ -210,6 +262,7 @@ export const characters = [
             "characters/dragon/platium/normal.png",
             "characters/dragon/platium/rest.png"
         ],
+        artist: artists.jatin
     },
     {
         name: "Diamond Deer",
@@ -220,6 +273,7 @@ export const characters = [
             "characters/deer/diamond/normal.png",
             "characters/deer/diamond/rest.png"
         ],
+        artist: artists.mehak
     },
     {
         name: "Bronze Deer",
@@ -230,6 +284,7 @@ export const characters = [
             "characters/deer/bronze/normal.png",
             "characters/deer/bronze/rest.png"
         ],
+        artist: artists.mehak
     },
     {
         name: "Silver Deer",
@@ -240,6 +295,7 @@ export const characters = [
             "characters/deer/silver/normal.png",
             "characters/deer/silver/rest.png"
         ],
+        artist: artists.mehak
     },
     {
         name: "Golden Deer",
@@ -250,6 +306,7 @@ export const characters = [
             "characters/deer/gold/normal.png",
             "characters/deer/gold/rest.png"
         ],
+        artist: artists.mehak
     },
     {
         name: "Platium Deer",
@@ -260,6 +317,7 @@ export const characters = [
             "characters/deer/platium/normal.png",
             "characters/deer/platium/rest.png"
         ],
+        artist: artists.mehak
     },
     {
         name: "Fish",
@@ -270,5 +328,6 @@ export const characters = [
             "characters/fish/normal.png",
             "characters/fish/rest.png"
         ],
+        artist: artists.debbie
     },
  ]
