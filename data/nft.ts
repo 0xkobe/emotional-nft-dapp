@@ -18,14 +18,15 @@ type Character = {
 }
 
 const backgrounds = [
+  'transparent', // should we create transparent 1024x1024 image?
   'nft/background/01_sunrise_boat.png',
-  'nft/background/05_bright_night_sky_moon.png',
-  'nft/background/07_no_cloud_night_sky.png',
-  'nft/background/03_evening_boat.png',
-  'nft/background/06_cloudy_night_sky.png',
-  'nft/background/04_night_boat.png',
-  'nft/background/08_rainy_night_sky.png',
   'nft/background/02_noon_boat.png',
+  'nft/background/03_evening_boat.png',
+  'nft/background/04_night_boat.png',
+  'nft/background/05_bright_night_sky_moon.png',
+  'nft/background/06_cloudy_night_sky.png',
+  'nft/background/07_no_cloud_night_sky.png',
+  'nft/background/08_rainy_night_sky.png',
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -112,5 +113,39 @@ characters.push({
     happy: `/nft/characters/minotaur/happy.png`,
   },
 })
+
+const favCoins = [
+  {
+    mintPrice: 0.01, // in ETH
+    dataUrl: "https://dapp.quiverprotocol.com/meta/coin/1", // api url for metadata of this coin
+    // the url should keep below json data 
+    // {
+    //   name: 'Bitcoin',
+    //   icon: 'bitcoin_icon_url',
+    // },
+  },
+];
+
+const lockOptions = [
+  {
+    minAmount: 0, // big number of QSTK amount
+    maxAmount: 100, // big number of QSTK amount
+    lockDuration: 6, // months
+    discount: 20, // percentage
+  },
+  {
+    minAmount: 100, // big number of QSTK amount
+    maxAmount: 200, // big number of QSTK amount
+    lockDuration: 12, // months
+    discount: 30, // percentage
+  },
+  {
+    minAmount: 200, // big number of QSTK amount
+    maxAmount: 300, // big number of QSTK amount
+    lockDuration: 1000000, // infinite
+    discount: 40, // percentage
+  },
+];
+
 
 export { characters, backgrounds, artists }
