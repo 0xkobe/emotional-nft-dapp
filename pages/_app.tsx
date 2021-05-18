@@ -12,10 +12,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <div className="relative min-h-screen flex flex-col">
-      <Navigation />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 flex items-stretch overflow-hidden"></div>
-      <Component {...pageProps} />
+        <Navigation />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex items-stretch overflow-hidden">
+            <Component {...pageProps} />
+          </div>
         </div>
       </div>
     </Web3ReactProvider>
