@@ -101,4 +101,16 @@ characters.push({
   },
 })
 
+characters.push({
+  name: 'Minotaur',
+  artist: artists.clive,
+  emotions: {
+    angry: `/nft/characters/minotaur/angry.png`,
+    worry: `/nft/characters/minotaur/worry.png`,
+    normal: `/nft/characters/minotaur/normal.png`,
+    rest: `/nft/characters/minotaur/rest.png`,
+    happy: `/nft/characters/minotaur/happy.png`,
+  },
+})
+
 export { characters, backgrounds, artists }
