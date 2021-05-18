@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"{components,pages}/**/*.{ts,tsx}\" --max-warnings 0",
-    "format": "prettier \"{components,pages}/**/*.{ts,tsx}\" -w"
+    "format": "prettier \"{components,pages}/**/*.{ts,tsx}\" -w",
+    "build:lambda": "netlify-lambda build --config ./config/webpack.functions.js pages/api",
+    "start:lambda": "netlify-lambda serve --config ./config/webpack.functions.js pages/api"
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
