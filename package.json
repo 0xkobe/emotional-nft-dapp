@@ -11,6 +11,7 @@
     "netlify": "netlify"
   },
   "dependencies": {
+    "@0xsequence/multicall": "^0.19.0",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@web3-react/core": "^6.1.9",
