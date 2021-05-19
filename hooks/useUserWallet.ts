@@ -2,36 +2,56 @@ import { Contract, ContractInterface } from '@ethersproject/contracts'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
 import { providers } from '@0xsequence/multicall'
-import { parseNumber } from './utils'
+import { BigNumber } from '@ethersproject/bignumber'
 
-type State = {
-    error?: Error
+export type NFTData = {
+    characterId: BigNumber
+    bgImageId: BigNumber
+    favCoinId: BigNumber
+    lockDuration: BigNumber
+    lockAmount: BigNumber
+    defaultEmotionIndex: BigNumber
+    createdAt: BigNumber
+    withdrawn: boolean
+    metaUrl: string
 }
+export type NFTDatas = NFTData[]
 
 export default function useUserWallet(
     addresses: { [chainId: number]: string },
     abi: ContractInterface,
+    account?: string,
     chainId?: number,
-): State {
+): {
+    totalNFTs: NFTDatas
+    myNFTs: NFTDatas
+    error?: Error
+} {
     const provider = new providers.MulticallProvider(new JsonRpcProvider("https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e"))
 
-    //   const [contract, setContract] = useState<Contract>()
+    const [totalNFTs, setTotalNFTs] = useState<NFTDatas>([])
+    const [myNFTs, setMyNFTs] = useState<NFTDatas>([])
     const [error, setError] = useState<Error>()
 
-    const getAllNFTs = async (contract: Contract) => {
-        const supply = parseNumber(await contract.circulatingSupply())
-        console.log("supply: ", supply)
-        const request = []
+    const setNFTDatas = async (contract: Contract, account: string) => {
+        const supply = (await contract.circulatingSupply()).toNumber()
+        const requestNFTData = []
+        const requestOwnerData = []
         for (let i = 1; i <= supply; i++) {
-            request.push(contract.nftData(i))
+            requestNFTData.push(contract.nftData(i))
+            requestOwnerData.push(contract.ownerOf(i))
         }
-        const res = await Promise.all(request)
-        console.log(res)
+        const resNFTs: NFTDatas = await Promise.all(requestNFTData)
+        const resOwners: string[] = await Promise.all(requestOwnerData)
+        setTotalNFTs(resNFTs)
+        const myNFTDatas = resNFTs.filter((_, index) => resOwners[index] === account)
+        setMyNFTs(myNFTDatas)
     }
 
     useEffect(() => {
         setError(undefined)
         if (!provider) return
+        if (!account) return
         if (!chainId) return
         if (!(chainId in addresses)) {
             setError(new Error(`no contract for the network "${chainId}"`))
@@ -39,13 +59,12 @@ export default function useUserWallet(
         }
         const contract = new Contract(addresses[chainId], abi, provider)
         console.log(`Reload contract: ${contract.address}`)
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        getAllNFTs(contract)
+        setNFTDatas(contract, account)
 
         return () => {
             setError(undefined)
         }
     }, [provider, addresses, abi])
 
-    return { error }
+    return { totalNFTs, myNFTs, error }
 }
