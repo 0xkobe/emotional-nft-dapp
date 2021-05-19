@@ -2,7 +2,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import Head from 'next/head'
 import Link from 'next/link'
 import useUserWallet from '../hooks/useUserWallet'
-import useWallet from '../hooks/useWallet'
+// import useWallet from '../hooks/useWallet'
 
 export const connector = new InjectedConnector({})
 
@@ -12,12 +12,12 @@ const addresses = {
 }
 
 export default function Wallet(): JSX.Element {
-  const { account, chainId } = useWallet(connector)
+  // const { library, chainId, account, activate, deactivate, active, error } =
+  //   useWallet(connector)
   const { totalNFTs, myNFTs, error: contractError } = useUserWallet(
+    connector,
     addresses,
     abiQNFT,
-    account || undefined,
-    chainId
   )
   console.log("totalNFTs", totalNFTs)
   console.log("myNFTs", myNFTs)

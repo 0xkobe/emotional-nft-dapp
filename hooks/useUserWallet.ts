@@ -1,8 +1,10 @@
 import { Contract, ContractInterface } from '@ethersproject/contracts'
-import { JsonRpcProvider } from '@ethersproject/providers'
-import { useEffect, useState } from 'react'
+import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers'
+import { AbstractConnector } from '@web3-react/abstract-connector'
+import { useCallback, useEffect, useState } from 'react'
 import { providers } from '@0xsequence/multicall'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useWeb3React } from '@web3-react/core'
 
 export type NFTData = {
     characterId: BigNumber
@@ -18,22 +20,30 @@ export type NFTData = {
 export type NFTDatas = NFTData[]
 
 export default function useUserWallet(
+    connector: AbstractConnector,
     addresses: { [chainId: number]: string },
     abi: ContractInterface,
-    account?: string,
-    chainId?: number,
 ): {
     totalNFTs: NFTDatas
     myNFTs: NFTDatas
     error?: Error
 } {
     const provider = new providers.MulticallProvider(new JsonRpcProvider("https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e"))
+    const context = useWeb3React<Web3Provider>()
+    const { account, chainId, activate } = context
 
     const [totalNFTs, setTotalNFTs] = useState<NFTDatas>([])
     const [myNFTs, setMyNFTs] = useState<NFTDatas>([])
     const [error, setError] = useState<Error>()
+    // Needed To prevent continuous refresh
+    const [isLoading, setLoading] = useState<boolean>(true)
 
-    const setNFTDatas = async (contract: Contract, account: string) => {
+    // activate the connector on init
+    useEffect(() => {
+        void activate(connector, console.error, true)
+    }, [activate, connector])
+
+    const setNFTDatas = useCallback(async (contract: Contract, account: string) => {
         const supply = (await contract.circulatingSupply()).toNumber()
         const requestNFTData = []
         const requestOwnerData = []
@@ -46,10 +56,11 @@ export default function useUserWallet(
         setTotalNFTs(resNFTs)
         const myNFTDatas = resNFTs.filter((_, index) => resOwners[index] === account)
         setMyNFTs(myNFTDatas)
-    }
+    }, [])
 
     useEffect(() => {
         setError(undefined)
+        if (!isLoading) return
         if (!provider) return
         if (!account) return
         if (!chainId) return
@@ -57,6 +68,9 @@ export default function useUserWallet(
             setError(new Error(`no contract for the network "${chainId}"`))
             return
         }
+
+        // Needed To prevent continuous refresh
+        setLoading(false)
         const contract = new Contract(addresses[chainId], abi, provider)
         console.log(`Reload contract: ${contract.address}`)
         setNFTDatas(contract, account)
@@ -64,7 +78,7 @@ export default function useUserWallet(
         return () => {
             setError(undefined)
         }
-    }, [provider, addresses, abi])
+    }, [provider])
 
     return { totalNFTs, myNFTs, error }
 }
