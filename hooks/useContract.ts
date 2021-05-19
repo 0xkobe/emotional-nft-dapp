@@ -1,22 +1,32 @@
 import { Contract, ContractInterface } from '@ethersproject/contracts'
 import { Web3Provider } from '@ethersproject/providers'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
+import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { useEffect, useState } from 'react'
 
-type State = {
-  contract?: Contract
-  error?: Error
-}
-
-export default function useContract(
+export default function useContract<T extends Contract>(
+  connector: AbstractConnector,
   addresses: { [chainId: number]: string },
   abi: ContractInterface,
-): State {
-  const { library, chainId } = useWeb3React<Web3Provider>()
+): Web3ReactContextInterface<Web3Provider> & {
+  contract?: T
+  error?: Error
+} {
+  // should this context be injected?
+  const context = useWeb3React<Web3Provider>()
+  const { library, chainId, activate } = context
 
-  const [contract, setContract] = useState<Contract>()
+  const [contract, setContract] = useState<T>()
   const [error, setError] = useState<Error>()
 
+  // activate the connector on init
+  // TODO: maybe this can be moved outside of this hook to give more flexibility to the page
+  useEffect(() => {
+    void activate(connector, console.error, true)
+  }, [activate, connector])
+
+  // init the contract
   useEffect(() => {
     setError(undefined)
     if (!library) return
@@ -27,7 +37,7 @@ export default function useContract(
     }
     const contract = new Contract(addresses[chainId], abi, library)
     console.log(`Reload contract: ${contract.address}`)
-    setContract(contract)
+    setContract(contract as T)
 
     return () => {
       setError(undefined)
@@ -35,5 +45,5 @@ export default function useContract(
     }
   }, [library, chainId, addresses, abi])
 
-  return { contract, error }
+  return { ...context, contract, error }
 }
