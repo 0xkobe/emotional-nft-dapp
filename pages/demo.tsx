@@ -3,14 +3,14 @@ import { Web3Provider } from '@ethersproject/providers'
 import { formatEther } from '@ethersproject/units'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { useEffect, useState } from 'react'
+import { useEffect,useState } from 'react'
 import useContract from '../hooks/useContract'
 
 export const connector = new InjectedConnector({})
 
-const abi = require('../abi.json')
+const abi = require('../abi/QNFT.json')
 const addresses = {
-  3: '0xbA6cB96fca05fD1819957c1C1dCfC2f50d12Bf0E',
+  3: '0x29D1B07a302d7CB8d3A78216495a80A86aA9593f',
 }
 
 export default function Demo() {
