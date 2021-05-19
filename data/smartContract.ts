@@ -2,7 +2,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '@web3-react/network-connector'
 
 export const abi = {
-  erc721: require('../erc721.abi.json'),
+  erc721: require('../abi/erc721.json'),
 }
 export const deployedAddresses = {
   31337: '0x5fbdb2315678afecb367f032d93f642f64180aa3', // FIXME: local dev
