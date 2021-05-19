@@ -113,4 +113,4 @@ characters.push({
   },
 })
 
-export { characters, backgrounds, artists }
+export { animals, skins, characters, backgrounds, artists }
