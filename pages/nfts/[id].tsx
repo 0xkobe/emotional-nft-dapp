@@ -1,13 +1,40 @@
+import { Contract } from '@ethersproject/contracts'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import { NetworkConnector } from '@web3-react/network-connector'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useCallback, useEffect, useState } from 'react'
 import NFTCard from '../../components/nft/card'
 import useContract from '../../hooks/useContract'
-import useNFT from '../../hooks/useNFT'
 import { attribute } from '../../lib/nft'
-import { Traits } from '../../types/metadata'
+import {
+  Background,
+  Creature,
+  Favcoin,
+  LockPeriod,
+  Metadata,
+  Skin,
+  Traits,
+} from '../../types/metadata'
+
+// TODO: remove when API is ready
+const metadataMock: Metadata = {
+  name: 'Super Bitcoin Bear',
+  description:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis felis in tincidunt posuere. Nullam imperdiet convallis augue vulputate sollicitudin.',
+  external_url: '',
+  image: 'https://via.placeholder.com/320x320',
+  attributes: [
+    { trait_type: Traits.Creature, value: Creature.Bear },
+    { trait_type: Traits.Skin, value: Skin.Gold },
+    { trait_type: Traits.Background, value: Background.NightBoat },
+    { trait_type: Traits.Favcoin, value: Favcoin.BTC },
+    { trait_type: Traits.Lock, value: LockPeriod.SixMonths },
+    { trait_type: Traits.CreatorName, value: 'px4.eth' },
+    { trait_type: Traits.CreatorWallet, value: '0x' },
+  ],
+}
 
 // TODO: move in a dedicate file
 const deployedAddresses = {
@@ -23,14 +50,43 @@ const remoteConnector = new NetworkConnector({
 
 export default function NFT(): JSX.Element {
   const router = useRouter()
-  const { id: strId } = router.query
-  const id = typeof strId === 'string' ? parseInt(strId, 10) : -1
   const { contract, error: contractError } = useContract(
     remoteConnector,
     deployedAddresses,
     require('../../abi/QNFT.json'),
   )
-  const { error, loading, metadata } = useNFT(contract, id)
+  const [id, setId] = useState<number>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [metadata, setMetadata] = useState<Metadata>()
+  const [error, setError] = useState<Error>()
+
+  const fetchMetadata = useCallback(async (contract: Contract, id: number) => {
+    setLoading(true)
+    try {
+      console.log(contract, id)
+      const tokenURI = await contract.tokenURI(id)
+      console.log(tokenURI)
+      // TODO: fetch metadata
+      const metadata = metadataMock
+      setMetadata(metadata)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!router.isReady) return
+    if (!router.query.id) return
+    setId(parseInt(router.query.id as string, 10))
+  }, [router])
+
+  useEffect(() => {
+    if (!contract) return
+    if (!id) return
+    void fetchMetadata(contract, id)
+  }, [contract, id])
 
   return (
     <>
@@ -93,20 +149,22 @@ export default function NFT(): JSX.Element {
       </main>
 
       <aside className="w-96">
-        <nav className="inline-flex w-full justify-between">
-          <Link href={`/nfts/${id - 1}`}>
-            <a className="text-sm leading-5 font-medium inline-flex items-center">
-              <ChevronLeftIcon className="w-4 h-4" />
-              Previous
-            </a>
-          </Link>
-          <Link href={`/nfts/${id + 1}`}>
-            <a className="text-sm leading-5 font-medium inline-flex items-center">
-              Next
-              <ChevronRightIcon className="w-4 h-4" />
-            </a>
-          </Link>
-        </nav>
+        {id && (
+          <nav className="inline-flex w-full justify-between">
+            <Link href={`/nfts/${id - 1}`}>
+              <a className="text-sm leading-5 font-medium inline-flex items-center">
+                <ChevronLeftIcon className="w-4 h-4" />
+                Previous
+              </a>
+            </Link>
+            <Link href={`/nfts/${id + 1}`}>
+              <a className="text-sm leading-5 font-medium inline-flex items-center">
+                Next
+                <ChevronRightIcon className="w-4 h-4" />
+              </a>
+            </Link>
+          </nav>
+        )}
       </aside>
     </>
   )
