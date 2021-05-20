@@ -3,58 +3,24 @@ import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useCallback, useEffect, useState } from 'react'
 import { providers } from '@0xsequence/multicall'
-import { BigNumber } from '@ethersproject/bignumber'
 import { useWeb3React } from '@web3-react/core'
-
-export type NFTData = {
-    characterId: BigNumber
-    favCoinId: BigNumber
-    lockDuration: BigNumber
-    lockAmount: BigNumber
-    createdAt: BigNumber
-    withdrawn: boolean
-    metaUrl: string
-}
-export type NFTDatas = NFTData[]
-
-export type NFTCreator = {
-    name: string
-    address: string
-    other: string
-}
-
-enum Emotion {
-    Angry = 0,
-    Worry,
-    Normal,
-    Rest,
-    Happy,
-}
-
-export type NFTMeta = {
-    name: string
-    bgImageId: number
-    defaultEmotion: Emotion
-    color: string // NFT character color (skin)
-    story: string // story that NFT minter want to put for the NFT
-    creator: NFTCreator // nft creator info
-}
+import { RawNFTDataArray} from '../types/nft'
 
 export default function useUserWallet(
     connector: AbstractConnector,
     addresses: { [chainId: number]: string },
     abi: ContractInterface,
 ): {
-    totalNFTs: NFTDatas
-    myNFTs: NFTDatas
+    totalNFTs: RawNFTDataArray
+    myNFTs: RawNFTDataArray
     error?: Error
 } {
     const provider = new providers.MulticallProvider(new JsonRpcProvider("https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e"))
     const context = useWeb3React<Web3Provider>()
     const { account, chainId, activate } = context
 
-    const [totalNFTs, setTotalNFTs] = useState<NFTDatas>([])
-    const [myNFTs, setMyNFTs] = useState<NFTDatas>([])
+    const [totalNFTs, setTotalNFTs] = useState<RawNFTDataArray>([])
+    const [myNFTs, setMyNFTs] = useState<RawNFTDataArray>([])
     const [error, setError] = useState<Error>()
     // Needed To prevent continuous refresh
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -72,7 +38,7 @@ export default function useUserWallet(
             requestNFTData.push(contract.nftData(i))
             requestOwnerData.push(contract.ownerOf(i))
         }
-        const resNFTs: NFTDatas = await Promise.all(requestNFTData)
+        const resNFTs: RawNFTDataArray = await Promise.all(requestNFTData)
         const resOwners: string[] = await Promise.all(requestOwnerData)
         setTotalNFTs(resNFTs)
         const myNFTDatas = resNFTs.filter((_, index) => resOwners[index] === account)
