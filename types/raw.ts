@@ -11,5 +11,5 @@ export type RawNFTData = {
   lockAmount: BigNumber
   createdAt: BigNumber
   withdrawn: boolean
-  metaUrl: string
+  metaId: BigNumber
 }
