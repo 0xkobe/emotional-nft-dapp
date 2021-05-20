@@ -15,7 +15,7 @@ export enum Skin {
   Diamond = 'diamond',
   Bronze = 'bronze',
   Silver = 'silver',
-  Golden = 'golden',
+  Gold = 'gold',
   Platinium = 'platinium',
 }
 
@@ -30,13 +30,13 @@ export enum Favcoin {
 export enum Background {
   None = 0,
   SunriseBoat = 1,
-  SoonBoat = 2,
-  SveningBoat = 3,
-  SightBoat = 4,
-  SrightNightSkyMoon = 5,
-  SloudyNightSky = 6,
+  NoonBoat = 2,
+  EveningBoat = 3,
+  NightBoat = 4,
+  BrightNightSkyMoon = 5,
+  CloudyNightSky = 6,
   NoCloudNightSky = 7,
-  SainyNightSky = 8,
+  RainyNightSky = 8,
 }
 
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#lockoption-id
@@ -46,6 +46,16 @@ export enum LockPeriod {
   OneCentury = 2,
 }
 
+export enum Traits {
+  Creature = 'creature',
+  Skin = 'skin',
+  Background = 'background',
+  Favcoin = 'favcoin',
+  Lock = 'lock',
+  CreatorName = 'creator_name',
+  CreatorWallet = 'creator_wallet',
+}
+
 export type Metadata = {
   name: string
   description: string
@@ -53,31 +63,31 @@ export type Metadata = {
   external_url: string
   attributes: [
     {
-      trait_type: 'creature'
+      trait_type: Traits.Creature
       value: Creature
     },
     {
-      trait_type: 'skin'
+      trait_type: Traits.Skin
       value: Skin
     },
     {
-      trait_type: 'background'
+      trait_type: Traits.Background
       value: Background
     },
     {
-      trait_type: 'favcoin'
+      trait_type: Traits.Favcoin
       value: Favcoin
     },
     {
-      trait_type: 'lock'
+      trait_type: Traits.Lock
       value: LockPeriod
     },
     {
-      trait_type: 'creator_name'
+      trait_type: Traits.CreatorName
       value: string
     },
     {
-      trait_type: 'creator_wallet'
+      trait_type: Traits.CreatorWallet
       value: string
     },
   ]
