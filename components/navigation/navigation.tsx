@@ -43,15 +43,15 @@ const Navigation: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <Logo />
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <div className="hidden sm:ml-6 sm:flex sm:space-x-2">
                   {navigation.map((x) => (
                     <Link key={x.href} href={x.href}>
                       <a
                         className={classNames(
-                          'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
+                          'inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200',
                           x.href === route
-                            ? 'border-primary-500 text-gray-900'
-                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-500',
                         )}
                       >
                         {x.text}
@@ -62,7 +62,7 @@ const Navigation: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <AccountMenu />
-                <SocialMenu />
+                <SocialMenu className="ml-3" />
               </div>
             </div>
           </div>
