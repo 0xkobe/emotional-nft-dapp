@@ -16,7 +16,7 @@ export enum Skin {
   Bronze = 'bronze',
   Silver = 'silver',
   Gold = 'gold',
-  Platinium = 'platinium',
+  Platinum = 'platinum',
 }
 
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#favcoin-id

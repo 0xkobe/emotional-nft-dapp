@@ -52,7 +52,7 @@ const skins = [
   Skin.Diamond,
   Skin.Silver,
   Skin.Gold,
-  Skin.Platinium,
+  Skin.Platinum,
 ]
 const animals = [
   { name: Creature.Bull, artist: artists.clive },
