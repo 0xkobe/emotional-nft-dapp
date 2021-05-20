@@ -8,6 +8,7 @@ type Artist = {
 }
 
 type Character = {
+  id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
   name: string
   skin: Skin
   emotions: {
@@ -87,8 +88,8 @@ const artists: { [key: string]: Artist } = {
 }
 
 const skins = [
-  Skin.Diamond,
   Skin.Bronze,
+  Skin.Diamond,
   Skin.Silver,
   Skin.Golden,
   Skin.Platinium,
@@ -102,10 +103,13 @@ const animals = [
 ]
 
 const characters: Character[] = []
-for (const animal of animals) {
-  for (const skin of skins) {
+for (const animalIndex in animals) {
+  const animal = animals[animalIndex]
+  for (const skinIndex in skins) {
+    const skin = skins[skinIndex]
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
+      id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
       skin: skin,
@@ -121,6 +125,7 @@ for (const animal of animals) {
 }
 
 characters.push({
+  id: 25,
   name: 'Fish',
   artist: artists.debbie,
   skin: Skin.None,
@@ -134,6 +139,7 @@ characters.push({
 })
 
 characters.push({
+  id: 26,
   name: 'Minotaur',
   artist: artists.clive,
   skin: Skin.None,
