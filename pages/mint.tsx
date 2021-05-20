@@ -1,5 +1,7 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 import Head from 'next/head'
-import { FormEvent, useEffect } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import {
   abi,
   deployedAddresses,
@@ -11,19 +13,6 @@ import useWallet from '../hooks/useWallet'
 import { QNFT, QNFTSettings } from '../types'
 
 export default function Mint(): JSX.Element {
-  // const [animalId, setAnimalId] = useState('0')
-  // const [skinId, setSkinId] = useState('0')
-  // const [emotion, setEmotion] = useState('normal')
-
-  const characterId = 1
-  const bgImageId = 0
-  const favCoinId = 0
-  const lockOptionId = 0
-  const lockAmount = 100
-  const defaultEmotionIndex = 0
-  const metaId = 0
-  const freeAmount = 30000
-
   const { signer, account, library } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
@@ -37,61 +26,91 @@ export default function Mint(): JSX.Element {
       abi.qnftSettings,
     )
 
-  // TODO: to remove
-  useEffect(() => {
-    console.log('account', account)
-    if (!account) return
-    library
-      ?.getBalance(account)
-      .then((x) => console.log('getBalance:', x.toString()))
-  })
+  const [userBalance, setUserBalance] = useState(BigNumber.from(0))
+  const [maxSupply, setMaxSupply] = useState(BigNumber.from(0))
+  const [totalSupply, setTotalSupply] = useState(BigNumber.from(0))
+  const [mintPrice, setMintPrice] = useState(BigNumber.from(0))
 
+  const [characterId, setCharacterId] = useState(0)
+  const [favCoinId, setFavCoinId] = useState(0)
+  const [lockOptionId, setLockOptionId] = useState(0)
+  const [lockAmount, setLockAmount] = useState(0)
+  const [metaId, setMetaId] = useState<number | undefined>(undefined)
+  const [freeAmount, setFreeAmount] = useState(0)
+  // TODO: to save in database
+  // const [name, setName] = useState("")
+  // const [description, setDescription] = useState("")
+  // const [author, setAuthor] = useState("")
+  // const [bgImageId, setBgImageId] = useState(0)
+  // const [defaultEmotionIndex, setDefaultEmotionIndex] = useState(0)
+
+  // user balance
   useEffect(() => {
-    void qnft?.symbol().then((x) => console.log('symbol:', x.toString()))
-    void qnft
-      ?.totalSupply()
-      .then((x) => console.log('totalSupply:', x.toString()))
-    // void qnft?.maxSupply().then((x) => console.log('maxSupply:', x.toString()))
-    // void qnft
-    //   ?.EMOTION_COUNT()
-    //   .then((x) => console.log('EMOTION_COUNT:', x.toString()))
+    if (!account) return
+    library?.getBalance(account).then((x) => setUserBalance(x))
+  }, [library, account])
+
+  // totalSupply
+  useEffect(() => {
+    qnft?.totalSupply().then((x) => setTotalSupply(x))
   }, [qnft])
+
+  // maxSupply
+  useEffect(() => {
+    qnft?.maxSupply().then((x) => setMaxSupply(x))
+  }, [qnft])
+
+  // calcMintPrice
+  useEffect(() => {
+    void qnftSettings
+      ?.calcMintPrice(
+        characterId,
+        favCoinId,
+        lockOptionId,
+        lockAmount,
+        freeAmount,
+      )
+      .then((x) => setMintPrice(x))
+  }, [
+    qnftSettings,
+    characterId,
+    favCoinId,
+    lockOptionId,
+    lockAmount,
+    freeAmount,
+  ])
+
+  // check mint conditions
+  useEffect(() => {
+    if (!qnftSettings) return
+    void Promise.all([
+      qnftSettings.mintStarted(),
+      qnftSettings.mintPaused(),
+      qnftSettings.mintFinished(),
+      qnftSettings.onlyAirdropUsers(),
+    ]).then(([mintStarted, mintPaused, mintFinished, onlyAirdropUsers]) => {
+      console.log('mintStarted:', mintStarted.toString())
+      console.log('mintPaused:', mintPaused.toString())
+      console.log('mintFinished:', mintFinished.toString())
+      console.log('onlyAirdropUsers:', onlyAirdropUsers.toString())
+
+      if (!mintStarted) throw new Error('mint is not started') // TODO: show this message to user nicely
+      if (mintPaused) throw new Error('mint is pause') // TODO: show this message to user nicely
+      if (mintFinished) throw new Error('mint is finished') // TODO: show this message to user nicely
+      if (onlyAirdropUsers) throw new Error('mint is only for airdrops users') // TODO: show this message to user nicely
+    })
+  }, [qnftSettings])
 
   useEffect(() => {
     void qnftSettings
       ?.characterCount()
       .then((x) => console.log('characterCount:', x.toString()))
     void qnftSettings
-      ?.bgImageCount()
-      .then((x) => console.log('bgImageCount:', x.toString()))
-    void qnftSettings
       ?.favCoinsCount()
       .then((x) => console.log('favCoinsCount:', x.toString()))
     void qnftSettings
       ?.lockOptionsCount()
       .then((x) => console.log('lockOptionsCount:', x.toString()))
-    void qnftSettings
-      ?.onlyAirdropUsers()
-      .then((x) => console.log('onlyAirdropUsers:', x.toString()))
-    void qnftSettings
-      ?.mintStarted()
-      .then((x) => console.log('mintStarted:', x.toString()))
-    void qnftSettings
-      ?.mintPaused()
-      .then((x) => console.log('mintPaused:', x.toString()))
-    void qnftSettings
-      ?.mintFinished()
-      .then((x) => console.log('mintFinished:', x.toString()))
-    void qnftSettings
-      ?.calcMintPrice(
-        characterId,
-        bgImageId,
-        favCoinId,
-        lockOptionId,
-        lockAmount,
-        freeAmount,
-      )
-      .then((x) => console.log('calcMintPrice:', x.toString()))
   }, [qnftSettings])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -108,7 +127,6 @@ export default function Mint(): JSX.Element {
     console.log('Calculate price...')
     const mintPrice = await qnftSettings.calcMintPrice(
       characterId,
-      bgImageId,
       favCoinId,
       lockOptionId,
       lockAmount,
@@ -117,20 +135,12 @@ export default function Mint(): JSX.Element {
     console.log('mintPrice', mintPrice.toString())
 
     console.log('Signing and sending transaction in Metamask...')
+    // TODO: make sure chainId is the same with signer and qnft
     const tx = await qnft
       .connect(signer)
-      .mintNft(
-        characterId,
-        bgImageId,
-        favCoinId,
-        lockOptionId,
-        lockAmount,
-        defaultEmotionIndex,
-        metaId,
-        {
-          value: mintPrice,
-        },
-      )
+      .mintNft(characterId, favCoinId, lockOptionId, lockAmount, metaId, {
+        value: mintPrice,
+      })
     console.log('tx', tx)
     console.log('Tx signed and broadcasted with success', tx.hash)
 
@@ -236,6 +246,11 @@ export default function Mint(): JSX.Element {
               ))}
             </select>
           </div> */}
+          <div>Mint price: {formatUnits(mintPrice)} ETH</div>
+          <div>Your balance: {formatUnits(userBalance)} ETH</div>
+          <div>
+            Minted NFTs: {totalSupply.toString()} / {maxSupply.toString()}
+          </div>
           <button className="block px-10 py-8 bg-primary-50">Mint</button>
         </form>
       </aside>
