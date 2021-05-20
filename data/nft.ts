@@ -1,3 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
+
 type Artist = {
   name: string
   wallet: string
@@ -17,15 +19,39 @@ type Character = {
   artist: Artist
 }
 
+type FavCoinMeta = {
+  name: string
+  symbol: string
+  icon: string
+  website: string
+  social: string
+  other: string
+}
+
+type FavCoin = {
+  id: number
+  mintPrice: BigNumber // default mint price in ETH
+  meta: FavCoinMeta
+}
+
+type LockOption = {
+  id: number
+  duration: number // in second
+  discount: number
+  minAmount: BigNumber
+  maxAmount: BigNumber
+}
+
 const backgrounds = [
+  'transparent', // should we create transparent 1024x1024 image?
   'nft/background/01_sunrise_boat.png',
-  'nft/background/05_bright_night_sky_moon.png',
-  'nft/background/07_no_cloud_night_sky.png',
-  'nft/background/03_evening_boat.png',
-  'nft/background/06_cloudy_night_sky.png',
-  'nft/background/04_night_boat.png',
-  'nft/background/08_rainy_night_sky.png',
   'nft/background/02_noon_boat.png',
+  'nft/background/03_evening_boat.png',
+  'nft/background/04_night_boat.png',
+  'nft/background/05_bright_night_sky_moon.png',
+  'nft/background/06_cloudy_night_sky.png',
+  'nft/background/07_no_cloud_night_sky.png',
+  'nft/background/08_rainy_night_sky.png',
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -112,5 +138,45 @@ characters.push({
     happy: `/nft/characters/minotaur/happy.png`,
   },
 })
+
+const favCoins: FavCoin[] = [
+  {
+    id: 0, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
+    mintPrice: BigNumber.from(1).pow(18).div(100), // 0.01ETH
+    meta: {
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      icon: 'https://dapp.quiverprotocol.com/icon/btc', // or online url if it works
+      website: 'https://bitcoin.org',
+      social: '',
+      other: '',
+    },
+  },
+];
+
+const lockOptions: LockOption[] = [
+  {
+    id: 0,
+    duration: 6 * 30 * 86400, // 6 months
+    discount: 20, // percentage
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
+  },
+  {
+    id: 1,
+    duration: 12 * 30 * 86400, // 12 months
+    discount: 30, // percentage
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
+  },
+  {
+    id: 2,
+    duration: 100 * 12 * 30 * 86400, // 1 century
+    discount: 40, // percentage
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+  },
+];
+
 
 export { characters, backgrounds, artists }
