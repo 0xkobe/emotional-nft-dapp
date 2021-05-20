@@ -11,7 +11,7 @@ import { attribute } from '../../lib/nft'
 import {
   Background,
   Creature,
-  Favcoin,
+  FavCoinEnum,
   LockPeriod,
   Metadata,
   Skin,
@@ -29,7 +29,7 @@ const metadataMock: Metadata = {
     { trait_type: Traits.Creature, value: Creature.Bear },
     { trait_type: Traits.Skin, value: Skin.Gold },
     { trait_type: Traits.Background, value: Background.NightBoat },
-    { trait_type: Traits.Favcoin, value: Favcoin.BTC },
+    { trait_type: Traits.FavCoin, value: FavCoinEnum.BTC },
     { trait_type: Traits.Lock, value: LockPeriod.SixMonths },
     { trait_type: Traits.CreatorName, value: 'px4.eth' },
     { trait_type: Traits.CreatorWallet, value: '0x' },
@@ -86,7 +86,7 @@ export default function NFT(): JSX.Element {
     if (!contract) return
     if (!id) return
     void fetchMetadata(contract, id)
-  }, [contract, id])
+  }, [contract, fetchMetadata, id])
 
   return (
     <>
@@ -126,7 +126,7 @@ export default function NFT(): JSX.Element {
                 <h3>Properties</h3>
                 <div className="flex">
                   <span className="p-4 mr-2 border">
-                    {attribute(metadata, Traits.Favcoin)}
+                    {attribute(metadata, Traits.FavCoin)}
                   </span>
                   <span className="p-4 mr-2 border">
                     {attribute(metadata, Traits.Creature)}

@@ -1,7 +1,8 @@
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { backgrounds, Character } from '../../data/nft'
+import { backgrounds } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { Creature, Metadata, Skin, Traits } from '../../types/metadata'
+import { Character } from '../../types/nft'
 
 const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: Metadata }> =
   (props) => {
@@ -23,7 +24,7 @@ const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: Metadata }> =
           <img
             src={
               backgrounds[
-                attribute(props.metadata, Traits.Background) as number
+              attribute(props.metadata, Traits.Background) as number
               ]
             }
             className="absolute top-0 right-0 left-0 bottom-0"
