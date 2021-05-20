@@ -34,6 +34,7 @@ export default function Mint(): JSX.Element {
       abi.qnftSettings,
     )
 
+  const [error, setError] = useState<string | undefined>(undefined)
   const [userBalance, setUserBalance] = useState(BigNumber.from(0))
   const [maxSupply, setMaxSupply] = useState(BigNumber.from(0))
   const [totalSupply, setTotalSupply] = useState(BigNumber.from(0))
@@ -56,19 +57,23 @@ export default function Mint(): JSX.Element {
   // user balance
   useEffect(() => {
     if (!account) return
-    library?.getBalance(account).then((x) => setUserBalance(x))
+    if (!library) return
+    void library.getBalance(account).then(setUserBalance)
   }, [library, account])
 
   // totalSupply
   // TODO: could be nice to refresh on every block
   useEffect(() => {
-    qnft?.totalSupply().then((x) => setTotalSupply(x))
+    if (!qnft) return
+    void qnft.totalSupply().then(setTotalSupply)
+    void qnft.maxSupply().then(setMaxSupply)
   }, [qnft])
 
-  // maxSupply
+  // show error in console
   useEffect(() => {
-    qnft?.maxSupply().then((x) => setMaxSupply(x))
-  }, [qnft])
+    if (!error) return
+    console.log(error)
+  }, [error])
 
   // calcMintPrice
   useEffect(() => {
@@ -84,7 +89,7 @@ export default function Mint(): JSX.Element {
         console.log('mint price updated', x.toString())
         setMintPrice(x)
       })
-  }, [qnftSettings, character, favCoin, lockOption.id, lockAmount, freeAmount])
+  }, [qnftSettings, character, favCoin, lockOption, lockAmount, freeAmount])
 
   // check mint conditions
   useEffect(() => {
@@ -100,10 +105,10 @@ export default function Mint(): JSX.Element {
       console.log('mintFinished:', mintFinished.toString())
       console.log('onlyAirdropUsers:', onlyAirdropUsers.toString())
 
-      if (!mintStarted) throw new Error('mint is not started') // TODO: show this message to user nicely
-      if (mintPaused) throw new Error('mint is pause') // TODO: show this message to user nicely
-      if (mintFinished) throw new Error('mint is finished') // TODO: show this message to user nicely
-      if (onlyAirdropUsers) throw new Error('mint is only for airdrops users') // TODO: show this message to user nicely
+      if (!mintStarted) return setError('mint is not started') // TODO: show this message to user nicely
+      if (mintPaused) return setError('mint is pause') // TODO: show this message to user nicely
+      if (mintFinished) return setError('mint is finished') // TODO: show this message to user nicely
+      if (onlyAirdropUsers) return setError('mint is only for airdrops users') // TODO: show this message to user nicely
     })
   }, [qnftSettings])
 
@@ -127,11 +132,11 @@ export default function Mint(): JSX.Element {
     // FIXME: save meta
 
     // console.log('Form was submitted', animalId, skinId, emotion)
-    if (!signer) throw new Error('signer is falsy')
-    if (!account) throw new Error('account is falsy')
-    if (!qnft) throw new Error('qnft is falsy')
-    if (!qnftSettings) throw new Error('qnftSettings is falsy')
-    if (metaId === undefined) throw new Error('metaId is falsy')
+    if (!signer) return setError('signer is falsy')
+    if (!account) return setError('account is falsy')
+    if (!qnft) return setError('qnft is falsy')
+    if (!qnftSettings) return setError('qnftSettings is falsy')
+    if (metaId === undefined) return setError('metaId is falsy')
 
     console.log('Signing and sending transaction in Metamask...')
     // TODO: make sure chainId is the same with signer and qnft
@@ -150,7 +155,7 @@ export default function Mint(): JSX.Element {
       (event) => event.event === 'Transfer',
     )
     const tokenId = transferEvent?.args?.tokenId
-    if (!tokenId) throw new Error('tokenId is falsy')
+    if (!tokenId) return setError('tokenId is falsy')
     console.log('Tx mined with success. Token id:', tokenId.toString())
   }
 
