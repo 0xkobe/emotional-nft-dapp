@@ -1,46 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-
-type Artist = {
-  name: string
-  wallet: string
-  meta: string
-}
-
-type Character = {
-  name: string
-  skin?: string
-  emotions: {
-    angry: string
-    worry: string
-    normal: string
-    rest: string
-    happy: string
-  }
-  artist: Artist
-}
-
-type FavCoinMeta = {
-  name: string
-  symbol: string
-  icon: string
-  website: string
-  social: string
-  other: string
-}
-
-type FavCoin = {
-  id: number
-  mintPrice: BigNumber // default mint price in ETH
-  meta: FavCoinMeta
-}
-
-type LockOption = {
-  id: number
-  duration: number // in second
-  discount: number
-  minAmount: BigNumber
-  maxAmount: BigNumber
-}
+import { Artist, Character, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?

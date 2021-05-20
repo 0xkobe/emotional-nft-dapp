@@ -33,3 +33,45 @@ export type NFTMeta = {
   story: string // story that NFT minter want to put for the NFT
   creator: NFTCreator // nft creator info
 }
+
+export type Artist = {
+  name: string
+  wallet: string
+  meta: string
+}
+
+export type Character = {
+  name: string
+  skin?: string
+  emotions: {
+    angry: string
+    worry: string
+    normal: string
+    rest: string
+    happy: string
+  }
+  artist: Artist
+}
+
+export type FavCoinMeta = {
+  name: string
+  symbol: string
+  icon: string
+  website: string
+  social: string
+  other: string
+}
+
+export type FavCoin = {
+  id: number
+  mintPrice: BigNumber // default mint price in ETH
+  meta: FavCoinMeta
+}
+
+export type LockOption = {
+  id: number
+  duration: number // in second
+  discount: number
+  minAmount: BigNumber
+  maxAmount: BigNumber
+}
