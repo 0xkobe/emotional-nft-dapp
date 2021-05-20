@@ -1,46 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Creature, Favcoin, LockPeriod, Skin } from '../types/metadata'
-
-type Artist = {
-  name: string
-  wallet: string
-  meta: string
-}
-
-export type Character = {
-  id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
-  name: string
-  skin: Skin
-  emotions: {
-    angry: string
-    worry: string
-    normal: string
-    rest: string
-    happy: string
-  }
-  artist: Artist
-}
-
-type FavCoin = {
-  id: Favcoin
-  mintPrice: BigNumber // default mint price in ETH
-  meta: {
-    name: string
-    symbol: string
-    icon: string
-    website: string
-    social: string
-    other: string
-  }
-}
-
-type LockOption = {
-  id: number
-  duration: number // in second
-  discount: number
-  minAmount: BigNumber
-  maxAmount: BigNumber
-}
+import { Artist, Character, FavCoin, LockOption } from '../types/nft'
+import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?
@@ -154,7 +114,7 @@ characters.push({
 
 const favCoins: FavCoin[] = [
   {
-    id: Favcoin.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
+    id: FavCoinEnum.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
     mintPrice: BigNumber.from(1).pow(18).div(100), // 0.01ETH
     meta: {
       name: 'Bitcoin',

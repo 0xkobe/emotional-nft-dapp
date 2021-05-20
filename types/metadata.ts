@@ -20,7 +20,7 @@ export enum Skin {
 }
 
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#favcoin-id
-export enum Favcoin {
+export enum FavCoinEnum {
   BTC = 0,
   ETH = 1,
   MATIC = 2,
@@ -50,7 +50,7 @@ export enum Traits {
   Creature = 'creature',
   Skin = 'skin',
   Background = 'background',
-  Favcoin = 'favcoin',
+  FavCoin = 'favcoin',
   Lock = 'lock',
   CreatorName = 'creator_name',
   CreatorWallet = 'creator_wallet',
@@ -75,8 +75,8 @@ export type Metadata = {
       value: Background
     },
     {
-      trait_type: Traits.Favcoin
-      value: Favcoin
+      trait_type: Traits.FavCoin
+      value: FavCoinEnum
     },
     {
       trait_type: Traits.Lock

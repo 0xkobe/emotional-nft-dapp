@@ -1,7 +1,22 @@
+import { InjectedConnector } from '@web3-react/injected-connector'
 import Head from 'next/head'
 import Link from 'next/link'
+import useUserWallet from '../hooks/useUserNFTs'
+
+export const connector = new InjectedConnector({})
+
+const abiQNFT = require('../abi/QNFT.json')
+const addresses = {
+  3: '0x29D1B07a302d7CB8d3A78216495a80A86aA9593f',
+}
 
 export default function Wallet(): JSX.Element {
+  const {
+    nfts,
+    error: contractError,
+    isLoading,
+  } = useUserWallet(connector, addresses, abiQNFT)
+
   return (
     <>
       <Head>
@@ -9,17 +24,18 @@ export default function Wallet(): JSX.Element {
       </Head>
 
       <main>
-        <ul>
-          <li>
-            <Link href="/nfts/1">NFT1</Link>
-          </li>
-          <li>
-            <Link href="/nfts/2">NFT2</Link>
-          </li>
-          <li>
-            <Link href="/nfts/3">NFT3</Link>
-          </li>
-        </ul>
+        {isLoading && <div>loading...</div>}
+        {contractError && <div>{contractError.toString()}</div>}
+        {nfts.length === 0 && <div>No NFTs</div>}
+        {nfts.length > 0 && (
+          <ul>
+            {nfts.map((nft) => (
+              <li key={nft.id}>
+                <Link href={`/nfts/${nft.id}`}><a>NFT {nft.id}</a></Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
     </>
   )

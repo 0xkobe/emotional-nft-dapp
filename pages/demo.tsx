@@ -60,8 +60,8 @@ export default function Demo() {
             {contract
               ? contract.address
               : contractError
-              ? contractError.toString()
-              : 'n/a'}
+                ? contractError.toString()
+                : 'n/a'}
           </span>
         </li>
         <li>
