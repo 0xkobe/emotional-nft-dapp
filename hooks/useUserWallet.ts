@@ -67,5 +67,8 @@ export default function useUserWallet(
         }
     }, [provider])
 
+    // TODO: wouldn't it be better to return parsed NFT objects?
+    // rather than RawNFTData could return NFTData
+
     return { totalNFTs, myNFTs, error }
 }
