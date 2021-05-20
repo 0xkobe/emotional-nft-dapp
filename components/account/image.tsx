@@ -16,7 +16,7 @@ const AccountImage: FunctionComponent<HTMLAttributes<any> & { size: number }> =
           Jazzicon(props.size, parseInt(account.slice(2, 10), 16)),
         )
       }
-    }, [account])
+    }, [account, props.size])
 
     return <div ref={ref as any} {...props} />
   }
