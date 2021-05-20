@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { Skin, FavCoinEnum } from '../types/metadata'
 
 export enum Emotion {
   Angry = 0,
@@ -41,8 +42,9 @@ export type Artist = {
 }
 
 export type Character = {
+  id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
   name: string
-  skin?: string
+  skin: Skin
   emotions: {
     angry: string
     worry: string
@@ -63,7 +65,7 @@ export type FavCoinMeta = {
 }
 
 export type FavCoin = {
-  id: number
+  id: FavCoinEnum
   mintPrice: BigNumber // default mint price in ETH
   meta: FavCoinMeta
 }

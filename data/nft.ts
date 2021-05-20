@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Artist, Character, FavCoin, LockOption } from '../types/nft'
+import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?
@@ -46,23 +47,32 @@ const artists: { [key: string]: Artist } = {
   },
 }
 
-const skins = ['Diamond', 'Bronze', 'Silver', 'Golden', 'Platinium']
+const skins = [
+  Skin.Bronze,
+  Skin.Diamond,
+  Skin.Silver,
+  Skin.Golden,
+  Skin.Platinium,
+]
 const animals = [
-  { name: 'Bull', artist: artists.clive },
-  { name: 'Bear', artist: artists.rogan },
-  { name: 'Whale', artist: artists.keili },
-  { name: 'Dragon', artist: artists.jatin },
-  { name: 'Deer', artist: artists.mehak },
+  { name: Creature.Bull, artist: artists.clive },
+  { name: Creature.Bear, artist: artists.rogan },
+  { name: Creature.Whale, artist: artists.keili },
+  { name: Creature.Dragon, artist: artists.jatin },
+  { name: Creature.Deer, artist: artists.mehak },
 ]
 
 const characters: Character[] = []
-for (const animal of animals) {
-  for (const skin of skins) {
+for (const animalIndex in animals) {
+  const animal = animals[animalIndex]
+  for (const skinIndex in skins) {
+    const skin = skins[skinIndex]
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
+      id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
-      skin: skin.toLowerCase(),
+      skin: skin,
       emotions: {
         angry: `${baseUrl}/angry.png`,
         worry: `${baseUrl}/worry.png`,
@@ -75,8 +85,10 @@ for (const animal of animals) {
 }
 
 characters.push({
+  id: 25,
   name: 'Fish',
   artist: artists.debbie,
+  skin: Skin.None,
   emotions: {
     angry: `/nft/characters/fish/angry.png`,
     worry: `/nft/characters/fish/worry.png`,
@@ -87,8 +99,10 @@ characters.push({
 })
 
 characters.push({
+  id: 26,
   name: 'Minotaur',
   artist: artists.clive,
+  skin: Skin.None,
   emotions: {
     angry: `/nft/characters/minotaur/angry.png`,
     worry: `/nft/characters/minotaur/worry.png`,
@@ -100,7 +114,7 @@ characters.push({
 
 const favCoins: FavCoin[] = [
   {
-    id: 0, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
+    id: FavCoinEnum.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
     mintPrice: BigNumber.from(1).pow(18).div(100), // 0.01ETH
     meta: {
       name: 'Bitcoin',
@@ -111,31 +125,30 @@ const favCoins: FavCoin[] = [
       other: '',
     },
   },
-];
+]
 
 const lockOptions: LockOption[] = [
   {
-    id: 0,
+    id: LockPeriod.SixMonths,
     duration: 6 * 30 * 86400, // 6 months
     discount: 20, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
   },
   {
-    id: 1,
+    id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
     discount: 30, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
   },
   {
-    id: 2,
+    id: LockPeriod.OneCentury,
     duration: 100 * 12 * 30 * 86400, // 1 century
     discount: 40, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
   },
-];
+]
 
-
-export { characters, backgrounds, artists }
+export { characters, backgrounds, artists, favCoins, lockOptions }
