@@ -142,7 +142,7 @@ characters.push({
 const favCoins: FavCoin[] = [
   {
     id: 0, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
-    mintPrice: 0.01, // in ETH
+    mintPrice: BigNumber.from(1).pow(18).div(100), // 0.01ETH
     meta: {
       name: 'Bitcoin',
       symbol: 'BTC',
@@ -157,24 +157,24 @@ const favCoins: FavCoin[] = [
 const lockOptions: LockOption[] = [
   {
     id: 0,
-    duration: 6, // months
+    duration: 6 * 30 * 86400, // 6 months
     discount: 20, // percentage
-    minAmount: 0, // big number of QSTK amount
-    maxAmount: 100, // big number of QSTK amount
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
   },
   {
     id: 1,
-    duration: 12, // months
+    duration: 12 * 30 * 86400, // 12 months
     discount: 30, // percentage
-    minAmount: 100, // big number of QSTK amount
-    maxAmount: 200, // big number of QSTK amount
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
   },
   {
     id: 2,
-    duration: 1000000, // infinite
+    duration: 100 * 12 * 30 * 86400, // 1 century
     discount: 40, // percentage
-    minAmount: 200, // big number of QSTK amount
-    maxAmount: 300, // big number of QSTK amount
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
   },
 ];
 
