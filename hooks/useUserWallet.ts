@@ -4,7 +4,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useCallback, useEffect, useState } from 'react'
 import { providers } from '@0xsequence/multicall'
 import { useWeb3React } from '@web3-react/core'
-import { RawNFTDataArray} from '../types/nft'
+import { RawNFTDataArray } from '../types/raw'
 
 export default function useUserWallet(
     connector: AbstractConnector,

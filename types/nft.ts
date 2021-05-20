@@ -19,18 +19,6 @@ export type NFTData = {
   metaUrl: string
 }
 
-// raw NFT data fetched directly from contract
-export type RawNFTData = {
-  characterId: BigNumber
-  favCoinId: BigNumber
-  lockDuration: BigNumber
-  lockAmount: BigNumber
-  createdAt: BigNumber
-  withdrawn: boolean
-  metaUrl: string
-}
-export type RawNFTDataArray = RawNFTData[]
-
 export type NFTCreator = {
   name: string
   address: string
