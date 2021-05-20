@@ -4,6 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 
 // raw NFT data fetched directly from contract
 export type RawNFTData = {
+  id: number
   characterId: BigNumber
   favCoinId: BigNumber
   lockDuration: BigNumber
@@ -11,11 +12,4 @@ export type RawNFTData = {
   createdAt: BigNumber
   withdrawn: boolean
   metaUrl: string
-}
-
-export type RawNFTDataArray = RawNFTData[]
-
-export type TotalRawNFTData = {
-  nfts: RawNFTDataArray,
-  owners: string[]
 }

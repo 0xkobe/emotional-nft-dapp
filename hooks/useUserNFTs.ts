@@ -1,32 +1,37 @@
-import { Contract, ContractInterface } from '@ethersproject/contracts'
-import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers'
+import { ContractInterface } from '@ethersproject/contracts'
+import { Web3Provider } from '@ethersproject/providers'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { useCallback, useEffect, useState } from 'react'
-import { providers } from '@0xsequence/multicall'
 import { useWeb3React } from '@web3-react/core'
-import { RawNFTDataArray } from '../types/raw'
+import { useEffect, useState } from 'react'
+import { RawNFTData } from '../types/raw'
 import useNFTs from './useNFTs'
 
 export default function useUserNFTs(
-    connector: AbstractConnector,
-    addresses: { [chainId: number]: string },
-    abi: ContractInterface,
+  connector: AbstractConnector,
+  addresses: { [chainId: number]: string },
+  abi: ContractInterface,
 ): {
-    userNFTs: RawNFTDataArray
-    error?: Error
+  nfts: RawNFTData[]
+  isLoading: boolean
+  error?: Error
 } {
-    const context = useWeb3React<Web3Provider>()
-    const { account } = context
-    const { totalNFTs, error } = useNFTs(connector, addresses, abi)
+  const { account } = useWeb3React<Web3Provider>()
+  const {
+    nfts: allNFTs,
+    owners,
+    error,
+    isLoading,
+  } = useNFTs(connector, addresses, abi)
 
-    const [userNFTs, setUserNFTs] = useState<RawNFTDataArray>([])
+  const [nfts, setNFTs] = useState<RawNFTData[]>([])
 
-    useEffect(() => {
-        if (totalNFTs.nfts.length) {
-            const userNFTDataArray = totalNFTs.nfts.filter((_, index) => totalNFTs.owners[index] === account)
-            setUserNFTs(userNFTDataArray)
-        }
-    }, [account, totalNFTs])
+  useEffect(() => {
+    if (!allNFTs.length) return
+    const userNFTDataArray = allNFTs.filter(
+      (_, index) => owners[index] === account,
+    )
+    setNFTs(userNFTDataArray)
+  }, [account, allNFTs])
 
-    return { userNFTs, error }
+  return { nfts, error, isLoading }
 }

@@ -12,15 +12,11 @@ const addresses = {
 }
 
 export default function Wallet(): JSX.Element {
-  // const { library, chainId, account, activate, deactivate, active, error } =
-  //   useWallet(connector)
-  const { userNFTs, error: contractError } = useUserWallet(
-    connector,
-    addresses,
-    abiQNFT,
-  )
-  console.log("userNFTs", userNFTs)
-  console.log("contractError", contractError)
+  const {
+    nfts,
+    error: contractError,
+    isLoading,
+  } = useUserWallet(connector, addresses, abiQNFT)
 
   return (
     <>
@@ -29,17 +25,18 @@ export default function Wallet(): JSX.Element {
       </Head>
 
       <main>
-        <ul>
-          <li>
-            <Link href="/nfts/1">NFT1</Link>
-          </li>
-          <li>
-            <Link href="/nfts/2">NFT2</Link>
-          </li>
-          <li>
-            <Link href="/nfts/3">NFT3</Link>
-          </li>
-        </ul>
+        {isLoading && <div>loading...</div>}
+        {contractError && <div>{contractError.toString()}</div>}
+        {nfts.length === 0 && <div>No NFTs</div>}
+        {nfts.length > 0 && (
+          <ul>
+            {nfts.map((x) => (
+              <li key={x.id}>
+                <Link href={`'/nfts/${x.id}`}>NFT {x.id}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
     </>
   )
