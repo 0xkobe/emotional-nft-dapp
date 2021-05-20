@@ -8,16 +8,37 @@ import { useWeb3React } from '@web3-react/core'
 
 export type NFTData = {
     characterId: BigNumber
-    bgImageId: BigNumber
     favCoinId: BigNumber
     lockDuration: BigNumber
     lockAmount: BigNumber
-    defaultEmotionIndex: BigNumber
     createdAt: BigNumber
     withdrawn: boolean
     metaUrl: string
 }
 export type NFTDatas = NFTData[]
+
+export type NFTCreator = {
+    name: string
+    address: string
+    other: string
+}
+
+enum Emotion {
+    Angry = 0,
+    Worry,
+    Normal,
+    Rest,
+    Happy,
+}
+
+export type NFTMeta = {
+    name: string
+    bgImageId: number
+    defaultEmotion: Emotion
+    color: string // NFT character color (skin)
+    story: string // story that NFT minter want to put for the NFT
+    creator: NFTCreator // nft creator info
+}
 
 export default function useUserWallet(
     connector: AbstractConnector,
