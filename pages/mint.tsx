@@ -1,7 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatUnits } from '@ethersproject/units'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import Head from 'next/head'
+import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
+import { characters, Emotion, favCoins, lockOptions } from '../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -11,6 +13,11 @@ import {
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { QNFT, QNFTSettings } from '../types'
+
+// This helper function allow to iterate on a enum containing string
+function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+  return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[]
+}
 
 export default function Mint(): JSX.Element {
   const { signer, account, library } = useWallet(metamaskConnector)
@@ -31,18 +38,19 @@ export default function Mint(): JSX.Element {
   const [totalSupply, setTotalSupply] = useState(BigNumber.from(0))
   const [mintPrice, setMintPrice] = useState(BigNumber.from(0))
 
-  const [characterId, setCharacterId] = useState(0)
-  const [favCoinId, setFavCoinId] = useState(0)
-  const [lockOptionId, setLockOptionId] = useState(0)
-  const [lockAmount, setLockAmount] = useState(0)
-  const [metaId, setMetaId] = useState<number | undefined>(undefined)
-  const [freeAmount, setFreeAmount] = useState(0)
+  const [character, setCharacter] = useState(characters[0])
+  const [favCoin, setFavCoin] = useState(favCoins[0])
+  const [lockOption, setLockOption] = useState(lockOptions[0])
+  const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
+  const [freeAmount, setFreeAmount] = useState(BigNumber.from(0))
+
+  const [metaId, setMetaId] = useState<number>(0) // FIXME: to replace with save in database
   // TODO: to save in database
   // const [name, setName] = useState("")
   // const [description, setDescription] = useState("")
   // const [author, setAuthor] = useState("")
   // const [bgImageId, setBgImageId] = useState(0)
-  // const [defaultEmotionIndex, setDefaultEmotionIndex] = useState(0)
+  const [defaultEmotion, setDefaultEmotion] = useState(Emotion.Normal)
 
   // user balance
   useEffect(() => {
@@ -51,6 +59,7 @@ export default function Mint(): JSX.Element {
   }, [library, account])
 
   // totalSupply
+  // TODO: could be nice to refresh on every block
   useEffect(() => {
     qnft?.totalSupply().then((x) => setTotalSupply(x))
   }, [qnft])
@@ -64,21 +73,17 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     void qnftSettings
       ?.calcMintPrice(
-        characterId,
-        favCoinId,
-        lockOptionId,
+        character.id,
+        favCoin.id,
+        lockOption.id,
         lockAmount,
         freeAmount,
       )
-      .then((x) => setMintPrice(x))
-  }, [
-    qnftSettings,
-    characterId,
-    favCoinId,
-    lockOptionId,
-    lockAmount,
-    freeAmount,
-  ])
+      .then((x) => {
+        console.log('mint price updated', x.toString())
+        setMintPrice(x)
+      })
+  }, [qnftSettings, character, favCoin, lockOption.id, lockAmount, freeAmount])
 
   // check mint conditions
   useEffect(() => {
@@ -118,27 +123,20 @@ export default function Mint(): JSX.Element {
 
     // TODO: make sure metamask is connected or throw a nice error
 
+    // FIXME: save meta
+
     // console.log('Form was submitted', animalId, skinId, emotion)
     if (!signer) throw new Error('signer is falsy')
     if (!account) throw new Error('account is falsy')
     if (!qnft) throw new Error('qnft is falsy')
     if (!qnftSettings) throw new Error('qnftSettings is falsy')
-
-    console.log('Calculate price...')
-    const mintPrice = await qnftSettings.calcMintPrice(
-      characterId,
-      favCoinId,
-      lockOptionId,
-      lockAmount,
-      freeAmount,
-    )
-    console.log('mintPrice', mintPrice.toString())
+    if (metaId === undefined) throw new Error('metaId is falsy')
 
     console.log('Signing and sending transaction in Metamask...')
     // TODO: make sure chainId is the same with signer and qnft
     const tx = await qnft
       .connect(signer)
-      .mintNft(characterId, favCoinId, lockOptionId, lockAmount, metaId, {
+      .mintNft(character.id, favCoin.id, lockOption.id, lockAmount, metaId, {
         value: mintPrice,
       })
     console.log('tx', tx)
@@ -169,83 +167,126 @@ export default function Mint(): JSX.Element {
       </main>
 
       <aside className="w-1/3 bg-white border-l border-gray-200 overflow-y-auto p-4 flex flex-col justify-between">
-        <div>
-          <strong>qnft contract: </strong>
-          <span>
-            {qnft ? qnft.address : qnftError ? qnftError.toString() : 'n/a'}
-          </span>
-        </div>
-        <div>
-          <strong>qnftSettings contract: </strong>
-          <span>
-            {qnftSettings
-              ? qnftSettings.address
-              : qnftSettingsError
-              ? qnftSettingsError.toString()
-              : 'n/a'}
-          </span>
-        </div>
-        {/* <div className="border h-96 w-96 mx-auto">
-          {animalId != null && skinId != null ? (
+        <div className="border h-96 w-96 mx-auto">
+          {character != null && defaultEmotion != null ? (
             <Image
-              src={`/nft/characters/${animals[
-                Number.parseInt(animalId)
-              ].name.toLowerCase()}/${skins[
-                Number.parseInt(skinId)
-              ].toLowerCase()}/${emotion}.png`}
+              src={character.emotions[defaultEmotion]}
               height={200}
               width={200}
             />
           ) : (
-            'Select an animal and a skin to get the preview'
+            'Select an character to get the preview'
           )}
-        </div> */}
+        </div>
         <form onSubmit={handleSubmit}>
-          {/* <div>
-            <label htmlFor="animal">Animal</label>
+          <div>
+            <label htmlFor="character">Character</label>
             <select
-              id="animal"
-              name="animalId"
-              value={animalId}
-              onChange={(event) => setAnimalId(event.target.value)}
+              id="character"
+              name="characterId"
+              value={character.id}
+              onChange={(event) => {
+                const char = characters.find(
+                  (c) => c.id === parseInt(event.target.value),
+                )
+                if (!char) return
+                setCharacter(char)
+              }}
             >
-              {animals.map((animal, index) => (
-                <option key={index} value={index}>
-                  {animal.name}
+              {characters.map((character) => (
+                <option key={character.id} value={character.id}>
+                  {character.name}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label htmlFor="skin">Skin</label>
+            <label htmlFor="defaultEmotion">DefaultEmotion</label>
             <select
-              id="skin"
-              name="skinId"
-              value={skinId}
-              onChange={(event) => setSkinId(event.target.value)}
+              id="defaultEmotion"
+              name="defaultEmotion"
+              value={defaultEmotion}
+              onChange={(event) => {
+                const x = enumKeys(Emotion).find(
+                  (key) => Emotion[key] === event.target.value,
+                )
+                if (!x) return
+                setDefaultEmotion(Emotion[x])
+              }}
             >
-              {skins.map((skin, index) => (
-                <option key={index} value={index}>
-                  {skin}
+              {enumKeys(Emotion).map((defaultEmotion) => (
+                <option key={defaultEmotion} value={Emotion[defaultEmotion]}>
+                  {defaultEmotion}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label htmlFor="emotion">Emotion</label>
+            <label htmlFor="favCoin">FavCoin</label>
             <select
-              id="emotion"
-              name="emotion"
-              value={emotion}
-              onChange={(event) => setEmotion(event.target.value)}
+              id="favCoin"
+              name="favCoinId"
+              value={favCoin.id}
+              onChange={(event) => {
+                const x = favCoins.find(
+                  (x) => x.id === parseInt(event.target.value),
+                )
+                if (!x) return
+                setFavCoin(x)
+              }}
             >
-              {['angry', 'worry', 'normal', 'rest', 'happy'].map((emotion) => (
-                <option key={emotion} value={emotion}>
-                  {emotion}
+              {favCoins.map((favCoin) => (
+                <option key={favCoin.id} value={favCoin.id}>
+                  {favCoin.meta.name}
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
+          <div>
+            <label htmlFor="lockOption">LockOption</label>
+            <select
+              id="lockOption"
+              name="lockOptionId"
+              value={lockOption.id}
+              onChange={(event) => {
+                const x = lockOptions.find(
+                  (x) => x.id === parseInt(event.target.value),
+                )
+                if (!x) return
+                setLockOption(x)
+              }}
+            >
+              {lockOptions.map((lockOption) => (
+                <option key={lockOption.id} value={lockOption.id}>
+                  {lockOption.description}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="lockAmount">LockAmount</label>
+
+            <input
+              id="lockAmount"
+              name="lockAmount"
+              type="number"
+              onChange={(event) => {
+                setLockAmount(parseUnits(event.target.value || '0', 'wei'))
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor="freeAmount">FreeAmount</label>
+
+            <input
+              id="freeAmount"
+              name="freeAmount"
+              type="number"
+              onChange={(event) => {
+                setFreeAmount(parseUnits(event.target.value || '0', 'wei'))
+              }}
+            />
+          </div>
           <div>Mint price: {formatUnits(mintPrice)} ETH</div>
           <div>Your balance: {formatUnits(userBalance)} ETH</div>
           <div>
