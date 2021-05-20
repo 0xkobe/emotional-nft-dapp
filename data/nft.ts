@@ -1,3 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
+
 type Artist = {
   name: string
   wallet: string
@@ -15,6 +17,29 @@ type Character = {
     happy: string
   }
   artist: Artist
+}
+
+type FavCoinMeta = {
+  name: string
+  symbol: string
+  icon: string
+  website: string
+  social: string
+  other: string
+}
+
+type FavCoin = {
+  id: number
+  mintPrice: BigNumber // default mint price in ETH
+  meta: FavCoinMeta
+}
+
+type LockOption = {
+  id: number
+  duration: number // in second
+  discount: number
+  minAmount: BigNumber
+  maxAmount: BigNumber
 }
 
 const backgrounds = [
@@ -114,36 +139,42 @@ characters.push({
   },
 })
 
-const favCoins = [
+const favCoins: FavCoin[] = [
   {
+    id: 0, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
     mintPrice: 0.01, // in ETH
-    dataUrl: "https://dapp.quiverprotocol.com/meta/coin/1", // api url for metadata of this coin
-    // the url should keep below json data 
-    // {
-    //   name: 'Bitcoin',
-    //   icon: 'bitcoin_icon_url',
-    // },
+    meta: {
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      icon: 'https://dapp.quiverprotocol.com/icon/btc', // or online url if it works
+      website: 'https://bitcoin.org',
+      social: '',
+      other: '',
+    },
   },
 ];
 
-const lockOptions = [
+const lockOptions: LockOption[] = [
   {
+    id: 0,
+    duration: 6, // months
+    discount: 20, // percentage
     minAmount: 0, // big number of QSTK amount
     maxAmount: 100, // big number of QSTK amount
-    lockDuration: 6, // months
-    discount: 20, // percentage
   },
   {
+    id: 1,
+    duration: 12, // months
+    discount: 30, // percentage
     minAmount: 100, // big number of QSTK amount
     maxAmount: 200, // big number of QSTK amount
-    lockDuration: 12, // months
-    discount: 30, // percentage
   },
   {
+    id: 2,
+    duration: 1000000, // infinite
+    discount: 40, // percentage
     minAmount: 200, // big number of QSTK amount
     maxAmount: 300, // big number of QSTK amount
-    lockDuration: 1000000, // infinite
-    discount: 40, // percentage
   },
 ];
 
