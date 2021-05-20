@@ -1,6 +1,7 @@
-const Jazzicon = require('@metamask/jazzicon')
 import { useWeb3React } from '@web3-react/core'
 import { FunctionComponent, HTMLAttributes, useEffect, useRef } from 'react'
+
+const Jazzicon = require('@metamask/jazzicon')
 
 const AccountImage: FunctionComponent<HTMLAttributes<any> & { size: number }> =
   (props) => {
