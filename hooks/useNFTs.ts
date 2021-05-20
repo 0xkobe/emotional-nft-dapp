@@ -4,23 +4,24 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useCallback, useEffect, useState } from 'react'
 import { providers } from '@0xsequence/multicall'
 import { useWeb3React } from '@web3-react/core'
-import { RawNFTDataArray } from '../types/raw'
+import { RawNFTDataArray, TotalRawNFTData } from '../types/raw'
 
-export default function useUserWallet(
+export default function useNFTs(
     connector: AbstractConnector,
     addresses: { [chainId: number]: string },
     abi: ContractInterface,
 ): {
-    totalNFTs: RawNFTDataArray
-    myNFTs: RawNFTDataArray
+    totalNFTs: TotalRawNFTData
     error?: Error
 } {
     const provider = new providers.MulticallProvider(new JsonRpcProvider("https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e"))
     const context = useWeb3React<Web3Provider>()
     const { account, chainId, activate } = context
 
-    const [totalNFTs, setTotalNFTs] = useState<RawNFTDataArray>([])
-    const [myNFTs, setMyNFTs] = useState<RawNFTDataArray>([])
+    const [totalNFTs, setTotalNFTs] = useState<TotalRawNFTData>({
+        nfts: [],
+        owners: []
+    })
     const [error, setError] = useState<Error>()
     // Needed To prevent continuous refresh
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -40,9 +41,10 @@ export default function useUserWallet(
         }
         const resNFTs: RawNFTDataArray = await Promise.all(requestNFTData)
         const resOwners: string[] = await Promise.all(requestOwnerData)
-        setTotalNFTs(resNFTs)
-        const myNFTDataArray = resNFTs.filter((_, index) => resOwners[index] === account)
-        setMyNFTs(myNFTDataArray)
+        setTotalNFTs({
+            nfts: resNFTs,
+            owners: resOwners
+        })
     }, [])
 
     useEffect(() => {
@@ -65,10 +67,7 @@ export default function useUserWallet(
         return () => {
             setError(undefined)
         }
-    }, [provider])
+    }, [provider, addresses, chainId, account])
 
-    // TODO: wouldn't it be better to return parsed NFT objects?
-    // rather than RawNFTData could return NFTData
-
-    return { totalNFTs, myNFTs, error }
+    return { totalNFTs, error }
 }
