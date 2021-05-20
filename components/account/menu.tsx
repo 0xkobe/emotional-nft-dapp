@@ -3,6 +3,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import classNames from 'classnames'
 import { FunctionComponent, HtmlHTMLAttributes, useEffect } from 'react'
 import useWallet from '../../hooks/useWallet'
+import { shortenAddress } from '../../lib/utils'
 import AccountImage from './image'
 
 export const connector = new InjectedConnector({})
@@ -29,8 +30,10 @@ const Account: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
       {({ open }) => (
         <>
           <Menu.Button className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border">
-            {account}
-            <AccountImage className="h-4 w-4 ml-2" size={16} />
+            <span className="hidden md:block mr-2">
+              {shortenAddress(account)}
+            </span>
+            <AccountImage className="h-4 w-4" size={16} />
           </Menu.Button>
           {open && (
             <Menu.Items
