@@ -30,7 +30,7 @@ export default function useUserWallet(
         void activate(connector, console.error, true)
     }, [activate, connector])
 
-    const setNFTDatas = useCallback(async (contract: Contract, account: string) => {
+    const setNFTDataArray = useCallback(async (contract: Contract, account: string) => {
         const supply = (await contract.circulatingSupply()).toNumber()
         const requestNFTData = []
         const requestOwnerData = []
@@ -41,8 +41,8 @@ export default function useUserWallet(
         const resNFTs: RawNFTDataArray = await Promise.all(requestNFTData)
         const resOwners: string[] = await Promise.all(requestOwnerData)
         setTotalNFTs(resNFTs)
-        const myNFTDatas = resNFTs.filter((_, index) => resOwners[index] === account)
-        setMyNFTs(myNFTDatas)
+        const myNFTDataArray = resNFTs.filter((_, index) => resOwners[index] === account)
+        setMyNFTs(myNFTDataArray)
     }, [])
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export default function useUserWallet(
         setLoading(false)
         const contract = new Contract(addresses[chainId], abi, provider)
         console.log(`Reload contract: ${contract.address}`)
-        setNFTDatas(contract, account)
+        setNFTDataArray(contract, account)
 
         return () => {
             setError(undefined)
