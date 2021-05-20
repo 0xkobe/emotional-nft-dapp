@@ -1,0 +1,45 @@
+import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
+import { backgrounds, Character } from '../../data/nft'
+import { attribute, getCreature } from '../../lib/nft'
+import { Creature, Metadata, Skin, Traits } from '../../types/metadata'
+
+const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: Metadata }> =
+  (props) => {
+    const [creature, setCreature] = useState<Character>()
+
+    useEffect(() => {
+      const animalId = attribute(props.metadata, Traits.Creature) as Creature
+      const skinId = attribute(props.metadata, Traits.Skin) as Skin
+      const creature = getCreature(animalId, skinId)
+      if (!creature) return
+      setCreature(creature)
+    }, [props.metadata])
+
+    if (!creature) return <div>not found</div>
+
+    return (
+      <div className="p-8 border rounded-xl w-96">
+        <div className="relative h-80 rounded overflow-hidden mx-auto">
+          <img
+            src={
+              backgrounds[
+                attribute(props.metadata, Traits.Background) as number
+              ]
+            }
+            className="absolute top-0 right-0 left-0 bottom-0"
+          />
+          <img
+            src={creature.emotions.angry}
+            className="absolute top-0 right-0 left-0 bottom-0"
+          />
+        </div>
+        <div>{props.metadata.name}</div>
+        <div>
+          [{attribute(props.metadata, Traits.Skin)} -{' '}
+          {attribute(props.metadata, Traits.Creature)}]
+        </div>
+      </div>
+    )
+  }
+
+export default NFTCard

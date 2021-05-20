@@ -4,14 +4,14 @@ import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?
-  'nft/background/01_sunrise_boat.png',
-  'nft/background/02_noon_boat.png',
-  'nft/background/03_evening_boat.png',
-  'nft/background/04_night_boat.png',
-  'nft/background/05_bright_night_sky_moon.png',
-  'nft/background/06_cloudy_night_sky.png',
-  'nft/background/07_no_cloud_night_sky.png',
-  'nft/background/08_rainy_night_sky.png',
+  '/nft/background/01_sunrise_boat.png',
+  '/nft/background/02_noon_boat.png',
+  '/nft/background/03_evening_boat.png',
+  '/nft/background/04_night_boat.png',
+  '/nft/background/05_bright_night_sky_moon.png',
+  '/nft/background/06_cloudy_night_sky.png',
+  '/nft/background/07_no_cloud_night_sky.png',
+  '/nft/background/08_rainy_night_sky.png',
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -51,7 +51,7 @@ const skins = [
   Skin.Bronze,
   Skin.Diamond,
   Skin.Silver,
-  Skin.Golden,
+  Skin.Gold,
   Skin.Platinium,
 ]
 const animals = [
@@ -151,4 +151,12 @@ const lockOptions: LockOption[] = [
   },
 ]
 
-export { characters, backgrounds, artists, favCoins, lockOptions }
+export {
+  characters,
+  backgrounds,
+  artists,
+  favCoins,
+  lockOptions,
+  skins,
+  animals,
+}
