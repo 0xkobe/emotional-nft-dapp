@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { FormEvent, useEffect, useState } from 'react'
-import { animals, skins } from '../data/nft'
+import { FormEvent, useEffect } from 'react'
 import {
   abi,
   deployedAddresses,
@@ -10,41 +8,135 @@ import {
 } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
-import { ERC721 } from '../types/ERC721'
+import { QNFT, QNFTSettings } from '../types'
 
 export default function Mint(): JSX.Element {
-  const [animalId, setAnimalId] = useState('0')
-  const [skinId, setSkinId] = useState('0')
-  const [emotion, setEmotion] = useState('normal')
+  // const [animalId, setAnimalId] = useState('0')
+  // const [skinId, setSkinId] = useState('0')
+  // const [emotion, setEmotion] = useState('normal')
 
-  const { signer, account } = useWallet(metamaskConnector)
-  const { contract, error: contractError } = useContract<ERC721>(
+  const characterId = 1
+  const bgImageId = 0
+  const favCoinId = 0
+  const lockOptionId = 0
+  const lockAmount = 100
+  const defaultEmotionIndex = 0
+  const metaId = 0
+  const freeAmount = 30000
+
+  const { signer, account, library } = useWallet(metamaskConnector)
+  const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
-    deployedAddresses,
-    abi.erc721,
+    deployedAddresses.qnft,
+    abi.qnft,
   )
+  const { contract: qnftSettings, error: qnftSettingsError } =
+    useContract<QNFTSettings>(
+      remoteConnector,
+      deployedAddresses.qnftSettings,
+      abi.qnftSettings,
+    )
+
+  // TODO: to remove
+  useEffect(() => {
+    console.log('account', account)
+    if (!account) return
+    library
+      ?.getBalance(account)
+      .then((x) => console.log('getBalance:', x.toString()))
+  })
 
   useEffect(() => {
-    if (!contract) return
-    void contract.symbol().then((x) => console.log('loaded symbol:', x))
-  }, [contract])
+    void qnft?.symbol().then((x) => console.log('symbol:', x.toString()))
+    void qnft
+      ?.totalSupply()
+      .then((x) => console.log('totalSupply:', x.toString()))
+    // void qnft?.maxSupply().then((x) => console.log('maxSupply:', x.toString()))
+    // void qnft
+    //   ?.EMOTION_COUNT()
+    //   .then((x) => console.log('EMOTION_COUNT:', x.toString()))
+  }, [qnft])
+
+  useEffect(() => {
+    void qnftSettings
+      ?.characterCount()
+      .then((x) => console.log('characterCount:', x.toString()))
+    void qnftSettings
+      ?.bgImageCount()
+      .then((x) => console.log('bgImageCount:', x.toString()))
+    void qnftSettings
+      ?.favCoinsCount()
+      .then((x) => console.log('favCoinsCount:', x.toString()))
+    void qnftSettings
+      ?.lockOptionsCount()
+      .then((x) => console.log('lockOptionsCount:', x.toString()))
+    void qnftSettings
+      ?.onlyAirdropUsers()
+      .then((x) => console.log('onlyAirdropUsers:', x.toString()))
+    void qnftSettings
+      ?.mintStarted()
+      .then((x) => console.log('mintStarted:', x.toString()))
+    void qnftSettings
+      ?.mintPaused()
+      .then((x) => console.log('mintPaused:', x.toString()))
+    void qnftSettings
+      ?.mintFinished()
+      .then((x) => console.log('mintFinished:', x.toString()))
+    void qnftSettings
+      ?.calcMintPrice(
+        characterId,
+        bgImageId,
+        favCoinId,
+        lockOptionId,
+        lockAmount,
+        freeAmount,
+      )
+      .then((x) => console.log('calcMintPrice:', x.toString()))
+  }, [qnftSettings])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     // TODO: make sure metamask is connected or throw a nice error
 
-    console.log('Form was submitted', animalId, skinId, emotion)
+    // console.log('Form was submitted', animalId, skinId, emotion)
     if (!signer) throw new Error('signer is falsy')
     if (!account) throw new Error('account is falsy')
-    if (!contract) throw new Error('contract is falsy')
+    if (!qnft) throw new Error('qnft is falsy')
+    if (!qnftSettings) throw new Error('qnftSettings is falsy')
+
+    console.log('Calculate price...')
+    const mintPrice = await qnftSettings.calcMintPrice(
+      characterId,
+      bgImageId,
+      favCoinId,
+      lockOptionId,
+      lockAmount,
+      freeAmount,
+    )
+    console.log('mintPrice', mintPrice.toString())
 
     console.log('Signing and sending transaction in Metamask...')
-    const tx = await contract.connect(signer).mint(account)
+    const tx = await qnft
+      .connect(signer)
+      .mintNft(
+        characterId,
+        bgImageId,
+        favCoinId,
+        lockOptionId,
+        lockAmount,
+        defaultEmotionIndex,
+        metaId,
+        {
+          value: mintPrice,
+        },
+      )
+    console.log('tx', tx)
     console.log('Tx signed and broadcasted with success', tx.hash)
 
     console.log('Waiting for tx to be mined...')
     const log = await tx.wait()
+    console.log('log', log)
     const transferEvent = log.events?.find(
       (event) => event.event === 'Transfer',
     )
@@ -68,16 +160,22 @@ export default function Mint(): JSX.Element {
 
       <aside className="w-1/3 bg-white border-l border-gray-200 overflow-y-auto p-4 flex flex-col justify-between">
         <div>
-          <strong>Contract: </strong>
+          <strong>qnft contract: </strong>
           <span>
-            {contract
-              ? contract.address
-              : contractError
-              ? contractError.toString()
+            {qnft ? qnft.address : qnftError ? qnftError.toString() : 'n/a'}
+          </span>
+        </div>
+        <div>
+          <strong>qnftSettings contract: </strong>
+          <span>
+            {qnftSettings
+              ? qnftSettings.address
+              : qnftSettingsError
+              ? qnftSettingsError.toString()
               : 'n/a'}
           </span>
         </div>
-        <div className="border h-96 w-96 mx-auto">
+        {/* <div className="border h-96 w-96 mx-auto">
           {animalId != null && skinId != null ? (
             <Image
               src={`/nft/characters/${animals[
@@ -91,9 +189,9 @@ export default function Mint(): JSX.Element {
           ) : (
             'Select an animal and a skin to get the preview'
           )}
-        </div>
+        </div> */}
         <form onSubmit={handleSubmit}>
-          <div>
+          {/* <div>
             <label htmlFor="animal">Animal</label>
             <select
               id="animal"
@@ -137,7 +235,7 @@ export default function Mint(): JSX.Element {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
           <button className="block px-10 py-8 bg-primary-50">Mint</button>
         </form>
       </aside>
