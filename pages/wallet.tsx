@@ -2,7 +2,6 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import Head from 'next/head'
 import Link from 'next/link'
 import useUserWallet from '../hooks/useUserNFTs'
-// import useWallet from '../hooks/useWallet'
 
 export const connector = new InjectedConnector({})
 
@@ -30,9 +29,9 @@ export default function Wallet(): JSX.Element {
         {nfts.length === 0 && <div>No NFTs</div>}
         {nfts.length > 0 && (
           <ul>
-            {nfts.map((x) => (
-              <li key={x.id}>
-                <Link href={`'/nfts/${x.id}`}>NFT {x.id}</Link>
+            {nfts.map((nft) => (
+              <li key={nft.id}>
+                <Link href={`/nfts/${nft.id}`}><a>NFT {nft.id}</a></Link>
               </li>
             ))}
           </ul>
