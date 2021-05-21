@@ -20,5 +20,3 @@ const Input: FunctionComponent<IProps> = ({ unit, label, className, ...props }: 
 }
 
 export default Input
-
-
