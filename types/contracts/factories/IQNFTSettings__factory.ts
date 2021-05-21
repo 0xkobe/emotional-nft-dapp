@@ -10,19 +10,19 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "_characterId",
-        type: "uint256",
+        type: "uint32",
       },
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "_favCoinId",
-        type: "uint256",
+        type: "uint32",
       },
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "_lockOptionId",
-        type: "uint256",
+        type: "uint32",
       },
       {
         internalType: "uint256",
@@ -39,7 +39,17 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "totalPrice",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenPrice",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "nonTokenPrice",
         type: "uint256",
       },
     ],
@@ -62,9 +72,28 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint32",
+        name: "characterId",
+        type: "uint32",
+      },
+    ],
+    name: "characterMaxSupply",
+    outputs: [
+      {
         internalType: "uint256",
-        name: "_nftCharacterId",
+        name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "characterId",
+        type: "uint32",
       },
     ],
     name: "characterPrices",
@@ -81,9 +110,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_favCoinId",
-        type: "uint256",
+        internalType: "uint32",
+        name: "favCoinId",
+        type: "uint32",
       },
     ],
     name: "favCoinPrices",
@@ -113,9 +142,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_lockOptionId",
-        type: "uint256",
+        internalType: "uint32",
+        name: "lockOptionId",
+        type: "uint32",
       },
     ],
     name: "lockOptionLockDuration",
@@ -215,6 +244,32 @@ const _abi = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "transferAllowedAfterRedeem",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "upgradePriceMultiplier",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

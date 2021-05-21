@@ -20,12 +20,13 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IQNFTSettingsInterface extends ethers.utils.Interface {
   functions: {
-    "calcMintPrice(uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calcMintPrice(uint32,uint32,uint32,uint256,uint256)": FunctionFragment;
     "characterCount()": FunctionFragment;
-    "characterPrices(uint256)": FunctionFragment;
-    "favCoinPrices(uint256)": FunctionFragment;
+    "characterMaxSupply(uint32)": FunctionFragment;
+    "characterPrices(uint32)": FunctionFragment;
+    "favCoinPrices(uint32)": FunctionFragment;
     "favCoinsCount()": FunctionFragment;
-    "lockOptionLockDuration(uint256)": FunctionFragment;
+    "lockOptionLockDuration(uint32)": FunctionFragment;
     "lockOptionsCount()": FunctionFragment;
     "mintEndTime()": FunctionFragment;
     "mintFinished()": FunctionFragment;
@@ -33,6 +34,8 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
     "mintStartTime()": FunctionFragment;
     "mintStarted()": FunctionFragment;
     "onlyAirdropUsers()": FunctionFragment;
+    "transferAllowedAfterRedeem()": FunctionFragment;
+    "upgradePriceMultiplier()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -48,6 +51,10 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "characterCount",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "characterMaxSupply",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "characterPrices",
@@ -93,6 +100,14 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "onlyAirdropUsers",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferAllowedAfterRedeem",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upgradePriceMultiplier",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "calcMintPrice",
@@ -100,6 +115,10 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "characterCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "characterMaxSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -141,6 +160,14 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "onlyAirdropUsers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferAllowedAfterRedeem",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradePriceMultiplier",
     data: BytesLike
   ): Result;
 
@@ -198,24 +225,35 @@ export class IQNFTSettings extends BaseContract {
       _lockAmount: BigNumberish,
       _freeAmount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalPrice: BigNumber;
+        tokenPrice: BigNumber;
+        nonTokenPrice: BigNumber;
+      }
+    >;
 
     characterCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    characterMaxSupply(
+      characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     characterPrices(
-      _nftCharacterId: BigNumberish,
+      characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     favCoinPrices(
-      _favCoinId: BigNumberish,
+      favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     favCoinsCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     lockOptionLockDuration(
-      _lockOptionId: BigNumberish,
+      lockOptionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -232,6 +270,10 @@ export class IQNFTSettings extends BaseContract {
     mintStarted(overrides?: CallOverrides): Promise<[boolean]>;
 
     onlyAirdropUsers(overrides?: CallOverrides): Promise<[boolean]>;
+
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<[boolean]>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   calcMintPrice(
@@ -241,24 +283,35 @@ export class IQNFTSettings extends BaseContract {
     _lockAmount: BigNumberish,
     _freeAmount: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber] & {
+      totalPrice: BigNumber;
+      tokenPrice: BigNumber;
+      nonTokenPrice: BigNumber;
+    }
+  >;
 
   characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+  characterMaxSupply(
+    characterId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   characterPrices(
-    _nftCharacterId: BigNumberish,
+    characterId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   favCoinPrices(
-    _favCoinId: BigNumberish,
+    favCoinId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   favCoinsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
   lockOptionLockDuration(
-    _lockOptionId: BigNumberish,
+    lockOptionId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -276,6 +329,10 @@ export class IQNFTSettings extends BaseContract {
 
   onlyAirdropUsers(overrides?: CallOverrides): Promise<boolean>;
 
+  transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<boolean>;
+
+  upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
   callStatic: {
     calcMintPrice(
       _characterId: BigNumberish,
@@ -284,24 +341,35 @@ export class IQNFTSettings extends BaseContract {
       _lockAmount: BigNumberish,
       _freeAmount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalPrice: BigNumber;
+        tokenPrice: BigNumber;
+        nonTokenPrice: BigNumber;
+      }
+    >;
 
     characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+    characterMaxSupply(
+      characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     characterPrices(
-      _nftCharacterId: BigNumberish,
+      characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinPrices(
-      _favCoinId: BigNumberish,
+      favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
     lockOptionLockDuration(
-      _lockOptionId: BigNumberish,
+      lockOptionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -318,6 +386,10 @@ export class IQNFTSettings extends BaseContract {
     mintStarted(overrides?: CallOverrides): Promise<boolean>;
 
     onlyAirdropUsers(overrides?: CallOverrides): Promise<boolean>;
+
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<boolean>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
@@ -334,20 +406,25 @@ export class IQNFTSettings extends BaseContract {
 
     characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+    characterMaxSupply(
+      characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     characterPrices(
-      _nftCharacterId: BigNumberish,
+      characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinPrices(
-      _favCoinId: BigNumberish,
+      favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
     lockOptionLockDuration(
-      _lockOptionId: BigNumberish,
+      lockOptionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -364,6 +441,10 @@ export class IQNFTSettings extends BaseContract {
     mintStarted(overrides?: CallOverrides): Promise<BigNumber>;
 
     onlyAirdropUsers(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<BigNumber>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -378,20 +459,25 @@ export class IQNFTSettings extends BaseContract {
 
     characterCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    characterMaxSupply(
+      characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     characterPrices(
-      _nftCharacterId: BigNumberish,
+      characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     favCoinPrices(
-      _favCoinId: BigNumberish,
+      favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     favCoinsCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lockOptionLockDuration(
-      _lockOptionId: BigNumberish,
+      lockOptionId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -408,5 +494,13 @@ export class IQNFTSettings extends BaseContract {
     mintStarted(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     onlyAirdropUsers(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferAllowedAfterRedeem(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    upgradePriceMultiplier(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
   };
 }
