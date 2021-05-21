@@ -22,7 +22,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface QNFTInterface extends ethers.utils.Interface {
   functions: {
-    "FOUNDATION_PERCENTAGE()": FunctionFragment;
     "PERCENT_MAX()": FunctionFragment;
     "airdrop()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
@@ -32,10 +31,9 @@ interface QNFTInterface extends ethers.utils.Interface {
     "governance()": FunctionFragment;
     "initialize(address,address,address,address,string)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "maxCharacterSupply()": FunctionFragment;
     "maxSupply()": FunctionFragment;
-    "mintNft(uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
-    "mintNftForAirdropUser(uint256,uint256,uint256,uint256,uint256,uint256,bytes)": FunctionFragment;
+    "mintNft(uint32,uint32,uint32,uint256,uint256)": FunctionFragment;
+    "mintNftForAirdropUser(uint32,uint32,uint32,uint256,uint256,uint256,bytes)": FunctionFragment;
     "name()": FunctionFragment;
     "nftCountByCharacter(uint256)": FunctionFragment;
     "nftData(uint256)": FunctionFragment;
@@ -46,7 +44,6 @@ interface QNFTInterface extends ethers.utils.Interface {
     "remainingQstk()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setMaxCharacterSupply(uint256)": FunctionFragment;
     "setMaxSupply(uint256)": FunctionFragment;
     "settings()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -60,14 +57,10 @@ interface QNFTInterface extends ethers.utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "unlockQstkFromNft(uint256)": FunctionFragment;
     "updateBaseUrl(string)": FunctionFragment;
-    "upgradeNftCoin(uint256,uint256)": FunctionFragment;
+    "upgradeNftCoin(uint256,uint32)": FunctionFragment;
     "withdrawQstk(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "FOUNDATION_PERCENTAGE",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "PERCENT_MAX",
     values?: undefined
@@ -97,10 +90,6 @@ interface QNFTInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "maxCharacterSupply",
-    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "maxSupply", values?: undefined): string;
   encodeFunctionData(
@@ -160,10 +149,6 @@ interface QNFTInterface extends ethers.utils.Interface {
     values: [string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "setMaxCharacterSupply",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setMaxSupply",
     values: [BigNumberish]
   ): string;
@@ -219,10 +204,6 @@ interface QNFTInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "FOUNDATION_PERCENTAGE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "PERCENT_MAX",
     data: BytesLike
   ): Result;
@@ -241,10 +222,6 @@ interface QNFTInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "maxCharacterSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "maxSupply", data: BytesLike): Result;
@@ -279,10 +256,6 @@ interface QNFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setMaxCharacterSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -341,14 +314,14 @@ interface QNFTInterface extends ethers.utils.Interface {
     "AddFreeAllocation(address,uint256)": EventFragment;
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "DepositQstk(address,uint256)": EventFragment;
-    "MintNFT(address,uint256,uint256,uint256,uint256,uint256)": EventFragment;
+    "DepositQstk(uint256)": EventFragment;
+    "MintNFT(address,uint256,uint32,uint32,uint256,uint256)": EventFragment;
     "RemoveFreeAllocation(address,uint256)": EventFragment;
     "SetMaxSupply(uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "UnlockQstkFromNft(address,uint256,uint256)": EventFragment;
-    "UpgradeNftCoin(address,uint256,uint256,uint256)": EventFragment;
-    "WithdrawQstk(address,uint256)": EventFragment;
+    "UpgradeNftCoin(address,uint256,uint32,uint32)": EventFragment;
+    "WithdrawQstk(uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AddFreeAllocation"): EventFragment;
@@ -408,8 +381,6 @@ export class QNFT extends BaseContract {
   interface: QNFTInterface;
 
   functions: {
-    FOUNDATION_PERCENTAGE(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     PERCENT_MAX(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     airdrop(overrides?: CallOverrides): Promise<[string]>;
@@ -449,8 +420,6 @@ export class QNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    maxCharacterSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     maxSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     mintNft(
@@ -484,17 +453,9 @@ export class QNFT extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        BigNumber
-      ] & {
-        characterId: BigNumber;
-        favCoinId: BigNumber;
+      [number, number, BigNumber, BigNumber, BigNumber, boolean, BigNumber] & {
+        characterId: number;
+        favCoinId: number;
         lockDuration: BigNumber;
         lockAmount: BigNumber;
         createdAt: BigNumber;
@@ -534,11 +495,6 @@ export class QNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setMaxCharacterSupply(
-      _maxCharacterSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -607,8 +563,6 @@ export class QNFT extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  FOUNDATION_PERCENTAGE(overrides?: CallOverrides): Promise<BigNumber>;
-
   PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
   airdrop(overrides?: CallOverrides): Promise<string>;
@@ -648,8 +602,6 @@ export class QNFT extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  maxCharacterSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
   maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   mintNft(
@@ -683,17 +635,9 @@ export class QNFT extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      BigNumber
-    ] & {
-      characterId: BigNumber;
-      favCoinId: BigNumber;
+    [number, number, BigNumber, BigNumber, BigNumber, boolean, BigNumber] & {
+      characterId: number;
+      favCoinId: number;
       lockDuration: BigNumber;
       lockAmount: BigNumber;
       createdAt: BigNumber;
@@ -730,11 +674,6 @@ export class QNFT extends BaseContract {
   setApprovalForAll(
     operator: string,
     approved: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setMaxCharacterSupply(
-    _maxCharacterSupply: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -800,8 +739,6 @@ export class QNFT extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    FOUNDATION_PERCENTAGE(overrides?: CallOverrides): Promise<BigNumber>;
-
     PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
     airdrop(overrides?: CallOverrides): Promise<string>;
@@ -841,8 +778,6 @@ export class QNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    maxCharacterSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
     maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     mintNft(
@@ -876,17 +811,9 @@ export class QNFT extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        boolean,
-        BigNumber
-      ] & {
-        characterId: BigNumber;
-        favCoinId: BigNumber;
+      [number, number, BigNumber, BigNumber, BigNumber, boolean, BigNumber] & {
+        characterId: number;
+        favCoinId: number;
         lockDuration: BigNumber;
         lockAmount: BigNumber;
         createdAt: BigNumber;
@@ -923,11 +850,6 @@ export class QNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setMaxCharacterSupply(
-      _maxCharacterSupply: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1021,12 +943,8 @@ export class QNFT extends BaseContract {
     >;
 
     DepositQstk(
-      owner?: string | null,
       amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; amount: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
 
     MintNFT(
       user?: string | null,
@@ -1036,12 +954,12 @@ export class QNFT extends BaseContract {
       lockDuration?: null,
       metaId?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, number, number, BigNumber, BigNumber],
       {
         user: string;
         nftId: BigNumber;
-        characterId: BigNumber;
-        favCoinId: BigNumber;
+        characterId: number;
+        favCoinId: number;
         lockDuration: BigNumber;
         metaId: BigNumber;
       }
@@ -1083,27 +1001,21 @@ export class QNFT extends BaseContract {
       oldFavCoinId?: null,
       newFavCoinId?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, number, number],
       {
         user: string;
         nftId: BigNumber;
-        oldFavCoinId: BigNumber;
-        newFavCoinId: BigNumber;
+        oldFavCoinId: number;
+        newFavCoinId: number;
       }
     >;
 
     WithdrawQstk(
-      owner?: string | null,
       amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; amount: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
   };
 
   estimateGas: {
-    FOUNDATION_PERCENTAGE(overrides?: CallOverrides): Promise<BigNumber>;
-
     PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
     airdrop(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1142,8 +1054,6 @@ export class QNFT extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    maxCharacterSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1207,11 +1117,6 @@ export class QNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setMaxCharacterSupply(
-      _maxCharacterSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1281,10 +1186,6 @@ export class QNFT extends BaseContract {
   };
 
   populateTransaction: {
-    FOUNDATION_PERCENTAGE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     PERCENT_MAX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     airdrop(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1324,10 +1225,6 @@ export class QNFT extends BaseContract {
     isApprovedForAll(
       owner: string,
       operator: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    maxCharacterSupply(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1399,11 +1296,6 @@ export class QNFT extends BaseContract {
     setApprovalForAll(
       operator: string,
       approved: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setMaxCharacterSupply(
-      _maxCharacterSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
