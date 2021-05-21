@@ -28,12 +28,12 @@ function trendIcon(changePercentage: number): any {
 
 function trendClass(changePercentage: number): any {
   if (changePercentage > 0) {
-    return 'uptrend'
+    return styles.upTrend
   }
   if (changePercentage < 0) {
-    return 'downtrend'
+    return styles.downTrend
   }
-  return 'normaltrend'
+  return styles.normalTrend
 }
 
 function capitalizeFirstLetter(str: string) {

@@ -37,7 +37,7 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
   })
 
   return (
-    <div className={classNames(className, 'select')}>
+    <div className={classNames(className, styles.select)}>
       <div className={styles.selectLabel}>{label}</div>
       <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
         {placeholder || 'Select an option'}
