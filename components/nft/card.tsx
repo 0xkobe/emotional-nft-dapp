@@ -1,10 +1,11 @@
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
 import { backgrounds } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
-import { Creature, Metadata, Skin, Traits } from '../../types/metadata'
+import { APINftMetadataResponse } from '../../types/api'
+import { Creature, Skin, Traits } from '../../types/metadata'
 import { Character } from '../../types/nft'
 
-const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: Metadata }> =
+const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: APINftMetadataResponse }> =
   (props) => {
     const [creature, setCreature] = useState<Character>()
 

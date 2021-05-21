@@ -2,7 +2,10 @@ import { animals, characters, skins } from '../data/nft'
 import { Creature, Metadata, Skin, Traits } from '../types/metadata'
 import { Character } from '../types/nft'
 
-export const attribute = (metadata: Metadata, trait: Traits) => {
+export const attribute = (
+  metadata: APINftMetadataResponse,
+  trait: Traits,
+): any => {
   const attr = metadata.attributes.find((x) => x.trait_type === trait)
   if (!attr) throw new Error(`Cannot find trait ${trait} in metadata`)
   return attr.value

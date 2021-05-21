@@ -13,6 +13,11 @@ import {
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
+import {
+  APINftCreateRequest,
+  APINftCreateResponse,
+  APIResponseError,
+} from '../types/api'
 import { QNFT, QNFTSettings } from '../types/contracts'
 import { Emotion } from '../types/nft'
 
@@ -153,30 +158,32 @@ export default function Mint(): JSX.Element {
   }
 
   // create a new metadata on the API. Returns the created metadata id.
-  const createMetadata = async (signature: string): Promise<string> => {
+  const createMetadata = async (signature: string): Promise<number> => {
+    if (!account) throw new Error('account is falsy')
+    if (!chainId) throw new Error('account is falsy')
+
+    const payload: APINftCreateRequest = {
+      author,
+      backgroundId,
+      description,
+      name,
+      creator: account,
+      signature,
+      chainId,
+    }
     const res = await fetch('/api/nft/create', {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        author,
-        backgroundId,
-        description,
-        name,
-        owner: account,
-        signature,
-        chainId,
-      }),
+      body: JSON.stringify(payload),
       method: 'POST',
     })
-    if (!res.ok) {
-      const error = (await res.json()).error
-      if (error)
-        throw new Error(`an error occurred while creating metadata: ${error}`)
+    const response: APINftCreateResponse | APIResponseError = await res.json()
+    if ('error' in response)
+      throw new Error(`an error occurred while creating metadata: ${error}`)
+    if (!res.ok)
       throw new Error(`an unknown error occurred while creating metadata`)
-    }
-    const metaId = (await res.json()).metaId
-    return metaId
+    return response.metaId
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
