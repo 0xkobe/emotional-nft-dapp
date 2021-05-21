@@ -12,6 +12,7 @@ import {
 } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
+import { favCoins } from '../../data/nft'
 import {
   Background,
   Creature,
@@ -21,6 +22,7 @@ import {
   Skin,
   Traits,
 } from '../../types/metadata'
+
 
 // TODO: remove when API is ready
 const metadataMock: Metadata = {
@@ -97,7 +99,12 @@ export default function NFT(): JSX.Element {
 
         {metadata && (
           <div className="flex">
-            <NFTCard metadata={metadata} />
+            <NFTCard
+              changePercentage={-20}
+              favcoin={favCoins[0]}
+              ethPrice={"0.8429"}
+              metadata={metadata}
+            />
             <div>
               <h1>{metadata.name}</h1>
               <div>
