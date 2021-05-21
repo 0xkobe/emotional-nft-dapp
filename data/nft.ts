@@ -58,15 +58,17 @@ const animals = [
 ]
 
 const characters: Character[] = []
+// TODO: the characters should not be calculated like this but set one by one so we can set any id we need to match the smart contract
 for (const animalIndex in animals) {
   const animal = animals[animalIndex]
   for (const skinIndex in skins) {
     const skin = skins[skinIndex]
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
-      id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
+      id: parseInt(animalIndex) * skins.length + parseInt(skinIndex),
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
+      creature: animal.name,
       skin: skin,
       emotions: {
         [Emotion.Angry]: `${baseUrl}/angry.png`,
@@ -83,6 +85,7 @@ characters.push({
   id: 25,
   name: 'Fish',
   artist: artists.debbie,
+  creature: Creature.Fish,
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/fish/angry.png`,
@@ -97,6 +100,7 @@ characters.push({
   id: 26,
   name: 'Minotaur',
   artist: artists.clive,
+  creature: Creature.Minotaur,
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,

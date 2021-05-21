@@ -8,7 +8,14 @@ export const abi = {
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
 // structure is: contract name -> chain id -> contract address
-export const deployedAddresses = {
+export const deployedAddresses: {
+  qstk: { [key: number]: string }
+  qSettings: { [key: number]: string }
+  qAirdrop: { [key: number]: string }
+  qnftSettings: { [key: number]: string }
+  qnftGov: { [key: number]: string }
+  qnft: { [key: number]: string }
+} = {
   qstk: {
     3: '0x7b93a8A27117AE5F3FE92852258383891B4BA29D',
     31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
@@ -35,7 +42,10 @@ export const deployedAddresses = {
   },
 }
 
-export const remoteProviderConfig = {
+export const remoteProviderConfig: {
+  urls: { [key: number]: string }
+  defaultChainId: number
+} = {
   urls: {
     1: 'https://eth-mainnet.alchemyapi.io/v2/jte2TvgFm5Uqjz6lYLUfnBsMd7TXS6SW', // dedicated alchemy app to use in prod
     3: 'https://eth-ropsten.alchemyapi.io/v2/j3511RMZjDGkirYD0QPu8nGn1sIY0Y7c', // dedicated alchemy app to use in dev/staging
