@@ -11,34 +11,59 @@ import './card.css'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage: number // percentage of changes
-  emotion: Emotion
   favcoin: FavCoin
   metadata: Metadata
   ethPrice: string
 }
 
-function trendIcon(trendValue: number): any {
-  if (trendValue > 0) {
+function trendIcon(changePercentage: number): any {
+  if (changePercentage > 0) {
     return IconUptrend
   }
-  if (trendValue < 0) {
+  if (changePercentage < 0) {
     return IconDownTrend
   }
   return IconNormalTrend
 }
 
-function trendClass(trendValue: number): any {
-  if (trendValue > 0) {
+function trendClass(changePercentage: number): any {
+  if (changePercentage > 0) {
     return 'uptrend'
   }
-  if (trendValue < 0) {
+  if (changePercentage < 0) {
     return 'downtrend'
   }
   return 'normaltrend'
 }
 
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function emotionFromPriceChange(changePercentage: number): Emotion {
+  // temporarily we strictly define emotion as specified in https://github.com/Quiver-Protocol/emotional-nft-dapp/issues/8
+  // angry	< -20%
+  // worry	[-20%, -10%]
+  // normal	[-10%, +15%]
+  // rest	[+15%, +30%]
+  // happy	>+30%
+  if (changePercentage < -20) {
+    return Emotion.Angry
+  }
+  if (changePercentage < -10) {
+    return Emotion.Worry
+  }
+  if (changePercentage < 15) {
+    return Emotion.Normal
+  }
+  if (changePercentage < 30) {
+    return Emotion.Rest
+  }
+  return Emotion.Happy
+}
+
 const NFTCard: FunctionComponent<IProps> =
-  ({ emotion, changePercentage, favcoin, ethPrice, metadata }: IProps) => {
+  ({ changePercentage, favcoin, ethPrice, metadata }: IProps) => {
     const [creature, setCreature] = useState<Character>()
 
     useEffect(() => {
@@ -53,11 +78,12 @@ const NFTCard: FunctionComponent<IProps> =
 
     let TrendIcon = trendIcon(changePercentage)
     let backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number]
+    let emotion = emotionFromPriceChange(changePercentage)
 
     return (
       <div className="p-8 border rounded-xl w-96 card">
         <div className="card-top">
-          <div className={classNames('emotion-text', trendClass(changePercentage))}>{emotion}</div>
+          <div className={classNames('emotion-text', trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
           <div className="favcoin-visual">
             <TrendIcon className="favcoin-trend" />
             <img className="favcoin-logo" src={favcoin.meta.icon} />
