@@ -12,6 +12,7 @@ import {
 } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
+import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { QNFT, QNFTSettings } from '../types/contracts'
 import { Emotion } from '../types/nft'
 
@@ -22,7 +23,7 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 }
 
 export default function Mint(): JSX.Element {
-  const { signer, account, library } = useWallet(metamaskConnector)
+  const { signer, account, library, chainId } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
@@ -48,13 +49,10 @@ export default function Mint(): JSX.Element {
   const [lockOption, setLockOption] = useState(lockOptions[0])
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
   const [freeAmount, setFreeAmount] = useState(BigNumber.from(0))
-
-  const [metaId, setMetaId] = useState<number>(0) // FIXME: to replace with save in database
-  // TODO: to save in database
-  // const [name, setName] = useState("")
-  // const [description, setDescription] = useState("")
-  // const [author, setAuthor] = useState("")
-  // const [bgImageId, setBgImageId] = useState(0)
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [author, setAuthor] = useState('')
+  const [backgroundId, setBackgroundId] = useState(0)
   const [defaultEmotion, setDefaultEmotion] = useState(Emotion.Normal)
 
   // user balance
@@ -137,22 +135,76 @@ export default function Mint(): JSX.Element {
       .then((x) => console.log('lockOptionsCount:', x.toString()))
   }, [qnftSettings])
 
+  // generate the signature of the metadata using Metamask
+  const signMetadata = async (): Promise<string> => {
+    if (!library) throw new Error('library is falsy')
+    if (!chainId) throw new Error('chainId is falsy')
+    const payload = payloadForSignatureEIP712v4(
+      chainId,
+      author,
+      backgroundId,
+      description,
+      name,
+    )
+    return library.send('eth_signTypedData_v4', [
+      account,
+      JSON.stringify(payload),
+    ])
+  }
+
+  // create a new metadata on the API. Returns the created metadata id.
+  const createMetadata = async (signature: string): Promise<string> => {
+    const res = await fetch('/api/nft/create', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        author,
+        backgroundId,
+        description,
+        name,
+        owner: account,
+        signature,
+        chainId,
+      }),
+      method: 'POST',
+    })
+    if (!res.ok) {
+      const error = (await res.json()).error
+      if (error)
+        throw new Error(`an error occurred while creating metadata: ${error}`)
+      throw new Error(`an unknown error occurred while creating metadata`)
+    }
+    const metaId = (await res.json()).metaId
+    return metaId
+  }
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!signer) return setError('signer is falsy')
+    if (!qnft) return setError('qnft is falsy')
+
+    if (lockAmount.isZero() || lockAmount.isNegative())
+      return setError('lockAmount must be positive and not zero')
 
     // TODO: make sure metamask is connected or throw a nice error
 
-    // FIXME: save meta
+    // generate signature
+    // TODO: try to use useCallback to not call this if not changes. same for createMetadata if it works
+    console.log('Signing metadata using Metamask...')
+    const signature = await signMetadata()
+    console.log('signature', signature)
+
+    // save meta
+    console.log('Saving metadata on backend...')
+    const metaId = await createMetadata(signature)
+    console.log('metaId', metaId)
 
     // console.log('Form was submitted', animalId, skinId, emotion)
-    if (!signer) return setError('signer is falsy')
-    if (!account) return setError('account is falsy')
-    if (!qnft) return setError('qnft is falsy')
-    if (!qnftSettings) return setError('qnftSettings is falsy')
-    if (metaId === undefined) return setError('metaId is falsy')
 
-    console.log('Signing and sending transaction in Metamask...')
+    console.log('Signing and sending transaction using Metamask...')
     // TODO: make sure chainId is the same with signer and qnft
+    // TODO: It seems the contracts hooks is also using the chain id from metamask: to investigate
     const tx = await qnft
       .connect(signer)
       .mintNft(character.id, favCoin.id, lockOption.id, lockAmount, metaId, {
@@ -294,9 +346,57 @@ export default function Mint(): JSX.Element {
               }}
             />
           </div>
+
+          <div>
+            <label htmlFor="backgroundId">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              onChange={(event) => {
+                setName(event.target.value)
+              }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="description">Description</label>
+            <input
+              id="description"
+              name="description"
+              type="text"
+              onChange={(event) => {
+                setDescription(event.target.value)
+              }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="author">Author</label>
+            <input
+              id="author"
+              name="author"
+              type="text"
+              onChange={(event) => {
+                setAuthor(event.target.value)
+              }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="backgroundId">BackgroundId</label>
+            <input
+              id="backgroundId"
+              name="backgroundId"
+              type="number"
+              onChange={(event) => {
+                setBackgroundId(parseInt(event.target.value))
+              }}
+            />
+          </div>
+
           <div>
             <label htmlFor="freeAmount">FreeAmount</label>
-
             <input
               id="freeAmount"
               name="freeAmount"
@@ -313,6 +413,7 @@ export default function Mint(): JSX.Element {
           <div>
             Minted NFTs: {totalSupply.toString()} / {maxSupply.toString()}
           </div>
+          <div>Chain id: {chainId}</div>
           <button className="block px-10 py-8 bg-primary-50">Mint</button>
         </form>
       </aside>
