@@ -1,67 +1,18 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { parseEther } from '@ethersproject/units'
-import { Creature, Favcoin, LockPeriod, Skin } from '../types/metadata'
-
-type Artist = {
-  name: string
-  wallet: string
-  meta: string
-}
-
-enum Emotion {
-  Angry = 'angry',
-  Worry = 'worry',
-  Normal = 'normal',
-  Rest = 'rest',
-  Happy = 'happy',
-}
-
-type Character = {
-  id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
-  name: string
-  skin: Skin
-  emotions: {
-    [Emotion.Angry]: string
-    [Emotion.Worry]: string
-    [Emotion.Normal]: string
-    [Emotion.Rest]: string
-    [Emotion.Happy]: string
-  }
-  artist: Artist
-}
-
-type FavCoin = {
-  id: Favcoin
-  mintPrice: BigNumber // default mint price in ETH
-  meta: {
-    name: string
-    symbol: string
-    icon: string
-    website: string
-    social: string
-    other: string
-  }
-}
-
-type LockOption = {
-  id: number
-  description: string
-  duration: number // in second
-  discount: number
-  minAmount: BigNumber
-  maxAmount: BigNumber
-}
+import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
+import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?
-  'nft/background/01_sunrise_boat.png',
-  'nft/background/02_noon_boat.png',
-  'nft/background/03_evening_boat.png',
-  'nft/background/04_night_boat.png',
-  'nft/background/05_bright_night_sky_moon.png',
-  'nft/background/06_cloudy_night_sky.png',
-  'nft/background/07_no_cloud_night_sky.png',
-  'nft/background/08_rainy_night_sky.png',
+  '/nft/background/01_sunrise_boat.png',
+  '/nft/background/02_noon_boat.png',
+  '/nft/background/03_evening_boat.png',
+  '/nft/background/04_night_boat.png',
+  '/nft/background/05_bright_night_sky_moon.png',
+  '/nft/background/06_cloudy_night_sky.png',
+  '/nft/background/07_no_cloud_night_sky.png',
+  '/nft/background/08_rainy_night_sky.png',
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -97,13 +48,7 @@ const artists: { [key: string]: Artist } = {
   },
 }
 
-const skins = [
-  Skin.Bronze,
-  Skin.Diamond,
-  Skin.Silver,
-  Skin.Golden,
-  Skin.Platinium,
-]
+const skins = [Skin.Bronze, Skin.Diamond, Skin.Silver, Skin.Gold, Skin.Platinum]
 const animals = [
   { name: Creature.Bull, artist: artists.clive },
   { name: Creature.Bear, artist: artists.rogan },
@@ -164,7 +109,7 @@ characters.push({
 
 const favCoins: FavCoin[] = [
   {
-    id: Favcoin.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
+    id: FavCoinEnum.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
     mintPrice: parseEther('0.1'), // 0.1ETH
     meta: {
       name: 'Bitcoin',
@@ -176,7 +121,7 @@ const favCoins: FavCoin[] = [
     },
   },
   {
-    id: Favcoin.ETH, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/1",
+    id: FavCoinEnum.ETH, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/1",
     mintPrice: parseEther('0.05'), // 0.05ETH
     meta: {
       name: 'Ethereum',
@@ -217,12 +162,11 @@ const lockOptions: LockOption[] = [
 ]
 
 export {
-  Emotion,
-  animals,
-  skins,
   characters,
   backgrounds,
   artists,
   favCoins,
   lockOptions,
+  skins,
+  animals,
 }
