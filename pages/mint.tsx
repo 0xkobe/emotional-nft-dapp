@@ -39,7 +39,9 @@ export default function Mint(): JSX.Element {
   const [userBalance, setUserBalance] = useState(BigNumber.from(0))
   const [maxSupply, setMaxSupply] = useState(BigNumber.from(0))
   const [totalSupply, setTotalSupply] = useState(BigNumber.from(0))
-  const [mintPrice, setMintPrice] = useState(BigNumber.from(0))
+  const [mintTotalPrice, setMintTotalPrice] = useState(BigNumber.from(0))
+  const [mintTokenPrice, setMintTokenPrice] = useState(BigNumber.from(0))
+  const [mintNonTokenPrice, setMintNonTokenPrice] = useState(BigNumber.from(0))
 
   const [character, setCharacter] = useState(characters[0])
   const [favCoin, setFavCoin] = useState(favCoins[0])
@@ -73,8 +75,16 @@ export default function Mint(): JSX.Element {
   // show error in console
   useEffect(() => {
     if (!error) return
-    console.log(error)
+    console.error('error', error)
   }, [error])
+  useEffect(() => {
+    if (!qnftError) return
+    console.error('qnftError', qnftError)
+  }, [qnftError])
+  useEffect(() => {
+    if (!qnftSettingsError) return
+    console.error('qnftSettingsError', qnftSettingsError)
+  }, [qnftSettingsError])
 
   // calcMintPrice
   useEffect(() => {
@@ -88,7 +98,9 @@ export default function Mint(): JSX.Element {
       )
       .then((x) => {
         console.log('mint price updated', x.toString())
-        setMintPrice(x)
+        setMintTotalPrice(x.totalPrice)
+        setMintTokenPrice(x.tokenPrice)
+        setMintNonTokenPrice(x.nonTokenPrice)
       })
   }, [qnftSettings, character, favCoin, lockOption, lockAmount, freeAmount])
 
@@ -144,7 +156,7 @@ export default function Mint(): JSX.Element {
     const tx = await qnft
       .connect(signer)
       .mintNft(character.id, favCoin.id, lockOption.id, lockAmount, metaId, {
-        value: mintPrice,
+        value: mintTotalPrice,
       })
     console.log('tx', tx)
     console.log('Tx signed and broadcasted with success', tx.hash)
@@ -294,7 +306,9 @@ export default function Mint(): JSX.Element {
               }}
             />
           </div>
-          <div>Mint price: {formatUnits(mintPrice)} ETH</div>
+          <div>Mint total price: {formatUnits(mintTotalPrice)} ETH</div>
+          <div>Mint token price: {formatUnits(mintTokenPrice)}</div>
+          <div>Mint non token price: {formatUnits(mintNonTokenPrice)}</div>
           <div>Your balance: {formatUnits(userBalance)} ETH</div>
           <div>
             Minted NFTs: {totalSupply.toString()} / {maxSupply.toString()}
