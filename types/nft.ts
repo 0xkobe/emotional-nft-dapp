@@ -1,12 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Skin, FavCoinEnum } from '../types/metadata'
+import { FavCoinEnum, Skin } from '../types/metadata'
 
 export enum Emotion {
-  Angry = 0,
-  Worry,
-  Normal,
-  Rest,
-  Happy,
+  Angry = 'angry',
+  Worry = 'worry',
+  Normal = 'normal',
+  Rest = 'rest',
+  Happy = 'happy',
 }
 
 // NFT Data parsed from RawNFTData
@@ -46,11 +46,11 @@ export type Character = {
   name: string
   skin: Skin
   emotions: {
-    angry: string
-    worry: string
-    normal: string
-    rest: string
-    happy: string
+    [Emotion.Angry]: string
+    [Emotion.Worry]: string
+    [Emotion.Normal]: string
+    [Emotion.Rest]: string
+    [Emotion.Happy]: string
   }
   artist: Artist
 }
@@ -72,6 +72,7 @@ export type FavCoin = {
 
 export type LockOption = {
   id: number
+  description: string // used to display on the mint page
   duration: number // in second
   discount: number
   minAmount: BigNumber
