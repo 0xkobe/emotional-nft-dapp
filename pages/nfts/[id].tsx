@@ -1,11 +1,15 @@
 import { Contract } from '@ethersproject/contracts'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
-import { NetworkConnector } from '@web3-react/network-connector'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import NFTCard from '../../components/nft/card'
+import {
+  abi,
+  deployedAddresses,
+  metamaskConnector,
+} from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
 import {
@@ -36,24 +40,12 @@ const metadataMock: Metadata = {
   ],
 }
 
-// TODO: move in a dedicate file
-const deployedAddresses = {
-  3: '0x29D1B07a302d7CB8d3A78216495a80A86aA9593f',
-}
-
-const remoteConnector = new NetworkConnector({
-  urls: {
-    3: 'https://eth-ropsten.alchemyapi.io/v2/j3511RMZjDGkirYD0QPu8nGn1sIY0Y7c',
-  },
-  defaultChainId: 3,
-})
-
 export default function NFT(): JSX.Element {
   const router = useRouter()
   const { contract, error: contractError } = useContract(
-    remoteConnector,
-    deployedAddresses,
-    require('../../abi/QNFT.json'),
+    metamaskConnector,
+    deployedAddresses.qnft,
+    abi.qnft,
   )
   const [id, setId] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
