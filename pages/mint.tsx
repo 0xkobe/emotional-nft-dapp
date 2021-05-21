@@ -3,7 +3,7 @@ import { formatUnits, parseUnits } from '@ethersproject/units'
 import Head from 'next/head'
 import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
-import { characters, Emotion, favCoins, lockOptions } from '../data/nft'
+import { characters, favCoins, lockOptions } from '../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -13,6 +13,7 @@ import {
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { QNFT, QNFTSettings } from '../types/contracts'
+import { Emotion } from '../types/nft'
 
 // This helper function allow to iterate on a enum containing string. Source: https://www.petermorlion.com/iterating-a-typescript-enum/
 // TODO: only use by the form. can be removed when not needed
