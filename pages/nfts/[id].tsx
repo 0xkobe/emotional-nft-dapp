@@ -12,33 +12,8 @@ import {
 } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
-import {
-  Background,
-  Creature,
-  FavCoinEnum,
-  LockPeriod,
-  Metadata,
-  Skin,
-  Traits,
-} from '../../types/metadata'
-
-// TODO: remove when API is ready
-const metadataMock: Metadata = {
-  name: 'Super Bitcoin Bear',
-  description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis felis in tincidunt posuere. Nullam imperdiet convallis augue vulputate sollicitudin.',
-  external_url: '',
-  image: 'https://via.placeholder.com/320x320',
-  attributes: [
-    { trait_type: Traits.Creature, value: Creature.Bear },
-    { trait_type: Traits.Skin, value: Skin.Gold },
-    { trait_type: Traits.Background, value: Background.NightBoat },
-    { trait_type: Traits.FavCoin, value: FavCoinEnum.BTC },
-    { trait_type: Traits.Lock, value: LockPeriod.SixMonths },
-    { trait_type: Traits.CreatorName, value: 'px4.eth' },
-    { trait_type: Traits.CreatorWallet, value: '0x' },
-  ],
-}
+import { APINftMetadataResponse, APIResponseError } from '../../types/api'
+import { Traits } from '../../types/metadata'
 
 export default function NFT(): JSX.Element {
   const router = useRouter()
@@ -49,7 +24,7 @@ export default function NFT(): JSX.Element {
   )
   const [id, setId] = useState<number>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [metadata, setMetadata] = useState<Metadata>()
+  const [metadata, setMetadata] = useState<APINftMetadataResponse>()
   const [error, setError] = useState<Error>()
 
   const fetchMetadata = useCallback(async (contract: Contract, id: number) => {
@@ -58,9 +33,18 @@ export default function NFT(): JSX.Element {
       console.log(contract, id)
       const tokenURI = await contract.tokenURI(id)
       console.log(tokenURI)
-      // TODO: fetch metadata
-      const metadata = metadataMock
-      setMetadata(metadata)
+      const res = await fetch(tokenURI)
+      const response: APINftMetadataResponse | APIResponseError =
+        await res.json()
+      if ('error' in response)
+        return setError(
+          new Error(`an error occurred while fetching metadata: ${error}`),
+        )
+      if (!res.ok)
+        return setError(
+          new Error(`an unknown error occurred while fetching metadata`),
+        )
+      setMetadata(response)
     } catch (e) {
       setError(e)
     } finally {
