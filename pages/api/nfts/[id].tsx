@@ -86,6 +86,10 @@ export default async (
         trait_type: Traits.Withdrawn,
         value: metadata.withdrawn,
       },
+      {
+        trait_type: Traits.DefaultEmotion,
+        value: metadata.defaultEmotion,
+      },
     ],
   }
 

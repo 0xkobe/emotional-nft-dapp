@@ -7,6 +7,7 @@ import {
   Skin,
   Traits,
 } from './metadata'
+import { Emotion } from './nft'
 
 export type APIResponseError = {
   error: string
@@ -20,6 +21,7 @@ export type APINftCreateRequest = {
   creator: string
   signature: string
   chainId: number
+  defaultEmotion: Emotion
 }
 
 export type APINftCreateResponse = {
@@ -72,6 +74,10 @@ export type APINftMetadataResponse = {
     {
       trait_type: Traits.Withdrawn
       value: boolean
+    },
+    {
+      trait_type: Traits.DefaultEmotion
+      value: string
     },
   ]
 }

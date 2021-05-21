@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Character, FavCoin, LockOption } from './nft'
+import { Character, Emotion, FavCoin, LockOption } from './nft'
 
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
 export enum Creature {
@@ -61,6 +61,7 @@ export enum Traits {
   CreatorWallet = "Creator's Address",
   CreatedData = 'Created Date',
   Withdrawn = 'Withdrawn',
+  DefaultEmotion = 'Default Emotion',
 }
 
 export enum DisplayType {
@@ -78,9 +79,7 @@ export type MetadataOffChain = {
   name: string
   chainId: number
   creator: string
-
-  // TODO: add default emotion!
-  // defaultEmotion: Emotion
+  defaultEmotion: Emotion
 }
 
 // Structure of the nft data onchain

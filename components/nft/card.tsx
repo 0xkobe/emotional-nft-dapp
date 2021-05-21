@@ -31,7 +31,7 @@ const NFTCard: FunctionComponent<HTMLAttributes<any> & { metadata: APINftMetadat
             className="absolute top-0 right-0 left-0 bottom-0"
           />
           <img
-            src={creature.emotions.angry}
+            src={(creature.emotions as { [key: string]: string })[attribute(props.metadata, Traits.DefaultEmotion)]}
             className="absolute top-0 right-0 left-0 bottom-0"
           />
         </div>

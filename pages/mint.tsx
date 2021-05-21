@@ -23,6 +23,7 @@ import { Emotion } from '../types/nft'
 
 // This helper function allow to iterate on a enum containing string. Source: https://www.petermorlion.com/iterating-a-typescript-enum/
 // TODO: only use by the form. can be removed when not needed
+// eslint-disable-next-line @typescript-eslint/ban-types
 function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
   return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[]
 }
@@ -170,6 +171,7 @@ export default function Mint(): JSX.Element {
       creator: account,
       signature,
       chainId,
+      defaultEmotion,
     }
     const res = await fetch('/api/nft/create', {
       headers: {

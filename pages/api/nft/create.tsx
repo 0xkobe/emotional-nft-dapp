@@ -18,6 +18,7 @@ export default async (
     creator,
     signature,
     chainId,
+    defaultEmotion,
   } = req.body as APINftCreateRequest
 
   const reqError = []
@@ -27,6 +28,7 @@ export default async (
   if (!description) reqError.push('description is empty')
   if (!name) reqError.push('name is empty')
   if (!creator) reqError.push('creator is empty')
+  if (!defaultEmotion) reqError.push('defaultEmotion is empty')
   if (!Number.isInteger(backgroundId))
     reqError.push('backgroundId is not set or not a number')
 
@@ -55,6 +57,7 @@ export default async (
     name,
     chainId,
     creator: creator.toLowerCase(),
+    defaultEmotion,
   }
 
   // create data
