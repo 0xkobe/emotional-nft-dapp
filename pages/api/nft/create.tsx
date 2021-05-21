@@ -1,7 +1,7 @@
 import { recoverTypedSignature_v4 } from 'eth-sig-util'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { payloadForSignatureEIP712v4 } from '../../../lib/signature'
-import { supabase } from '../supabase'
+import { supabase } from '../../../lib/supabase'
 
 export default async (
   req: NextApiRequest,
