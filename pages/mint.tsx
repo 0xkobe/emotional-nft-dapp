@@ -1,6 +1,165 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import Head from 'next/head'
+import Image from 'next/image'
+import { FormEvent, useEffect, useState } from 'react'
+import { characters, favCoins, lockOptions } from '../data/nft'
+import {
+  abi,
+  deployedAddresses,
+  metamaskConnector,
+  remoteConnector,
+} from '../data/smartContract'
+import useContract from '../hooks/useContract'
+import useWallet from '../hooks/useWallet'
+import { QNFT, QNFTSettings } from '../types/contracts'
+import { Emotion } from '../types/nft'
+
+// This helper function allow to iterate on a enum containing string. Source: https://www.petermorlion.com/iterating-a-typescript-enum/
+// TODO: only use by the form. can be removed when not needed
+function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+  return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[]
+}
 
 export default function Mint(): JSX.Element {
+  const { signer, account, library } = useWallet(metamaskConnector)
+  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+    remoteConnector,
+    deployedAddresses.qnft,
+    abi.qnft,
+  )
+  const { contract: qnftSettings, error: qnftSettingsError } =
+    useContract<QNFTSettings>(
+      remoteConnector,
+      deployedAddresses.qnftSettings,
+      abi.qnftSettings,
+    )
+
+  const [error, setError] = useState<string | undefined>(undefined)
+  const [userBalance, setUserBalance] = useState(BigNumber.from(0))
+  const [maxSupply, setMaxSupply] = useState(BigNumber.from(0))
+  const [totalSupply, setTotalSupply] = useState(BigNumber.from(0))
+  const [mintPrice, setMintPrice] = useState(BigNumber.from(0))
+
+  const [character, setCharacter] = useState(characters[0])
+  const [favCoin, setFavCoin] = useState(favCoins[0])
+  const [lockOption, setLockOption] = useState(lockOptions[0])
+  const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
+  const [freeAmount, setFreeAmount] = useState(BigNumber.from(0))
+
+  const [metaId, setMetaId] = useState<number>(0) // FIXME: to replace with save in database
+  // TODO: to save in database
+  // const [name, setName] = useState("")
+  // const [description, setDescription] = useState("")
+  // const [author, setAuthor] = useState("")
+  // const [bgImageId, setBgImageId] = useState(0)
+  const [defaultEmotion, setDefaultEmotion] = useState(Emotion.Normal)
+
+  // user balance
+  useEffect(() => {
+    if (!account) return
+    if (!library) return
+    void library.getBalance(account).then(setUserBalance)
+  }, [library, account])
+
+  // totalSupply
+  // TODO: could be nice to refresh on every block
+  useEffect(() => {
+    if (!qnft) return
+    void qnft.totalSupply().then(setTotalSupply)
+    void qnft.maxSupply().then(setMaxSupply)
+  }, [qnft])
+
+  // show error in console
+  useEffect(() => {
+    if (!error) return
+    console.log(error)
+  }, [error])
+
+  // calcMintPrice
+  useEffect(() => {
+    void qnftSettings
+      ?.calcMintPrice(
+        character.id,
+        favCoin.id,
+        lockOption.id,
+        lockAmount,
+        freeAmount,
+      )
+      .then((x) => {
+        console.log('mint price updated', x.toString())
+        setMintPrice(x)
+      })
+  }, [qnftSettings, character, favCoin, lockOption, lockAmount, freeAmount])
+
+  // check mint conditions
+  useEffect(() => {
+    if (!qnftSettings) return
+    void Promise.all([
+      qnftSettings.mintStarted(),
+      qnftSettings.mintPaused(),
+      qnftSettings.mintFinished(),
+      qnftSettings.onlyAirdropUsers(),
+    ]).then(([mintStarted, mintPaused, mintFinished, onlyAirdropUsers]) => {
+      console.log('mintStarted:', mintStarted.toString())
+      console.log('mintPaused:', mintPaused.toString())
+      console.log('mintFinished:', mintFinished.toString())
+      console.log('onlyAirdropUsers:', onlyAirdropUsers.toString())
+
+      if (!mintStarted) return setError('mint is not started') // TODO: show this message to user nicely
+      if (mintPaused) return setError('mint is pause') // TODO: show this message to user nicely
+      if (mintFinished) return setError('mint is finished') // TODO: show this message to user nicely
+      if (onlyAirdropUsers) return setError('mint is only for airdrops users') // TODO: show this message to user nicely
+    })
+  }, [qnftSettings])
+
+  useEffect(() => {
+    void qnftSettings
+      ?.characterCount()
+      .then((x) => console.log('characterCount:', x.toString()))
+    void qnftSettings
+      ?.favCoinsCount()
+      .then((x) => console.log('favCoinsCount:', x.toString()))
+    void qnftSettings
+      ?.lockOptionsCount()
+      .then((x) => console.log('lockOptionsCount:', x.toString()))
+  }, [qnftSettings])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    // TODO: make sure metamask is connected or throw a nice error
+
+    // FIXME: save meta
+
+    // console.log('Form was submitted', animalId, skinId, emotion)
+    if (!signer) return setError('signer is falsy')
+    if (!account) return setError('account is falsy')
+    if (!qnft) return setError('qnft is falsy')
+    if (!qnftSettings) return setError('qnftSettings is falsy')
+    if (metaId === undefined) return setError('metaId is falsy')
+
+    console.log('Signing and sending transaction in Metamask...')
+    // TODO: make sure chainId is the same with signer and qnft
+    const tx = await qnft
+      .connect(signer)
+      .mintNft(character.id, favCoin.id, lockOption.id, lockAmount, metaId, {
+        value: mintPrice,
+      })
+    console.log('tx', tx)
+    console.log('Tx signed and broadcasted with success', tx.hash)
+
+    console.log('Waiting for tx to be mined...')
+    const log = await tx.wait()
+    console.log('log', log)
+    const transferEvent = log.events?.find(
+      (event) => event.event === 'Transfer',
+    )
+    const tokenId = transferEvent?.args?.tokenId
+    if (!tokenId) return setError('tokenId is falsy')
+    console.log('Tx mined with success. Token id:', tokenId.toString())
+  }
+
   return (
     <>
       <Head>
@@ -15,16 +174,133 @@ export default function Mint(): JSX.Element {
       </main>
 
       <aside className="w-1/3 bg-white border-l border-gray-200 overflow-y-auto p-4 flex flex-col justify-between">
-        <div>
-          <div className="border h-96 w-96 mx-auto">preview</div>
-          <ul>
-            <li>Stat 1</li>
-            <li>Stat 2</li>
-            <li>Stat 3</li>
-            <li>Stat 4</li>
-          </ul>
+        <div className="border h-96 w-96 mx-auto">
+          {character != null && defaultEmotion != null ? (
+            <Image
+              src={character.emotions[defaultEmotion]}
+              height={200}
+              width={200}
+            />
+          ) : (
+            'Select an character to get the preview'
+          )}
         </div>
-        <button className="block px-10 py-8 bg-primary-50">Mint</button>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="character">Character</label>
+            <select
+              id="character"
+              name="characterId"
+              value={character.id}
+              onChange={(event) => {
+                const char = characters.find(
+                  (c) => c.id === parseInt(event.target.value),
+                )
+                if (!char) return
+                setCharacter(char)
+              }}
+            >
+              {characters.map((character) => (
+                <option key={character.id} value={character.id}>
+                  {character.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="defaultEmotion">DefaultEmotion</label>
+            <select
+              id="defaultEmotion"
+              name="defaultEmotion"
+              value={defaultEmotion}
+              onChange={(event) => {
+                const x = enumKeys(Emotion).find(
+                  (key) => Emotion[key] === event.target.value,
+                )
+                if (!x) return
+                setDefaultEmotion(Emotion[x])
+              }}
+            >
+              {enumKeys(Emotion).map((defaultEmotion) => (
+                <option key={defaultEmotion} value={Emotion[defaultEmotion]}>
+                  {defaultEmotion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="favCoin">FavCoin</label>
+            <select
+              id="favCoin"
+              name="favCoinId"
+              value={favCoin.id}
+              onChange={(event) => {
+                const x = favCoins.find(
+                  (x) => x.id === parseInt(event.target.value),
+                )
+                if (!x) return
+                setFavCoin(x)
+              }}
+            >
+              {favCoins.map((favCoin) => (
+                <option key={favCoin.id} value={favCoin.id}>
+                  {favCoin.meta.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="lockOption">LockOption</label>
+            <select
+              id="lockOption"
+              name="lockOptionId"
+              value={lockOption.id}
+              onChange={(event) => {
+                const x = lockOptions.find(
+                  (x) => x.id === parseInt(event.target.value),
+                )
+                if (!x) return
+                setLockOption(x)
+              }}
+            >
+              {lockOptions.map((lockOption) => (
+                <option key={lockOption.id} value={lockOption.id}>
+                  {lockOption.description}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="lockAmount">LockAmount</label>
+
+            <input
+              id="lockAmount"
+              name="lockAmount"
+              type="number"
+              onChange={(event) => {
+                setLockAmount(parseUnits(event.target.value || '0', 'wei'))
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor="freeAmount">FreeAmount</label>
+
+            <input
+              id="freeAmount"
+              name="freeAmount"
+              type="number"
+              onChange={(event) => {
+                setFreeAmount(parseUnits(event.target.value || '0', 'wei'))
+              }}
+            />
+          </div>
+          <div>Mint price: {formatUnits(mintPrice)} ETH</div>
+          <div>Your balance: {formatUnits(userBalance)} ETH</div>
+          <div>
+            Minted NFTs: {totalSupply.toString()} / {maxSupply.toString()}
+          </div>
+          <button className="block px-10 py-8 bg-primary-50">Mint</button>
+        </form>
       </aside>
     </>
   )

@@ -1,57 +1,18 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Creature, Favcoin, LockPeriod, Skin } from '../types/metadata'
-
-type Artist = {
-  name: string
-  wallet: string
-  meta: string
-}
-
-type Character = {
-  id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
-  name: string
-  skin: Skin
-  emotions: {
-    angry: string
-    worry: string
-    normal: string
-    rest: string
-    happy: string
-  }
-  artist: Artist
-}
-
-type FavCoin = {
-  id: Favcoin
-  mintPrice: BigNumber // default mint price in ETH
-  meta: {
-    name: string
-    symbol: string
-    icon: string
-    website: string
-    social: string
-    other: string
-  }
-}
-
-type LockOption = {
-  id: number
-  duration: number // in second
-  discount: number
-  minAmount: BigNumber
-  maxAmount: BigNumber
-}
+import { parseEther } from '@ethersproject/units'
+import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
+import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
   'transparent', // should we create transparent 1024x1024 image?
-  'nft/background/01_sunrise_boat.png',
-  'nft/background/02_noon_boat.png',
-  'nft/background/03_evening_boat.png',
-  'nft/background/04_night_boat.png',
-  'nft/background/05_bright_night_sky_moon.png',
-  'nft/background/06_cloudy_night_sky.png',
-  'nft/background/07_no_cloud_night_sky.png',
-  'nft/background/08_rainy_night_sky.png',
+  '/nft/background/01_sunrise_boat.png',
+  '/nft/background/02_noon_boat.png',
+  '/nft/background/03_evening_boat.png',
+  '/nft/background/04_night_boat.png',
+  '/nft/background/05_bright_night_sky_moon.png',
+  '/nft/background/06_cloudy_night_sky.png',
+  '/nft/background/07_no_cloud_night_sky.png',
+  '/nft/background/08_rainy_night_sky.png',
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -87,13 +48,7 @@ const artists: { [key: string]: Artist } = {
   },
 }
 
-const skins = [
-  Skin.Bronze,
-  Skin.Diamond,
-  Skin.Silver,
-  Skin.Golden,
-  Skin.Platinium,
-]
+const skins = [Skin.Bronze, Skin.Diamond, Skin.Silver, Skin.Gold, Skin.Platinum]
 const animals = [
   { name: Creature.Bull, artist: artists.clive },
   { name: Creature.Bear, artist: artists.rogan },
@@ -114,11 +69,11 @@ for (const animalIndex in animals) {
       artist: animal.artist,
       skin: skin,
       emotions: {
-        angry: `${baseUrl}/angry.png`,
-        worry: `${baseUrl}/worry.png`,
-        normal: `${baseUrl}/normal.png`,
-        rest: `${baseUrl}/rest.png`,
-        happy: `${baseUrl}/happy.png`,
+        [Emotion.Angry]: `${baseUrl}/angry.png`,
+        [Emotion.Worry]: `${baseUrl}/worry.png`,
+        [Emotion.Normal]: `${baseUrl}/normal.png`,
+        [Emotion.Rest]: `${baseUrl}/rest.png`,
+        [Emotion.Happy]: `${baseUrl}/happy.png`,
       },
     })
   }
@@ -130,11 +85,11 @@ characters.push({
   artist: artists.debbie,
   skin: Skin.None,
   emotions: {
-    angry: `/nft/characters/fish/angry.png`,
-    worry: `/nft/characters/fish/worry.png`,
-    normal: `/nft/characters/fish/normal.png`,
-    rest: `/nft/characters/fish/rest.png`,
-    happy: `/nft/characters/fish/happy.png`,
+    [Emotion.Angry]: `/nft/characters/fish/angry.png`,
+    [Emotion.Worry]: `/nft/characters/fish/worry.png`,
+    [Emotion.Normal]: `/nft/characters/fish/normal.png`,
+    [Emotion.Rest]: `/nft/characters/fish/rest.png`,
+    [Emotion.Happy]: `/nft/characters/fish/happy.png`,
   },
 })
 
@@ -144,23 +99,35 @@ characters.push({
   artist: artists.clive,
   skin: Skin.None,
   emotions: {
-    angry: `/nft/characters/minotaur/angry.png`,
-    worry: `/nft/characters/minotaur/worry.png`,
-    normal: `/nft/characters/minotaur/normal.png`,
-    rest: `/nft/characters/minotaur/rest.png`,
-    happy: `/nft/characters/minotaur/happy.png`,
+    [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,
+    [Emotion.Worry]: `/nft/characters/minotaur/worry.png`,
+    [Emotion.Normal]: `/nft/characters/minotaur/normal.png`,
+    [Emotion.Rest]: `/nft/characters/minotaur/rest.png`,
+    [Emotion.Happy]: `/nft/characters/minotaur/happy.png`,
   },
 })
 
 const favCoins: FavCoin[] = [
   {
-    id: Favcoin.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
-    mintPrice: BigNumber.from(1).pow(18).div(100), // 0.01ETH
+    id: FavCoinEnum.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
+    mintPrice: parseEther('0.1'), // 0.1ETH
     meta: {
       name: 'Bitcoin',
       symbol: 'BTC',
       icon: 'https://dapp.quiverprotocol.com/icon/btc', // or online url if it works
       website: 'https://bitcoin.org',
+      social: '',
+      other: '',
+    },
+  },
+  {
+    id: FavCoinEnum.ETH, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/1",
+    mintPrice: parseEther('0.05'), // 0.05ETH
+    meta: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      icon: 'https://dapp.quiverprotocol.com/icon/eth', // or online url if it works
+      website: 'https://ethereum.org',
       social: '',
       other: '',
     },
@@ -171,6 +138,7 @@ const lockOptions: LockOption[] = [
   {
     id: LockPeriod.SixMonths,
     duration: 6 * 30 * 86400, // 6 months
+    description: '6 months',
     discount: 20, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
@@ -178,6 +146,7 @@ const lockOptions: LockOption[] = [
   {
     id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
+    description: '12 months',
     discount: 30, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
@@ -185,10 +154,19 @@ const lockOptions: LockOption[] = [
   {
     id: LockPeriod.OneCentury,
     duration: 100 * 12 * 30 * 86400, // 1 century
+    description: '1 century',
     discount: 40, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
   },
 ]
 
-export { characters, backgrounds, artists, favCoins, lockOptions }
+export {
+  characters,
+  backgrounds,
+  artists,
+  favCoins,
+  lockOptions,
+  skins,
+  animals,
+}
