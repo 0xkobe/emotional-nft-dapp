@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import Card, { IProps } from './card'
 import { favCoins } from '../../data/nft'
-import { Emotion } from '../../types/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, Metadata } from '../../types/metadata'
 
 export default {
