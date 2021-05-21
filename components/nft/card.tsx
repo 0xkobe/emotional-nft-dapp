@@ -55,7 +55,7 @@ const NFTCard: FunctionComponent<IProps> =
     let backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number]
 
     return (
-      <div className="p-8 border rounded-xl w-96">
+      <div className="p-8 border rounded-xl w-96 card">
         <div className="card-top">
           <div className={classNames('emotion-text', trendClass(changePercentage))}>{emotion}</div>
           <div className="favcoin-visual">

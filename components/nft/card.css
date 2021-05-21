@@ -1,53 +1,56 @@
-.card-top {
+.card {
+    background: linear-gradient(180deg, #FFFFFF 50.12%, rgba(236, 253, 245, 0.35) 100%), #FFFFFF;
+}
+.card .card-top {
     position: relative;
     margin-bottom: 32px;
 }
-.card-top .emotion-text {
+.card .card-top .emotion-text {
     display: inline-block;
     margin: 0 auto;
     border-radius: 10px;
     padding: 4px 8px;
 }
-.card-top .emotion-text.uptrend {
+.card .card-top .emotion-text.uptrend {
     color: #10B981;
     background: #ECFDF5;
 }
-.card-top .emotion-text.downtrend {
+.card .card-top .emotion-text.downtrend {
     color: #b94010;
     background: #ffb39a;
 }
-.card-top .emotion-text.normaltrend {
+.card .card-top .emotion-text.normaltrend {
     color: #000000;
     background: #eeeeee;
 }
-.card-top .favcoin-visual {
+.card .card-top .favcoin-visual {
     position: absolute;
     top: 0;
     right: 0;
 }
-.card-top .favcoin-visual .favcoin-trend {
+.card .card-top .favcoin-visual .favcoin-trend {
     display: inline-block;
     vertical-align: middle;
 }
-.card-top .favcoin-visual .favcoin-logo {
+.card .card-top .favcoin-visual .favcoin-logo {
     display: inline-block;
     width: 32px;
     height: 32px;
     margin-left: 8px;
     vertical-align: middle;
 }
-.card-bottom {
+.card .card-bottom {
     margin-top: 32px;
     position: relative;
 }
-.card-bottom .creature-name {
+.card .card-bottom .creature-name {
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
     line-height: 28px;
     color: #231B5C;
 }
-.card-bottom .creature-info {
+.card .card-bottom .creature-info {
     margin-top: 4px;
     font-style: normal;
     font-weight: normal;
@@ -55,18 +58,18 @@
     line-height: 20px;
     color: #9CA3AF;
 }
-.card-bottom .eth-price {
+.card .card-bottom .eth-price {
     position: absolute;
     top: 0;
     right: 0;
 }
-.card-bottom .eth-price img {
+.card .card-bottom .eth-price img {
     vertical-align: middle;
     display: inline-block;
     margin-right: 8px;
     height: 16px;
 }
-.card-bottom .eth-price span {
+.card .card-bottom .eth-price span {
     vertical-align: middle;
     display: inline-block;
     font-style: normal;
