@@ -1,23 +1,16 @@
 import { Meta, Story } from '@storybook/react'
-import Modal, { IProps } from './modal'
+import ModalProcessing, { IProps } from './modal-processing'
 
 export default {
-  title: 'Modal/Modal',
-  component: Modal,
+  title: 'ModalProcessing/ModalProcessing',
+  component: ModalProcessing,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <Modal {...args} />
+const Template: Story<IProps> = (args) => <ModalProcessing {...args} />
 
 export const Default = Template.bind({})
 Default.args = {  
   isShown: true,
-  children: (
-    <div>
-      <h1>
-        Modal basic
-      </h1>
-    </div>
-  ),
   onRequestClose: (): void => {},
   onModalClose: (): void => {},
 }

@@ -1,23 +1,16 @@
 import { Meta, Story } from '@storybook/react'
-import Modal, { IProps } from './modal'
+import ModalSucceed, { IProps } from './modal-succeed'
 
 export default {
-  title: 'Modal/Modal',
-  component: Modal,
+  title: 'ModalSucceed/ModalSucceed',
+  component: ModalSucceed,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <Modal {...args} />
+const Template: Story<IProps> = (args) => <ModalSucceed {...args} />
 
 export const Default = Template.bind({})
 Default.args = {  
   isShown: true,
-  children: (
-    <div>
-      <h1>
-        Modal basic
-      </h1>
-    </div>
-  ),
   onRequestClose: (): void => {},
   onModalClose: (): void => {},
 }
