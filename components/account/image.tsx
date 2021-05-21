@@ -1,24 +1,30 @@
-import { useWeb3React } from '@web3-react/core'
 import { FunctionComponent, HTMLAttributes, useEffect, useRef } from 'react'
 
 const Jazzicon = require('@metamask/jazzicon')
 
-const AccountImage: FunctionComponent<HTMLAttributes<any> & { size: number }> =
-  (props) => {
-    const ref = useRef<HTMLDivElement>()
+export type IProps = HTMLAttributes<any> & {
+  account: string
+  size?: number
+}
 
-    const { account } = useWeb3React()
+export const defaultSize = 32
 
-    useEffect(() => {
-      if (account && ref.current) {
-        ref.current.innerHTML = ''
-        ref.current.appendChild(
-          Jazzicon(props.size, parseInt(account.slice(2, 10), 16)),
-        )
-      }
-    }, [account, props.size])
+const AccountImage: FunctionComponent<IProps> = (props) => {
+  const ref = useRef<HTMLDivElement>()
 
-    return <div ref={ref as any} {...props} />
-  }
+  useEffect(() => {
+    if (props.account && ref.current) {
+      ref.current.innerHTML = ''
+      ref.current.appendChild(
+        Jazzicon(
+          props.size || defaultSize,
+          parseInt(props.account.slice(2, 10), 16),
+        ),
+      )
+    }
+  }, [props.account, props.size])
+
+  return <div ref={ref as any} {...props} />
+}
 
 export default AccountImage
