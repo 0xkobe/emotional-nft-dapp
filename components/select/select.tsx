@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent, useState, useRef } from 'react'
-import IconArrowDown from '../icon/down'
+import IconChevron from '../icon/chevron'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
 import './select.css'
 
@@ -41,7 +41,7 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
       <div className="select-label">{label}</div>
       <div className={classNames('select-trigger', isOpen? 'open': '')} onClick={toggleDropdown}>
         {placeholder || 'Select an option'}
-        <IconArrowDown className="dropdown-arrow" />
+        <IconChevron className="dropdown-arrow" />
       </div>
       <div className={classNames('select-dropdown', isOpen? 'open': '')}>
         {

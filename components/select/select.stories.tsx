@@ -15,11 +15,11 @@ WithIcon.args = {
   label: 'Animal Skin',
   placeholder: 'Select skin',
   options: [
-    { icon: '/favcoin/btc.png', text: 'Bronze' },
-    { icon: '/favcoin/btc.png', text: 'Diamond' },
-    { icon: '/favcoin/btc.png', text: 'Silver' },
-    { icon: '/favcoin/btc.png', text: 'Gold' },
-    { icon: '/favcoin/btc.png', text: 'Platinum' },
+    { icon: '/favcoin/btc.svg', text: 'Bronze' },
+    { icon: '/favcoin/btc.svg', text: 'Diamond' },
+    { icon: '/favcoin/btc.svg', text: 'Silver' },
+    { icon: '/favcoin/btc.svg', text: 'Gold' },
+    { icon: '/favcoin/btc.svg', text: 'Platinum' },
   ],
   selectedIndex: 1,
   onSelectOption: (option: Option, index: number): void => {}

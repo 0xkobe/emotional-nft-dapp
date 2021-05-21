@@ -5,7 +5,7 @@ type IProps = {
   className?: string
 }
 
-const IconArrowDown: FunctionComponent<IProps> = (props) => {
+const IconChevron: FunctionComponent<IProps> = (props) => {
   return (
     <svg 
         className={props.className}
@@ -24,4 +24,4 @@ const IconArrowDown: FunctionComponent<IProps> = (props) => {
   )
 }
 
-export default IconArrowDown
+export default IconChevron
