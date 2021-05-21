@@ -144,23 +144,24 @@ export const mintNFT = async (
   )
 }
 
-// Comment following functions for now since the contract wasn't updated to the latest yet
 // mint nft for airdrop users
-// export const mintNFTForAirdropUser = async (
-//   qnft: QNFT,
-//   characterId: number,
-//   favCoinId: number,
-//   lockOptionId: number,
-//   lockAmount: BigNumber,
-//   metaId: BigNumber,
-//   airdropKey: string
-// ): Promise<void> => {
-//   await qnft.callStatic.mintNftForAirdropUser(
-//     characterId,
-//     favCoinId,
-//     lockOptionId,
-//     lockAmount,
-//     metaId,
-//     airdropKey
-//   )
-// }
+export const mintNFTForAirdropUser = async (
+  qnft: QNFT,
+  characterId: number,
+  favCoinId: number,
+  lockOptionId: number,
+  lockAmount: BigNumber,
+  metaId: BigNumber,
+  airdropAmount: BigNumber,
+  signature: string
+): Promise<void> => {
+  await qnft.callStatic.mintNftForAirdropUser(
+    characterId,
+    favCoinId,
+    lockOptionId,
+    lockAmount,
+    metaId,
+    airdropAmount,
+    signature
+  )
+}
