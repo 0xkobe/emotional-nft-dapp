@@ -40,7 +40,7 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
     <div className={classNames(className, 'select')}>
       <div className="select-label">{label}</div>
       <div className={classNames('select-trigger', isOpen? 'open': '')} onClick={toggleDropdown}>
-        {placeholder}
+        {placeholder || 'Select an option'}
         <IconArrowDown className="dropdown-arrow" />
       </div>
       <div className={classNames('select-dropdown', isOpen? 'open': '')}>
@@ -51,7 +51,8 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
               key={index}
               className={classNames('select-dropdown-item', selectedIndex === index? 'selected': '')}
             >
-              {option.text}
+              {option.icon && <img src={option.icon} />}
+              <span>{option.text}</span>
             </div>
           ))
         }
