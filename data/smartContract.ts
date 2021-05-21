@@ -9,14 +9,26 @@ export const abi = {
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
 // structure is: contract name -> chain id -> contract address
 export const deployedAddresses = {
-  qstk: { 3: '0x7b93a8A27117AE5F3FE92852258383891B4BA29D' },
-  qSettings: { 3: '0x19e49a2607173Fa68848a7926933922928909949' },
-  qAirdrop: { 3: '0x8342926B783954cF6dF167C2D1068C4B387aDB3D' },
+  qstk: {
+    3: '0x7b93a8A27117AE5F3FE92852258383891B4BA29D',
+    31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+  },
+  qSettings: {
+    3: '0x19e49a2607173Fa68848a7926933922928909949',
+    31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+  },
+  qAirdrop: {
+    3: '0x8342926B783954cF6dF167C2D1068C4B387aDB3D',
+    31337: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+  },
   qnftSettings: {
     3: '0x7d539294AC8b1BA8486e7ef42c1638B9243bbeb0',
     31337: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
   },
-  qnftGov: { 3: '0x4a9dfAC63bb130f69DE2c1AF9DAb7E0b897B5a7A' },
+  qnftGov: {
+    3: '0x4a9dfAC63bb130f69DE2c1AF9DAb7E0b897B5a7A',
+    31337: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
+  },
   qnft: {
     3: '0x29D1B07a302d7CB8d3A78216495a80A86aA9593f',
     31337: '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0',
