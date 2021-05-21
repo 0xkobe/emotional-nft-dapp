@@ -75,7 +75,7 @@ interface QSettingsInterface extends ethers.utils.Interface {
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
-    "SetFoundationWallet(address,address)": EventFragment;
+    "SetFoundationWallet(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -221,9 +221,8 @@ export class QSettings extends BaseContract {
     >;
 
     SetFoundationWallet(
-      owner?: string | null,
       wallet?: null
-    ): TypedEventFilter<[string, string], { owner: string; wallet: string }>;
+    ): TypedEventFilter<[string], { wallet: string }>;
   };
 
   estimateGas: {

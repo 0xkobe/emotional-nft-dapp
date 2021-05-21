@@ -107,14 +107,12 @@ interface QAirdropInterface extends ethers.utils.Interface {
     "AddWhitelistedContract(address)": EventFragment;
     "ClaimQStk(address,uint256)": EventFragment;
     "RemoveWhitelistedContract(address)": EventFragment;
-    "SetFoundationWallet(address,address)": EventFragment;
     "SetVerifier(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AddWhitelistedContract"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ClaimQStk"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RemoveWhitelistedContract"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetFoundationWallet"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetVerifier"): EventFragment;
 }
 
@@ -355,11 +353,6 @@ export class QAirdrop extends BaseContract {
     RemoveWhitelistedContract(
       whitelisted?: string | null
     ): TypedEventFilter<[string], { whitelisted: string }>;
-
-    SetFoundationWallet(
-      owner?: string | null,
-      wallet?: null
-    ): TypedEventFilter<[string, string], { owner: string; wallet: string }>;
 
     SetVerifier(
       verifier?: string | null

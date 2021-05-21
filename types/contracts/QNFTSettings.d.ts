@@ -23,16 +23,17 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   functions: {
     "NFT_SALE_DURATION()": FunctionFragment;
     "PERCENT_MAX()": FunctionFragment;
-    "addCharacterPrices(uint256[])": FunctionFragment;
+    "addCharacters(uint256[],uint256)": FunctionFragment;
     "addFavCoinPrices(uint256[])": FunctionFragment;
     "addLockOption(uint256,uint256,uint256,uint8)": FunctionFragment;
-    "calcMintPrice(uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calcMintPrice(uint32,uint32,uint32,uint256,uint256)": FunctionFragment;
     "characterCount()": FunctionFragment;
-    "characterPrices(uint256)": FunctionFragment;
-    "favCoinPrices(uint256)": FunctionFragment;
+    "characterMaxSupply(uint32)": FunctionFragment;
+    "characterPrices(uint32)": FunctionFragment;
+    "favCoinPrices(uint32)": FunctionFragment;
     "favCoinsCount()": FunctionFragment;
     "initialize(address)": FunctionFragment;
-    "lockOptionLockDuration(uint256)": FunctionFragment;
+    "lockOptionLockDuration(uint32)": FunctionFragment;
     "lockOptions(uint256)": FunctionFragment;
     "lockOptionsCount()": FunctionFragment;
     "mintEndTime()": FunctionFragment;
@@ -47,13 +48,22 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     "setNonTokenPriceMultiplier(uint256)": FunctionFragment;
     "setOnlyAirdropUsers(bool)": FunctionFragment;
     "setTokenPriceMultiplier(uint256)": FunctionFragment;
+    "setTransferAllowedAfterRedeem(bool)": FunctionFragment;
+    "setUpgradePriceMultiplier(uint256)": FunctionFragment;
     "settings()": FunctionFragment;
     "startMint()": FunctionFragment;
     "tokenPriceMultiplier()": FunctionFragment;
+    "transferAllowedAfterRedeem()": FunctionFragment;
     "unPauseMint()": FunctionFragment;
-    "updateCharacterPrice(uint256,uint256)": FunctionFragment;
-    "updateFavCoinPrice(uint256,uint256)": FunctionFragment;
-    "updateLockOption(uint256,uint256,uint256,uint256,uint8)": FunctionFragment;
+    "updateCharacterMaxSupplies(uint32,uint32,uint256)": FunctionFragment;
+    "updateCharacterMaxSuppliesFromArray(uint32[],uint256[])": FunctionFragment;
+    "updateCharacterMaxSupply(uint32,uint256)": FunctionFragment;
+    "updateCharacterPrice(uint32,uint256)": FunctionFragment;
+    "updateCharacterPrices(uint32,uint32,uint256)": FunctionFragment;
+    "updateCharacterPricesFromArray(uint32[],uint256[])": FunctionFragment;
+    "updateFavCoinPrice(uint32,uint256)": FunctionFragment;
+    "updateLockOption(uint32,uint256,uint256,uint256,uint8)": FunctionFragment;
+    "upgradePriceMultiplier()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -65,8 +75,8 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "addCharacterPrices",
-    values: [BigNumberish[]]
+    functionFragment: "addCharacters",
+    values: [BigNumberish[], BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "addFavCoinPrices",
@@ -89,6 +99,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "characterCount",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "characterMaxSupply",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "characterPrices",
@@ -157,6 +171,14 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "setTokenPriceMultiplier",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setTransferAllowedAfterRedeem",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setUpgradePriceMultiplier",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(functionFragment: "startMint", values?: undefined): string;
   encodeFunctionData(
@@ -164,12 +186,36 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "transferAllowedAfterRedeem",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "unPauseMint",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "updateCharacterMaxSupplies",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCharacterMaxSuppliesFromArray",
+    values: [BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCharacterMaxSupply",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateCharacterPrice",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCharacterPrices",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateCharacterPricesFromArray",
+    values: [BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "updateFavCoinPrice",
@@ -185,6 +231,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
       BigNumberish
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "upgradePriceMultiplier",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "NFT_SALE_DURATION",
@@ -195,7 +245,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addCharacterPrices",
+    functionFragment: "addCharacters",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -212,6 +262,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "characterCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "characterMaxSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -278,6 +332,14 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "setTokenPriceMultiplier",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTransferAllowedAfterRedeem",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setUpgradePriceMultiplier",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startMint", data: BytesLike): Result;
   decodeFunctionResult(
@@ -285,11 +347,35 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "transferAllowedAfterRedeem",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "unPauseMint",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "updateCharacterMaxSupplies",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCharacterMaxSuppliesFromArray",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCharacterMaxSupply",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updateCharacterPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCharacterPrices",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateCharacterPricesFromArray",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -300,30 +386,50 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "updateLockOption",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradePriceMultiplier",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "AddCharacterPrices(address,uint256[])": EventFragment;
-    "AddFavCoinPrices(address,uint256[])": EventFragment;
-    "AddLockOption(address,uint256,uint256,uint256,uint256)": EventFragment;
-    "PauseMint(address,uint256)": EventFragment;
-    "SetNonTokenPriceMultiplier(address,uint256)": EventFragment;
-    "SetTokenPriceMultiplier(address,uint256)": EventFragment;
-    "StartMint(address,uint256)": EventFragment;
-    "UnpauseMint(address,uint256)": EventFragment;
-    "UpdateCharacterPrice(address,uint256,uint256)": EventFragment;
-    "UpdateFavCoinPrice(address,uint256,uint256)": EventFragment;
-    "UpdateLockOption(address,uint256,uint256,uint256,uint256,uint256)": EventFragment;
+    "AddCharacters(uint256[],uint256)": EventFragment;
+    "AddFavCoinPrices(uint256[])": EventFragment;
+    "AddLockOption(uint256,uint256,uint256,uint8)": EventFragment;
+    "PauseMint(uint256)": EventFragment;
+    "SetNonTokenPriceMultiplier(uint256)": EventFragment;
+    "SetTokenPriceMultiplier(uint256)": EventFragment;
+    "SetUpgradePriceMultiplier(uint256)": EventFragment;
+    "StartMint(uint256)": EventFragment;
+    "UnpauseMint(uint256)": EventFragment;
+    "UpdateCharacterMaxSupplies(uint32,uint32,uint256)": EventFragment;
+    "UpdateCharacterMaxSuppliesFromArray(uint32[],uint256[])": EventFragment;
+    "UpdateCharacterMaxSupply(uint32,uint256)": EventFragment;
+    "UpdateCharacterPrice(uint32,uint256)": EventFragment;
+    "UpdateCharacterPrices(uint32,uint32,uint256)": EventFragment;
+    "UpdateCharacterPricesFromArray(uint32[],uint256[])": EventFragment;
+    "UpdateFavCoinPrice(uint32,uint256)": EventFragment;
+    "UpdateLockOption(uint32,uint256,uint256,uint256,uint8)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "AddCharacterPrices"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AddCharacters"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AddFavCoinPrices"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AddLockOption"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PauseMint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetNonTokenPriceMultiplier"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetTokenPriceMultiplier"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetUpgradePriceMultiplier"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StartMint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnpauseMint"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UpdateCharacterMaxSupplies"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "UpdateCharacterMaxSuppliesFromArray"
+  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UpdateCharacterMaxSupply"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdateCharacterPrice"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UpdateCharacterPrices"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "UpdateCharacterPricesFromArray"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdateFavCoinPrice"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdateLockOption"): EventFragment;
 }
@@ -376,13 +482,14 @@ export class QNFTSettings extends BaseContract {
 
     PERCENT_MAX(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    addCharacterPrices(
-      _characterPrices: BigNumberish[],
+    addCharacters(
+      _prices: BigNumberish[],
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     addFavCoinPrices(
-      _favCoinPrices: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -401,17 +508,28 @@ export class QNFTSettings extends BaseContract {
       _lockAmount: BigNumberish,
       _freeAmount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalPrice: BigNumber;
+        tokenPrice: BigNumber;
+        nonTokenPrice: BigNumber;
+      }
+    >;
 
     characterCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    characterMaxSupply(
+      _characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     characterPrices(
-      arg0: BigNumberish,
+      _characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     favCoinPrices(
-      arg0: BigNumberish,
+      _favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -476,6 +594,16 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setTransferAllowedAfterRedeem(
+      _allow: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setUpgradePriceMultiplier(
+      _upgradePriceMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     settings(overrides?: CallOverrides): Promise<[string]>;
 
     startMint(
@@ -484,13 +612,47 @@ export class QNFTSettings extends BaseContract {
 
     tokenPriceMultiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<[boolean]>;
+
     unPauseMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCharacterMaxSupplies(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _supply: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCharacterMaxSuppliesFromArray(
+      _indexes: BigNumberish[],
+      _supplies: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCharacterMaxSupply(
+      _characterId: BigNumberish,
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     updateCharacterPrice(
       _characterId: BigNumberish,
       _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCharacterPrices(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCharacterPricesFromArray(
+      _indexes: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -508,19 +670,22 @@ export class QNFTSettings extends BaseContract {
       _discount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   NFT_SALE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
 
   PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
-  addCharacterPrices(
-    _characterPrices: BigNumberish[],
+  addCharacters(
+    _prices: BigNumberish[],
+    _maxSupply: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   addFavCoinPrices(
-    _favCoinPrices: BigNumberish[],
+    _prices: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -539,17 +704,28 @@ export class QNFTSettings extends BaseContract {
     _lockAmount: BigNumberish,
     _freeAmount: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber] & {
+      totalPrice: BigNumber;
+      tokenPrice: BigNumber;
+      nonTokenPrice: BigNumber;
+    }
+  >;
 
   characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+  characterMaxSupply(
+    _characterId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   characterPrices(
-    arg0: BigNumberish,
+    _characterId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   favCoinPrices(
-    arg0: BigNumberish,
+    _favCoinId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -614,6 +790,16 @@ export class QNFTSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setTransferAllowedAfterRedeem(
+    _allow: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setUpgradePriceMultiplier(
+    _upgradePriceMultiplier: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   settings(overrides?: CallOverrides): Promise<string>;
 
   startMint(
@@ -622,13 +808,47 @@ export class QNFTSettings extends BaseContract {
 
   tokenPriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
+  transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<boolean>;
+
   unPauseMint(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCharacterMaxSupplies(
+    _startIndex: BigNumberish,
+    _length: BigNumberish,
+    _supply: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCharacterMaxSuppliesFromArray(
+    _indexes: BigNumberish[],
+    _supplies: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCharacterMaxSupply(
+    _characterId: BigNumberish,
+    _maxSupply: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   updateCharacterPrice(
     _characterId: BigNumberish,
     _price: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCharacterPrices(
+    _startIndex: BigNumberish,
+    _length: BigNumberish,
+    _price: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCharacterPricesFromArray(
+    _indexes: BigNumberish[],
+    _prices: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -647,18 +867,21 @@ export class QNFTSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
+
   callStatic: {
     NFT_SALE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
 
     PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
-    addCharacterPrices(
-      _characterPrices: BigNumberish[],
+    addCharacters(
+      _prices: BigNumberish[],
+      _maxSupply: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     addFavCoinPrices(
-      _favCoinPrices: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -677,17 +900,28 @@ export class QNFTSettings extends BaseContract {
       _lockAmount: BigNumberish,
       _freeAmount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        totalPrice: BigNumber;
+        tokenPrice: BigNumber;
+        nonTokenPrice: BigNumber;
+      }
+    >;
 
     characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+    characterMaxSupply(
+      _characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     characterPrices(
-      arg0: BigNumberish,
+      _characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinPrices(
-      arg0: BigNumberish,
+      _favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -747,17 +981,61 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setTransferAllowedAfterRedeem(
+      _allow: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setUpgradePriceMultiplier(
+      _upgradePriceMultiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     settings(overrides?: CallOverrides): Promise<string>;
 
     startMint(overrides?: CallOverrides): Promise<void>;
 
     tokenPriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<boolean>;
+
     unPauseMint(overrides?: CallOverrides): Promise<void>;
+
+    updateCharacterMaxSupplies(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _supply: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCharacterMaxSuppliesFromArray(
+      _indexes: BigNumberish[],
+      _supplies: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCharacterMaxSupply(
+      _characterId: BigNumberish,
+      _maxSupply: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     updateCharacterPrice(
       _characterId: BigNumberish,
       _price: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCharacterPrices(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _price: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateCharacterPricesFromArray(
+      _indexes: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -775,116 +1053,134 @@ export class QNFTSettings extends BaseContract {
       _discount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {
-    AddCharacterPrices(
-      owner?: string | null,
-      prices?: null
+    AddCharacters(
+      prices?: null,
+      maxSupply?: null
     ): TypedEventFilter<
-      [string, BigNumber[]],
-      { owner: string; prices: BigNumber[] }
+      [BigNumber[], BigNumber],
+      { prices: BigNumber[]; maxSupply: BigNumber }
     >;
 
     AddFavCoinPrices(
-      owner?: string | null,
       mintPrices?: null
-    ): TypedEventFilter<
-      [string, BigNumber[]],
-      { owner: string; mintPrices: BigNumber[] }
-    >;
+    ): TypedEventFilter<[BigNumber[]], { mintPrices: BigNumber[] }>;
 
     AddLockOption(
-      owner?: string | null,
       minAmount?: null,
       maxAmount?: null,
       lockDuration?: null,
       discount?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber],
+      [BigNumber, BigNumber, BigNumber, number],
       {
-        owner: string;
         minAmount: BigNumber;
         maxAmount: BigNumber;
         lockDuration: BigNumber;
-        discount: BigNumber;
+        discount: number;
       }
     >;
 
     PauseMint(
-      owner?: string | null,
       pausedAt?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; pausedAt: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { pausedAt: BigNumber }>;
 
     SetNonTokenPriceMultiplier(
-      owner?: string | null,
       nonTokenPriceMultiplier?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; nonTokenPriceMultiplier: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { nonTokenPriceMultiplier: BigNumber }>;
 
     SetTokenPriceMultiplier(
-      owner?: string | null,
       tokenPriceMultiplier?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; tokenPriceMultiplier: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { tokenPriceMultiplier: BigNumber }>;
+
+    SetUpgradePriceMultiplier(
+      upgradePriceMultiplier?: null
+    ): TypedEventFilter<[BigNumber], { upgradePriceMultiplier: BigNumber }>;
 
     StartMint(
-      owner?: string | null,
       startedAt?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; startedAt: BigNumber }
-    >;
+    ): TypedEventFilter<[BigNumber], { startedAt: BigNumber }>;
 
     UnpauseMint(
-      owner?: string | null,
       unPausedAt?: null
+    ): TypedEventFilter<[BigNumber], { unPausedAt: BigNumber }>;
+
+    UpdateCharacterMaxSupplies(
+      startIndex?: null,
+      length?: null,
+      supply?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { owner: string; unPausedAt: BigNumber }
+      [number, number, BigNumber],
+      { startIndex: number; length: number; supply: BigNumber }
+    >;
+
+    UpdateCharacterMaxSuppliesFromArray(
+      indexes?: null,
+      supplies?: null
+    ): TypedEventFilter<
+      [number[], BigNumber[]],
+      { indexes: number[]; supplies: BigNumber[] }
+    >;
+
+    UpdateCharacterMaxSupply(
+      characterId?: BigNumberish | null,
+      maxSupply?: null
+    ): TypedEventFilter<
+      [number, BigNumber],
+      { characterId: number; maxSupply: BigNumber }
     >;
 
     UpdateCharacterPrice(
-      owner?: string | null,
       characterId?: BigNumberish | null,
       price?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { owner: string; characterId: BigNumber; price: BigNumber }
+      [number, BigNumber],
+      { characterId: number; price: BigNumber }
+    >;
+
+    UpdateCharacterPrices(
+      startIndex?: null,
+      length?: null,
+      price?: null
+    ): TypedEventFilter<
+      [number, number, BigNumber],
+      { startIndex: number; length: number; price: BigNumber }
+    >;
+
+    UpdateCharacterPricesFromArray(
+      indexes?: null,
+      prices?: null
+    ): TypedEventFilter<
+      [number[], BigNumber[]],
+      { indexes: number[]; prices: BigNumber[] }
     >;
 
     UpdateFavCoinPrice(
-      owner?: string | null,
       favCoinId?: null,
       price?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { owner: string; favCoinId: BigNumber; price: BigNumber }
+      [number, BigNumber],
+      { favCoinId: number; price: BigNumber }
     >;
 
     UpdateLockOption(
-      owner?: string | null,
       lockOptionId?: BigNumberish | null,
       minAmount?: null,
       maxAmount?: null,
       lockDuration?: null,
       discount?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber],
+      [number, BigNumber, BigNumber, BigNumber, number],
       {
-        owner: string;
-        lockOptionId: BigNumber;
+        lockOptionId: number;
         minAmount: BigNumber;
         maxAmount: BigNumber;
         lockDuration: BigNumber;
-        discount: BigNumber;
+        discount: number;
       }
     >;
   };
@@ -894,13 +1190,14 @@ export class QNFTSettings extends BaseContract {
 
     PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
 
-    addCharacterPrices(
-      _characterPrices: BigNumberish[],
+    addCharacters(
+      _prices: BigNumberish[],
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     addFavCoinPrices(
-      _favCoinPrices: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -923,13 +1220,18 @@ export class QNFTSettings extends BaseContract {
 
     characterCount(overrides?: CallOverrides): Promise<BigNumber>;
 
+    characterMaxSupply(
+      _characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     characterPrices(
-      arg0: BigNumberish,
+      _characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     favCoinPrices(
-      arg0: BigNumberish,
+      _favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -987,6 +1289,16 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setTransferAllowedAfterRedeem(
+      _allow: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setUpgradePriceMultiplier(
+      _upgradePriceMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     settings(overrides?: CallOverrides): Promise<BigNumber>;
 
     startMint(
@@ -995,13 +1307,47 @@ export class QNFTSettings extends BaseContract {
 
     tokenPriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
+    transferAllowedAfterRedeem(overrides?: CallOverrides): Promise<BigNumber>;
+
     unPauseMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCharacterMaxSupplies(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _supply: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCharacterMaxSuppliesFromArray(
+      _indexes: BigNumberish[],
+      _supplies: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCharacterMaxSupply(
+      _characterId: BigNumberish,
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     updateCharacterPrice(
       _characterId: BigNumberish,
       _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCharacterPrices(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCharacterPricesFromArray(
+      _indexes: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1019,6 +1365,8 @@ export class QNFTSettings extends BaseContract {
       _discount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1026,13 +1374,14 @@ export class QNFTSettings extends BaseContract {
 
     PERCENT_MAX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    addCharacterPrices(
-      _characterPrices: BigNumberish[],
+    addCharacters(
+      _prices: BigNumberish[],
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     addFavCoinPrices(
-      _favCoinPrices: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1055,13 +1404,18 @@ export class QNFTSettings extends BaseContract {
 
     characterCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    characterMaxSupply(
+      _characterId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     characterPrices(
-      arg0: BigNumberish,
+      _characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     favCoinPrices(
-      arg0: BigNumberish,
+      _favCoinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1121,6 +1475,16 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setTransferAllowedAfterRedeem(
+      _allow: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setUpgradePriceMultiplier(
+      _upgradePriceMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     settings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     startMint(
@@ -1131,13 +1495,49 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    transferAllowedAfterRedeem(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     unPauseMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCharacterMaxSupplies(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _supply: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCharacterMaxSuppliesFromArray(
+      _indexes: BigNumberish[],
+      _supplies: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCharacterMaxSupply(
+      _characterId: BigNumberish,
+      _maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     updateCharacterPrice(
       _characterId: BigNumberish,
       _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCharacterPrices(
+      _startIndex: BigNumberish,
+      _length: BigNumberish,
+      _price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCharacterPricesFromArray(
+      _indexes: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1154,6 +1554,10 @@ export class QNFTSettings extends BaseContract {
       _lockDuration: BigNumberish,
       _discount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgradePriceMultiplier(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }
