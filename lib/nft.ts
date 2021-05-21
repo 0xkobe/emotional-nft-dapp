@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import {
   animals,
   backgrounds,
@@ -7,7 +8,7 @@ import {
   skins,
 } from '../data/nft'
 import { APINftMetadataResponse } from '../types/api'
-import { QNFT } from '../types/contracts'
+import { QNFT, QNFTSettings } from '../types/contracts'
 import {
   Creature,
   HydratedMetadata,
@@ -18,6 +19,7 @@ import {
   Traits,
 } from '../types/metadata'
 import { Character } from '../types/nft'
+import { RawMintPrices } from '../types/raw'
 import { supabase } from './supabase'
 
 export const attribute = (
@@ -102,3 +104,63 @@ export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
     backgroundUrl,
   }
 }
+
+
+// get mint price
+export const getMintPrice = async (
+  qnftSettingsContract: QNFTSettings,
+  characterId: number,
+  favCoinId: number,
+  lockOptionId: number,
+  lockAmount: number,
+  freeAmount: number,
+): Promise<RawMintPrices> => {
+  const mintPrices = (await qnftSettingsContract.callStatic.calcMintPrice(
+    characterId,
+    favCoinId,
+    lockOptionId,
+    lockAmount,
+    freeAmount,
+  )) as RawMintPrices
+
+  return mintPrices
+}
+
+// mint nft
+export const mintNFT = async (
+  qnft: QNFT,
+  characterId: number,
+  favCoinId: number,
+  lockOptionId: number,
+  lockAmount: BigNumber,
+  metaId: BigNumber,
+): Promise<void> => {
+  await qnft.callStatic.mintNft(
+    characterId,
+    favCoinId,
+    lockOptionId,
+    lockAmount,
+    metaId
+  )
+}
+
+// Comment following functions for now since the contract wasn't updated to the latest yet
+// mint nft for airdrop users
+// export const mintNFTForAirdropUser = async (
+//   qnft: QNFT,
+//   characterId: number,
+//   favCoinId: number,
+//   lockOptionId: number,
+//   lockAmount: BigNumber,
+//   metaId: BigNumber,
+//   airdropKey: string
+// ): Promise<void> => {
+//   await qnft.callStatic.mintNftForAirdropUser(
+//     characterId,
+//     favCoinId,
+//     lockOptionId,
+//     lockAmount,
+//     metaId,
+//     airdropKey
+//   )
+// }
