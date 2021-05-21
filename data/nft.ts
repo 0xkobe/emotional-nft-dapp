@@ -163,6 +163,15 @@ const lockOptions: LockOption[] = [
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
   },
+  {
+    // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
+    id: LockPeriod.ThirtyMinutes,
+    duration: 1800,
+    description: '30 min',
+    discount: 2, // percentage
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+  },
 ]
 
 export {
