@@ -5,8 +5,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 // raw NFT data fetched directly from contract
 export type RawNFTData = {
   id: number
-  characterId: BigNumber
-  favCoinId: BigNumber
+  characterId: number
+  favCoinId: number
   lockDuration: BigNumber
   lockAmount: BigNumber
   createdAt: BigNumber
