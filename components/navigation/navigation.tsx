@@ -1,11 +1,14 @@
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
-import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import { FunctionComponent, HtmlHTMLAttributes } from 'react'
 import AccountMenu from '../account/menu'
 import SocialMenu from './social-menu'
+
+export type IProps = HtmlHTMLAttributes<any> & {
+  route?: string
+}
 
 const navigation = [
   { href: '/mint', text: 'Mint NFT' },
@@ -23,9 +26,7 @@ const Logo = () => (
   </div>
 )
 
-const Navigation: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
-  const { route } = useRouter()
-
+const Navigation: FunctionComponent<IProps> = (props) => {
   return (
     <Disclosure as="nav" className="bg-white" {...props}>
       {({ open }) => (
@@ -49,7 +50,7 @@ const Navigation: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
                       <a
                         className={classNames(
                           'inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200',
-                          x.href === route
+                          x.href === props.route
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-500',
                         )}
@@ -74,7 +75,7 @@ const Navigation: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
                   <a
                     className={classNames(
                       'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
-                      x.href === route
+                      x.href === props.route
                         ? 'bg-primary-50 border-primary-500 text-primary-700'
                         : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
                     )}
