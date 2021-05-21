@@ -7,7 +7,7 @@ import { Character, FavCoin, Emotion } from '../../types/nft'
 import IconUptrend from '../icon/uptrend'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
-import './card.css'
+import styles from './card.module.css'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage: number // percentage of changes
@@ -81,15 +81,15 @@ const NFTCard: FunctionComponent<IProps> =
     let emotion = emotionFromPriceChange(changePercentage)
 
     return (
-      <div className="p-8 border rounded-xl w-96 card">
-        <div className="card-top">
-          <div className={classNames('emotion-text', trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
-          <div className="favcoin-visual">
-            <TrendIcon className="favcoin-trend" />
-            <img className="favcoin-logo" src={favcoin.meta.icon} />
+      <div className={classNames('p-8 border rounded-xl w-96', styles.card)}>
+        <div className={styles.cardTop}>
+          <div className={classNames(styles.emotionText, trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
+          <div className={styles.favcoinVisual}>
+            <TrendIcon className={styles.favcoinTrend} />
+            <img className={styles.favcoinLogo} src={favcoin.meta.icon} />
           </div>
         </div>
-        <div className="relative h-80 rounded overflow-hidden mx-auto card-body">
+        <div className={classNames('relative h-80 rounded overflow-hidden mx-auto', styles.cardBody)}>
           {
             backgroundSrc && (
               <img
@@ -103,13 +103,13 @@ const NFTCard: FunctionComponent<IProps> =
             className="absolute top-0 right-0 left-0 bottom-0"
           />
         </div>
-        <div className="card-bottom">
-          <div className="creature-name">{metadata.name}</div>
-          <div className="creature-info">
+        <div className={styles.cardBottom}>
+          <div className={styles.creatureName}>{metadata.name}</div>
+          <div className={styles.creatureInfo}>
             [{attribute(metadata, Traits.Skin)} -{' '}
             {attribute(metadata, Traits.Creature)}]
           </div>
-          <div className="eth-price">
+          <div className={styles.ethPrice}>
             <img src="/favcoin/eth.svg" />
             <span>{ethPrice}</span>
           </div>

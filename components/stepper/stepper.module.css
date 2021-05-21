@@ -5,11 +5,11 @@
     border-radius: 16px;
     display: inline-block;
 }
-.stepper .stepper-option {
+.stepper .stepperOption {
     width: 200px;
     display: inline-block;
 }
-.stepper .stepper-option .stepper-option-number {
+.stepper .stepperOption .stepperOptionNumber {
     width: 40px;
     height: 40px;
     padding: 5px 8px;
@@ -17,10 +17,10 @@
     display: inline-block;
     border: 2px solid #D1D5DB;
 }
-.stepper .stepper-option.done .stepper-option-number {
+.stepper .stepperOption.done .stepperOptionNumber {
     border: 2px solid #000000;
 }
-.stepper .stepper-option .stepper-option-text {
+.stepper .stepperOption .stepperOptionText {
     margin-left: 16px;
     display: inline-block;
 }

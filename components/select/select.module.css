@@ -2,14 +2,14 @@
     margin-top: 32px;
     position: relative;
 }
-.select .select-label {
+.select .selectLabel {
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: #6B7280;
 }
-.select .select-trigger {
+.select .selectTrigger {
     height: 38px;
     padding: 9px 17px;
     background: #FFFFFF;
@@ -24,10 +24,10 @@
     cursor: pointer;
     position: relative;
 }
-.select .select-trigger:hover {
+.select .selectTrigger:hover {
     border: 1px solid #6090fe;
 }
-.select .select-trigger .dropdown-arrow {
+.select .selectTrigger .dropdownArrow {
     position: absolute;
     right: 16px;
     top: 16px;
@@ -37,13 +37,13 @@
     transition-duration: 0.4s;
     transition-property: transform;
 }
-.select .select-trigger.open .dropdown-arrow {
+.select .selectTrigger.open .dropdownArrow {
     transform:rotate(180deg);
     -webkit-transform:rotate(180deg);
     -moz-transform:rotate(180deg); 
     -o-transform:rotate(180deg);
 }
-.select .select-dropdown {
+.select .selectDropdown {
     position: absolute;
     z-index: 100;
     left: 0;
@@ -51,10 +51,10 @@
     border: 1px solid #E7EAF3;
     display: none;
 }
-.select .select-dropdown.open {
+.select .selectDropdown.open {
     display: block;
 }
-.select .select-dropdown .select-dropdown-item {
+.select .selectDropdown .selectDropdownItem {
     cursor: pointer;
     padding: 9px 13px;
     margin: 0;
@@ -68,20 +68,20 @@
     font-size: 14px;
     line-height: 20px;
 }
-.select .select-dropdown .select-dropdown-item:hover {
+.select .selectDropdown .selectDropdownItem:hover {
     background: #9dbafe;
 }
-.select .select-dropdown .select-dropdown-item.selected {
+.select .selectDropdown .selectDropdownItem.selected {
     background: #1253FA;
     color: white;
 }
-.select .select-dropdown .select-dropdown-item img {
+.select .selectDropdown .selectDropdownItem img {
     width: 20px;
     height: 20px;
     vertical-align: middle;
     display: inline-block;
 }
-.select .select-dropdown .select-dropdown-item span {
+.select .selectDropdown .selectDropdownItem span {
     margin-left: 8px;
     vertical-align: middle;
 }

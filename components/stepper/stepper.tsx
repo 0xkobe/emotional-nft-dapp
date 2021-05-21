@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent } from 'react'
-import './stepper.css'
+import styles from './stepper.module.css'
 
 export type IProps = HTMLAttributes<{}> & {
   step: number
@@ -13,14 +13,14 @@ const Stepper: FunctionComponent<IProps> = ({ className, step }: IProps) => {
     'QSTK Allocation'
   ]
   return (
-    <div className={classNames(className, 'stepper')}>
+    <div className={classNames(className, styles.stepper)}>
       {
         options.map((option, index) => (
-          <div className={classNames('stepper-option', (step > index? 'done': ''))}>
-            <div className="stepper-option-number">
+          <div className={classNames(styles.stepperOption, (step > index? styles.done: ''))}>
+            <div className={styles.stepperOptionNumber}>
               {('0' + (index+1))}
             </div>
-            <div className="stepper-option-text">
+            <div className={styles.stepperOptionText}>
               {option}
             </div>
           </div>

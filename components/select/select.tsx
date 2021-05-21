@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent, useState, useRef } from 'react'
 import IconChevron from '../icon/chevron'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
-import './select.css'
+import styles from './select.module.css'
 
 export type Option = {
   icon?: string
@@ -38,18 +38,18 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
 
   return (
     <div className={classNames(className, 'select')}>
-      <div className="select-label">{label}</div>
-      <div className={classNames('select-trigger', isOpen? 'open': '')} onClick={toggleDropdown}>
+      <div className={styles.selectLabel}>{label}</div>
+      <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
         {placeholder || 'Select an option'}
-        <IconChevron className="dropdown-arrow" />
+        <IconChevron className={styles.dropdownArrow} />
       </div>
-      <div className={classNames('select-dropdown', isOpen? 'open': '')}>
+      <div className={classNames(styles.selectDropdown, isOpen? styles.open: '')}>
         {
           options?.map((option, index) => (
             <div
               onClick={onOptionClick(option, index)}
               key={index}
-              className={classNames('select-dropdown-item', selectedIndex === index? 'selected': '')}
+              className={classNames(styles.selectDropdownItem, selectedIndex === index? styles.selected: '')}
             >
               {option.icon && <img src={option.icon} />}
               <span>{option.text}</span>

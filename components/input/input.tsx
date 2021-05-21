@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { InputHTMLAttributes, FunctionComponent } from 'react'
-import './input.css'
+import styles from './input.module.css'
 
 export type IProps = InputHTMLAttributes<{}> & {
   unit?: string
@@ -9,11 +9,11 @@ export type IProps = InputHTMLAttributes<{}> & {
 
 const Input: FunctionComponent<IProps> = ({ unit, label, className, ...props }: IProps) => {
   return (
-    <div className={classNames(className, 'input')}>
-      <div className="input-label">{label}</div>
-      <div className="input-wrapper">
+    <div className={classNames(className, styles.input)}>
+      <div className={styles.inputLabel}>{label}</div>
+      <div className={styles.inputWrapper}>
         <input {...props} />
-        <div className="input-unit">{unit}</div>
+        <div className={styles.inputUnit}>{unit}</div>
       </div>
     </div>
   )
