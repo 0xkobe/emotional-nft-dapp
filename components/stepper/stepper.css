@@ -1,0 +1,26 @@
+.stepper {
+    height: 72px;
+    padding: 15px;
+    border: 1px solid #D1D5DB;
+    border-radius: 16px;
+    display: inline-block;
+}
+.stepper .stepper-option {
+    width: 200px;
+    display: inline-block;
+}
+.stepper .stepper-option .stepper-option-number {
+    width: 40px;
+    height: 40px;
+    padding: 5px 8px;
+    border-radius: 100%;
+    display: inline-block;
+    border: 2px solid #D1D5DB;
+}
+.stepper .stepper-option.done .stepper-option-number {
+    border: 2px solid #000000;
+}
+.stepper .stepper-option .stepper-option-text {
+    margin-left: 16px;
+    display: inline-block;
+}
