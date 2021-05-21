@@ -6,7 +6,7 @@ import useWallet from '../../hooks/useWallet'
 import { shortenAddress } from '../../lib/utils'
 import AccountImage from './image'
 
-export const connector = new InjectedConnector({})
+const connector = new InjectedConnector({})
 
 const Account: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
   const { account, activate, deactivate } = useWallet(connector)
@@ -22,14 +22,14 @@ const Account: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => {
     )
 
   return (
-    <Menu as="div" className="relative" {...props}>
+    <Menu as="div" className="relative inline-block" {...props}>
       {({ open }) => (
         <>
           <Menu.Button className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border">
             <span className="hidden md:block mr-2">
               {shortenAddress(account)}
             </span>
-            <AccountImage className="h-4 w-4" size={16} />
+            <AccountImage className="h-4 w-4" size={16} account={account} />
           </Menu.Button>
           {open && (
             <Menu.Items
