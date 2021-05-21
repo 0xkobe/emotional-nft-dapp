@@ -20,19 +20,22 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IQSettingsInterface extends ethers.utils.Interface {
   functions: {
-    "foundation()": FunctionFragment;
+    "foundationWallet()": FunctionFragment;
     "manager()": FunctionFragment;
     "qstk()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "foundation",
+    functionFragment: "foundationWallet",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "manager", values?: undefined): string;
   encodeFunctionData(functionFragment: "qstk", values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "foundation", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "foundationWallet",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "manager", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "qstk", data: BytesLike): Result;
 
@@ -83,21 +86,21 @@ export class IQSettings extends BaseContract {
   interface: IQSettingsInterface;
 
   functions: {
-    foundation(overrides?: CallOverrides): Promise<[string]>;
+    foundationWallet(overrides?: CallOverrides): Promise<[string]>;
 
     manager(overrides?: CallOverrides): Promise<[string]>;
 
     qstk(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  foundation(overrides?: CallOverrides): Promise<string>;
+  foundationWallet(overrides?: CallOverrides): Promise<string>;
 
   manager(overrides?: CallOverrides): Promise<string>;
 
   qstk(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    foundation(overrides?: CallOverrides): Promise<string>;
+    foundationWallet(overrides?: CallOverrides): Promise<string>;
 
     manager(overrides?: CallOverrides): Promise<string>;
 
@@ -107,7 +110,7 @@ export class IQSettings extends BaseContract {
   filters: {};
 
   estimateGas: {
-    foundation(overrides?: CallOverrides): Promise<BigNumber>;
+    foundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
 
     manager(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -115,7 +118,7 @@ export class IQSettings extends BaseContract {
   };
 
   populateTransaction: {
-    foundation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    foundationWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     manager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

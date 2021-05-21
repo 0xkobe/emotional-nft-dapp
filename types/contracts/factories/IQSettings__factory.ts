@@ -9,7 +9,7 @@ import type { IQSettings, IQSettingsInterface } from "../IQSettings";
 const _abi = [
   {
     inputs: [],
-    name: "foundation",
+    name: "foundationWallet",
     outputs: [
       {
         internalType: "address",
