@@ -1,10 +1,10 @@
 import { Menu } from '@headlessui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/outline'
-import { FunctionComponent, HtmlHTMLAttributes } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 
 const social = [{ href: 'https://t.me/quiverprotocolchat', text: 'Telegram' }]
 
-const SocialMenu: FunctionComponent<HtmlHTMLAttributes<any>> = (props) => (
+const SocialMenu: FunctionComponent<HTMLAttributes<any>> = (props) => (
   <Menu as="div" className="relative" {...props}>
     {({ open }) => (
       <>
