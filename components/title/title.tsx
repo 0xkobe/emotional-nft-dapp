@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent } from 'react'
-import styles from './title.module.css'
 
 export type IProps = HTMLAttributes<{}> & {
   text: string
@@ -8,7 +7,7 @@ export type IProps = HTMLAttributes<{}> & {
 
 const Title: FunctionComponent<IProps> = ({ text, className, ...props }: IProps) => {
   return (
-    <div className={classNames(className, styles.title)}>
+    <div className={classNames(className, "text-xl leading-7 font-bold text-gray-500")}>
       {text}
     </div>
   )

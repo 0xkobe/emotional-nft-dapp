@@ -1,5 +1,4 @@
 import { FunctionComponent } from 'react'
-import styles from './icon.module.css'
 
 type IProps = {
   className?: string
@@ -7,7 +6,7 @@ type IProps = {
 
 const IconSpinner: FunctionComponent<IProps> = (props) => {
   return (
-    <div className={styles.spinner}>
+    <div className="animate-spin">
       <svg 
           className={props.className}
           width="48"
