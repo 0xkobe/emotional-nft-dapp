@@ -19,7 +19,7 @@ const StoryWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps)
       </div>
       <div className="flex flex-col space-y-4">
         <div className="text-base leading-6 font-medium text-gray-500">NFT Description</div>
-        <TextArea placeholder="The best bear in the universe to watch my Bitcoins"/>
+        <TextArea noResize placeholder="The best bear in the universe to watch my Bitcoins" />
       </div>
     </div>
   )

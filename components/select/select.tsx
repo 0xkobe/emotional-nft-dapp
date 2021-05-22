@@ -38,7 +38,11 @@ const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOptio
   return (
     <div className={classNames(className, styles.select)} ref={wrapperRef}>
       <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
-        {placeholder || 'Select an option'}
+        {
+          selectedIndex < options.length ? (
+            options[selectedIndex].text
+          ) : placeholder || 'Select an option'
+        }
         <IconChevron className={styles.dropdownArrow} />
       </div>
       <div className={classNames(styles.selectDropdown, isOpen? styles.open: '')}>

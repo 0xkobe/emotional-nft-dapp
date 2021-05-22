@@ -10,6 +10,7 @@ import StoryWizard from '../components/mint-wizard/story-wizard'
 import AllocationWizard from '../components/mint-wizard/allocation-wizard'
 import MintSummary from '../components/mint-summary/mint-summary'
 import Button from '../components/button/button'
+import { BigNumber } from '@ethersproject/bignumber'
 
 export default function Mint(): JSX.Element {
   const [mintStep, setMintStep] = useState(0)
@@ -74,7 +75,38 @@ export default function Mint(): JSX.Element {
               mintStep === 1 && <StoryWizard/>
             }
             {
-              mintStep === 2 && <AllocationWizard/>
+              mintStep === 2 && (
+                <AllocationWizard
+                  availableMintAmount={BigNumber.from("540000")}
+                  availableFreeAllocation={BigNumber.from("1520000")}
+                  lockOptions={[
+                    {
+                      id: 1,
+                      description: "",
+                      duration: 12*30*24*3600,
+                      discount: 50,
+                      minAmount: BigNumber.from(1000),
+                      maxAmount: BigNumber.from(2000),
+                    },
+                    {
+                      id: 2,
+                      description: "",
+                      duration: 6*30*24*3600,
+                      discount: 30,
+                      minAmount: BigNumber.from(2000),
+                      maxAmount: BigNumber.from(3000),
+                    },
+                    {
+                      id: 3,
+                      description: "",
+                      duration: 3*30*24*3600,
+                      discount: 20,
+                      minAmount: BigNumber.from(3000),
+                      maxAmount: BigNumber.from(4000),
+                    },
+                  ]}
+                />
+              )
             }
           </div>
           <MintSummary

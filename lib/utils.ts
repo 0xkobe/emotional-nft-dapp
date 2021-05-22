@@ -1,4 +1,5 @@
 import { getAddress, isAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!isAddress(address)) return ''
@@ -21,9 +22,19 @@ export function formatDate(d: Date): string {
 
 export function lockDurationToString(duration: number): string {
   // TODO: need to be updated
-  return '6 months'
+  if (duration === 12*30*24*3600) {
+    return '1 Year'
+  }
+  if (duration === 6*30*24*3600) {
+    return '6 months'  
+  }
+  if (duration === 3*30*24*3600) {
+    return '3 months'  
+  }
+
+  return '1 month'
 }
 
-export function formatNumber(n: number): string {
+export function formatNumber(n: number | BigNumber): string {
   return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
