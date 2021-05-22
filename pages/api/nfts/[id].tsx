@@ -79,7 +79,7 @@ export default async (
       },
       {
         display_type: DisplayType.Date,
-        trait_type: Traits.CreatedData,
+        trait_type: Traits.CreatedDate,
         value: metadata.createdAt.toNumber(),
       },
       {

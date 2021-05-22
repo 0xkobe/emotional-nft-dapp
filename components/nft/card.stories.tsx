@@ -64,7 +64,7 @@ Angry.args = {
       },
       {
         display_type: DisplayType.Date,
-        trait_type: Traits.CreatedData,
+        trait_type: Traits.CreatedDate,
         value: Date.now(),
       },
       {
@@ -124,7 +124,7 @@ Happy.args = {
       },
       {
         display_type: DisplayType.Date,
-        trait_type: Traits.CreatedData,
+        trait_type: Traits.CreatedDate,
         value: Date.now(),
       },
       {
@@ -184,7 +184,7 @@ Normal.args = {
       },
       {
         display_type: DisplayType.Date,
-        trait_type: Traits.CreatedData,
+        trait_type: Traits.CreatedDate,
         value: Date.now(),
       },
       {

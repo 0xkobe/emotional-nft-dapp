@@ -6,17 +6,15 @@ import {
   lockOptions,
   skins,
 } from '../data/nft'
-import { APINftMetadataResponse } from '../types/api'
-import { QNFT } from '../types/contracts'
 import {
-  Creature,
+  APINftMetadataResponse,
   HydratedMetadata,
   Metadata,
   MetadataOffChain,
   MetadataOnChain,
-  Skin,
-  Traits,
-} from '../types/metadata'
+} from '../types/api'
+import { QNFT } from '../types/contracts'
+import { Creature, Skin, Traits } from '../types/metadata'
 import { Character } from '../types/nft'
 import { supabase } from './supabase'
 

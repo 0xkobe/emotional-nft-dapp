@@ -1,6 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { Character, Emotion, FavCoin, LockOption } from './nft'
-
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
 export enum Creature {
   Bull = 'bull',
@@ -59,7 +56,7 @@ export enum Traits {
   LockAmount = 'Lock Amount',
   CreatorName = "Creator's Name",
   CreatorWallet = "Creator's Address",
-  CreatedData = 'Created Date',
+  CreatedDate = 'Created Date',
   Withdrawn = 'Withdrawn',
   DefaultEmotion = 'Default Emotion',
 }
@@ -69,35 +66,4 @@ export enum DisplayType {
   Number = 'number', // can also set optional max_value
   BoostPercentage = 'boost_percentage', // can also set optional max_value
   BoostNumber = 'boost_number', // can also set optional max_value
-}
-
-// Structure used to save the metadata in database
-export type MetadataOffChain = {
-  author: string
-  backgroundId: number
-  description: string
-  name: string
-  chainId: number
-  creator: string
-  defaultEmotion: Emotion
-}
-
-// Structure of the nft data onchain
-export type MetadataOnChain = {
-  characterId: number
-  favCoinId: number
-  lockDuration: BigNumber
-  lockAmount: BigNumber
-  createdAt: BigNumber
-  withdrawn: boolean
-  metaId: BigNumber
-}
-
-export type Metadata = MetadataOffChain & MetadataOnChain
-
-export type HydratedMetadata = Metadata & {
-  character: Character
-  favCoin: FavCoin
-  lockOption: LockOption
-  backgroundUrl: string
 }

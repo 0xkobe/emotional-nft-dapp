@@ -2,8 +2,11 @@ import { recoverTypedSignature_v4 } from 'eth-sig-util'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { payloadForSignatureEIP712v4 } from '../../../lib/signature'
 import { supabase } from '../../../lib/supabase'
-import { APINftCreateRequest, APINftCreateResponse } from '../../../types/api'
-import { MetadataOffChain } from '../../../types/metadata'
+import {
+  APINftCreateRequest,
+  APINftCreateResponse,
+  MetadataOffChain,
+} from '../../../types/api'
 
 export default async (
   req: NextApiRequest,
