@@ -7,10 +7,10 @@ import styles from './character.module.css'
 export type IProps = HTMLAttributes<{}> & {
   characters: CharacterOption[]
   selectedIndex: number
-  onChange: (index: number) => void
+  onSelectOption: (index: number) => void
 }
 
-const CharacterView: FunctionComponent<IProps> = ({ characters, selectedIndex, onChange, className, ...props }: IProps) => {
+const CharacterView: FunctionComponent<IProps> = ({ characters, selectedIndex, onSelectOption, className, ...props }: IProps) => {
   return (
     <div className={styles.characters}>
       {
@@ -21,7 +21,7 @@ const CharacterView: FunctionComponent<IProps> = ({ characters, selectedIndex, o
               character={character}
               selected={index === selectedIndex}
               onSelect={() => {
-                onChange(index)
+                onSelectOption(index)
               }}
             />
           )

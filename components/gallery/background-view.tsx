@@ -7,10 +7,10 @@ import styles from './character.module.css'
 export type IProps = HTMLAttributes<{}> & {
   backgrounds: BackgroundOption[]
   selectedIndex: number
-  onChange: (index: number) => void
+  onSelectOption: (index: number) => void
 }
 
-const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex, onChange, className, ...props }: IProps) => {
+const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex, onSelectOption, className, ...props }: IProps) => {
   return (
     <div className={styles.backgrounds}>
       {
@@ -21,7 +21,7 @@ const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex,
               background={background}
               selected={index === selectedIndex}
               onSelect={() => {
-                onChange(index)
+                onSelectOption(index)
               }}
             />
           )

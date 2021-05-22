@@ -65,5 +65,5 @@ Default.args = {
     }
   ],
   selectedIndex: 3,
-  onChange: (index: number): void => {}
+  onSelectOption: (index: number): void => {}
 }
