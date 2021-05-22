@@ -81,7 +81,7 @@ const NFTCard: FunctionComponent<IProps> =
     let emotion = emotionFromPriceChange(changePercentage)
 
     return (
-      <div className={classNames('p-8 border rounded-xl w-96', styles.card)}>
+      <div className={classNames('mb-auto p-8 border rounded-xl w-96', styles.card)}>
         <div className={styles.cardTop}>
           <div className={classNames(styles.emotionText, trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
           <div className={styles.favcoinVisual}>

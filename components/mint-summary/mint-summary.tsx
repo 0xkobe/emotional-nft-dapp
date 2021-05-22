@@ -10,9 +10,9 @@ export type IProps = HTMLAttributes<{}> & {
   mintPrice: string
 }
 
-const MintSummary: FunctionComponent<IProps> = ({ properties, mintPrice, className, ...props }: IProps) => {
+const MintSummary: FunctionComponent<IProps> = ({ properties, mintPrice, className, children, ...props }: IProps) => {
   return (
-    <div className={classNames(className, styles.mintSummary)}>
+    <div className={classNames(className, styles.mintSummary, "mb-auto")}>
       <div
         className={styles.properties}
       >
@@ -36,9 +36,7 @@ const MintSummary: FunctionComponent<IProps> = ({ properties, mintPrice, classNa
             {mintPrice}
           </div>
         </div>
-        <Button>
-          Mint my NFT
-        </Button>
+        {children}
       </div>
     </div>
   )

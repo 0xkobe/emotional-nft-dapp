@@ -10,14 +10,13 @@ export type Option = {
 }
 
 export type IProps = HTMLAttributes<{}> & {
-  label?: string
   placeholder?: string
   options: Option[]
   selectedIndex: number
   onSelectOption?: (option: Option, index: number) => void
 }
 
-const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSelectOption, selectedIndex, className, ...props }: IProps) => {
+const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOption, selectedIndex, className, ...props }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
   
   const toggleDropdown = () => {
@@ -37,8 +36,7 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
   })
 
   return (
-    <div className={classNames(className, styles.select)}>
-      <div className={styles.selectLabel}>{label}</div>
+    <div className={classNames(className, styles.select)} ref={wrapperRef}>
       <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
         {placeholder || 'Select an option'}
         <IconChevron className={styles.dropdownArrow} />
