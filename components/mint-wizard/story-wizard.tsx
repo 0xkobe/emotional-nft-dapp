@@ -1,11 +1,5 @@
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
-import { characters, backgrounds } from '../../data/nft'
-import { Creature } from '../../types/metadata'
-import { capitalize } from '../../lib/utils'
-import Select from '../select/select'
-import CharacterView from '../gallery/character-view'
-import BackgroundView from '../gallery/background-view'
 import Input from '../input/input'
 import TextArea from '../textarea/textarea'
 
