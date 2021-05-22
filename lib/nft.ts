@@ -19,7 +19,6 @@ import {
   Traits,
 } from '../types/metadata'
 import { Character } from '../types/nft'
-import { RawMintPrices } from '../types/raw'
 import { supabase } from './supabase'
 
 export const attribute = (
@@ -114,17 +113,13 @@ export const getMintPrice = async (
   lockOptionId: number,
   lockAmount: number,
   freeAmount: number,
-): Promise<RawMintPrices> => {
-  const mintPrices = (await qnftSettingsContract.callStatic.calcMintPrice(
-    characterId,
-    favCoinId,
-    lockOptionId,
-    lockAmount,
-    freeAmount,
-  )) as RawMintPrices
-
-  return mintPrices
-}
+): Promise<BigNumber> => (await qnftSettingsContract.callStatic.calcMintPrice(
+  characterId,
+  favCoinId,
+  lockOptionId,
+  lockAmount,
+  freeAmount,
+)).totalPrice
 
 // mint nft
 export const mintNFT = async (

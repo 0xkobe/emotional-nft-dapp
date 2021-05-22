@@ -16,24 +16,23 @@ export const verifyAirdropKey = async (
   address: string,
   airdropKey: string
 ): Promise<VerifyAirdropKeyResponse> => {
-  if (airdropKey.length === 158 || airdropKey.length === 162) {
-    const verifier = await qairdrop.callStatic.verifier()
-    const keyBuffer = Buffer.from(airdropKey, 'hex')
-    const amountBuffer = keyBuffer.slice(0, 16)
-    const signature = keyBuffer.slice(16)
-    const messageHash = ethers.utils.solidityKeccak256(['address', 'uint256'], [address, `0x${amountBuffer.toString('hex')}`])
-    // messageHash starts with '0x'
-    const res = ethers.utils.verifyMessage(Buffer.from(messageHash.slice(2), 'hex'), signature)
-    if (res === verifier) {
-      return {
-        isValid: true,
-        amount: BigNumber.from(amountBuffer)
-      }
+  if (airdropKey.length !== 158 && airdropKey.length !== 162) {
+    return {
+      isValid: false,
+      amount: BigNumber.from(0)
     }
   }
 
+  const verifier = await qairdrop.callStatic.verifier()
+  const keyBuffer = Buffer.from(airdropKey, 'hex')
+  const amountBuffer = keyBuffer.slice(0, 16)
+  const signature = keyBuffer.slice(16)
+  const messageHash = ethers.utils.solidityKeccak256(['address', 'uint256'], [address, `0x${amountBuffer.toString('hex')}`])
+  // messageHash starts with '0x'
+  const res = ethers.utils.verifyMessage(Buffer.from(messageHash.slice(2), 'hex'), signature)
+
   return {
-    isValid: false,
-    amount: BigNumber.from(0)
+    isValid: res === verifier,
+    amount: BigNumber.from(amountBuffer)
   }
 }

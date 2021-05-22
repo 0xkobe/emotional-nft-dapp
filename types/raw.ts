@@ -13,10 +13,3 @@ export type RawNFTData = {
   withdrawn: boolean
   metaId: BigNumber
 }
-
-// raw mint prices fetched directly from contract
-export type RawMintPrices = {
-  totalPrice: BigNumber
-  tokenPrice: BigNumber
-  nonTokenPrice: BigNumber
-}
