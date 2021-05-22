@@ -3,13 +3,11 @@ import { TextareaHTMLAttributes, FunctionComponent } from 'react'
 import styles from './textarea.module.css'
 
 export type IProps = TextareaHTMLAttributes<{}> & {
-  label?: string
 }
 
-const TextArea: FunctionComponent<IProps> = ({ label, className, ...props }: IProps) => {
+const TextArea: FunctionComponent<IProps> = ({className, ...props }: IProps) => {
   return (
     <div className={classNames(className, styles.textarea)}>
-      <div className={styles.textareaLabel}>{label}</div>
       <div className={styles.textareaWrapper}>
         <textarea {...props} />
       </div>

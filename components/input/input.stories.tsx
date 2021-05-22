@@ -20,11 +20,6 @@ WithPlaceholder.args = {
   placeholder: '2000',
 }
 
-export const WithLabel = Template.bind({})
-WithLabel.args = {
-  label: 'Amount to Mint',
-}
-
 export const WithValue = Template.bind({})
 WithValue.args = {
   value: '2000',
@@ -32,7 +27,6 @@ WithValue.args = {
 
 export const WithAll = Template.bind({})
 WithAll.args = {
-  label: 'Amount to Mint',
   placeholder: '2000',
   value: '2000',
   unit: 'QSTK',
