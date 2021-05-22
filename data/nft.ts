@@ -4,7 +4,7 @@ import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
-  'transparent', // should we create transparent 1024x1024 image?
+  '',
   '/nft/background/01_sunrise_boat.png',
   '/nft/background/02_noon_boat.png',
   '/nft/background/03_evening_boat.png',
@@ -118,7 +118,7 @@ const favCoins: FavCoin[] = [
     meta: {
       name: 'Bitcoin',
       symbol: 'BTC',
-      icon: 'https://dapp.quiverprotocol.com/icon/btc', // or online url if it works
+      icon: '/favcoin/btc.svg', // or online url if it works
       website: 'https://bitcoin.org',
       social: '',
       other: '',
@@ -130,7 +130,7 @@ const favCoins: FavCoin[] = [
     meta: {
       name: 'Ethereum',
       symbol: 'ETH',
-      icon: 'https://dapp.quiverprotocol.com/icon/eth', // or online url if it works
+      icon: '/favcoin/eth.svg', // or online url if it works
       website: 'https://ethereum.org',
       social: '',
       other: '',

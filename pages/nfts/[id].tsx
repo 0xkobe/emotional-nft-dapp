@@ -13,6 +13,7 @@ import {
 import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
 import { APINftMetadataResponse, APIResponseError } from '../../types/api'
+import { favCoins } from '../../data/nft'
 import { Traits } from '../../types/metadata'
 
 export default function NFT(): JSX.Element {
@@ -81,7 +82,12 @@ export default function NFT(): JSX.Element {
 
         {metadata && (
           <div className="flex">
-            <NFTCard metadata={metadata} />
+            <NFTCard
+              changePercentage={-20}
+              favcoin={favCoins[0]}
+              ethPrice={"0.8429"}
+              metadata={metadata}
+            />
             <div>
               <h1>{metadata.name}</h1>
               <div>

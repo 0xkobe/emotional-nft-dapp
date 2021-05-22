@@ -21,65 +21,75 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface QSettingsInterface extends ethers.utils.Interface {
   functions: {
+    "admin()": FunctionFragment;
     "foundation()": FunctionFragment;
-    "initialize(address,address)": FunctionFragment;
+    "foundationWallet()": FunctionFragment;
+    "initialize(address,address,address,address,address)": FunctionFragment;
     "manager()": FunctionFragment;
-    "owner()": FunctionFragment;
     "qstk()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
+    "setAdmin(address)": FunctionFragment;
     "setFoundation(address)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
+    "setFoundationWallet(address)": FunctionFragment;
+    "setManager(address)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "admin", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "foundation",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "initialize",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(functionFragment: "manager", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "qstk", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
+    functionFragment: "foundationWallet",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, string, string, string, string]
+  ): string;
+  encodeFunctionData(functionFragment: "manager", values?: undefined): string;
+  encodeFunctionData(functionFragment: "qstk", values?: undefined): string;
+  encodeFunctionData(functionFragment: "setAdmin", values: [string]): string;
+  encodeFunctionData(
     functionFragment: "setFoundation",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
+    functionFragment: "setFoundationWallet",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "setManager", values: [string]): string;
 
+  decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "foundation", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "manager", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "qstk", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "foundationWallet",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "manager", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "qstk", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setFoundation",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: "setFoundationWallet",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setManager", data: BytesLike): Result;
 
   events: {
-    "OwnershipTransferred(address,address)": EventFragment;
+    "SetAdmin(address)": EventFragment;
+    "SetFoundation(address)": EventFragment;
     "SetFoundationWallet(address)": EventFragment;
+    "SetManager(address,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetAdmin"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetFoundation"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetFoundationWallet"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetManager"): EventFragment;
 }
 
 export class QSettings extends BaseContract {
@@ -126,21 +136,27 @@ export class QSettings extends BaseContract {
   interface: QSettingsInterface;
 
   functions: {
+    admin(overrides?: CallOverrides): Promise<[string]>;
+
     foundation(overrides?: CallOverrides): Promise<[string]>;
 
+    foundationWallet(overrides?: CallOverrides): Promise<[string]>;
+
     initialize(
-      _qstk: string,
+      _admin: string,
+      _manager: string,
       _foundation: string,
+      _foundationWallet: string,
+      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     manager(overrides?: CallOverrides): Promise<[string]>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
     qstk(overrides?: CallOverrides): Promise<[string]>;
 
-    renounceOwnership(
+    setAdmin(
+      _admin: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -149,27 +165,38 @@ export class QSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    transferOwnership(
-      newOwner: string,
+    setFoundationWallet(
+      _foundationWallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setManager(
+      _manager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
+  admin(overrides?: CallOverrides): Promise<string>;
+
   foundation(overrides?: CallOverrides): Promise<string>;
 
+  foundationWallet(overrides?: CallOverrides): Promise<string>;
+
   initialize(
-    _qstk: string,
+    _admin: string,
+    _manager: string,
     _foundation: string,
+    _foundationWallet: string,
+    _qstk: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   manager(overrides?: CallOverrides): Promise<string>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
   qstk(overrides?: CallOverrides): Promise<string>;
 
-  renounceOwnership(
+  setAdmin(
+    _admin: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -178,69 +205,95 @@ export class QSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  transferOwnership(
-    newOwner: string,
+  setFoundationWallet(
+    _foundationWallet: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setManager(
+    _manager: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    admin(overrides?: CallOverrides): Promise<string>;
+
     foundation(overrides?: CallOverrides): Promise<string>;
 
+    foundationWallet(overrides?: CallOverrides): Promise<string>;
+
     initialize(
-      _qstk: string,
+      _admin: string,
+      _manager: string,
       _foundation: string,
+      _foundationWallet: string,
+      _qstk: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     manager(overrides?: CallOverrides): Promise<string>;
 
-    owner(overrides?: CallOverrides): Promise<string>;
-
     qstk(overrides?: CallOverrides): Promise<string>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+    setAdmin(_admin: string, overrides?: CallOverrides): Promise<void>;
 
     setFoundation(
       _foundation: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    transferOwnership(
-      newOwner: string,
+    setFoundationWallet(
+      _foundationWallet: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setManager(_manager: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
-    OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
-    ): TypedEventFilter<
-      [string, string],
-      { previousOwner: string; newOwner: string }
-    >;
+    SetAdmin(
+      admin?: string | null
+    ): TypedEventFilter<[string], { admin: string }>;
+
+    SetFoundation(
+      foundation?: string | null
+    ): TypedEventFilter<[string], { foundation: string }>;
 
     SetFoundationWallet(
-      wallet?: null
-    ): TypedEventFilter<[string], { wallet: string }>;
+      foundationWallet?: string | null
+    ): TypedEventFilter<[string], { foundationWallet: string }>;
+
+    SetManager(
+      executor?: string | null,
+      manager?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { executor: string; manager: string }
+    >;
   };
 
   estimateGas: {
+    admin(overrides?: CallOverrides): Promise<BigNumber>;
+
     foundation(overrides?: CallOverrides): Promise<BigNumber>;
 
+    foundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
+
     initialize(
-      _qstk: string,
+      _admin: string,
+      _manager: string,
       _foundation: string,
+      _foundationWallet: string,
+      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     manager(overrides?: CallOverrides): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
     qstk(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOwnership(
+    setAdmin(
+      _admin: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -249,28 +302,39 @@ export class QSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    transferOwnership(
-      newOwner: string,
+    setFoundationWallet(
+      _foundationWallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setManager(
+      _manager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     foundation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    foundationWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     initialize(
-      _qstk: string,
+      _admin: string,
+      _manager: string,
       _foundation: string,
+      _foundationWallet: string,
+      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     manager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     qstk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceOwnership(
+    setAdmin(
+      _admin: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -279,8 +343,13 @@ export class QSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    transferOwnership(
-      newOwner: string,
+    setFoundationWallet(
+      _foundationWallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setManager(
+      _manager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

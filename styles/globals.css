@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* TODO: setup global font correctly */
+body {
+    font-family: Inter;
+}

@@ -2,11 +2,11 @@ import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { FunctionComponent, HtmlHTMLAttributes } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 import AccountMenu from '../account/menu'
 import SocialMenu from './social-menu'
 
-export type IProps = HtmlHTMLAttributes<any> & {
+export type IProps = HTMLAttributes<any> & {
   route?: string
 }
 
