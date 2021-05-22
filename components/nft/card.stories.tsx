@@ -1,7 +1,16 @@
 import { Meta, Story } from '@storybook/react'
-import Card, { IProps } from './card'
 import { favCoins } from '../../data/nft'
-import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, Metadata } from '../../types/metadata'
+import {
+  Background,
+  Creature,
+  DisplayType,
+  FavCoinEnum,
+  LockPeriod,
+  Skin,
+  Traits,
+} from '../../types/metadata'
+import { Emotion } from '../../types/nft'
+import Card, { IProps } from './card'
 
 export default {
   title: 'NFT/Card',
@@ -38,8 +47,12 @@ Angry.args = {
         value: FavCoinEnum.MATIC,
       },
       {
-        trait_type: Traits.Lock,
+        trait_type: Traits.LockPeriod,
         value: LockPeriod.OneCentury,
+      },
+      {
+        trait_type: Traits.LockAmount,
+        value: 10,
       },
       {
         trait_type: Traits.CreatorName,
@@ -49,8 +62,21 @@ Angry.args = {
         trait_type: Traits.CreatorWallet,
         value: '0x0992',
       },
-    ]
-  }
+      {
+        display_type: DisplayType.Date,
+        trait_type: Traits.CreatedData,
+        value: Date.now(),
+      },
+      {
+        trait_type: Traits.Withdrawn,
+        value: false,
+      },
+      {
+        trait_type: Traits.DefaultEmotion,
+        value: Emotion.Angry,
+      },
+    ],
+  },
 }
 
 export const Happy = Template.bind({})
@@ -81,8 +107,12 @@ Happy.args = {
         value: FavCoinEnum.MATIC,
       },
       {
-        trait_type: Traits.Lock,
+        trait_type: Traits.LockPeriod,
         value: LockPeriod.OneCentury,
+      },
+      {
+        trait_type: Traits.LockAmount,
+        value: 10,
       },
       {
         trait_type: Traits.CreatorName,
@@ -92,10 +122,22 @@ Happy.args = {
         trait_type: Traits.CreatorWallet,
         value: '0x0992',
       },
-    ]
-  }
+      {
+        display_type: DisplayType.Date,
+        trait_type: Traits.CreatedData,
+        value: Date.now(),
+      },
+      {
+        trait_type: Traits.Withdrawn,
+        value: false,
+      },
+      {
+        trait_type: Traits.DefaultEmotion,
+        value: Emotion.Happy,
+      },
+    ],
+  },
 }
-
 
 export const Normal = Template.bind({})
 Normal.args = {
@@ -125,8 +167,12 @@ Normal.args = {
         value: FavCoinEnum.MATIC,
       },
       {
-        trait_type: Traits.Lock,
+        trait_type: Traits.LockPeriod,
         value: LockPeriod.OneCentury,
+      },
+      {
+        trait_type: Traits.LockAmount,
+        value: 10,
       },
       {
         trait_type: Traits.CreatorName,
@@ -136,6 +182,19 @@ Normal.args = {
         trait_type: Traits.CreatorWallet,
         value: '0x0992',
       },
-    ]
-  }
+      {
+        display_type: DisplayType.Date,
+        trait_type: Traits.CreatedData,
+        value: Date.now(),
+      },
+      {
+        trait_type: Traits.Withdrawn,
+        value: false,
+      },
+      {
+        trait_type: Traits.DefaultEmotion,
+        value: Emotion.Normal,
+      },
+    ],
+  },
 }
