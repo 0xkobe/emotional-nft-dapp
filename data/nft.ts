@@ -4,15 +4,38 @@ import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
-  '',
-  '/nft/background/01_sunrise_boat.png',
-  '/nft/background/02_noon_boat.png',
-  '/nft/background/03_evening_boat.png',
-  '/nft/background/04_night_boat.png',
-  '/nft/background/05_bright_night_sky_moon.png',
-  '/nft/background/06_cloudy_night_sky.png',
-  '/nft/background/07_no_cloud_night_sky.png',
-  '/nft/background/08_rainy_night_sky.png',
+  {
+    name: "Sunrise Boat",
+    image: '/nft/background/01_sunrise_boat.png'
+  },
+  {
+    name: "Noon Boat",
+    image: '/nft/background/02_noon_boat.png'
+  },
+  {
+    name: "Evening Boat",
+    image: '/nft/background/03_evening_boat.png',
+  },
+  {
+    name: "Night Boat",
+    image: '/nft/background/04_night_boat.png',
+  },
+  {
+    name: "Bright Night Sky Moon",
+    image: '/nft/background/05_bright_night_sky_moon.png',
+  },
+  {
+    name: "Cloudy Night Sky",
+    image: '/nft/background/06_cloudy_night_sky.png',
+  },
+  {
+    name: "No Cloudy Night Sky",
+    image: '/nft/background/07_no_cloud_night_sky.png'
+  },
+  {
+    name: "Rainy Night Sky",
+    image: '/nft/background/08_rainy_night_sky.png'
+  },
 ]
 
 const artists: { [key: string]: Artist } = {
@@ -48,7 +71,30 @@ const artists: { [key: string]: Artist } = {
   },
 }
 
-const skins = [Skin.Bronze, Skin.Diamond, Skin.Silver, Skin.Gold, Skin.Platinum]
+// TODO: update with correct image paths
+const skins = [
+  {
+    skin: Skin.Bronze,
+    icon: '/nft/skins/gold.svg'
+  },
+  {
+    skin: Skin.Diamond,
+    icon: '/nft/skins/gold.svg'
+  },
+  {
+    skin: Skin.Silver,
+    icon: '/nft/skins/gold.svg'
+  },
+  {
+    skin: Skin.Gold,
+    icon: '/nft/skins/gold.svg'
+  },
+  {
+    skin: Skin.Platinum,
+    icon: '/nft/skins/gold.svg'
+  }
+]
+
 const animals = [
   { name: Creature.Bull, artist: artists.clive },
   { name: Creature.Bear, artist: artists.rogan },
@@ -61,7 +107,7 @@ const characters: Character[] = []
 for (const animalIndex in animals) {
   const animal = animals[animalIndex]
   for (const skinIndex in skins) {
-    const skin = skins[skinIndex]
+    const skin = skins[skinIndex].skin
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
       id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
@@ -106,6 +152,36 @@ characters.push({
     [Emotion.Happy]: `/nft/characters/minotaur/happy.png`,
   },
 })
+
+const charactersSupply = [
+  100,  // bronze bull
+  100,  // bronze bull
+  100,  // bronze bull
+  100,  // bronze bull
+  100,  // bronze bull
+  100,  // diamond bear
+  100,  // diamond bear
+  100,  // diamond bear
+  100,  // diamond bear
+  100,  // diamond bear
+  100,  // silver whale
+  100,  // silver whale
+  100,  // silver whale
+  100,  // silver whale
+  100,  // silver whale
+  100,  // gold dragon
+  100,  // gold dragon
+  100,  // gold dragon
+  100,  // gold dragon
+  100,  // gold dragon
+  100,  // platinum deer
+  100,  // platinum deer
+  100,  // platinum deer
+  100,  // platinum deer
+  100,  // platinum deer
+  100,  // fish
+  100,  // minotaur
+]
 
 const favCoins: FavCoin[] = [
   {
@@ -163,6 +239,7 @@ const lockOptions: LockOption[] = [
 
 export {
   characters,
+  charactersSupply,
   backgrounds,
   artists,
   favCoins,

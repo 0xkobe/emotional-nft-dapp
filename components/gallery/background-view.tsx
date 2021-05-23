@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent } from 'react'
 import { BackgroundOption } from '../../types/options';
 import BackgroundItem from './background-item'
@@ -17,7 +16,7 @@ const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex,
         backgrounds.map((background, index) => {
           return (
             <BackgroundItem
-              key={background.id}
+              key={JSON.stringify(background)}
               background={background}
               selected={index === selectedIndex}
               onSelect={() => {

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { favCoins } from '../data/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
 import Title from '../components/title/title'
@@ -11,9 +11,37 @@ import AllocationWizard from '../components/mint-wizard/allocation-wizard'
 import MintSummary from '../components/mint-summary/mint-summary'
 import Button from '../components/button/button'
 import { BigNumber } from '@ethersproject/bignumber'
+import useContract from '../hooks/useContract'
+import { QNFT, QNFTSettings } from '../types/contracts'
+import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 
 export default function Mint(): JSX.Element {
+  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+    remoteConnector,
+    deployedAddresses.qnft,
+    abi.qnft,
+  )
+  const { contract: qnftSettings, error: qnftSettingsError } =
+    useContract<QNFTSettings>(
+      remoteConnector,
+      deployedAddresses.qnftSettings,
+      abi.qnftSettings,
+    )
+
   const [mintStep, setMintStep] = useState(0)
+  const [characterIndex, setCharacterIndex] = useState(0)
+  const [skinIndex, setSkinIndex] = useState(0)
+  const [coinIndex, setCoinIndex] = useState(0)
+  const [backgroundIndex, setBackgroundIndex] = useState(0)
+
+  useEffect(() => {
+    if (!qnftError) return
+    console.error('qnftError', qnftError)
+  }, [qnftError])
+  useEffect(() => {
+    if (!qnftSettingsError) return
+    console.error('qnftSettingsError', qnftSettingsError)
+  }, [qnftSettingsError])
 
   return (
     <>
@@ -23,7 +51,7 @@ export default function Mint(): JSX.Element {
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
         <div className="flex flex-row items-center justify-between">
           <Title text="Create Your own Quiver Emotional NFT"></Title>
-          <Stepper step={mintStep}/>
+          <Stepper step={mintStep} />
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-8">
@@ -69,10 +97,22 @@ export default function Mint(): JSX.Element {
               }}
             />
             {
-              mintStep === 0 && <DesignWizard/>
+              mintStep === 0 &&
+              <DesignWizard
+                qnft={qnft}
+                qnftSettings={qnftSettings}
+                characterIndex={characterIndex}
+                setCharacterIndex={setCharacterIndex}
+                skinIndex={skinIndex}
+                setSkinIndex={setSkinIndex}
+                coinIndex={coinIndex}
+                setCoinIndex={setCoinIndex}
+                backgroundIndex={backgroundIndex}
+                setBackgroundIndex={setBackgroundIndex}
+              />
             }
             {
-              mintStep === 1 && <StoryWizard/>
+              mintStep === 1 && <StoryWizard />
             }
             {
               mintStep === 2 && (
@@ -83,7 +123,7 @@ export default function Mint(): JSX.Element {
                     {
                       id: 1,
                       description: "",
-                      duration: 12*30*24*3600,
+                      duration: 12 * 30 * 24 * 3600,
                       discount: 50,
                       minAmount: BigNumber.from(1000),
                       maxAmount: BigNumber.from(2000),
@@ -91,7 +131,7 @@ export default function Mint(): JSX.Element {
                     {
                       id: 2,
                       description: "",
-                      duration: 6*30*24*3600,
+                      duration: 6 * 30 * 24 * 3600,
                       discount: 30,
                       minAmount: BigNumber.from(2000),
                       maxAmount: BigNumber.from(3000),
@@ -99,7 +139,7 @@ export default function Mint(): JSX.Element {
                     {
                       id: 3,
                       description: "",
-                      duration: 3*30*24*3600,
+                      duration: 3 * 30 * 24 * 3600,
                       discount: 20,
                       minAmount: BigNumber.from(3000),
                       maxAmount: BigNumber.from(4000),

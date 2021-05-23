@@ -1,13 +1,11 @@
-export type CharacterOption = {
-  id: number
-  name: string
-  image: string
+import { Character } from "./nft"
+
+export type CharacterOption = Character & {
   maxSupply: number
   currentSupply: number
 }
 
 export type BackgroundOption = {
-  id: number
   name: string
   image: string
 }

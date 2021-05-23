@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent } from 'react'
 import { CharacterOption } from '../../types/options';
 import CharacterItem from './character-item'
@@ -17,7 +16,7 @@ const CharacterView: FunctionComponent<IProps> = ({ characters, selectedIndex, o
         characters.map((character, index) => {
           return (
             <CharacterItem
-              key={character.id}
+              key={JSON.stringify(character)}
               character={character}
               selected={index === selectedIndex}
               onSelect={() => {

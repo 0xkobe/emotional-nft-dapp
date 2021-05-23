@@ -15,7 +15,7 @@ export const getCreature = (
   skin: Skin,
 ): Character | undefined => {
   const animalIndex = animals.findIndex((x) => x.name === animal)
-  const skinIndex = skins.findIndex((x) => x === skin)
+  const skinIndex = skins.findIndex((x) => x.skin === skin)
   const id = animalIndex * skins.length + skinIndex
   return characters.find((x) => x.id === id)
 }

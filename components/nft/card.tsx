@@ -76,9 +76,9 @@ const NFTCard: FunctionComponent<IProps> =
 
     if (!creature) return <div>not found</div>
 
-    let TrendIcon = trendIcon(changePercentage)
-    let backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number]
-    let emotion = emotionFromPriceChange(changePercentage)
+    const TrendIcon = trendIcon(changePercentage)
+    const backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number].image
+    const emotion = emotionFromPriceChange(changePercentage)
 
     return (
       <div className={classNames('mb-auto p-8 border rounded-xl w-96', styles.card)}>
