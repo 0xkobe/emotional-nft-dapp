@@ -35,15 +35,30 @@ const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOptio
     setIsOpen(false)
   })
 
+  const renderOption = (option: Option) => {
+    return (
+      <div className="flex flex-row items-center">
+        {option.icon && (
+          <img className="w-5 h-5 mx-2" src={option.icon} />
+        )}
+        <span className="text-sm leading-5 font-medium">
+          {option.text}
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <div className={classNames(className, styles.select)} ref={wrapperRef}>
-      <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
-        {
-          selectedIndex < options.length ? (
-            options[selectedIndex].text
-          ) : placeholder || 'Select an option'
-        }
-        <IconChevron className={styles.dropdownArrow} />
+    <div className={classNames(className, "relative cursor-pointer text-gray-500")} ref={wrapperRef}>
+      <div className={classNames("flex flex-row w-full items-center justify-between p-1.5 border border-solid border-gray-300 rounded-lg", isOpen? styles.open: '')} onClick={toggleDropdown}>
+        <div>
+          {
+            selectedIndex < options.length ? (
+              renderOption(options[selectedIndex])
+            ) : placeholder || 'Select an option'
+          }
+        </div>
+        <IconChevron className={classNames(styles.dropdownArrow)} />
       </div>
       <div className={classNames(styles.selectDropdown, isOpen? styles.open: '')}>
         {
