@@ -1,8 +1,8 @@
 import classNames from 'classnames'
-import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
+import React, { FunctionComponent, HTMLAttributes, useState, useEffect } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatNumber, lockDurationToString } from '../../lib/utils'
+import { formatNumber, lockDurationToString, bnToInput, inputToBn, bnToText } from '../../lib/utils'
 import Input from '../input/input'
 import Select from '../select/select'
 import { LockOption } from '../../types/nft'
@@ -20,16 +20,29 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   className,
   ...props
 }: IProps) => {
-  const [lockOptionId, setLockOptionId] = useState(0);
+  const [shouldValidate, setShouldValidate] = useState(false)
+  const [lockOptionId, setLockOptionId] = useState(0)
+  const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
+  const [qstkAmountInput, setQstkAmountInput] = useState('')
+  const [qstkAmountError, setQstkAmountError] = useState('')
 
   const lockOption = lockOptions[lockOptionId];
-  const allocatedAmount = BigNumber.from("10000");
-  const totalAmount = BigNumber.from("10000");
+  const allocatedAmount = BigNumber.from("10000").mul(BigNumber.from(10).pow(18))
+  const totalAmount = BigNumber.from("10000").mul(BigNumber.from(10).pow(18))
+
+  useEffect(() => {
+    try {
+      let bn = inputToBn(qstkAmountInput)
+      setQstkAmount(bn)
+    } catch(err) {
+      setQstkAmountError(err)
+    }
+  }, [qstkAmountInput])
 
   return (
     <div className={classNames(className, "flex flex-col space-y-8")}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">QSTK Token Remainig</div>
+        <div className="text-base leading-6 font-medium text-gray-500">QSTK Token Remaining</div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
             QSTK to Mint: {formatNumber(availableMintAmount)} QSTK
@@ -46,14 +59,19 @@ const AllocationWizard: FunctionComponent<IProps> = ({
           <div className="flex flex-col space-y-2">
             <Input
               className="w-full"
-              placeholder=""
+              placeholder="Enter QSTK amount"
               unit="QSTK"
+              value={qstkAmountInput}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setQstkAmountInput(e.target.value)}
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500"> 
-                Min {formatNumber(lockOption.minAmount)} - Max {formatNumber(lockOption.maxAmount)}
+                Min {bnToText(lockOption.minAmount)} - Max {bnToText(lockOption.maxAmount)}
               </span>
-              <a className="text-xs leading-4 font-normal text-black cursor-pointer" onClick={() => {}}>
+              <a
+                className="text-xs leading-4 font-normal text-black cursor-pointer"
+                onClick={() => setQstkAmountInput(bnToInput(lockOption.maxAmount))}
+              >
                 MAX
               </a>
             </div>

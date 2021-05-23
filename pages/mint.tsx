@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { backgrounds, favCoins, skins, characters, charactersSupply } from '../data/nft'
+import { backgrounds, favCoins, skins, characters, charactersSupply, lockOptions } from '../data/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
@@ -203,32 +203,7 @@ export default function Mint(): JSX.Element {
                 <AllocationWizard
                   availableMintAmount={BigNumber.from("540000")}
                   availableFreeAllocation={BigNumber.from("1520000")}
-                  lockOptions={[
-                    {
-                      id: 1,
-                      description: "",
-                      duration: 12 * 30 * 24 * 3600,
-                      discount: 50,
-                      minAmount: BigNumber.from(1000),
-                      maxAmount: BigNumber.from(2000),
-                    },
-                    {
-                      id: 2,
-                      description: "",
-                      duration: 6 * 30 * 24 * 3600,
-                      discount: 30,
-                      minAmount: BigNumber.from(2000),
-                      maxAmount: BigNumber.from(3000),
-                    },
-                    {
-                      id: 3,
-                      description: "",
-                      duration: 3 * 30 * 24 * 3600,
-                      discount: 20,
-                      minAmount: BigNumber.from(3000),
-                      maxAmount: BigNumber.from(4000),
-                    },
-                  ]}
+                  lockOptions={lockOptions}
                 />
               )
             }
