@@ -8,8 +8,8 @@ import { CharacterOption } from '../../types/options'
 
 export type IProps = HTMLAttributes<{}> & {
   charactersData: CharacterOption[]
-  characterIndex: number
-  setCharacterIndex: (index: number) => void
+  characterId: number
+  setCharacterId: (index: number) => void
   skinIndex: number
   setSkinIndex: (index: number) => void
   coinIndex: number
@@ -21,11 +21,11 @@ export type IProps = HTMLAttributes<{}> & {
 const DesignWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps) => {
   const {
     charactersData,
-    characterIndex,
+    characterId,
     skinIndex,
     coinIndex,
     backgroundIndex,
-    setCharacterIndex,
+    setCharacterId,
     setSkinIndex,
     setCoinIndex,
     setBackgroundIndex
@@ -37,8 +37,8 @@ const DesignWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps
         <div className="text-base leading-6 font-medium text-gray-500">Animal Set</div>
         <CharacterView
           characters={charactersData}
-          selectedIndex={charactersData.findIndex(character => character.id === characters[characterIndex].id)}
-          onSelectOption={(index: number) => setCharacterIndex(charactersData[index].id)}
+          selectedCharacterId={characterId}
+          onSelectOption={(id: number) => setCharacterId(id)}
         />
       </div>
       <div className="flex flex-row space-x-8">

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { characters, charactersSupply, favCoins, skins } from '../data/nft'
+import { backgrounds, favCoins, skins, characters, charactersSupply } from '../data/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
@@ -31,7 +31,7 @@ export default function Mint(): JSX.Element {
   //   )
 
   const [mintStep, setMintStep] = useState(0)
-  const [characterIndex, setCharacterIndex] = useState(0)
+  const [characterId, setCharacterId] = useState(0)
   const [skinIndex, setSkinIndex] = useState(0)
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
@@ -82,19 +82,19 @@ export default function Mint(): JSX.Element {
       keyValues: [
         {
           key: "Animal",
-          value: "Bear",
+          value: characters[characterId].name,
         },
         {
           key: "Skin",
-          value: "Gold",
+          value: skins[skinIndex].skin,
         },
         {
           key: "FavCoin",
-          value: "Bitcoin",
+          value: favCoins[coinIndex].meta.name,
         },
         {
           key: "Background",
-          value: "Sunrise",
+          value: backgrounds[backgroundIndex].name,
         },
       ]
     },
@@ -144,11 +144,11 @@ export default function Mint(): JSX.Element {
                 attributes: [
                   {
                     trait_type: Traits.Creature,
-                    value: characters[characterIndex].creature,
+                    value: characters[characterId].creature,
                   },
                   {
                     trait_type: Traits.Skin,
-                    value: characters[characterIndex].skin,
+                    value: characters[characterId].skin,
                   },
                   {
                     trait_type: Traits.Background,
@@ -164,11 +164,11 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.CreatorName,
-                    value: characters[characterIndex].artist.name,
+                    value: characters[characterId].artist.name,
                   },
                   {
                     trait_type: Traits.CreatorWallet,
-                    value: characters[characterIndex].artist.wallet,
+                    value: characters[characterId].artist.wallet,
                   },
                 ]
               }}
@@ -177,8 +177,8 @@ export default function Mint(): JSX.Element {
               mintStep === 0 &&
               <DesignWizard
                 charactersData={charactersData}
-                characterIndex={characterIndex}
-                setCharacterIndex={setCharacterIndex}
+                characterId={characterId}
+                setCharacterId={setCharacterId}
                 skinIndex={skinIndex}
                 setSkinIndex={setSkinIndex}
                 coinIndex={coinIndex}
@@ -235,7 +235,7 @@ export default function Mint(): JSX.Element {
           </div>
           <MintSummary
             properties={mintSummaryProperties}
-            mintPrice="1.4761 ETH"
+            mintPrice={`${nftPrice.toString()} ETH`}
           >
             <Button onClick={() => {
               setMintStep(mintStep + 1)
