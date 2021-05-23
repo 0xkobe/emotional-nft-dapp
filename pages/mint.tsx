@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import { backgrounds, favCoins, skins, characters, charactersSupply, lockOptions } from '../data/nft'
-import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
+import { useEffect, useMemo, useState } from 'react'
+import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
+import { LockPeriod, Skin, Traits } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
@@ -36,11 +36,12 @@ export default function Mint(): JSX.Element {
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
   const [charactersData, setCharactersData] = useState([] as CharacterOption[])
-  const [nftPrice, setNFTPrice] = useState(0)
   const [changePercentage, setChangePercentage] = useState(0)
   const [nftName, setNftName] = useState('')
   const [minterName, setMinterName] = useState('')
   const [nftDescription, setNftDescription] = useState('')
+  const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
+  const [lockOptionIndex, setLockOptionIndex] = useState(0)
 
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
@@ -76,7 +77,13 @@ export default function Mint(): JSX.Element {
     }
   }, [qnft, skinIndex])
 
-  let mintSummaryProperties = [
+  const nftPrice = useMemo(() => {
+    const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
+    const tokenPrice = qstkAmount.mul(qstkPrice).mul(100 - lockOptions[lockOptionIndex].discount).div(100).mul(tokenMultiplier)
+    return nonTokenPrice.add(tokenPrice)
+  }, [characterId, coinIndex, lockOptionIndex, qstkAmount])
+
+  const mintSummaryProperties = [
     {
       title: "Design Properties",
       keyValues: [
@@ -135,7 +142,7 @@ export default function Mint(): JSX.Element {
             <NFTCard
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
-              ethPrice={nftPrice.toString()}
+              ethPrice={nftPrice.toString()}  // Update with covert function BigNumber -> Actual ETH Value
               metadata={{
                 name: nftName,
                 description: nftDescription,
@@ -159,7 +166,7 @@ export default function Mint(): JSX.Element {
                     value: coinIndex,
                   },
                   {
-                    trait_type: Traits.Lock,
+                    trait_type: Traits.LockPeriod,
                     value: LockPeriod.OneCentury, // Need to be updated with actual state variable
                   },
                   {

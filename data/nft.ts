@@ -96,11 +96,11 @@ const skins = [
 ]
 
 const animals = [
-  { name: Creature.Bull, artist: artists.clive },
-  { name: Creature.Bear, artist: artists.rogan },
-  { name: Creature.Whale, artist: artists.keili },
-  { name: Creature.Dragon, artist: artists.jatin },
-  { name: Creature.Deer, artist: artists.mehak },
+  { name: Creature.Bull, artist: artists.clive, price: parseEther('0.1') },
+  { name: Creature.Bear, artist: artists.rogan, price: parseEther('0.2') },
+  { name: Creature.Whale, artist: artists.keili, price: parseEther('0.3') },
+  { name: Creature.Dragon, artist: artists.jatin, price: parseEther('0.4') },
+  { name: Creature.Deer, artist: artists.mehak, price: parseEther('0.5') },
 ]
 
 const characters: Character[] = []
@@ -115,6 +115,7 @@ for (const animalIndex in animals) {
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
       creature: animal.name,
+      mintPrice: animal.price,
       skin: skin,
       emotions: {
         [Emotion.Angry]: `${baseUrl}/angry.png`,
@@ -132,6 +133,7 @@ characters.push({
   name: 'Fish',
   artist: artists.debbie,
   creature: Creature.Fish,
+  mintPrice: parseEther('0.6'),
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/fish/angry.png`,
@@ -147,6 +149,7 @@ characters.push({
   name: 'Minotaur',
   artist: artists.clive,
   creature: Creature.Minotaur,
+  mintPrice: parseEther('0.7'),
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,
@@ -252,6 +255,10 @@ const lockOptions: LockOption[] = [
 
 const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
 
+const nonTokenMultiplier = 1
+const tokenMultiplier = 1
+const qstkPrice = parseEther('0.01')
+
 export {
   characters,
   charactersSupply,
@@ -262,4 +269,7 @@ export {
   skins,
   animals,
   verifier,
+  nonTokenMultiplier,
+  tokenMultiplier,
+  qstkPrice
 }

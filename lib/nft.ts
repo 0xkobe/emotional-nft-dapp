@@ -87,7 +87,7 @@ export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
     )
 
   // backgroundUrl
-  const backgroundUrl = backgrounds[metadata.backgroundId]
+  const backgroundUrl = backgrounds[metadata.backgroundId].image
   if (!backgroundUrl)
     throw new Error(`background with id ${metadata.backgroundId} not found`)
 

@@ -28,7 +28,7 @@ export type Character = {
     [Emotion.Happy]: string
   }
   artist: Artist
-  creature: Creature
+  mintPrice: BigNumber
 }
 
 export type FavCoinMeta = {
