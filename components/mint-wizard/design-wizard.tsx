@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
-import { backgrounds, skins, favCoins, characters } from '../../data/nft'
+import { backgrounds, skins, favCoins } from '../../data/nft'
 import Select from '../select/select'
 import CharacterView from '../gallery/character-view'
 import BackgroundView from '../gallery/background-view'
