@@ -30,4 +30,5 @@ WithAll.args = {
   placeholder: '2000',
   value: '2000',
   unit: 'QSTK',
+  isError: true,
 }

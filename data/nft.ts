@@ -223,24 +223,24 @@ const lockOptions: LockOption[] = [
     duration: 6 * 30 * 86400, // 6 months
     description: '6 months',
     discount: 20, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(10).pow(18)), // 100K QSTK
   },
   {
     id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
     description: '12 months',
     discount: 30, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(10).pow(18)), // 200K QSTK
   },
   {
     id: LockPeriod.OneCentury,
     duration: 100 * 12 * 30 * 86400, // 1 century
     description: '1 century',
     discount: 40, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
   },
   {
     // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
@@ -248,10 +248,12 @@ const lockOptions: LockOption[] = [
     duration: 1800,
     description: '30 min',
     discount: 2, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
   },
 ]
+
+const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
 
 const nonTokenMultiplier = 1
 const tokenMultiplier = 1
@@ -266,6 +268,7 @@ export {
   lockOptions,
   skins,
   animals,
+  verifier,
   nonTokenMultiplier,
   tokenMultiplier,
   qstkPrice

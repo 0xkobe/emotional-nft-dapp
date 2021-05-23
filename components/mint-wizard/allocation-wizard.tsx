@@ -1,11 +1,12 @@
 import classNames from 'classnames'
-import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
+import React, { FunctionComponent, HTMLAttributes, useState, useEffect } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import { formatNumber, lockDurationToString } from '../../lib/utils'
+import { formatNumber, lockDurationToString, verifyAirdropKey, bnToInput, inputToBn, bnToText } from '../../lib/utils'
 import Input from '../input/input'
 import Select from '../select/select'
 import { LockOption } from '../../types/nft'
+import { verifier } from '../../data/nft'
 
 export type IProps = HTMLAttributes<{}> & {
   availableMintAmount: BigNumber
@@ -20,16 +21,55 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   className,
   ...props
 }: IProps) => {
-  const [lockOptionId, setLockOptionId] = useState(0);
+  const [shouldValidate, setShouldValidate] = useState(true)
+  const [lockOptionId, setLockOptionId] = useState(0)
+  const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
+  const [qstkAmountInput, setQstkAmountInput] = useState('')
+  const [qstkAmountError, setQstkAmountError] = useState('')
+  const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
+  // e.g. 000000000000003643aa64798604000006ad9f847018909faf08411804c204b32b93530117370faeb41860e1dcb3ed2d24ce720350208bafa2aad3e2ce150daa98bce085b79b5050f69579aa0caa82ce1c
+  const [airdropKey, setAirdropKey] = useState('') 
+  const [airdropKeyError, setAirdropKeyError] = useState('')
+  const address = "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc"
 
   const lockOption = lockOptions[lockOptionId];
-  const allocatedAmount = BigNumber.from("10000");
-  const totalAmount = BigNumber.from("10000");
+  const totalAmount = BigNumber.from("10000").mul(BigNumber.from(10).pow(18))
+
+  // TODO: already used key validation
+  // TODO: totalAmount to sum(qstkAmount, airdropAmount)
+  // TODO: pass qstkAmount to parent component
+
+  useEffect(() => {
+    try {
+      let bn = inputToBn(qstkAmountInput)
+      setQstkAmount(bn)
+      if (bn.lt(lockOption.minAmount)) {
+        setQstkAmountError('lower than min')
+      } else if (bn.gt(lockOption.maxAmount)) {
+        setQstkAmountError('bigger than max')
+      } else {
+        setQstkAmountError('')
+      }
+    } catch(err) {
+      setQstkAmountError(err.message)
+    }
+  }, [qstkAmountInput, lockOptionId])
+
+  useEffect(() => {
+    let result = verifyAirdropKey(verifier, address, airdropKey)
+    if (!result.isValid) {
+      setAirdropAmount(BigNumber.from(0))
+      setAirdropKeyError('invalid airdrop key')
+    } else {
+      setAirdropAmount(result.amount)
+      setAirdropKeyError('')
+    }
+  }, [airdropKey])
 
   return (
     <div className={classNames(className, "flex flex-col space-y-8")}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">QSTK Token Remainig</div>
+        <div className="text-base leading-6 font-medium text-gray-500">QSTK Token Remaining</div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
             QSTK to Mint: {formatNumber(availableMintAmount)} QSTK
@@ -46,17 +86,28 @@ const AllocationWizard: FunctionComponent<IProps> = ({
           <div className="flex flex-col space-y-2">
             <Input
               className="w-full"
-              placeholder=""
+              placeholder="Enter QSTK amount"
               unit="QSTK"
+              value={qstkAmountInput}
+              isError={shouldValidate && qstkAmountError != ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setQstkAmountInput(e.target.value)}
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500"> 
-                Min {formatNumber(lockOption.minAmount)} - Max {formatNumber(lockOption.maxAmount)}
+                Min {bnToText(lockOption.minAmount)} - Max {bnToText(lockOption.maxAmount)}
               </span>
-              <a className="text-xs leading-4 font-normal text-black cursor-pointer" onClick={() => {}}>
+              <a
+                className="text-xs leading-4 font-normal text-black cursor-pointer"
+                onClick={() => setQstkAmountInput(bnToInput(lockOption.maxAmount))}
+              >
                 MAX
               </a>
             </div>
+            {shouldValidate && qstkAmountError != '' && (
+              <div className="text-red-500 text-xs">
+                {qstkAmountError}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col space-y-4 w-1/2">
@@ -88,13 +139,27 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         <div className="flex flex-col space-y-2">
           <Input
             className="w-full"
-            placeholder=""
+            placeholder="000000000000003..."
+            value={airdropKey}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setAirdropKey(e.target.value)}
+            isError={shouldValidate && airdropKeyError != ''}
           />
-          <span className="text-xs leading-4 font-normal text-gray-500">
-            <span className="mr-2">🎉</span>
-            Congratulations, you are eligible to
-            <span className="ml-1 font-semibold">{formatNumber(allocatedAmount)} QSTK</span>
-          </span>
+          {
+            shouldValidate && airdropKeyError == '' && (
+              <span className="text-xs leading-4 font-normal text-gray-500">
+                <span className="mr-2">🎉</span>
+                Congratulations, you are eligible to
+                <span className="ml-1 font-semibold">{bnToText(airdropAmount)} QSTK</span>
+              </span>
+            )
+          }
+          {
+            shouldValidate && airdropKeyError != '' && (
+              <div className="text-red-500 text-xs">
+                {airdropKeyError}
+              </div>
+            )
+          }
         </div>
       </div>
       <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
@@ -104,7 +169,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             <img src="/quiver.svg"/>
           </div>
           <span className="text-sm leading-5 font-semibold text-gray-500">
-            {formatNumber(totalAmount)} QSTK
+            {bnToInput(totalAmount)} QSTK
           </span>
         </div>
       </div>

@@ -16,7 +16,6 @@ import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import { CharacterOption } from '../types/options'
 import { Character } from '../types/nft'
-import { getNFTMintPrice } from '../lib/utils'
 
 export default function Mint(): JSX.Element {
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
@@ -211,32 +210,7 @@ export default function Mint(): JSX.Element {
                 <AllocationWizard
                   availableMintAmount={BigNumber.from("540000")}
                   availableFreeAllocation={BigNumber.from("1520000")}
-                  lockOptions={[
-                    {
-                      id: 1,
-                      description: "",
-                      duration: 12 * 30 * 24 * 3600,
-                      discount: 50,
-                      minAmount: BigNumber.from(1000),
-                      maxAmount: BigNumber.from(2000),
-                    },
-                    {
-                      id: 2,
-                      description: "",
-                      duration: 6 * 30 * 24 * 3600,
-                      discount: 30,
-                      minAmount: BigNumber.from(2000),
-                      maxAmount: BigNumber.from(3000),
-                    },
-                    {
-                      id: 3,
-                      description: "",
-                      duration: 3 * 30 * 24 * 3600,
-                      discount: 20,
-                      minAmount: BigNumber.from(3000),
-                      maxAmount: BigNumber.from(4000),
-                    },
-                  ]}
+                  lockOptions={lockOptions}
                 />
               )
             }
