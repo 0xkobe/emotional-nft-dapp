@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { FavCoinEnum, Skin } from '../types/metadata'
+import { Creature, FavCoinEnum, Skin } from '../types/metadata'
 
 export enum Emotion {
   Angry = 'angry',
@@ -7,32 +7,6 @@ export enum Emotion {
   Normal = 'normal',
   Rest = 'rest',
   Happy = 'happy',
-}
-
-// NFT Data parsed from RawNFTData
-export type NFTData = {
-  characterId: number
-  favCoinId: number
-  lockDuration: number
-  lockAmount: BigNumber
-  createdAt: Date
-  withdrawn: boolean
-  metaUrl: string
-}
-
-export type NFTCreator = {
-  name: string
-  address: string
-  other: string
-}
-
-export type NFTMeta = {
-  name: string
-  bgImageId: number
-  defaultEmotion: Emotion
-  color: string // NFT character color (skin)
-  story: string // story that NFT minter want to put for the NFT
-  creator: NFTCreator // nft creator info
 }
 
 export type Artist = {
@@ -44,6 +18,7 @@ export type Artist = {
 export type Character = {
   id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
   name: string
+  creature: Creature
   skin: Skin
   emotions: {
     [Emotion.Angry]: string

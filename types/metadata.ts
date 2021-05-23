@@ -44,51 +44,26 @@ export enum LockPeriod {
   SixMonths = 0,
   TwelveMonths = 1,
   OneCentury = 2,
+  ThirtyMinutes = 3, // FIXME: for dev only
 }
 
 export enum Traits {
-  Creature = 'creature',
-  Skin = 'skin',
-  Background = 'background',
-  FavCoin = 'favcoin',
-  Lock = 'lock',
-  CreatorName = 'creator_name',
-  CreatorWallet = 'creator_wallet',
+  Creature = 'Creature',
+  Skin = 'Skin',
+  Background = 'Background',
+  FavCoin = 'Favorite Coin',
+  LockPeriod = 'Lock Period',
+  LockAmount = 'Lock Amount',
+  CreatorName = "Creator's Name",
+  CreatorWallet = "Creator's Address",
+  CreatedDate = 'Created Date',
+  Withdrawn = 'Withdrawn',
+  DefaultEmotion = 'Default Emotion',
 }
 
-export type Metadata = {
-  name: string
-  description: string
-  image: string
-  external_url: string
-  attributes: [
-    {
-      trait_type: Traits.Creature
-      value: Creature
-    },
-    {
-      trait_type: Traits.Skin
-      value: Skin
-    },
-    {
-      trait_type: Traits.Background
-      value: Background
-    },
-    {
-      trait_type: Traits.FavCoin
-      value: FavCoinEnum
-    },
-    {
-      trait_type: Traits.Lock
-      value: LockPeriod
-    },
-    {
-      trait_type: Traits.CreatorName
-      value: string
-    },
-    {
-      trait_type: Traits.CreatorWallet
-      value: string
-    },
-  ]
+export enum DisplayType {
+  Date = 'date',
+  Number = 'number', // can also set optional max_value
+  BoostPercentage = 'boost_percentage', // can also set optional max_value
+  BoostNumber = 'boost_number', // can also set optional max_value
 }

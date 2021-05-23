@@ -2,7 +2,8 @@ import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
 import { backgrounds } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
-import { Creature, Metadata, Skin, Traits } from '../../types/metadata'
+import { APINftMetadataResponse } from '../../types/api'
+import { Creature, Skin, Traits } from '../../types/metadata'
 import { Character, FavCoin, Emotion } from '../../types/nft'
 import IconUptrend from '../icon/uptrend'
 import IconDownTrend from '../icon/downtrend'
@@ -12,7 +13,7 @@ import styles from './card.module.css'
 export type IProps = HTMLAttributes<any> & {
   changePercentage: number // percentage of changes
   favcoin: FavCoin
-  metadata: Metadata
+  metadata: APINftMetadataResponse
   ethPrice: string
 }
 
