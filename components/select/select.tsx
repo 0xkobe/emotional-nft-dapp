@@ -50,7 +50,7 @@ const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOptio
 
   return (
     <div className={classNames(className, "relative cursor-pointer text-gray-500")} ref={wrapperRef}>
-      <div className={classNames("flex flex-row w-full items-center justify-between p-2 border border-solid border-gray-300 rounded-lg", isOpen? styles.open: '')} onClick={toggleDropdown}>
+      <div className={classNames("flex flex-row w-full items-center justify-between p-2 border border-solid border-gray-300 rounded-lg")} onClick={toggleDropdown}>
         <div>
           {
             selectedIndex < options.length ? (
@@ -58,7 +58,7 @@ const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOptio
             ) : placeholder || 'Select an option'
           }
         </div>
-        <IconChevron className={classNames(styles.dropdownArrow)} />
+        <IconChevron className={classNames("absolute top-4 right-4 transition duration-400 transition-transform", isOpen ? "transform rotate-180" : "")} />
       </div>
       {
         isOpen && (
