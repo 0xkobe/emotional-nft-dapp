@@ -33,6 +33,9 @@ export default function Mint(): JSX.Element {
   const [skinIndex, setSkinIndex] = useState(0)
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
+  const [nftName, setNftName] = useState('')
+  const [minterName, setMinterName] = useState('')
+  const [nftDescription, setNftDescription] = useState('')
 
   useEffect(() => {
     if (!qnftError) return
@@ -42,6 +45,50 @@ export default function Mint(): JSX.Element {
     if (!qnftSettingsError) return
     console.error('qnftSettingsError', qnftSettingsError)
   }, [qnftSettingsError])
+
+  let mintSummaryProperties = [
+    {
+      title: "Design Properties",
+      keyValues: [
+        {
+          key: "Animal",
+          value: "Bear",
+        },
+        {
+          key: "Skin",
+          value: "Gold",
+        },
+        {
+          key: "FavCoin",
+          value: "Bitcoin",
+        },
+        {
+          key: "Background",
+          value: "Sunrise",
+        },
+      ]
+    },
+  ]
+
+  if (mintStep > 0) {
+    mintSummaryProperties.push({
+      title: "Story Properties",
+      keyValues: [
+        {
+          key: "Name",
+          value: nftName,
+        },
+        {
+          key: "Minter",
+          value: minterName,
+        },
+        {
+          key: "Description",
+          value: nftDescription,
+        },
+      ]
+    })
+  }
 
   return (
     <>
@@ -112,7 +159,15 @@ export default function Mint(): JSX.Element {
               />
             }
             {
-              mintStep === 1 && <StoryWizard />
+              mintStep === 1 &&
+              <StoryWizard
+                nftName={nftName}
+                minterName={minterName}
+                nftDescription={nftDescription}
+                onNftNameChange={(value: string) => setNftName(value)}
+                onMinterNameChange={(value: string) => setMinterName(value)}
+                onNftDescriptionChange={(value: string) => setNftDescription(value)}
+              />
             }
             {
               mintStep === 2 && (
@@ -150,29 +205,7 @@ export default function Mint(): JSX.Element {
             }
           </div>
           <MintSummary
-            properties={[
-              {
-                title: "Design Properties",
-                keyValues: [
-                  {
-                    key: "Animal",
-                    value: "Bear",
-                  },
-                  {
-                    key: "Skin",
-                    value: "Gold",
-                  },
-                  {
-                    key: "FavCoin",
-                    value: "Bitcoin",
-                  },
-                  {
-                    key: "Background",
-                    value: "Sunrise",
-                  },
-                ]
-              }
-            ]}
+            properties={mintSummaryProperties}
             mintPrice="1.4761 ETH"
           >
             <Button onClick={() => {
