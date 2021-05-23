@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
-import { backgrounds, skins, favCoins } from '../../data/nft'
+import { backgrounds, skins, favCoins, characters } from '../../data/nft'
 import Select from '../select/select'
 import CharacterView from '../gallery/character-view'
 import BackgroundView from '../gallery/background-view'
@@ -37,7 +37,7 @@ const DesignWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps
         <div className="text-base leading-6 font-medium text-gray-500">Animal Set</div>
         <CharacterView
           characters={charactersData}
-          selectedIndex={characterIndex}
+          selectedIndex={charactersData.findIndex(character => character.id === characters[characterIndex].id)}
           onSelectOption={(index: number) => setCharacterIndex(charactersData[index].id)}
         />
       </div>

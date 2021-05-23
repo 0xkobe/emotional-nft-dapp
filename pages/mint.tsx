@@ -38,6 +38,9 @@ export default function Mint(): JSX.Element {
   const [charactersData, setCharactersData] = useState([] as CharacterOption[])
   const [nftPrice, setNFTPrice] = useState(0)
   const [changePercentage, setChangePercentage] = useState(0)
+  const [nftName, setNftName] = useState('')
+  const [minterName, setMinterName] = useState('')
+  const [nftDescription, setNftDescription] = useState('')
 
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
@@ -54,7 +57,6 @@ export default function Mint(): JSX.Element {
       currentSupply: resCharactersSupply[index]
     })))
   }
-
 
   useEffect(() => {
     if (!qnftError) return
@@ -74,7 +76,50 @@ export default function Mint(): JSX.Element {
     }
   }, [qnft, skinIndex])
 
-  console.log(123, characters[characterIndex])
+  let mintSummaryProperties = [
+    {
+      title: "Design Properties",
+      keyValues: [
+        {
+          key: "Animal",
+          value: "Bear",
+        },
+        {
+          key: "Skin",
+          value: "Gold",
+        },
+        {
+          key: "FavCoin",
+          value: "Bitcoin",
+        },
+        {
+          key: "Background",
+          value: "Sunrise",
+        },
+      ]
+    },
+  ]
+
+  if (mintStep > 0) {
+    mintSummaryProperties.push({
+      title: "Story Properties",
+      keyValues: [
+        {
+          key: "Name",
+          value: nftName,
+        },
+        {
+          key: "Minter",
+          value: minterName,
+        },
+        {
+          key: "Description",
+          value: nftDescription,
+        },
+      ]
+    })
+  }
+
   return (
     <>
       <Head>
@@ -92,8 +137,8 @@ export default function Mint(): JSX.Element {
               favcoin={favCoins[coinIndex]}
               ethPrice={nftPrice.toString()}
               metadata={{
-                name: characters[characterIndex].name,
-                description: 'Gopher bear',
+                name: nftName,
+                description: nftDescription,
                 image: 'string', // TODO: what is image here?
                 external_url: 'string', // TODO: what is external_url here?
                 attributes: [
@@ -143,7 +188,15 @@ export default function Mint(): JSX.Element {
               />
             }
             {
-              mintStep === 1 && <StoryWizard />
+              mintStep === 1 &&
+              <StoryWizard
+                nftName={nftName}
+                minterName={minterName}
+                nftDescription={nftDescription}
+                onNftNameChange={(value: string) => setNftName(value)}
+                onMinterNameChange={(value: string) => setMinterName(value)}
+                onNftDescriptionChange={(value: string) => setNftDescription(value)}
+              />
             }
             {
               mintStep === 2 && (
@@ -181,29 +234,7 @@ export default function Mint(): JSX.Element {
             }
           </div>
           <MintSummary
-            properties={[
-              {
-                title: "Design Properties",
-                keyValues: [
-                  {
-                    key: "Animal",
-                    value: "Bear",
-                  },
-                  {
-                    key: "Skin",
-                    value: "Gold",
-                  },
-                  {
-                    key: "FavCoin",
-                    value: "Bitcoin",
-                  },
-                  {
-                    key: "Background",
-                    value: "Sunrise",
-                  },
-                ]
-              }
-            ]}
+            properties={mintSummaryProperties}
             mintPrice="1.4761 ETH"
           >
             <Button onClick={() => {
