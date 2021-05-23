@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import {
   animals,
   backgrounds,
@@ -6,6 +7,7 @@ import {
   lockOptions,
   skins,
 } from '../data/nft'
+import { QNFT, QNFTSettings } from '../types/contracts'
 import {
   APINftMetadataResponse,
   HydratedMetadata,
@@ -13,7 +15,6 @@ import {
   MetadataOffChain,
   MetadataOnChain,
 } from '../types/api'
-import { QNFT } from '../types/contracts'
 import { Creature, Skin, Traits } from '../types/metadata'
 import { Character } from '../types/nft'
 import { supabase } from './supabase'
@@ -99,3 +100,20 @@ export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
     backgroundUrl,
   }
 }
+
+
+// get mint price
+export const getMintPrice = async (
+  qnftSettingsContract: QNFTSettings,
+  characterId: number,
+  favCoinId: number,
+  lockOptionId: number,
+  lockAmount: number,
+  freeAmount: number,
+): Promise<BigNumber> => (await qnftSettingsContract.callStatic.calcMintPrice(
+  characterId,
+  favCoinId,
+  lockOptionId,
+  lockAmount,
+  freeAmount,
+)).totalPrice

@@ -51,7 +51,7 @@ export default function NFT(): JSX.Element {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [error])
 
   useEffect(() => {
     if (!router.isReady) return
