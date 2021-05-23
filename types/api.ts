@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import {
   Background,
   Creature,
@@ -7,7 +8,7 @@ import {
   Skin,
   Traits,
 } from './metadata'
-import { Emotion } from './nft'
+import { Character, Emotion, FavCoin, LockOption } from './nft'
 
 export type APIResponseError = {
   error: string
@@ -68,7 +69,7 @@ export type APINftMetadataResponse = {
     },
     {
       display_type: DisplayType.Date
-      trait_type: Traits.CreatedData
+      trait_type: Traits.CreatedDate
       value: number
     },
     {
@@ -77,7 +78,38 @@ export type APINftMetadataResponse = {
     },
     {
       trait_type: Traits.DefaultEmotion
-      value: string
+      value: Emotion
     },
   ]
+}
+
+// Structure used to save the metadata in database
+export type MetadataOffChain = {
+  author: string
+  backgroundId: number
+  description: string
+  name: string
+  chainId: number
+  creator: string
+  defaultEmotion: Emotion
+}
+
+// Structure of the nft data onchain
+export type MetadataOnChain = {
+  characterId: number
+  favCoinId: number
+  lockDuration: BigNumber
+  lockAmount: BigNumber
+  createdAt: BigNumber
+  withdrawn: boolean
+  metaId: BigNumber
+}
+
+export type Metadata = MetadataOffChain & MetadataOnChain
+
+export type HydratedMetadata = Metadata & {
+  character: Character
+  favCoin: FavCoin
+  lockOption: LockOption
+  backgroundUrl: string
 }

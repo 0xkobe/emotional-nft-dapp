@@ -7,24 +7,21 @@ import {
   lockOptions,
   skins,
 } from '../data/nft'
-import { APINftMetadataResponse } from '../types/api'
 import { QNFT, QNFTSettings } from '../types/contracts'
 import {
-  Creature,
+  APINftMetadataResponse,
   HydratedMetadata,
   Metadata,
   MetadataOffChain,
   MetadataOnChain,
-  Skin,
-  Traits,
-} from '../types/metadata'
+} from '../types/api'
+import { Creature, Skin, Traits } from '../types/metadata'
 import { Character } from '../types/nft'
 import { supabase } from './supabase'
 
-export const attribute = (
-  metadata: APINftMetadataResponse,
-  trait: Traits,
-): any => {
+export const attribute = (metadata: APINftMetadataResponse, trait: Traits) => {
+  if (!metadata) throw new Error(`Metadata is empty`)
+  if (!metadata.attributes) throw new Error(`Attribute is empty`)
   const attr = metadata.attributes.find((x) => x.trait_type === trait)
   if (!attr) throw new Error(`Cannot find trait ${trait} in metadata`)
   return attr.value

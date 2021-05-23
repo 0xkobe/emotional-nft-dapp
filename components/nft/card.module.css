@@ -1,0 +1,80 @@
+.card {
+    background: linear-gradient(180deg, #FFFFFF 50.12%, rgba(236, 253, 245, 0.35) 100%), #FFFFFF;
+}
+.card .cardTop {
+    position: relative;
+    margin-bottom: 32px;
+}
+.card .cardTop .emotionText {
+    display: inline-block;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 4px 8px;
+}
+.card .cardTop .emotionText.upTrend {
+    color: #10B981;
+    background: #ECFDF5;
+}
+.card .cardTop .emotionText.downTrend {
+    color: #b94010;
+    background: #ffb39a;
+}
+.card .cardTop .emotionText.normalTrend {
+    color: #000000;
+    background: #eeeeee;
+}
+.card .cardTop .favcoinVisual {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.card .cardTop .favcoinVisual .favcoinTrend {
+    display: inline-block;
+    vertical-align: middle;
+}
+.card .cardTop .favcoinVisual .favcoinLogo {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.card .cardBottom {
+    margin-top: 32px;
+    position: relative;
+}
+.card .cardBottom .creatureName {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
+    color: #231B5C;
+}
+.card .cardBottom .creatureInfo {
+    margin-top: 4px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #9CA3AF;
+}
+.card .cardBottom .ethPrice {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.card .cardBottom .ethPrice img {
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 8px;
+    height: 16px;
+}
+.card .cardBottom .ethPrice span {
+    vertical-align: middle;
+    display: inline-block;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    color: #231B5C;
+}

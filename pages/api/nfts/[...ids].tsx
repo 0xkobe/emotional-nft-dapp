@@ -16,10 +16,10 @@ export default async (
   res: NextApiResponse,
 ): Promise<void> => {
   // parse request
-  const { id: _tokenId } = req.query
-  if (_tokenId === undefined) return res.status(404).json({})
-  if (typeof _tokenId !== 'string') throw new Error('tokenId is not a string')
-  const tokenId = parseInt(_tokenId)
+  const ids = req.query.ids
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw new Error('ids is not an array or has zero length')
+  const tokenId = parseInt(ids[0])
   if (Number.isNaN(tokenId)) throw new Error('tokenId is not a number')
 
   // init ethereum provider
@@ -79,7 +79,7 @@ export default async (
       },
       {
         display_type: DisplayType.Date,
-        trait_type: Traits.CreatedData,
+        trait_type: Traits.CreatedDate,
         value: metadata.createdAt.toNumber(),
       },
       {

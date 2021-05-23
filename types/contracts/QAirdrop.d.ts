@@ -32,6 +32,7 @@ interface QAirdropInterface extends ethers.utils.Interface {
     "setVerifier(address)": FunctionFragment;
     "settings()": FunctionFragment;
     "verifier()": FunctionFragment;
+    "verify(address,uint256,bytes)": FunctionFragment;
     "whitelistedContracts(address)": FunctionFragment;
     "withdrawLockedQStk(address,uint256,bytes)": FunctionFragment;
   };
@@ -62,6 +63,10 @@ interface QAirdropInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "setVerifier", values: [string]): string;
   encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(functionFragment: "verifier", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "verify",
+    values: [string, BigNumberish, BytesLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "whitelistedContracts",
     values: [string]
@@ -94,6 +99,7 @@ interface QAirdropInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "verifier", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "whitelistedContracts",
     data: BytesLike
@@ -208,6 +214,13 @@ export class QAirdrop extends BaseContract {
 
     verifier(overrides?: CallOverrides): Promise<[string]>;
 
+    verify(
+      _recipient: string,
+      _qstkAmount: BigNumberish,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     whitelistedContracts(
       arg0: string,
       overrides?: CallOverrides
@@ -269,6 +282,13 @@ export class QAirdrop extends BaseContract {
 
   verifier(overrides?: CallOverrides): Promise<string>;
 
+  verify(
+    _recipient: string,
+    _qstkAmount: BigNumberish,
+    _signature: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   whitelistedContracts(
     arg0: string,
     overrides?: CallOverrides
@@ -324,6 +344,13 @@ export class QAirdrop extends BaseContract {
 
     verifier(overrides?: CallOverrides): Promise<string>;
 
+    verify(
+      _recipient: string,
+      _qstkAmount: BigNumberish,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     whitelistedContracts(
       arg0: string,
       overrides?: CallOverrides
@@ -334,7 +361,7 @@ export class QAirdrop extends BaseContract {
       _qstkAmount: BigNumberish,
       _signature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -408,6 +435,13 @@ export class QAirdrop extends BaseContract {
 
     verifier(overrides?: CallOverrides): Promise<BigNumber>;
 
+    verify(
+      _recipient: string,
+      _qstkAmount: BigNumberish,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     whitelistedContracts(
       arg0: string,
       overrides?: CallOverrides
@@ -472,6 +506,13 @@ export class QAirdrop extends BaseContract {
     settings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     verifier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    verify(
+      _recipient: string,
+      _qstkAmount: BigNumberish,
+      _signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     whitelistedContracts(
       arg0: string,

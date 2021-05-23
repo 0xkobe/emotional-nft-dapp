@@ -8,11 +8,17 @@ Emotional NFT is designed to give happiness by giving emotional NFTs on their in
 - [Technical Spec](https://docs.google.com/document/d/1tAnfPLfWV_P3-qaNuDdLCGsZ_mx3Di1B2tVhEaLGBBA/edit)
 - [Design Spec](https://docs.google.com/document/d/1SlXrz9Fvfe_7YQo6dWa5n7tQ6nliVusnsbx4A-I_CGA/edit)
 - [Frontend Spec](https://docs.google.com/document/d/1djDo8vjvTP_Hzswh4NpqMzbxabbQ8FUA4chJlDYprsA/edit)
-- [Figma Design]()
+- [Figma Design](https://www.figma.com/file/htIaWwzpJpaChxT3DoafVO/NFTs-DApp-UI?node-id=0%3A1)
 
-## Getting Started
+## Building UI components
 
-First, run the development server:
+```bash
+npm run storybook
+```
+
+It automatically redirects to `http://localhost:6006/`
+
+## Running development server
 
 ```bash
 npm run dev
