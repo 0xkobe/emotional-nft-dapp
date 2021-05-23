@@ -104,13 +104,14 @@ const animals = [
 ]
 
 const characters: Character[] = []
+// TODO: the characters should not be calculated like this but set one by one so we can set any id we need to match the smart contract
 for (const animalIndex in animals) {
   const animal = animals[animalIndex]
   for (const skinIndex in skins) {
     const skin = skins[skinIndex].skin
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
-      id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
+      id: parseInt(animalIndex) * skins.length + parseInt(skinIndex),
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
       creature: animal.name,
@@ -235,6 +236,15 @@ const lockOptions: LockOption[] = [
     duration: 100 * 12 * 30 * 86400, // 1 century
     description: '1 century',
     discount: 40, // percentage
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+  },
+  {
+    // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
+    id: LockPeriod.ThirtyMinutes,
+    duration: 1800,
+    description: '30 min',
+    discount: 2, // percentage
     minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
     maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
   },
