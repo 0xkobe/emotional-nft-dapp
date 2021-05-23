@@ -12,6 +12,12 @@ export type IProps = HTMLAttributes<{}> & {
   availableMintAmount: BigNumber
   availableFreeAllocation: BigNumber
   lockOptions: LockOption[]
+  lockOptionId: number
+  qstkAmount: BigNumber
+  airdropAmount: BigNumber
+  setLockOptionId: (id: number) => void
+  setQstkAmount: (amount: BigNumber) => void
+  setAirdropAmount: (amount: BigNumber) => void
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
@@ -19,14 +25,17 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   availableFreeAllocation,
   lockOptions,
   className,
+  lockOptionId,
+  qstkAmount,
+  airdropAmount,
+  setLockOptionId,
+  setQstkAmount,
+  setAirdropAmount,
   ...props
 }: IProps) => {
   const [shouldValidate, setShouldValidate] = useState(true)
-  const [lockOptionId, setLockOptionId] = useState(0)
-  const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [qstkAmountInput, setQstkAmountInput] = useState('')
   const [qstkAmountError, setQstkAmountError] = useState('')
-  const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
   // e.g. 000000000000003643aa64798604000006ad9f847018909faf08411804c204b32b93530117370faeb41860e1dcb3ed2d24ce720350208bafa2aad3e2ce150daa98bce085b79b5050f69579aa0caa82ce1c
   const [airdropKey, setAirdropKey] = useState('') 
   const [airdropKeyError, setAirdropKeyError] = useState('')
@@ -35,6 +44,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   const lockOption = lockOptions[lockOptionId];
   const totalAmount = BigNumber.from("10000").mul(BigNumber.from(10).pow(18))
 
+  // TODO: modify validation steps
   // TODO: already used key validation
   // TODO: totalAmount to sum(qstkAmount, airdropAmount)
   // TODO: pass qstkAmount to parent component
