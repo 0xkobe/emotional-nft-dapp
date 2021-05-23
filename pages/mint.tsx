@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { favCoins } from '../data/nft'
+import { backgrounds, favCoins, skins, characters, charactersSupply } from '../data/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
@@ -29,7 +29,7 @@ export default function Mint(): JSX.Element {
     )
 
   const [mintStep, setMintStep] = useState(0)
-  const [characterIndex, setCharacterIndex] = useState(0)
+  const [characterId, setCharacterId] = useState(0)
   const [skinIndex, setSkinIndex] = useState(0)
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
@@ -52,19 +52,19 @@ export default function Mint(): JSX.Element {
       keyValues: [
         {
           key: "Animal",
-          value: "Bear",
+          value: characters[characterId].name,
         },
         {
           key: "Skin",
-          value: "Gold",
+          value: skins[skinIndex].skin,
         },
         {
           key: "FavCoin",
-          value: "Bitcoin",
+          value: favCoins[coinIndex].meta.name,
         },
         {
           key: "Background",
-          value: "Sunrise",
+          value: backgrounds[backgroundIndex].name,
         },
       ]
     },
@@ -148,8 +148,8 @@ export default function Mint(): JSX.Element {
               <DesignWizard
                 qnft={qnft}
                 qnftSettings={qnftSettings}
-                characterIndex={characterIndex}
-                setCharacterIndex={setCharacterIndex}
+                characterId={characterId}
+                setCharacterId={setCharacterId}
                 skinIndex={skinIndex}
                 setSkinIndex={setSkinIndex}
                 coinIndex={coinIndex}

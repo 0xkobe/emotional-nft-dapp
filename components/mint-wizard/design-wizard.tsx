@@ -10,8 +10,8 @@ import { Skin } from '../../types/metadata'
 export type IProps = HTMLAttributes<{}> & {
   qnft?: QNFT
   qnftSettings?: QNFTSettings
-  characterIndex: number
-  setCharacterIndex: (index: number) => void
+  characterId: number
+  setCharacterId: (index: number) => void
   skinIndex: number
   setSkinIndex: (index: number) => void
   coinIndex: number
@@ -24,11 +24,11 @@ const DesignWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps
   const { qnft } = props
 
   const {
-    characterIndex,
+    characterId,
     skinIndex,
     coinIndex,
     backgroundIndex,
-    setCharacterIndex,
+    setCharacterId,
     setSkinIndex,
     setCoinIndex,
     setBackgroundIndex
@@ -63,8 +63,8 @@ const DesignWizard: FunctionComponent<IProps> = ({ className, ...props }: IProps
         <div className="text-base leading-6 font-medium text-gray-500">Animal Set</div>
         <CharacterView
           characters={characterData}
-          selectedIndex={characterIndex}
-          onSelectOption={(index: number) => setCharacterIndex(index)}
+          selectedCharacterId={characterId}
+          onSelectOption={(index: number) => setCharacterId(index)}
         />
       </div>
       <div className="flex flex-row space-x-8">
