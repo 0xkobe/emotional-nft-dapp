@@ -59,11 +59,11 @@ export function inputToBn(s: string): BigNumber {
 }
 
 // verify airdrop key - off chain
-export const verifyAirdropKey = async (
-  qairdrop: QAirdrop,
+export const verifyAirdropKey = (
+  verifier: string,
   address: string,
   airdropKey: string
-): Promise<VerifyAirdropKeyResponse> => {
+): VerifyAirdropKeyResponse => {
   if (airdropKey.length !== 158 && airdropKey.length !== 162) {
     return {
       isValid: false,
@@ -71,7 +71,6 @@ export const verifyAirdropKey = async (
     }
   }
 
-  const verifier = await qairdrop.callStatic.verifier()
   const keyBuffer = Buffer.from(airdropKey, 'hex')
   const amountBuffer = keyBuffer.slice(0, 16)
   const signature = keyBuffer.slice(16)

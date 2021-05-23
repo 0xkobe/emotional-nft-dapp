@@ -250,6 +250,8 @@ const lockOptions: LockOption[] = [
   },
 ]
 
+const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+
 export {
   characters,
   charactersSupply,
@@ -259,4 +261,5 @@ export {
   lockOptions,
   skins,
   animals,
+  verifier,
 }
