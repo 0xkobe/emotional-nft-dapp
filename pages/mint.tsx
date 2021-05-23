@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { backgrounds, favCoins, skins, characters, charactersSupply } from '../data/nft'
-import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum } from '../types/metadata'
+import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, DisplayType } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
@@ -15,7 +15,7 @@ import useContract from '../hooks/useContract'
 import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import { CharacterOption } from '../types/options'
-import { Character } from '../types/nft'
+import { Character, Emotion } from '../types/nft'
 
 export default function Mint(): JSX.Element {
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
@@ -76,7 +76,7 @@ export default function Mint(): JSX.Element {
     }
   }, [qnft, skinIndex])
 
-  let mintSummaryProperties = [
+  const mintSummaryProperties = [
     {
       title: "Design Properties",
       keyValues: [
@@ -133,44 +133,62 @@ export default function Mint(): JSX.Element {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-8">
             <NFTCard
+              size="big"
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
               ethPrice={nftPrice.toString()}
               metadata={{
-                name: nftName,
-                description: nftDescription,
+                name: 'bear',
+                description: 'Gopher bear',
                 image: 'string', // TODO: what is image here?
                 external_url: 'string', // TODO: what is external_url here?
                 attributes: [
                   {
                     trait_type: Traits.Creature,
-                    value: characters[characterId].creature,
+                    value: Creature.Bear,
                   },
                   {
                     trait_type: Traits.Skin,
-                    value: characters[characterId].skin,
+                    value: Skin.Silver,
                   },
                   {
                     trait_type: Traits.Background,
-                    value: backgroundIndex,
+                    value: Background.NoCloudNightSky,
                   },
                   {
                     trait_type: Traits.FavCoin,
-                    value: coinIndex,
+                    value: FavCoinEnum.MATIC,
                   },
                   {
-                    trait_type: Traits.Lock,
-                    value: LockPeriod.OneCentury, // Need to be updated with actual state variable
+                    trait_type: Traits.LockPeriod,
+                    value: LockPeriod.OneCentury,
+                  },
+                  {
+                    trait_type: Traits.LockAmount,
+                    value: 10,
                   },
                   {
                     trait_type: Traits.CreatorName,
-                    value: characters[characterId].artist.name,
+                    value: 'gopher',
                   },
                   {
                     trait_type: Traits.CreatorWallet,
-                    value: characters[characterId].artist.wallet,
+                    value: '0x0992',
                   },
-                ]
+                  {
+                    display_type: DisplayType.Date,
+                    trait_type: Traits.CreatedDate,
+                    value: Date.now(),
+                  },
+                  {
+                    trait_type: Traits.Withdrawn,
+                    value: false,
+                  },
+                  {
+                    trait_type: Traits.DefaultEmotion,
+                    value: Emotion.Angry,
+                  },
+                ],
               }}
             />
             {

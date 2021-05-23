@@ -1,6 +1,12 @@
 .card {
-    background: linear-gradient(180deg, #FFFFFF 50.12%, rgba(236, 253, 245, 0.35) 100%), #FFFFFF;
+  background: linear-gradient(
+      180deg,
+      #ffffff 50.12%,
+      rgba(236, 253, 245, 0.35) 100%
+    ),
+    #ffffff;
 }
+/*
 .card .cardTop {
     position: relative;
     margin-bottom: 32px;
@@ -77,4 +83,4 @@
     font-size: 16px;
     line-height: 24px;
     color: #231B5C;
-}
+}*/
