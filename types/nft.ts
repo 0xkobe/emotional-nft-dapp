@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { FavCoinEnum, Skin } from '../types/metadata'
+import { Creature, FavCoinEnum, Skin } from '../types/metadata'
 
 export enum Emotion {
   Angry = 'angry',
@@ -53,6 +53,7 @@ export type Character = {
     [Emotion.Happy]: string
   }
   artist: Artist
+  creature: Creature
 }
 
 export type FavCoinMeta = {

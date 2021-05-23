@@ -113,6 +113,7 @@ for (const animalIndex in animals) {
       id: parseInt(animalIndex, 10) * skins.length + parseInt(skinIndex, 10),
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
+      creature: animal.name,
       skin: skin,
       emotions: {
         [Emotion.Angry]: `${baseUrl}/angry.png`,
@@ -129,6 +130,7 @@ characters.push({
   id: 25,
   name: 'Fish',
   artist: artists.debbie,
+  creature: Creature.Fish,
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/fish/angry.png`,
@@ -143,6 +145,7 @@ characters.push({
   id: 26,
   name: 'Minotaur',
   artist: artists.clive,
+  creature: Creature.Minotaur,
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,

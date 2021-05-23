@@ -12,8 +12,10 @@ import MintSummary from '../components/mint-summary/mint-summary'
 import Button from '../components/button/button'
 import { BigNumber } from '@ethersproject/bignumber'
 import useContract from '../hooks/useContract'
-import { QNFT, QNFTSettings } from '../types/contracts'
+import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
+import { CharacterOption } from '../types/options'
+import { Character } from '../types/nft'
 
 export default function Mint(): JSX.Element {
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
@@ -21,30 +23,58 @@ export default function Mint(): JSX.Element {
     deployedAddresses.qnft,
     abi.qnft,
   )
-  const { contract: qnftSettings, error: qnftSettingsError } =
-    useContract<QNFTSettings>(
-      remoteConnector,
-      deployedAddresses.qnftSettings,
-      abi.qnftSettings,
-    )
+  // const { contract: qnftSettings, error: qnftSettingsError } =
+  //   useContract<QNFTSettings>(
+  //     remoteConnector,
+  //     deployedAddresses.qnftSettings,
+  //     abi.qnftSettings,
+  //   )
 
   const [mintStep, setMintStep] = useState(0)
   const [characterId, setCharacterId] = useState(0)
   const [skinIndex, setSkinIndex] = useState(0)
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
+  const [charactersData, setCharactersData] = useState([] as CharacterOption[])
+  const [nftPrice, setNFTPrice] = useState(0)
+  const [changePercentage, setChangePercentage] = useState(0)
   const [nftName, setNftName] = useState('')
   const [minterName, setMinterName] = useState('')
   const [nftDescription, setNftDescription] = useState('')
+
+  const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
+    const requestCharactersSupply = []
+    for (let i = 0; i < characters.length; i++) {
+      requestCharactersSupply.push(
+        qnft.nftCountByCharacter(characters[i].id).then(
+          (val): number => val.toNumber()),
+      )
+    }
+    const resCharactersSupply: number[] = await Promise.all(requestCharactersSupply)
+    setCharactersData(characters.map((character, index) => ({
+      ...character,
+      maxSupply: charactersSupply[character.id],
+      currentSupply: resCharactersSupply[index]
+    })))
+  }
 
   useEffect(() => {
     if (!qnftError) return
     console.error('qnftError', qnftError)
   }, [qnftError])
+  // useEffect(() => {
+  //   if (!qnftSettingsError) return
+  //   console.error('qnftSettingsError', qnftSettingsError)
+  // }, [qnftSettingsError])
   useEffect(() => {
-    if (!qnftSettingsError) return
-    console.error('qnftSettingsError', qnftSettingsError)
-  }, [qnftSettingsError])
+    if (!qnft) return
+    try {
+      const filteredCharacters = characters.filter(character => character.skin === skins[skinIndex].skin || character.skin === Skin.None)
+      void getCharactersSupply(qnft, filteredCharacters)
+    } catch (err) {
+      console.error(' qnft getCharactersSupply fail')
+    }
+  }, [qnft, skinIndex])
 
   let mintSummaryProperties = [
     {
@@ -103,42 +133,42 @@ export default function Mint(): JSX.Element {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-8">
             <NFTCard
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
+              changePercentage={changePercentage}
+              favcoin={favCoins[coinIndex]}
+              ethPrice={nftPrice.toString()}
               metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
+                name: nftName,
+                description: nftDescription,
                 image: 'string', // TODO: what is image here?
                 external_url: 'string', // TODO: what is external_url here?
                 attributes: [
                   {
                     trait_type: Traits.Creature,
-                    value: Creature.Bear,
+                    value: characters[characterId].creature,
                   },
                   {
                     trait_type: Traits.Skin,
-                    value: Skin.Silver,
+                    value: characters[characterId].skin,
                   },
                   {
                     trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
+                    value: backgroundIndex,
                   },
                   {
                     trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
+                    value: coinIndex,
                   },
                   {
                     trait_type: Traits.Lock,
-                    value: LockPeriod.OneCentury,
+                    value: LockPeriod.OneCentury, // Need to be updated with actual state variable
                   },
                   {
                     trait_type: Traits.CreatorName,
-                    value: 'gopher',
+                    value: characters[characterId].artist.name,
                   },
                   {
                     trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
+                    value: characters[characterId].artist.wallet,
                   },
                 ]
               }}
@@ -146,8 +176,7 @@ export default function Mint(): JSX.Element {
             {
               mintStep === 0 &&
               <DesignWizard
-                qnft={qnft}
-                qnftSettings={qnftSettings}
+                charactersData={charactersData}
                 characterId={characterId}
                 setCharacterId={setCharacterId}
                 skinIndex={skinIndex}
@@ -206,7 +235,7 @@ export default function Mint(): JSX.Element {
           </div>
           <MintSummary
             properties={mintSummaryProperties}
-            mintPrice="1.4761 ETH"
+            mintPrice={`${nftPrice.toString()} ETH`}
           >
             <Button onClick={() => {
               setMintStep(mintStep + 1)

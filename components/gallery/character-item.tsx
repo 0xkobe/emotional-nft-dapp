@@ -12,14 +12,14 @@ export type IProps = HTMLAttributes<{}> & {
 const CharacterItem: FunctionComponent<IProps> = ({ character, selected, onSelect, className, ...props }: IProps) => {
   return (
     <div
-      className={classNames(className, styles.character, selected && styles.selected )}
+      className={classNames(className, styles.character, selected && styles.selected)}
       onClick={() => {
         onSelect && onSelect()
       }}
     >
       <div className={styles.image}>
         <img
-          src={character.image}
+          src={character.emotions.normal}
         />
       </div>
       <div className={styles.supply}>

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { backgrounds } from '../../data/nft'
+import { backgrounds, characters } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { Creature, Metadata, Skin, Traits } from '../../types/metadata'
 import { Character, FavCoin, Emotion } from '../../types/nft'
@@ -69,7 +69,14 @@ const NFTCard: FunctionComponent<IProps> =
     useEffect(() => {
       const animalId = attribute(metadata, Traits.Creature) as Creature
       const skinId = attribute(metadata, Traits.Skin) as Skin
-      const creature = getCreature(animalId, skinId)
+      let creature: Character | undefined
+      if (animalId === Creature.Fish) {
+        creature = characters[25]
+      } else if (animalId === Creature.Minotaur) {
+        creature = characters[26]
+      } else {
+        creature = getCreature(animalId, skinId)
+      }
       if (!creature) return
       setCreature(creature)
     }, [metadata])
