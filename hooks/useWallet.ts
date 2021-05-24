@@ -11,20 +11,13 @@ export default function useWallet(
   const { library, activate, account } = context
   const [signer, setSigner] = useState<JsonRpcSigner>()
 
-  // activate the connector on init
-  // TODO: maybe this can be moved outside of this hook to give more flexibility to the page when to connect
-  useEffect(() => {
-    // FIXME: this throw an error if metamask is not injected into the page
-    void activate(connector, console.error, true)
-  }, [activate, connector])
-
   // activate wallet if already authorized
   useEffect(() => {
     void connector.isAuthorized().then((isAuthorized) => {
       if (!isAuthorized) return
-      return activate(connector, console.error, true)
+      return activate(connector, undefined, true)
     })
-  }, [connector, activate])
+  }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   // create the signer
   useEffect(() => {
