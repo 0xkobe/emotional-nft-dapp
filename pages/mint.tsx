@@ -19,7 +19,7 @@ import { Character } from '../types/nft'
 import { bnToText } from '../lib/utils'
 
 export default function Mint(): JSX.Element {
-  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+  const { contract: qnft, error: qnftError, account } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
     abi.qnft,
@@ -43,7 +43,6 @@ export default function Mint(): JSX.Element {
   const [nftDescription, setNftDescription] = useState('')
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [lockOptionId, setLockOptionId] = useState(0)
-  const [qstkAmountInput, setQstkAmountInput] = useState('')
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
 
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
@@ -82,9 +81,9 @@ export default function Mint(): JSX.Element {
 
   const nftPrice = useMemo(() => {
     const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
-    const tokenPrice = qstkAmount.mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
+    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
     return nonTokenPrice.add(tokenPrice)
-  }, [characterId, coinIndex, lockOptionId, qstkAmount])
+  }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
   const mintSummaryProperties = [
     {
@@ -154,7 +153,15 @@ export default function Mint(): JSX.Element {
     })
   }
 
-  // TODO: modify Validate design button name to step based one
+  const mintSummaryBtnName = useMemo(() => {
+    if (mintStep === 0) {
+      return 'Validate Design'
+    }
+    if (mintStep === 1) {
+      return 'Validate Story'
+    }
+    return 'Mint my NFT'
+  }, [mintStep])
 
   return (
     <>
@@ -237,6 +244,7 @@ export default function Mint(): JSX.Element {
             {
               mintStep === 2 && (
                 <AllocationWizard
+                  account={account || ''}
                   availableMintAmount={BigNumber.from("540000")}
                   availableFreeAllocation={BigNumber.from("1520000")}
                   lockOptions={lockOptions}
@@ -257,7 +265,7 @@ export default function Mint(): JSX.Element {
             <Button onClick={() => {
               setMintStep(mintStep + 1)
             }}>
-              Validate Design
+              {mintSummaryBtnName}
             </Button>
           </MintSummary>
         </div>

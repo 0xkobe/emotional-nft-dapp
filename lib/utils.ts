@@ -2,7 +2,6 @@ import { getAddress, isAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ethers, utils } from 'ethers'
 import { VerifyAirdropKeyResponse } from '../types/airdrop'
-import { QAirdrop } from '../types/contracts'
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!isAddress(address)) return ''
