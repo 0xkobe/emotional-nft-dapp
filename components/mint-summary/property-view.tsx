@@ -27,7 +27,7 @@ const PropertyView: FunctionComponent<IProps> = ({ value, className, ...props }:
               <div className={styles.key}>
                 {keyValue.key}
               </div>
-              <div className={styles.value}>
+              <div className={classNames(styles.value, "overflow-ellipsis overflow-hidden")}>
                 {keyValue.value}
               </div>
             </div>

@@ -2,9 +2,10 @@ import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent } from 'react'
 import styles from './allocation.module.css'
 import { formatDate, lockDurationToString, formatNumber } from '../../lib/utils'
+import { BigNumber } from '@ethersproject/bignumber'
 
 export type IProps = HTMLAttributes<{}> & {
-  lockAmount: number
+  lockAmount: BigNumber
   createdAt: Date
   lockDuration: number
 }
