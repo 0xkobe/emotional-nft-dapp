@@ -81,7 +81,7 @@ export default function Mint(): JSX.Element {
 
   const nftPrice = useMemo(() => {
     const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
-    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
+    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier).div(BigNumber.from(10).pow(18))
     return nonTokenPrice.add(tokenPrice)
   }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
@@ -208,7 +208,7 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: qstkAmount.add(airdropAmount).toNumber() // Need to confirm if this is correct
+                    value: qstkAmount.add(airdropAmount)
                   },
                   {
                     trait_type: Traits.CreatorName,

@@ -57,7 +57,7 @@ export type APINftMetadataResponse = {
     },
     {
       trait_type: Traits.LockAmount
-      value: number
+      value: BigNumber
     },
     {
       trait_type: Traits.CreatorName
