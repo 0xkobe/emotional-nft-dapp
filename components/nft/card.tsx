@@ -137,7 +137,7 @@ const NFTCard: FunctionComponent<IProps> =
           }
           <img
             src={creature.emotions[emotion]}
-            className="absolute top-0 right-0 left-0 bottom-0"
+            className={classNames('top-0 right-0 left-0 bottom-0', backgroundSrc ? 'absolute' : '')}
           />
         </div>
         <div className="flex flex-row justify-between space-u-4">

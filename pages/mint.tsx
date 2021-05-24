@@ -188,19 +188,19 @@ export default function Mint(): JSX.Element {
                 attributes: [
                   {
                     trait_type: Traits.Creature,
-                    value: Creature.Bear,
+                    value: characters[characterId].creature,
                   },
                   {
                     trait_type: Traits.Skin,
-                    value: Skin.Silver,
+                    value: characters[characterId].skin,
                   },
                   {
                     trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
+                    value: backgroundIndex,
                   },
                   {
                     trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
+                    value: coinIndex,
                   },
                   {
                     trait_type: Traits.LockPeriod,
@@ -212,11 +212,11 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.CreatorName,
-                    value: 'gopher',
+                    value: characters[characterId].artist.name,
                   },
                   {
                     trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
+                    value: characters[characterId].artist.wallet,
                   },
                   {
                     display_type: DisplayType.Date,
