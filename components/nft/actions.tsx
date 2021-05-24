@@ -14,13 +14,13 @@ const NFTActions: FunctionComponent<IProps> = ({onTransfer, onEdit, onUpgrade, c
         NFT Actions
       </span>
       <div className="flex flex-col space-y-4">
-        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg">
+        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg cursor-not-allowed">
           Transfer (coming soon)
         </span>
-        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg">
+        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg cursor-not-allowed">
           Edition (coming soon)
         </span>
-        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg">
+        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg cursor-not-allowed">
           Upgrade (coming soon)
         </span>
       </div>
