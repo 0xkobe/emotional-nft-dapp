@@ -16,9 +16,10 @@ import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import { CharacterOption } from '../types/options'
 import { Character } from '../types/nft'
+import { bnToText } from '../lib/utils'
 
 export default function Mint(): JSX.Element {
-  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+  const { contract: qnft, error: qnftError, account } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
     abi.qnft,
@@ -41,7 +42,8 @@ export default function Mint(): JSX.Element {
   const [minterName, setMinterName] = useState('')
   const [nftDescription, setNftDescription] = useState('')
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
-  const [lockOptionIndex, setLockOptionIndex] = useState(0)
+  const [lockOptionId, setLockOptionId] = useState(0)
+  const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
 
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
@@ -79,9 +81,9 @@ export default function Mint(): JSX.Element {
 
   const nftPrice = useMemo(() => {
     const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
-    const tokenPrice = qstkAmount.mul(qstkPrice).mul(100 - lockOptions[lockOptionIndex].discount).div(100).mul(tokenMultiplier)
+    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
     return nonTokenPrice.add(tokenPrice)
-  }, [characterId, coinIndex, lockOptionIndex, qstkAmount])
+  }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
   const mintSummaryProperties = [
     {
@@ -126,6 +128,40 @@ export default function Mint(): JSX.Element {
       ]
     })
   }
+
+  if (mintStep > 1) {
+    mintSummaryProperties.push({
+      title: "QSTK Allocation",
+      keyValues: [
+        {
+          key: "Mint amount",
+          value: bnToText(qstkAmount),
+        },
+        {
+          key: "Lock period",
+          value: lockOptions[lockOptionId].description,
+        },
+        {
+          key: "Free allocation",
+          value: bnToText(airdropAmount),
+        },
+        {
+          key: "Total to receive",
+          value: bnToText(qstkAmount.add(airdropAmount)),
+        },
+      ]
+    })
+  }
+
+  const mintSummaryBtnName = useMemo(() => {
+    if (mintStep === 0) {
+      return 'Validate Design'
+    }
+    if (mintStep === 1) {
+      return 'Validate Story'
+    }
+    return 'Mint my NFT'
+  }, [mintStep])
 
   return (
     <>
@@ -208,9 +244,16 @@ export default function Mint(): JSX.Element {
             {
               mintStep === 2 && (
                 <AllocationWizard
+                  account={account || ''}
                   availableMintAmount={BigNumber.from("540000")}
                   availableFreeAllocation={BigNumber.from("1520000")}
                   lockOptions={lockOptions}
+                  lockOptionId={lockOptionId}
+                  qstkAmount={qstkAmount}
+                  airdropAmount={airdropAmount}
+                  setLockOptionId={(id: number): void => setLockOptionId(id)}
+                  setQstkAmount={(amount: BigNumber): void => setQstkAmount(amount)}
+                  setAirdropAmount={(amount: BigNumber): void => setAirdropAmount(amount)}
                 />
               )
             }
@@ -222,7 +265,7 @@ export default function Mint(): JSX.Element {
             <Button onClick={() => {
               setMintStep(mintStep + 1)
             }}>
-              Validate Design
+              {mintSummaryBtnName}
             </Button>
           </MintSummary>
         </div>
