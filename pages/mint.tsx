@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useMemo, useState } from 'react'
 import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
-import { DisplayType, LockPeriod, Skin, Traits } from '../types/metadata'
+import { DisplayType, Skin, Traits } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
@@ -178,7 +178,7 @@ export default function Mint(): JSX.Element {
             <NFTCard
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
-              ethPrice={nftPrice.toString()}  // Update with covert function BigNumber -> Actual ETH Value
+              ethPrice={bnToText(nftPrice)}
               metadata={{
                 name: nftName,
                 description: nftDescription,
@@ -203,11 +203,11 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury, // Need to be updated with actual state variable
+                    value: lockOptionId
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: qstkAmount.add(airdropAmount).toNumber() // Need to confirm if this is correct
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -220,7 +220,7 @@ export default function Mint(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0  // Need to be updated with actual value
                   },
                   {
                     trait_type: Traits.Withdrawn,
@@ -228,7 +228,7 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal // Need to be updated with actual value
                   },
                 ]
               }}
@@ -262,8 +262,8 @@ export default function Mint(): JSX.Element {
               mintStep === 2 && (
                 <AllocationWizard
                   account={account || ''}
-                  availableMintAmount={BigNumber.from("540000")}
-                  availableFreeAllocation={BigNumber.from("1520000")}
+                  availableMintAmount={BigNumber.from("540000")}  // TODO: Get actual value from the contract
+                  availableFreeAllocation={BigNumber.from("1520000")} // TODO: Get actual value from the contract
                   lockOptions={lockOptions}
                   lockOptionId={lockOptionId}
                   qstkAmount={qstkAmount}
@@ -277,7 +277,7 @@ export default function Mint(): JSX.Element {
           </div>
           <MintSummary
             properties={mintSummaryProperties}
-            mintPrice={`${nftPrice.toString()} ETH`}
+            mintPrice={`${bnToText(nftPrice)} ETH`}
           >
             <Button onClick={() => {
               setMintStep(mintStep + 1)
