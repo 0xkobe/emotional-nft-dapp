@@ -16,14 +16,14 @@ const navigation = [
 ]
 
 const Logo = () => (
-  <div className="flex-shrink-0 flex items-center">
+  <a href="/" className="flex-shrink-0 flex items-center">
     <img
       className="block lg:hidden h-8 w-auto"
       src="https://quiverprotocol.com/icon.svg"
       alt="Quiver"
     />
     <img className="hidden lg:block h-8 w-auto" src="/logo.svg" alt="Quiver" />
-  </div>
+  </a>
 )
 
 const Navigation: FunctionComponent<IProps> = (props) => {
