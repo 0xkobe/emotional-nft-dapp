@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent, useState, useRef } from 'react'
 import IconChevron from '../icon/chevron'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
-import styles from './select.module.css'
 
 export type Option = {
   icon?: string
@@ -18,7 +17,7 @@ export type IProps = HTMLAttributes<{}> & {
 
 const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOption, selectedIndex, className, ...props }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
@@ -68,7 +67,7 @@ const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOptio
                 <div
                   onClick={onOptionClick(option, index)}
                   key={index}
-                  className={classNames("flex flex-row items-center p-2", selectedIndex === index? "bg-blue-500 text-white": 'bg-white text-gray-500 hover:bg-gray-100')}
+                  className={classNames("flex flex-row items-center p-2", selectedIndex === index ? "bg-blue-500 text-white" : 'bg-white text-gray-500 hover:bg-gray-100')}
                 >
                   <div className="flex flex-row pl-2 items-center">
                     {option.icon && <img className="w-5 h-5 mr-2" src={option.icon} />}

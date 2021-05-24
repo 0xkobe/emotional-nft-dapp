@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useMemo, useState } from 'react'
 import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
-import { LockPeriod, Skin, Traits } from '../types/metadata'
+import { DisplayType, LockPeriod, Skin, Traits } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
@@ -15,7 +15,7 @@ import useContract from '../hooks/useContract'
 import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import { CharacterOption } from '../types/options'
-import { Character } from '../types/nft'
+import { Character, Emotion } from '../types/nft'
 import { bnToText } from '../lib/utils'
 
 export default function Mint(): JSX.Element {
@@ -206,12 +206,29 @@ export default function Mint(): JSX.Element {
                     value: LockPeriod.OneCentury, // Need to be updated with actual state variable
                   },
                   {
+                    trait_type: Traits.LockAmount,
+                    value: 0
+                  },
+                  {
                     trait_type: Traits.CreatorName,
                     value: characters[characterId].artist.name,
                   },
                   {
                     trait_type: Traits.CreatorWallet,
                     value: characters[characterId].artist.wallet,
+                  },
+                  {
+                    display_type: DisplayType.Date,
+                    trait_type: Traits.CreatedDate,
+                    value: 0
+                  },
+                  {
+                    trait_type: Traits.Withdrawn,
+                    value: false
+                  },
+                  {
+                    trait_type: Traits.DefaultEmotion,
+                    value: Emotion.Normal
                   },
                 ]
               }}

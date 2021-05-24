@@ -9,6 +9,4 @@ export default {
 const Template: Story<IProps> = (args) => <Title {...args} />
 
 export const Default = Template.bind({})
-Default.args = {
-  text: 'Create your own Quiver Emotional NFT'
-}
+Default.args = {}
