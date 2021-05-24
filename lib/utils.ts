@@ -19,10 +19,10 @@ export function lockDurationToString(duration: number): string {
     return '1 Year'
   }
   if (duration === 6 * 30 * 24 * 3600) {
-    return '6 months'
+    return '6 Months'
   }
 
-  throw new Error('Invalid Lock Duration')
+  return duration.toString() + ' seconds'
 }
 
 // format number with comma
