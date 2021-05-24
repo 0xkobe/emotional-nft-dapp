@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useMemo, useState } from 'react'
 import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
-import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, DisplayType } from '../types/metadata'
+import { Skin, Traits, DisplayType } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
