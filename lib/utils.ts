@@ -1,8 +1,7 @@
 import { getAddress, isAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { VerifyAirdropKeyResponse } from '../types/airdrop'
-import { QAirdrop } from '../types/contracts'
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!isAddress(address)) return ''
@@ -10,44 +9,48 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
 }
 
-export function capitalize(s: string): string {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-export function formatDate(d: Date): string {
-  const year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-  const month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
-  const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-
-  return `${day}/${month}/${year}`
-}
+export const formatDate = (d: Date): string => d.toLocaleDateString()
 
 export function lockDurationToString(duration: number): string {
-  // TODO: need to be updated
+  if (duration === 100 * 12 * 30 * 24 * 3600) {
+    return '1 Century'
+  }
   if (duration === 12 * 30 * 24 * 3600) {
     return '1 Year'
   }
   if (duration === 6 * 30 * 24 * 3600) {
     return '6 months'
   }
-  if (duration === 3 * 30 * 24 * 3600) {
-    return '3 months'
-  }
 
-  return '1 month'
+  throw new Error('Invalid Lock Duration')
 }
 
+// format number with comma
 export function formatNumber(n: number | BigNumber): string {
   return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
+// format big number to user friendly text
+export function bnToText(n: BigNumber): string {
+  return utils.formatEther(n).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
+// format big number to user friendly input - can add comma later if needed
+export function bnToInput(n: BigNumber): string {
+  return utils.formatEther(n)
+}
+
+// format various types of user input to big number
+export function inputToBn(s: string): BigNumber {
+  return utils.parseEther(s)
+}
+
 // verify airdrop key - off chain
-export const verifyAirdropKey = async (
-  qairdrop: QAirdrop,
+export const verifyAirdropKey = (
+  verifier: string,
   address: string,
   airdropKey: string
-): Promise<VerifyAirdropKeyResponse> => {
+): VerifyAirdropKeyResponse => {
   if (airdropKey.length !== 158 && airdropKey.length !== 162) {
     return {
       isValid: false,
@@ -55,7 +58,6 @@ export const verifyAirdropKey = async (
     }
   }
 
-  const verifier = await qairdrop.callStatic.verifier()
   const keyBuffer = Buffer.from(airdropKey, 'hex')
   const amountBuffer = keyBuffer.slice(0, 16)
   const signature = keyBuffer.slice(16)

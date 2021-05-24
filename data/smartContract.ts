@@ -49,9 +49,11 @@ export const remoteProviderConfig: {
   urls: {
     1: 'https://eth-mainnet.alchemyapi.io/v2/jte2TvgFm5Uqjz6lYLUfnBsMd7TXS6SW', // dedicated alchemy app to use in prod
     3: 'https://eth-ropsten.alchemyapi.io/v2/j3511RMZjDGkirYD0QPu8nGn1sIY0Y7c', // dedicated alchemy app to use in dev/staging
-    31337: 'http://127.0.0.1:8545/', // FIXME: local dev
+    31337: 'http://127.0.0.1:8545/', // local dev
   },
-  defaultChainId: 31337,
+  defaultChainId: process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID
+    ? parseInt(process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID)
+    : 3, // default is ropsten
 }
 
 export const metamaskConnector = new InjectedConnector({})

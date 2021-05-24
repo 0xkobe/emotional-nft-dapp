@@ -6,6 +6,7 @@ export type CharacterOption = Character & {
 }
 
 export type BackgroundOption = {
+  id: number
   name: string
   image: string
 }

@@ -13,7 +13,7 @@ const CharacterView: FunctionComponent<IProps> = ({ characters, selectedCharacte
   return (
     <div className={styles.characters}>
       {
-        characters.map((character, index) => {
+        characters.map((character) => {
           return (
             <CharacterItem
               key={JSON.stringify(character)}

@@ -19,7 +19,7 @@ import { Creature, Skin, Traits } from '../types/metadata'
 import { Character } from '../types/nft'
 import { supabase } from './supabase'
 
-export const attribute = (metadata: APINftMetadataResponse, trait: Traits) => {
+export const attribute = (metadata: APINftMetadataResponse, trait: Traits): string | number | boolean => {
   if (!metadata) throw new Error(`Metadata is empty`)
   if (!metadata.attributes) throw new Error(`Attribute is empty`)
   const attr = metadata.attributes.find((x) => x.trait_type === trait)
@@ -87,7 +87,7 @@ export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
     )
 
   // backgroundUrl
-  const backgroundUrl = backgrounds[metadata.backgroundId]
+  const backgroundUrl = backgrounds[metadata.backgroundId].image
   if (!backgroundUrl)
     throw new Error(`background with id ${metadata.backgroundId} not found`)
 

@@ -5,34 +5,47 @@ import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
   {
+    id: 0,
+    name: "",
+    image: ''
+  },
+  {
+    id: 1,
     name: "Sunrise Boat",
     image: '/nft/background/01_sunrise_boat.png'
   },
   {
+    id: 2,
     name: "Noon Boat",
     image: '/nft/background/02_noon_boat.png'
   },
   {
+    id: 3,
     name: "Evening Boat",
     image: '/nft/background/03_evening_boat.png',
   },
   {
+    id: 4,
     name: "Night Boat",
     image: '/nft/background/04_night_boat.png',
   },
   {
+    id: 5,
     name: "Bright Night Sky Moon",
     image: '/nft/background/05_bright_night_sky_moon.png',
   },
   {
+    id: 6,
     name: "Cloudy Night Sky",
     image: '/nft/background/06_cloudy_night_sky.png',
   },
   {
+    id: 7,
     name: "No Cloudy Night Sky",
     image: '/nft/background/07_no_cloud_night_sky.png'
   },
   {
+    id: 8,
     name: "Rainy Night Sky",
     image: '/nft/background/08_rainy_night_sky.png'
   },
@@ -96,11 +109,11 @@ const skins = [
 ]
 
 const animals = [
-  { name: Creature.Bull, artist: artists.clive },
-  { name: Creature.Bear, artist: artists.rogan },
-  { name: Creature.Whale, artist: artists.keili },
-  { name: Creature.Dragon, artist: artists.jatin },
-  { name: Creature.Deer, artist: artists.mehak },
+  { name: Creature.Bull, artist: artists.clive, price: parseEther('0.1') },
+  { name: Creature.Bear, artist: artists.rogan, price: parseEther('0.2') },
+  { name: Creature.Whale, artist: artists.keili, price: parseEther('0.3') },
+  { name: Creature.Dragon, artist: artists.jatin, price: parseEther('0.4') },
+  { name: Creature.Deer, artist: artists.mehak, price: parseEther('0.5') },
 ]
 
 const characters: Character[] = []
@@ -115,6 +128,7 @@ for (const animalIndex in animals) {
       name: `${skin} ${animal.name}`,
       artist: animal.artist,
       creature: animal.name,
+      mintPrice: animal.price,
       skin: skin,
       emotions: {
         [Emotion.Angry]: `${baseUrl}/angry.png`,
@@ -132,6 +146,7 @@ characters.push({
   name: 'Fish',
   artist: artists.debbie,
   creature: Creature.Fish,
+  mintPrice: parseEther('0.6'),
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/fish/angry.png`,
@@ -147,6 +162,7 @@ characters.push({
   name: 'Minotaur',
   artist: artists.clive,
   creature: Creature.Minotaur,
+  mintPrice: parseEther('0.7'),
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,
@@ -220,24 +236,24 @@ const lockOptions: LockOption[] = [
     duration: 6 * 30 * 86400, // 6 months
     description: '6 months',
     discount: 20, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(1).pow(18)), // 100K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(10).pow(18)), // 100K QSTK
   },
   {
     id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
     description: '12 months',
     discount: 30, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(1).pow(18)), // 200K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(10).pow(18)), // 200K QSTK
   },
   {
     id: LockPeriod.OneCentury,
     duration: 100 * 12 * 30 * 86400, // 1 century
     description: '1 century',
     discount: 40, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
   },
   {
     // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
@@ -245,10 +261,16 @@ const lockOptions: LockOption[] = [
     duration: 1800,
     description: '30 min',
     discount: 2, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(1).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(1).pow(18)), // 400K QSTK
+    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
+    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
   },
 ]
+
+const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+
+const nonTokenMultiplier = 1
+const tokenMultiplier = 1
+const qstkPrice = parseEther('0.01')
 
 export {
   characters,
@@ -259,4 +281,8 @@ export {
   lockOptions,
   skins,
   animals,
+  verifier,
+  nonTokenMultiplier,
+  tokenMultiplier,
+  qstkPrice
 }

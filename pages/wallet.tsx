@@ -14,11 +14,11 @@ export default function Wallet(): JSX.Element {
       <Head>
         <title>Wallet</title>
       </Head>
-      
+
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
         <div className="flex flex-row items-center justify-between">
           <Title>Your Investor Space</Title>
-          <LockedTokenStat lockAmount={48000}/>
+          <LockedTokenStat lockAmount={48000} />
         </div>
         <div className="flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
@@ -63,7 +63,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -76,17 +76,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
+                ]
               }}
             />
             <NFTCard
@@ -122,7 +122,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -135,17 +135,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
+                ]
               }}
             />
             <NFTCard
@@ -181,7 +181,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -194,17 +194,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
+                ]
               }}
             />
             <NFTCard
@@ -240,7 +240,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -253,17 +253,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
+                ]
               }}
             />
             <NFTCard
@@ -299,7 +299,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -312,17 +312,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
+                ]
               }}
             />
             <NFTCard
@@ -358,7 +358,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: 0
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -371,253 +371,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal
                   },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 10,
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: Date.now(),
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 10,
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: Date.now(),
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 10,
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: Date.now(),
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 10,
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: Date.now(),
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
-                  },
-                ],
+                ]
               }}
             />
           </div>

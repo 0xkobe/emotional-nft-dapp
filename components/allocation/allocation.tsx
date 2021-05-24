@@ -20,7 +20,7 @@ const Allocation: FunctionComponent<IProps> = ({ lockAmount, createdAt, lockDura
 
   const values = [
     <>
-      <img src="/quiver.svg"/>
+      <img src="/quiver.svg" />
       <div>QSTK</div>
     </>,
     formatNumber(lockAmount),
@@ -31,29 +31,29 @@ const Allocation: FunctionComponent<IProps> = ({ lockAmount, createdAt, lockDura
 
   return (
     <div
-      className={classNames(className, styles.allocation )}
+      className={classNames(className, styles.allocation)}
     >
       <div className={styles.headers}>
-      {
-        headers.map(header => {
-          return (
-            <div key={header} className={styles.header}>
-              {header}
-            </div>
-          )
-        })
-      }
+        {
+          headers.map(header => {
+            return (
+              <div key={header} className={styles.header}>
+                {header}
+              </div>
+            )
+          })
+        }
       </div>
       <div className={styles.values}>
-      {
-        values.map(value => {
-          return (
-            <div key={value.toString()} className={styles.value}>
-              {value}
-            </div>
-          )
-        })
-      }
+        {
+          values.map(value => {
+            return (
+              <div key={value.toString()} className={styles.value}>
+                {value}
+              </div>
+            )
+          })
+        }
       </div>
     </div>
   )

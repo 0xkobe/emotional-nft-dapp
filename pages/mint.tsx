@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import { backgrounds, favCoins, skins, characters, charactersSupply } from '../data/nft'
+import { useEffect, useMemo, useState } from 'react'
+import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
 import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, DisplayType } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
@@ -16,9 +16,10 @@ import { QNFT } from '../types/contracts'
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import { CharacterOption } from '../types/options'
 import { Character, Emotion } from '../types/nft'
+import { bnToText } from '../lib/utils'
 
 export default function Mint(): JSX.Element {
-  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+  const { contract: qnft, error: qnftError, account } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
     abi.qnft,
@@ -36,11 +37,13 @@ export default function Mint(): JSX.Element {
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
   const [charactersData, setCharactersData] = useState([] as CharacterOption[])
-  const [nftPrice, setNFTPrice] = useState(0)
   const [changePercentage, setChangePercentage] = useState(0)
   const [nftName, setNftName] = useState('')
   const [minterName, setMinterName] = useState('')
   const [nftDescription, setNftDescription] = useState('')
+  const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
+  const [lockOptionId, setLockOptionId] = useState(0)
+  const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
 
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
@@ -75,6 +78,12 @@ export default function Mint(): JSX.Element {
       console.error(' qnft getCharactersSupply fail')
     }
   }, [qnft, skinIndex])
+
+  const nftPrice = useMemo(() => {
+    const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
+    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
+    return nonTokenPrice.add(tokenPrice)
+  }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
   const mintSummaryProperties = [
     {
@@ -120,6 +129,40 @@ export default function Mint(): JSX.Element {
     })
   }
 
+  if (mintStep > 1) {
+    mintSummaryProperties.push({
+      title: "QSTK Allocation",
+      keyValues: [
+        {
+          key: "Mint amount",
+          value: bnToText(qstkAmount),
+        },
+        {
+          key: "Lock period",
+          value: lockOptions[lockOptionId].description,
+        },
+        {
+          key: "Free allocation",
+          value: bnToText(airdropAmount),
+        },
+        {
+          key: "Total to receive",
+          value: bnToText(qstkAmount.add(airdropAmount)),
+        },
+      ]
+    })
+  }
+
+  const mintSummaryBtnName = useMemo(() => {
+    if (mintStep === 0) {
+      return 'Validate Design'
+    }
+    if (mintStep === 1) {
+      return 'Validate Story'
+    }
+    return 'Mint my NFT'
+  }, [mintStep])
+
   return (
     <>
       <Head>
@@ -136,12 +179,12 @@ export default function Mint(): JSX.Element {
               size="big"
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
-              ethPrice={nftPrice.toString()}
+              ethPrice={bnToText(nftPrice)}
               metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
+                name: nftName,
+                description: nftDescription,
+                image: characters[characterId].emotions.normal, // TODO: confirm?
+                external_url: '/', // TODO: confirm?
                 attributes: [
                   {
                     trait_type: Traits.Creature,
@@ -161,11 +204,11 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
+                    value: lockOptionId
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 10,
+                    value: qstkAmount.add(airdropAmount).toNumber() // Need to confirm if this is correct
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -178,17 +221,17 @@ export default function Mint(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: Date.now(),
+                    value: 0  // Need to be updated with actual value
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false,
+                    value: false
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Angry,
+                    value: Emotion.Normal // Need to be updated with actual value
                   },
-                ],
+                ]
               }}
             />
             {
@@ -219,46 +262,28 @@ export default function Mint(): JSX.Element {
             {
               mintStep === 2 && (
                 <AllocationWizard
-                  availableMintAmount={BigNumber.from("540000")}
-                  availableFreeAllocation={BigNumber.from("1520000")}
-                  lockOptions={[
-                    {
-                      id: 1,
-                      description: "",
-                      duration: 12 * 30 * 24 * 3600,
-                      discount: 50,
-                      minAmount: BigNumber.from(1000),
-                      maxAmount: BigNumber.from(2000),
-                    },
-                    {
-                      id: 2,
-                      description: "",
-                      duration: 6 * 30 * 24 * 3600,
-                      discount: 30,
-                      minAmount: BigNumber.from(2000),
-                      maxAmount: BigNumber.from(3000),
-                    },
-                    {
-                      id: 3,
-                      description: "",
-                      duration: 3 * 30 * 24 * 3600,
-                      discount: 20,
-                      minAmount: BigNumber.from(3000),
-                      maxAmount: BigNumber.from(4000),
-                    },
-                  ]}
+                  account={account || ''}
+                  availableMintAmount={BigNumber.from("540000")}  // TODO: Get actual value from the contract
+                  availableFreeAllocation={BigNumber.from("1520000")} // TODO: Get actual value from the contract
+                  lockOptions={lockOptions}
+                  lockOptionId={lockOptionId}
+                  qstkAmount={qstkAmount}
+                  airdropAmount={airdropAmount}
+                  setLockOptionId={(id: number): void => setLockOptionId(id)}
+                  setQstkAmount={(amount: BigNumber): void => setQstkAmount(amount)}
+                  setAirdropAmount={(amount: BigNumber): void => setAirdropAmount(amount)}
                 />
               )
             }
           </div>
           <MintSummary
             properties={mintSummaryProperties}
-            mintPrice={`${nftPrice.toString()} ETH`}
+            mintPrice={`${bnToText(nftPrice)} ETH`}
           >
             <Button onClick={() => {
               setMintStep(mintStep + 1)
             }}>
-              Validate Design
+              {mintSummaryBtnName}
             </Button>
           </MintSummary>
         </div>

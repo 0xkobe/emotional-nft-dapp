@@ -41,6 +41,7 @@
 .keyValue {
   display: flex;
   justify-content: space-between;
+  min-width: 100%;
 }
 
 .key {
@@ -48,6 +49,10 @@
 
 .value {
   text-align: right;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(100% - 80px);
 }
 
 .mint {
