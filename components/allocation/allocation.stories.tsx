@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import { BigNumber } from 'ethers'
 import Allocation, { IProps } from './allocation'
 
 export default {
@@ -10,7 +11,7 @@ const Template: Story<IProps> = (args) => <Allocation {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  lockAmount: 12000,
+  lockAmount: BigNumber.from(12000),
   createdAt: new Date("2021-06-01"),
   lockDuration: 3600*24*30*6,
 }
