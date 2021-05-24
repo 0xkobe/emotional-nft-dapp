@@ -182,8 +182,8 @@ export default function Mint(): JSX.Element {
               metadata={{
                 name: nftName,
                 description: nftDescription,
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
+                image: characters[characterId].emotions.normal, // TODO: confirm?
+                external_url: '/', // TODO: confirm?
                 attributes: [
                   {
                     trait_type: Traits.Creature,

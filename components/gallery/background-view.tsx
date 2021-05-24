@@ -16,7 +16,7 @@ const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex,
         backgrounds.map((background, index) => {
           return (
             <BackgroundItem
-              key={JSON.stringify(background)}
+              key={background.id}
               background={background}
               selected={index === selectedIndex}
               onSelect={() => {

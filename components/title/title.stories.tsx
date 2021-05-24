@@ -6,7 +6,7 @@ export default {
   component: Title,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <Title {...args} />
+const Template: Story<IProps> = (args) => <Title {...args}>My title</Title>
 
 export const Default = Template.bind({})
 Default.args = {}

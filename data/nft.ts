@@ -5,34 +5,47 @@ import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
 
 const backgrounds = [
   {
+    id: 0,
+    name: "",
+    image: ''
+  },
+  {
+    id: 1,
     name: "Sunrise Boat",
     image: '/nft/background/01_sunrise_boat.png'
   },
   {
+    id: 2,
     name: "Noon Boat",
     image: '/nft/background/02_noon_boat.png'
   },
   {
+    id: 3,
     name: "Evening Boat",
     image: '/nft/background/03_evening_boat.png',
   },
   {
+    id: 4,
     name: "Night Boat",
     image: '/nft/background/04_night_boat.png',
   },
   {
+    id: 5,
     name: "Bright Night Sky Moon",
     image: '/nft/background/05_bright_night_sky_moon.png',
   },
   {
+    id: 6,
     name: "Cloudy Night Sky",
     image: '/nft/background/06_cloudy_night_sky.png',
   },
   {
+    id: 7,
     name: "No Cloudy Night Sky",
     image: '/nft/background/07_no_cloud_night_sky.png'
   },
   {
+    id: 8,
     name: "Rainy Night Sky",
     image: '/nft/background/08_rainy_night_sky.png'
   },

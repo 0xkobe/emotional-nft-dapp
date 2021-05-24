@@ -8,8 +8,6 @@ export default {
 
 const Template: Story<IProps> = (args) => <Select {...args} />
 
-export const Default = Template.bind({})
-
 export const WithIcon = Template.bind({})
 WithIcon.args = {
   placeholder: 'Select skin',

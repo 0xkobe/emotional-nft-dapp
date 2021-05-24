@@ -48,6 +48,6 @@ Default.args = {
       currentSupply: 100,
     }
   ],
-  selectedCharacterId: 3,
+  selectedCharacterId: 0,
   onSelectOption: (_) => { },
 }
