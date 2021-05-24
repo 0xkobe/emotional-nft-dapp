@@ -15,11 +15,6 @@ WithPlaceholder.args = {
   placeholder: '2000',
 }
 
-export const WithLabel = Template.bind({})
-WithLabel.args = {
-  label: 'NFT Description',
-}
-
 export const WithValue = Template.bind({})
 WithValue.args = {
   value: '2000',
@@ -27,7 +22,6 @@ WithValue.args = {
 
 export const WithAll = Template.bind({})
 WithAll.args = {
-  label: 'NFT Description',
   placeholder: '2000',
   value: '2000',
 }

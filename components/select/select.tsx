@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import { HTMLAttributes, FunctionComponent, useState, useRef } from 'react'
 import IconChevron from '../icon/chevron'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
-import styles from './select.module.css'
 
 export type Option = {
   icon?: string
@@ -10,16 +9,15 @@ export type Option = {
 }
 
 export type IProps = HTMLAttributes<{}> & {
-  label?: string
   placeholder?: string
   options: Option[]
   selectedIndex: number
   onSelectOption?: (option: Option, index: number) => void
 }
 
-const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSelectOption, selectedIndex, className, ...props }: IProps) => {
+const Select: FunctionComponent<IProps> = ({ placeholder, options, onSelectOption, selectedIndex, className, ...props }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
@@ -36,27 +34,53 @@ const Select: FunctionComponent<IProps> = ({ label, placeholder, options, onSele
     setIsOpen(false)
   })
 
+  const renderOption = (option: Option) => {
+    return (
+      <div className="flex flex-row pl-2 items-center">
+        {option.icon && (
+          <img className="w-5 h-5 mr-2" src={option.icon} />
+        )}
+        <span className="text-sm leading-5 font-medium">
+          {option.text}
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <div className={classNames(className, styles.select)}>
-      <div className={styles.selectLabel}>{label}</div>
-      <div className={classNames(styles.selectTrigger, isOpen? styles.open: '')} onClick={toggleDropdown}>
-        {placeholder || 'Select an option'}
-        <IconChevron className={styles.dropdownArrow} />
+    <div className={classNames(className, "relative cursor-pointer text-gray-500")} ref={wrapperRef}>
+      <div className={classNames("flex flex-row w-full items-center justify-between p-2 border border-solid border-gray-300 rounded-lg")} onClick={toggleDropdown}>
+        <div>
+          {
+            selectedIndex < options.length ? (
+              renderOption(options[selectedIndex])
+            ) : placeholder || 'Select an option'
+          }
+        </div>
+        <IconChevron className={classNames("absolute top-4 right-4 transition duration-400 transition-transform", isOpen ? "transform rotate-180" : "")} />
       </div>
-      <div className={classNames(styles.selectDropdown, isOpen? styles.open: '')}>
-        {
-          options?.map((option, index) => (
-            <div
-              onClick={onOptionClick(option, index)}
-              key={index}
-              className={classNames(styles.selectDropdownItem, selectedIndex === index? styles.selected: '')}
-            >
-              {option.icon && <img src={option.icon} />}
-              <span>{option.text}</span>
-            </div>
-          ))
-        }
-      </div>
+      {
+        isOpen && (
+          <div className="absolute left-0 right-0 z-50 border border-gray-400">
+            {
+              options?.map((option, index) => (
+                <div
+                  onClick={onOptionClick(option, index)}
+                  key={index}
+                  className={classNames("flex flex-row items-center p-2", selectedIndex === index ? "bg-blue-500 text-white" : 'bg-white text-gray-500 hover:bg-gray-100')}
+                >
+                  <div className="flex flex-row pl-2 items-center">
+                    {option.icon && <img className="w-5 h-5 mr-2" src={option.icon} />}
+                    <span className="text-sm leading-5 font-medium">
+                      {option.text}
+                    </span>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        )
+      }
     </div>
   )
 }

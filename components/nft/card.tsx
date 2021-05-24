@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { backgrounds } from '../../data/nft'
+import { backgrounds, characters } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { APINftMetadataResponse } from '../../types/api'
 import { Creature, Skin, Traits } from '../../types/metadata'
@@ -70,19 +70,26 @@ const NFTCard: FunctionComponent<IProps> =
     useEffect(() => {
       const animalId = attribute(metadata, Traits.Creature) as Creature
       const skinId = attribute(metadata, Traits.Skin) as Skin
-      const creature = getCreature(animalId, skinId)
+      let creature: Character | undefined
+      if (animalId === Creature.Fish) {
+        creature = characters[25]
+      } else if (animalId === Creature.Minotaur) {
+        creature = characters[26]
+      } else {
+        creature = getCreature(animalId, skinId)
+      }
       if (!creature) return
       setCreature(creature)
     }, [metadata])
 
     if (!creature) return <div>not found</div>
 
-    let TrendIcon = trendIcon(changePercentage)
-    let backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number]
-    let emotion = emotionFromPriceChange(changePercentage)
+    const TrendIcon = trendIcon(changePercentage)
+    const backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number].image
+    const emotion = emotionFromPriceChange(changePercentage)
 
     return (
-      <div className={classNames('p-8 border rounded-xl w-96', styles.card)}>
+      <div className={classNames('mb-auto p-8 border rounded-xl w-96', styles.card)}>
         <div className={styles.cardTop}>
           <div className={classNames(styles.emotionText, trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
           <div className={styles.favcoinVisual}>

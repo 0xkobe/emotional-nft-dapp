@@ -3,15 +3,14 @@ import { TextareaHTMLAttributes, FunctionComponent } from 'react'
 import styles from './textarea.module.css'
 
 export type IProps = TextareaHTMLAttributes<{}> & {
-  label?: string
+  noResize?: boolean
 }
 
-const TextArea: FunctionComponent<IProps> = ({ label, className, ...props }: IProps) => {
+const TextArea: FunctionComponent<IProps> = ({noResize, className, ...props }: IProps) => {
   return (
     <div className={classNames(className, styles.textarea)}>
-      <div className={styles.textareaLabel}>{label}</div>
       <div className={styles.textareaWrapper}>
-        <textarea {...props} />
+        <textarea {...props} className={noResize ? "resize-none" : ""}/>
       </div>
     </div>
   )

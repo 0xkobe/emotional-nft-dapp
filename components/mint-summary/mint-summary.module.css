@@ -1,0 +1,76 @@
+.mintSummary {
+  width: 280px;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  border-radius: 16px;
+}
+
+.title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  color: #6b7280;
+}
+
+.properties {
+  padding: 32px;
+  display: grid;
+  grid-gap: 32px;
+}
+
+.propertyTitle {
+  margin-bottom: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7280;
+}
+
+.keyValues {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  color: #6b7280;
+  display: grid;
+  grid-gap: 4px;
+}
+
+.keyValue {
+  display: flex;
+  justify-content: space-between;
+  min-width: 100%;
+}
+
+.key {
+}
+
+.value {
+  text-align: right;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(100% - 80px);
+}
+
+.mint {
+  padding: 32px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  border-radius: 0px 0px 16px 16px;
+  display: grid;
+  grid-gap: 32px;
+  text-align: center;
+}
+
+.mint .key,
+.mint .value {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7280;
+}

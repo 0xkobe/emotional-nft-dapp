@@ -28,6 +28,7 @@ export type Character = {
     [Emotion.Happy]: string
   }
   artist: Artist
+  mintPrice: BigNumber
 }
 
 export type FavCoinMeta = {
@@ -52,4 +53,14 @@ export type LockOption = {
   discount: number
   minAmount: BigNumber
   maxAmount: BigNumber
+}
+
+export type KeyValue = {
+  key: string
+  value: string
+}
+
+export type Property = {
+  title: string
+  keyValues: KeyValue[]
 }

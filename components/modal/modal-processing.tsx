@@ -12,7 +12,7 @@ export type IProps = HTMLAttributes<{}> & {
 const ModalProcessing: FunctionComponent<IProps> = ({ isShown, onModalClose, onRequestClose }: IProps) => {
   return (
       <Modal isShown={isShown} onModalClose={onModalClose} onRequestClose={onRequestClose} >
-        <div>
+        <div className={styles.processing}>
             <div className={styles.spinner}>
                 <IconSpinner />
             </div>
