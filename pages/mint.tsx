@@ -179,7 +179,6 @@ export default function Mint(): JSX.Element {
               size="big"
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
-              ethPrice={bnToText(nftPrice)}
               metadata={{
                 name: nftName,
                 description: nftDescription,

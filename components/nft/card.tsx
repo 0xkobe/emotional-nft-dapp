@@ -14,7 +14,6 @@ export type IProps = HTMLAttributes<any> & {
   changePercentage: number // percentage of changes
   favcoin: FavCoin
   metadata: APINftMetadataResponse
-  ethPrice: string
   size?: 'big' | 'medium' | 'small'
 }
 
@@ -56,7 +55,7 @@ function emotionFromPriceChange(changePercentage: number): Emotion {
 
 function bgColorFromPriceChange(changePercentage: number): string {
   const emotion = emotionFromPriceChange(changePercentage)
-  switch(emotion) {
+  switch (emotion) {
     case Emotion.Angry:
     case Emotion.Worry:
       return 'bg-red-100'
@@ -70,7 +69,7 @@ function bgColorFromPriceChange(changePercentage: number): string {
 
 function colorFromPriceChange(changePercentage: number): string {
   const emotion = emotionFromPriceChange(changePercentage)
-  switch(emotion) {
+  switch (emotion) {
     case Emotion.Angry:
     case Emotion.Worry:
       return 'text-red-500'
@@ -83,7 +82,7 @@ function colorFromPriceChange(changePercentage: number): string {
 }
 
 const NFTCard: FunctionComponent<IProps> =
-  ({ changePercentage, favcoin, ethPrice, metadata, size, className }: IProps) => {
+  ({ changePercentage, favcoin, metadata, size, className }: IProps) => {
     const [creature, setCreature] = useState<Character>()
 
     useEffect(() => {
@@ -122,7 +121,7 @@ const NFTCard: FunctionComponent<IProps> =
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            <TrendIcon className="w-6 h-4"/>
+            <TrendIcon className="w-6 h-4" />
             <img className="w-8 h-8" src={favcoin.meta.icon} />
           </div>
         </div>
@@ -148,12 +147,6 @@ const NFTCard: FunctionComponent<IProps> =
             <span className="text-xs leading-4 font-normal text-gray-400">
               [{attribute(metadata, Traits.Skin)} -{' '}
               {attribute(metadata, Traits.Creature)}]
-            </span>
-          </div>
-          <div className="flex flex-row items-center justify-center space-x-1">
-            <img className="h-3" src="/favcoin/eth.svg" />
-            <span className="text-sm leading-6 font-bold text-purple-900 pt-px">
-              {ethPrice}
             </span>
           </div>
         </div>
