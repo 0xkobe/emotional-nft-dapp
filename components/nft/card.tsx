@@ -4,10 +4,10 @@ import { backgrounds, characters } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { APINftMetadataResponse } from '../../types/api'
 import { Creature, Skin, Traits } from '../../types/metadata'
-import { Character, FavCoin, Emotion } from '../../types/nft'
-import IconUptrend from '../icon/uptrend'
+import { Character, Emotion, FavCoin } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
+import IconUptrend from '../icon/uptrend'
 import styles from './card.module.css'
 
 export type IProps = HTMLAttributes<any> & {
@@ -28,7 +28,7 @@ function trendIcon(changePercentage: number): any {
 }
 
 function capitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 function emotionFromPriceChange(changePercentage: number): Emotion {
@@ -81,63 +81,84 @@ function colorFromPriceChange(changePercentage: number): string {
   }
 }
 
-const NFTCard: FunctionComponent<IProps> =
-  ({ changePercentage, favcoin, metadata, size, className }: IProps) => {
-    const [creature, setCreature] = useState<Character>()
+const NFTCard: FunctionComponent<IProps> = ({
+  changePercentage,
+  favcoin,
+  metadata,
+  size,
+  className,
+}: IProps) => {
+  const [creature, setCreature] = useState<Character>()
 
-    useEffect(() => {
-      const animalId = attribute(metadata, Traits.Creature) as Creature
-      const skinId = attribute(metadata, Traits.Skin) as Skin
-      let creature: Character | undefined
-      if (animalId === Creature.Fish) {
-        creature = characters[25]
-      } else if (animalId === Creature.Minotaur) {
-        creature = characters[26]
-      } else {
-        creature = getCreature(animalId, skinId)
-      }
-      if (!creature) return
-      setCreature(creature)
-    }, [metadata])
+  useEffect(() => {
+    const animalId = attribute(metadata, Traits.Creature) as Creature
+    const skinId = attribute(metadata, Traits.Skin) as Skin
+    let creature: Character | undefined
+    if (animalId === Creature.Fish) {
+      creature = characters[25]
+    } else if (animalId === Creature.Minotaur) {
+      creature = characters[26]
+    } else {
+      creature = getCreature(animalId, skinId)
+    }
+    if (!creature) return
+    setCreature(creature)
+  }, [metadata])
 
-    if (!creature) return <div>not found</div>
+  if (!creature) return <div>not found</div>
 
-    const TrendIcon = trendIcon(changePercentage)
-    const backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number].image
-    const emotion = emotionFromPriceChange(changePercentage)
-    const bgColor = bgColorFromPriceChange(changePercentage);
-    const color = colorFromPriceChange(changePercentage);
+  const TrendIcon = trendIcon(changePercentage)
+  const backgroundSrc =
+    backgrounds[attribute(metadata, Traits.Background) as number].image
+  const emotion = emotionFromPriceChange(changePercentage)
+  const bgColor = bgColorFromPriceChange(changePercentage)
+  const color = colorFromPriceChange(changePercentage)
 
-    return (
-      <div className={classNames(className, 'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm', (
-        size === 'big' ? 'w-96' : (
-          size === 'medium' ? 'w-80' : (
-            size === 'small' ? 'w-72' : ''
-          )
-        )
-      ), styles.card)}>
-        <div className="flex flex-row justify-between">
-          <div className={classNames("px-2 py-1 rounded-full", bgColor, color)}>
-            {capitalizeFirstLetter(emotion)}
-          </div>
-          <div className="flex flex-row items-center justify-center space-x-2">
-            <TrendIcon className="w-6 h-4" />
-            <img className="w-8 h-8" src={favcoin.meta.icon} />
-          </div>
+  return (
+    <div
+      className={classNames(
+        className,
+        'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
+        size === 'big'
+          ? 'w-96'
+          : size === 'medium'
+          ? 'w-80'
+          : size === 'small'
+          ? 'w-72'
+          : '',
+        styles.card,
+      )}
+    >
+      <div className="flex flex-row justify-between">
+        <div className={classNames('px-2 py-1 rounded-full', bgColor, color)}>
+          {capitalizeFirstLetter(emotion)}
         </div>
-        <div className={classNames('relative rounded-xl overflow-hidden')}>
-          {
-            backgroundSrc && (
-              <img
-                src={backgroundSrc}
-                className="top-0 right-0 left-0 bottom-0"
-              />
-            )
-          }
-          <img
-            src={creature.emotions[emotion]}
-            className={classNames('top-0 right-0 left-0 bottom-0', backgroundSrc ? 'absolute' : '')}
-          />
+        <div className="flex flex-row items-center justify-center space-x-2">
+          <TrendIcon className="w-6 h-4" />
+          <img className="w-8 h-8" src={favcoin.meta.icon} />
+        </div>
+      </div>
+      <div className={classNames('relative rounded-xl overflow-hidden')}>
+        {backgroundSrc && (
+          <img src={backgroundSrc} className="top-0 right-0 left-0 bottom-0" />
+        )}
+        <img
+          src={creature.emotions[emotion]}
+          className={classNames(
+            'top-0 right-0 left-0 bottom-0',
+            backgroundSrc ? 'absolute' : '',
+          )}
+        />
+      </div>
+      <div className="flex flex-row justify-between space-u-4">
+        <div className="flex flex-col space-y-1">
+          <span className="text-base leading-6 font-bold text-purple-900">
+            {metadata.name}
+          </span>
+          <span className="text-xs leading-4 font-normal text-gray-400">
+            [{attribute(metadata, Traits.Skin)} -{' '}
+            {attribute(metadata, Traits.Creature)}]
+          </span>
         </div>
         <div className="flex flex-row justify-between space-u-4">
           <div className="flex flex-col space-y-1">
@@ -151,7 +172,8 @@ const NFTCard: FunctionComponent<IProps> =
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
 export default NFTCard

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import NFTCard from '../../components/nft/card'
+import { favCoins } from '../../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -13,7 +14,6 @@ import {
 import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
 import { APINftMetadataResponse, APIResponseError } from '../../types/api'
-import { favCoins } from '../../data/nft'
 import { Traits } from '../../types/metadata'
 
 export default function NFT(): JSX.Element {
@@ -28,30 +28,33 @@ export default function NFT(): JSX.Element {
   const [metadata, setMetadata] = useState<APINftMetadataResponse>()
   const [error, setError] = useState<Error>()
 
-  const fetchMetadata = useCallback(async (contract: Contract, id: number) => {
-    setLoading(true)
-    try {
-      console.log(contract, id)
-      const tokenURI = await contract.tokenURI(id)
-      console.log(tokenURI)
-      const res = await fetch(tokenURI)
-      const response: APINftMetadataResponse | APIResponseError =
-        await res.json()
-      if ('error' in response)
-        return setError(
-          new Error(`an error occurred while fetching metadata: ${error}`),
-        )
-      if (!res.ok)
-        return setError(
-          new Error(`an unknown error occurred while fetching metadata`),
-        )
-      setMetadata(response)
-    } catch (e) {
-      setError(e)
-    } finally {
-      setLoading(false)
-    }
-  }, [error])
+  const fetchMetadata = useCallback(
+    async (contract: Contract, id: number) => {
+      setLoading(true)
+      try {
+        console.log(contract, id)
+        const tokenURI = await contract.tokenURI(id)
+        console.log(tokenURI)
+        const res = await fetch(tokenURI)
+        const response: APINftMetadataResponse | APIResponseError =
+          await res.json()
+        if ('error' in response)
+          return setError(
+            new Error(`an error occurred while fetching metadata: ${error}`),
+          )
+        if (!res.ok)
+          return setError(
+            new Error(`an unknown error occurred while fetching metadata`),
+          )
+        setMetadata(response)
+      } catch (e) {
+        setError(e)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [error],
+  )
 
   useEffect(() => {
     if (!router.isReady) return

@@ -12,4 +12,3 @@ export const Default = Template.bind({})
 Default.args = {
   step: 1,
 }
-

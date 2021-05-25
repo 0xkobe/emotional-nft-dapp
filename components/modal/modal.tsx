@@ -1,6 +1,11 @@
-import classNames from 'classnames'
+import React, {
+  FunctionComponent,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react'
 import ReactDOM from 'react-dom'
-import React, { FunctionComponent, ReactNode, useEffect, useState, HTMLAttributes } from 'react'
 import { useKeyDown } from '../../hooks/UI/useKeyDown'
 import styles from './modal.module.css'
 
@@ -11,8 +16,15 @@ export type IProps = HTMLAttributes<{}> & {
   onModalClose: () => void
 }
 
-const Modal: FunctionComponent<IProps> = ({ className, isShown, children, onModalClose, onRequestClose, ...props }: IProps) => {
-  const [ closeRequestSent, setCloseRequest ] = useState(false);
+const Modal: FunctionComponent<IProps> = ({
+  className,
+  isShown,
+  children,
+  onModalClose,
+  onRequestClose,
+  ...props
+}: IProps) => {
+  const [closeRequestSent, setCloseRequest] = useState(false)
   useEffect(() => {
     if (closeRequestSent && isShown === false) {
       onModalClose()
@@ -27,16 +39,15 @@ const Modal: FunctionComponent<IProps> = ({ className, isShown, children, onModa
   useKeyDown('Escape', () => isShown && requestClose())
 
   let modal = (
-      <React.Fragment>
-        <div className={styles.backdrop} onClick={requestClose}/>
-        <div className={styles.modalWrapper}>
-          <div className={styles.modal}>
-            <div className={styles.content}>{children}</div>
-          </div>
+    <React.Fragment>
+      <div className={styles.backdrop} onClick={requestClose} />
+      <div className={styles.modalWrapper}>
+        <div className={styles.modal}>
+          <div className={styles.content}>{children}</div>
         </div>
-      </React.Fragment>
+      </div>
+    </React.Fragment>
   )
-
 
   return isShown ? ReactDOM.createPortal(modal, document.body) : null
 }

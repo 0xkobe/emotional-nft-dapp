@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
-import React, { HTMLAttributes, FunctionComponent } from 'react'
+import React, { FunctionComponent, HTMLAttributes } from 'react'
 import { bnToText } from '../../lib/utils'
 import LockIcon from '../icon/lock'
 
@@ -8,10 +8,17 @@ export type IProps = HTMLAttributes<{}> & {
   lockAmount: BigNumber
 }
 
-const LockedTokenStat: FunctionComponent<IProps> = ({ lockAmount, className, ...props }: IProps) => {
+const LockedTokenStat: FunctionComponent<IProps> = ({
+  lockAmount,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div
-      className={classNames(className, "flex flex-row w-max p-4 pr-12 space-x-7 border border-gray-200 rounded-2xl")}
+      className={classNames(
+        className,
+        'flex flex-row w-max p-4 pr-12 space-x-7 border border-gray-200 rounded-2xl',
+      )}
     >
       <div className="relative flex w-12 h-12 items-center justify-center rounded-full border border-gray-200">
         <img className="w-6 h-6" src="/quiver.svg" />
@@ -20,9 +27,7 @@ const LockedTokenStat: FunctionComponent<IProps> = ({ lockAmount, className, ...
         </div>
       </div>
       <div className="flex flex-col text-gray-500 mr-4">
-        <span className="text-sm leading-5 font-medium">
-          Your Locked Token
-        </span>
+        <span className="text-sm leading-5 font-medium">Your Locked Token</span>
         <span className="text-xl leading-7 font-semibold">
           {bnToText(lockAmount)} QSTK
         </span>
