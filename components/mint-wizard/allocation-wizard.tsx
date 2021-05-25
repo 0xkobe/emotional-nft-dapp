@@ -1,12 +1,18 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
-
-import { BigNumber } from '@ethersproject/bignumber'
-import { formatNumber, lockDurationToString, verifyAirdropKey, bnToInput, inputToBn, bnToText } from '../../lib/utils'
+import { verifier } from '../../data/nft'
+import {
+  bnToInput,
+  bnToText,
+  formatNumber,
+  inputToBn,
+  lockDurationToString,
+  verifyAirdropKey,
+} from '../../lib/utils'
+import { LockOption } from '../../types/nft'
 import Input from '../input/input'
 import Select from '../select/select'
-import { LockOption } from '../../types/nft'
-import { verifier } from '../../data/nft'
 
 export type IProps = HTMLAttributes<{}> & {
   account: string
@@ -34,7 +40,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   setQstkAmount,
   setAirdropAmount,
 }: IProps) => {
-  const lockOption = lockOptions[lockOptionId];
+  const lockOption = lockOptions[lockOptionId]
 
   const [qstkAmountInput, setQstkAmountInput] = useState('')
   const [qstkAmountError, setQstkAmountError] = useState('')
@@ -75,9 +81,11 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   }
 
   return (
-    <div className={classNames(className, "flex flex-col space-y-8")}>
+    <div className={classNames(className, 'flex flex-col space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">QSTK Token Remaining</div>
+        <div className="text-base leading-6 font-medium text-gray-500">
+          QSTK Token Remaining
+        </div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
             QSTK to Mint: {formatNumber(availableMintAmount)} QSTK
@@ -90,7 +98,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
 
       <div className="flex flex-row space-x-8">
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">Amount to mint</div>
+          <div className="text-base leading-6 font-medium text-gray-500">
+            Amount to mint
+          </div>
           <div className="flex flex-col space-y-2">
             <Input
               className="w-full"
@@ -102,35 +112,38 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500">
-                Min {bnToText(lockOption.minAmount)} - Max {bnToText(lockOption.maxAmount)}
+                Min {bnToText(lockOption.minAmount)} - Max{' '}
+                {bnToText(lockOption.maxAmount)}
               </span>
               <a
                 className="text-xs leading-4 font-normal text-black cursor-pointer"
-                onClick={() => setQstkAmountInput(bnToInput(lockOption.maxAmount))}
+                onClick={() =>
+                  setQstkAmountInput(bnToInput(lockOption.maxAmount))
+                }
               >
                 MAX
               </a>
             </div>
             {qstkAmountError != '' && (
-              <div className="text-red-500 text-xs">
-                {qstkAmountError}
-              </div>
+              <div className="text-red-500 text-xs">{qstkAmountError}</div>
             )}
           </div>
         </div>
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">Lock Period Discount</div>
+          <div className="text-base leading-6 font-medium text-gray-500">
+            Lock Period Discount
+          </div>
           <div className="flex flex-col space-y-2">
             <Select
               className="w-full"
               placeholder=""
-              options={
-                lockOptions.map(option => {
-                  return {
-                    text: `${lockDurationToString(option.duration)} - ${option.discount}%`
-                  };
-                })
-              }
+              options={lockOptions.map((option) => {
+                return {
+                  text: `${lockDurationToString(option.duration)} - ${
+                    option.discount
+                  }%`,
+                }
+              })}
               selectedIndex={lockOptionId}
               onSelectOption={(_, index: number): void => {
                 setLockOptionId(index)
@@ -143,7 +156,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col space-y-4 w-full">
-        <div className="text-base leading-6 font-medium text-gray-500">Free Allocation Key</div>
+        <div className="text-base leading-6 font-medium text-gray-500">
+          Free Allocation Key
+        </div>
         <div className="flex flex-col space-y-2">
           <Input
             className="w-full"
@@ -152,26 +167,24 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             onChange={onChangeAirdropKey}
             isError={airdropKeyError !== '' && airdropKey !== ''}
           />
-          {
-            airdropKeyError === '' && airdropKey && (
-              <span className="text-xs leading-4 font-normal text-gray-500">
-                <span className="mr-2">🎉</span>
-                Congratulations, you are eligible to
-                <span className="ml-1 font-semibold">{bnToText(airdropAmount)} QSTK</span>
+          {airdropKeyError === '' && airdropKey && (
+            <span className="text-xs leading-4 font-normal text-gray-500">
+              <span className="mr-2">🎉</span>
+              Congratulations, you are eligible to
+              <span className="ml-1 font-semibold">
+                {bnToText(airdropAmount)} QSTK
               </span>
-            )
-          }
-          {
-            airdropKeyError !== '' && airdropKey && (
-              <div className="text-red-500 text-xs">
-                {airdropKeyError}
-              </div>
-            )
-          }
+            </span>
+          )}
+          {airdropKeyError !== '' && airdropKey && (
+            <div className="text-red-500 text-xs">{airdropKeyError}</div>
+          )}
         </div>
       </div>
       <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">Total Token to Receive</div>
+        <div className="text-base leading-6 font-medium text-gray-500">
+          Total Token to Receive
+        </div>
         <div className="flex flex-row space-x-2 items-center">
           <div className="flex w-8 h-8 p-2 bg-white rounded-2xl border border-solid border-gray-200">
             <img src="/quiver.svg" />

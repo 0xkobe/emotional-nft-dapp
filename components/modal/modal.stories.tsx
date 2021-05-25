@@ -9,13 +9,11 @@ export default {
 const Template: Story<IProps> = (args) => <Modal {...args} />
 
 export const Default = Template.bind({})
-Default.args = {  
+Default.args = {
   isShown: true,
   children: (
     <div>
-      <h1>
-        Modal basic
-      </h1>
+      <h1>Modal basic</h1>
     </div>
   ),
   onRequestClose: (): void => {},
