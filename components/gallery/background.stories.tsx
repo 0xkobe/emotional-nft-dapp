@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react'
-import BackgroundView, { IProps } from './background-view'
 import { backgrounds } from '../../data/nft'
+import BackgroundView, { IProps } from './background-view'
 
 export default {
   title: 'Gallery/BackgroundView',
@@ -13,5 +13,5 @@ export const Default = Template.bind({})
 Default.args = {
   backgrounds,
   selectedIndex: 3,
-  onSelectOption: (_): void => { }
+  onSelectOption: (_): void => {},
 }

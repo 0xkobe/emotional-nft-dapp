@@ -1,5 +1,5 @@
-import { HTMLAttributes, FunctionComponent } from 'react'
-import { BackgroundOption } from '../../types/options';
+import { FunctionComponent, HTMLAttributes } from 'react'
+import { BackgroundOption } from '../../types/options'
 import BackgroundItem from './background-item'
 import styles from './character.module.css'
 
@@ -9,23 +9,27 @@ export type IProps = HTMLAttributes<{}> & {
   onSelectOption: (index: number) => void
 }
 
-const BackgroundView: FunctionComponent<IProps> = ({ backgrounds, selectedIndex, onSelectOption, className, ...props }: IProps) => {
+const BackgroundView: FunctionComponent<IProps> = ({
+  backgrounds,
+  selectedIndex,
+  onSelectOption,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div className={styles.backgrounds}>
-      {
-        backgrounds.map((background, index) => {
-          return (
-            <BackgroundItem
-              key={background.id}
-              background={background}
-              selected={index === selectedIndex}
-              onSelect={() => {
-                onSelectOption(index)
-              }}
-            />
-          )
-        })
-      }
+      {backgrounds.map((background, index) => {
+        return (
+          <BackgroundItem
+            key={background.id}
+            background={background}
+            selected={index === selectedIndex}
+            onSelect={() => {
+              onSelectOption(index)
+            }}
+          />
+        )
+      })}
     </div>
   )
 }

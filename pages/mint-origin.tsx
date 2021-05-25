@@ -24,12 +24,7 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 }
 
 export default function Mint(): JSX.Element {
-  const {
-    account,
-    library,
-    chainId,
-    getSigner,
-  } = useWallet(metamaskConnector)
+  const { account, library, chainId, getSigner } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
