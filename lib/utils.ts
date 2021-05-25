@@ -21,8 +21,11 @@ export function lockDurationToString(duration: number): string {
   if (duration === 6 * 30 * 24 * 3600) {
     return '6 Months'
   }
-
-  return duration.toString() + ' seconds'
+  // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
+  if (duration === 1800) {
+    return '30 min'
+  }
+  throw new Error('Invalid Lock Duration')
 }
 
 // format number with comma

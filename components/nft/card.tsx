@@ -15,6 +15,7 @@ export type IProps = HTMLAttributes<any> & {
   favcoin: FavCoin
   metadata: APINftMetadataResponse
   ethPrice: string
+  size?: 'big' | 'medium' | 'small'
 }
 
 function trendIcon(changePercentage: number): any {
@@ -25,16 +26,6 @@ function trendIcon(changePercentage: number): any {
     return IconDownTrend
   }
   return IconNormalTrend
-}
-
-function trendClass(changePercentage: number): any {
-  if (changePercentage > 0) {
-    return styles.upTrend
-  }
-  if (changePercentage < 0) {
-    return styles.downTrend
-  }
-  return styles.normalTrend
 }
 
 function capitalizeFirstLetter(str: string) {
@@ -63,8 +54,36 @@ function emotionFromPriceChange(changePercentage: number): Emotion {
   return Emotion.Happy
 }
 
+function bgColorFromPriceChange(changePercentage: number): string {
+  const emotion = emotionFromPriceChange(changePercentage)
+  switch(emotion) {
+    case Emotion.Angry:
+    case Emotion.Worry:
+      return 'bg-red-100'
+    case Emotion.Rest:
+    case Emotion.Happy:
+      return 'bg-green-100'
+    case Emotion.Normal:
+      return 'bg-gray-100'
+  }
+}
+
+function colorFromPriceChange(changePercentage: number): string {
+  const emotion = emotionFromPriceChange(changePercentage)
+  switch(emotion) {
+    case Emotion.Angry:
+    case Emotion.Worry:
+      return 'text-red-500'
+    case Emotion.Rest:
+    case Emotion.Happy:
+      return 'text-green-500'
+    case Emotion.Normal:
+      return 'text-black'
+  }
+}
+
 const NFTCard: FunctionComponent<IProps> =
-  ({ changePercentage, favcoin, ethPrice, metadata }: IProps) => {
+  ({ changePercentage, favcoin, ethPrice, metadata, size, className }: IProps) => {
     const [creature, setCreature] = useState<Character>()
 
     useEffect(() => {
@@ -87,39 +106,55 @@ const NFTCard: FunctionComponent<IProps> =
     const TrendIcon = trendIcon(changePercentage)
     const backgroundSrc = backgrounds[attribute(metadata, Traits.Background) as number].image
     const emotion = emotionFromPriceChange(changePercentage)
+    const bgColor = bgColorFromPriceChange(changePercentage);
+    const color = colorFromPriceChange(changePercentage);
 
     return (
-      <div className={classNames('mb-auto p-8 border rounded-xl w-96', styles.card)}>
-        <div className={styles.cardTop}>
-          <div className={classNames(styles.emotionText, trendClass(changePercentage))}>{capitalizeFirstLetter(emotion)}</div>
-          <div className={styles.favcoinVisual}>
-            <TrendIcon className={styles.favcoinTrend} />
-            <img className={styles.favcoinLogo} src={favcoin.meta.icon} />
+      <div className={classNames(className, 'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm', (
+        size === 'big' ? 'w-96' : (
+          size === 'medium' ? 'w-80' : (
+            size === 'small' ? 'w-72' : ''
+          )
+        )
+      ), styles.card)}>
+        <div className="flex flex-row justify-between">
+          <div className={classNames("px-2 py-1 rounded-full", bgColor, color)}>
+            {capitalizeFirstLetter(emotion)}
+          </div>
+          <div className="flex flex-row items-center justify-center space-x-2">
+            <TrendIcon className="w-6 h-4"/>
+            <img className="w-8 h-8" src={favcoin.meta.icon} />
           </div>
         </div>
-        <div className={classNames('relative h-80 rounded overflow-hidden mx-auto', styles.cardBody)}>
+        <div className={classNames('relative rounded-xl overflow-hidden')}>
           {
             backgroundSrc && (
               <img
                 src={backgroundSrc}
-                className="absolute top-0 right-0 left-0 bottom-0"
+                className="top-0 right-0 left-0 bottom-0"
               />
             )
           }
           <img
             src={creature.emotions[emotion]}
-            className="absolute top-0 right-0 left-0 bottom-0"
+            className={classNames('top-0 right-0 left-0 bottom-0', backgroundSrc ? 'absolute' : '')}
           />
         </div>
-        <div className={styles.cardBottom}>
-          <div className={styles.creatureName}>{metadata.name}</div>
-          <div className={styles.creatureInfo}>
-            [{attribute(metadata, Traits.Skin)} -{' '}
-            {attribute(metadata, Traits.Creature)}]
+        <div className="flex flex-row justify-between space-u-4">
+          <div className="flex flex-col space-y-1">
+            <span className="text-base leading-6 font-bold text-purple-900">
+              {metadata.name}
+            </span>
+            <span className="text-xs leading-4 font-normal text-gray-400">
+              [{attribute(metadata, Traits.Skin)} -{' '}
+              {attribute(metadata, Traits.Creature)}]
+            </span>
           </div>
-          <div className={styles.ethPrice}>
-            <img src="/favcoin/eth.svg" />
-            <span>{ethPrice}</span>
+          <div className="flex flex-row items-center justify-center space-x-1">
+            <img className="h-3" src="/favcoin/eth.svg" />
+            <span className="text-sm leading-6 font-bold text-purple-900 pt-px">
+              {ethPrice}
+            </span>
           </div>
         </div>
       </div>

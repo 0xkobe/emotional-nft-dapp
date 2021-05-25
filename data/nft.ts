@@ -268,9 +268,9 @@ const lockOptions: LockOption[] = [
 
 const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
 
-const nonTokenMultiplier = 1
-const tokenMultiplier = 1
-const qstkPrice = parseEther('0.01')
+const nonTokenMultiplier = 1  // TODO: Update with correct value
+const tokenMultiplier = 1 // TODO: Update with correct value
+const qstkPrice = parseEther('0.01')  // TODO: Update with correct value
 
 export {
   characters,
