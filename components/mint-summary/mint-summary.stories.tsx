@@ -12,64 +12,64 @@ export const Default = Template.bind({})
 Default.args = {
   properties: [
     {
-      title: "Design Properties",
+      title: 'Design Properties',
       keyValues: [
         {
-          key: "Animal",
-          value: "Bear",
+          key: 'Animal',
+          value: 'Bear',
         },
         {
-          key: "Skin",
-          value: "Gold",
+          key: 'Skin',
+          value: 'Gold',
         },
         {
-          key: "FavCoin",
-          value: "Bitcoin",
+          key: 'FavCoin',
+          value: 'Bitcoin',
         },
         {
-          key: "Background",
-          value: "Sunrise",
+          key: 'Background',
+          value: 'Sunrise',
         },
-      ]
+      ],
     },
     {
-      title: "Story Properties",
+      title: 'Story Properties',
       keyValues: [
         {
-          key: "Name",
-          value: "Filled"
+          key: 'Name',
+          value: 'Filled',
         },
         {
-          key: "Minter",
-          value: "Filled"
+          key: 'Minter',
+          value: 'Filled',
         },
         {
-          key: "Description",
-          value: "Filled"
+          key: 'Description',
+          value: 'Filled',
         },
-      ]
+      ],
     },
     {
-      title: "QSTK Allocation",
+      title: 'QSTK Allocation',
       keyValues: [
         {
-          key: "Mint amount",
-          value: "2,000 QSTK",
+          key: 'Mint amount',
+          value: '2,000 QSTK',
         },
         {
-          key: "Lock period",
-          value: "6 months",
+          key: 'Lock period',
+          value: '6 months',
         },
         {
-          key: "Free allocatioin",
-          value: "10,000 QSTK",
+          key: 'Free allocatioin',
+          value: '10,000 QSTK',
         },
         {
-          key: "Total to receive",
-          value: "12,000 QSTK",
+          key: 'Total to receive',
+          value: '12,000 QSTK',
         },
-      ]
-    }
+      ],
+    },
   ],
-  mintPrice: "1.4761 ETH",
+  mintPrice: '1.4761 ETH',
 }

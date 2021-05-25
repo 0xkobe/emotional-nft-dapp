@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import { HTMLAttributes, FunctionComponent } from 'react'
-import { CharacterOption } from '../../types/options';
+import { FunctionComponent, HTMLAttributes } from 'react'
+import { CharacterOption } from '../../types/options'
 import styles from './character.module.css'
 
 export type IProps = HTMLAttributes<{}> & {
@@ -9,25 +9,31 @@ export type IProps = HTMLAttributes<{}> & {
   onSelect?: () => void
 }
 
-const CharacterItem: FunctionComponent<IProps> = ({ character, selected, onSelect, className, ...props }: IProps) => {
+const CharacterItem: FunctionComponent<IProps> = ({
+  character,
+  selected,
+  onSelect,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div
-      className={classNames(className, styles.character, selected && styles.selected)}
+      className={classNames(
+        className,
+        styles.character,
+        selected && styles.selected,
+      )}
       onClick={() => {
         onSelect && onSelect()
       }}
     >
       <div className={styles.image}>
-        <img
-          src={character.emotions.normal}
-        />
+        <img src={character.emotions.normal} />
       </div>
       <div className={styles.supply}>
         {character.currentSupply}/{character.maxSupply}
       </div>
-      <div className={styles.name}>
-        {character.name}
-      </div>
+      <div className={styles.name}>{character.name}</div>
     </div>
   )
 }

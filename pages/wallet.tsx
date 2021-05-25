@@ -1,11 +1,19 @@
 import Head from 'next/head'
 import React from 'react'
-import { favCoins } from '../data/nft'
-import { Creature, LockPeriod, Skin, Traits, Background, FavCoinEnum, DisplayType } from '../types/metadata'
 import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
-import Title from '../components/title/title'
 import NFTCard from '../components/nft/card'
+import Title from '../components/title/title'
+import { favCoins } from '../data/nft'
+import {
+  Background,
+  Creature,
+  DisplayType,
+  FavCoinEnum,
+  LockPeriod,
+  Skin,
+  Traits,
+} from '../types/metadata'
 import { Emotion } from '../types/nft'
 
 export default function Wallet(): JSX.Element {
@@ -25,9 +33,7 @@ export default function Wallet(): JSX.Element {
             <span className="text-base leading-6 font-bold text-gray-500">
               Your NFT's Collection
             </span>
-            <Button href="/mint">
-              Mint new NFT
-            </Button>
+            <Button href="/mint">Mint new NFT</Button>
           </div>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
             <NFTCard
@@ -63,7 +69,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -76,17 +82,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
             <NFTCard
@@ -122,7 +128,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -135,17 +141,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
             <NFTCard
@@ -181,7 +187,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -194,17 +200,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
             <NFTCard
@@ -240,7 +246,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -253,17 +259,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
             <NFTCard
@@ -299,7 +305,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -312,17 +318,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
             <NFTCard
@@ -358,7 +364,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -371,17 +377,17 @@ export default function Wallet(): JSX.Element {
                   {
                     display_type: DisplayType.Date,
                     trait_type: Traits.CreatedDate,
-                    value: 0
+                    value: 0,
                   },
                   {
                     trait_type: Traits.Withdrawn,
-                    value: false
+                    value: false,
                   },
                   {
                     trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
+                    value: Emotion.Normal,
                   },
-                ]
+                ],
               }}
             />
           </div>

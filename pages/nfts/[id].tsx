@@ -15,8 +15,37 @@ import { RawNFTData } from '../../types/raw'
 
 export default function NFT(): JSX.Element {
   const router = useRouter()
+
   const [id, setId] = useState<number>(0)
-  
+
+  // const fetchMetadata = useCallback(
+  //   async (contract: Contract, id: number) => {
+  //     setLoading(true)
+  //     try {
+  //       console.log(contract, id)
+  //       const tokenURI = await contract.tokenURI(id)
+  //       console.log(tokenURI)
+  //       const res = await fetch(tokenURI)
+  //       const response: APINftMetadataResponse | APIResponseError =
+  //         await res.json()
+  //       if ('error' in response)
+  //         return setError(
+  //           new Error(`an error occurred while fetching metadata: ${error}`),
+  //         )
+  //       if (!res.ok)
+  //         return setError(
+  //           new Error(`an unknown error occurred while fetching metadata`),
+  //         )
+  //       setMetadata(response)
+  //     } catch (e) {
+  //       setError(e)
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   },
+  //   [error],
+  // )
+
   useEffect(() => {
     if (!router.isReady) return
     if (!router.query.id) return
@@ -54,7 +83,7 @@ export default function NFT(): JSX.Element {
         </div>
         <div className="w-full flex flex-row justify-between">
           <div className="flex flex-row space-x-8">
-            <NFTCard          
+            <NFTCard
               size="big"
               className="cursor-pointer hover:shadow"
               changePercentage={changePercentage}
@@ -64,7 +93,7 @@ export default function NFT(): JSX.Element {
                 name: 'bear',
                 description: 'description',
                 image: characters[nft.characterId].emotions.normal,
-                external_url: '/', 
+                external_url: '/',
                 attributes: [
                   {
                     trait_type: Traits.Creature,
@@ -88,7 +117,7 @@ export default function NFT(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 100,
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -155,7 +184,7 @@ export default function NFT(): JSX.Element {
                   Description
                 </span>
                 <span className="text-sm leading-5 font-normal text-gray-500 overflow-ellipsis overflow-hidden">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis felis in tincidunt posuere. Nullam imperdiet convallis augue vulputate sollicitudin. 
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis felis in tincidunt posuere. Nullam imperdiet convallis augue vulputate sollicitudin.
                 </span>
               </div>
               <div className="flex flex-col space-y-4">

@@ -19,7 +19,7 @@ WithIcon.args = {
     { icon: '/favcoin/btc.svg', text: 'Platinum' },
   ],
   selectedIndex: 1,
-  onSelectOption: (_, __): void => { }
+  onSelectOption: (_, __): void => {},
 }
 
 export const WithNoIcon = Template.bind({})
@@ -33,5 +33,5 @@ WithNoIcon.args = {
     { icon: '', text: 'Platinum' },
   ],
   selectedIndex: 1,
-  onSelectOption: (_, __): void => { }
+  onSelectOption: (_, __): void => {},
 }
