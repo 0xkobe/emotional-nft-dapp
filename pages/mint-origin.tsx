@@ -23,7 +23,12 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 }
 
 export default function Mint(): JSX.Element {
-  const { signer, account, library, chainId } = useWallet(metamaskConnector)
+  const {
+    account,
+    library,
+    chainId,
+    getSigner,
+  } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
@@ -181,13 +186,14 @@ export default function Mint(): JSX.Element {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    const signer = await getSigner()
+
     if (!signer) return setError('signer is falsy')
     if (!qnft) return setError('qnft is falsy')
 
     if (lockAmount.isZero() || lockAmount.isNegative())
       return setError('lockAmount must be positive and not zero')
-
-    // TODO: make sure metamask is connected or throw a nice error
 
     // generate signature
     // TODO: try to use useCallback to not call this if not changes. same for createMetadata if it works
