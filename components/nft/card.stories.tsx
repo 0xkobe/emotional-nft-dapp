@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Meta, Story } from '@storybook/react'
 import { favCoins } from '../../data/nft'
 import {
@@ -52,7 +53,7 @@ Angry.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: BigNumber.from(10),
       },
       {
         trait_type: Traits.CreatorName,
@@ -112,7 +113,7 @@ Happy.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: BigNumber.from(10),
       },
       {
         trait_type: Traits.CreatorName,
@@ -172,7 +173,7 @@ Normal.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: BigNumber.from(10),
       },
       {
         trait_type: Traits.CreatorName,

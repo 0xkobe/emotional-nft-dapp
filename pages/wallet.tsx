@@ -7,6 +7,7 @@ import Button from '../components/button/button'
 import Title from '../components/title/title'
 import NFTCard from '../components/nft/card'
 import { Emotion } from '../types/nft'
+import { BigNumber } from '@ethersproject/bignumber'
 
 export default function Wallet(): JSX.Element {
   return (
@@ -63,7 +64,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -122,7 +123,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -181,7 +182,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -240,7 +241,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -299,7 +300,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -358,7 +359,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: BigNumber.from(0)
                   },
                   {
                     trait_type: Traits.CreatorName,
