@@ -2,6 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { parseEther } from '@ethersproject/units'
 import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
+import { favCoins } from './favCoins'
 
 const backgrounds = [
   {
@@ -96,11 +97,11 @@ const skins = [
 ]
 
 const animals = [
+  { name: Creature.Deer, artist: artists.mehak, price: parseEther('0.075') },
   { name: Creature.Bull, artist: artists.clive, price: parseEther('0.1') },
-  { name: Creature.Bear, artist: artists.rogan, price: parseEther('0.2') },
-  { name: Creature.Whale, artist: artists.keili, price: parseEther('0.3') },
-  { name: Creature.Dragon, artist: artists.jatin, price: parseEther('0.4') },
-  { name: Creature.Deer, artist: artists.mehak, price: parseEther('0.5') },
+  { name: Creature.Bear, artist: artists.rogan, price: parseEther('0.125') },
+  { name: Creature.Whale, artist: artists.keili, price: parseEther('0.15') },
+  { name: Creature.Dragon, artist: artists.jatin, price: parseEther('0.2') },
 ]
 
 const characters: Character[] = []
@@ -130,26 +131,10 @@ for (const animalIndex in animals) {
 
 characters.push({
   id: 25,
-  name: 'Fish',
-  artist: artists.debbie,
-  creature: Creature.Fish,
-  mintPrice: parseEther('0.6'),
-  skin: Skin.None,
-  emotions: {
-    [Emotion.Angry]: `/nft/characters/fish/angry.png`,
-    [Emotion.Worry]: `/nft/characters/fish/worry.png`,
-    [Emotion.Normal]: `/nft/characters/fish/normal.png`,
-    [Emotion.Rest]: `/nft/characters/fish/rest.png`,
-    [Emotion.Happy]: `/nft/characters/fish/happy.png`,
-  },
-})
-
-characters.push({
-  id: 26,
   name: 'Minotaur',
   artist: artists.clive,
   creature: Creature.Minotaur,
-  mintPrice: parseEther('0.7'),
+  mintPrice: parseEther('0.4'),
   skin: Skin.None,
   emotions: {
     [Emotion.Angry]: `/nft/characters/minotaur/angry.png`,
@@ -160,61 +145,25 @@ characters.push({
   },
 })
 
-const charactersSupply = [
-  100,  // bronze bull
-  100,  // bronze bull
-  100,  // bronze bull
-  100,  // bronze bull
-  100,  // bronze bull
-  100,  // diamond bear
-  100,  // diamond bear
-  100,  // diamond bear
-  100,  // diamond bear
-  100,  // diamond bear
-  100,  // silver whale
-  100,  // silver whale
-  100,  // silver whale
-  100,  // silver whale
-  100,  // silver whale
-  100,  // gold dragon
-  100,  // gold dragon
-  100,  // gold dragon
-  100,  // gold dragon
-  100,  // gold dragon
-  100,  // platinum deer
-  100,  // platinum deer
-  100,  // platinum deer
-  100,  // platinum deer
-  100,  // platinum deer
-  100,  // fish
-  100,  // minotaur
-]
+characters.push({
+  id: 26,
+  name: 'Fish',
+  artist: artists.debbie,
+  creature: Creature.Fish,
+  mintPrice: parseEther('0.5'),
+  skin: Skin.None,
+  emotions: {
+    [Emotion.Angry]: `/nft/characters/fish/angry.png`,
+    [Emotion.Worry]: `/nft/characters/fish/worry.png`,
+    [Emotion.Normal]: `/nft/characters/fish/normal.png`,
+    [Emotion.Rest]: `/nft/characters/fish/rest.png`,
+    [Emotion.Happy]: `/nft/characters/fish/happy.png`,
+  },
+})
 
-const favCoins: FavCoin[] = [
-  {
-    id: FavCoinEnum.BTC, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/0",
-    mintPrice: parseEther('0.1'), // 0.1ETH
-    meta: {
-      name: 'Bitcoin',
-      symbol: 'BTC',
-      icon: '/favcoin/btc.svg', // or online url if it works
-      website: 'https://bitcoin.org',
-      social: '',
-      other: '',
-    },
-  },
-  {
-    id: FavCoinEnum.ETH, // api url for metadata "https://dapp.quiverprotocol.com/meta/coin/1",
-    mintPrice: parseEther('0.05'), // 0.05ETH
-    meta: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      icon: '/favcoin/eth.svg', // or online url if it works
-      website: 'https://ethereum.org',
-      social: '',
-      other: '',
-    },
-  },
+const charactersSupply = [
+  ...Array(25).fill(150), // 25 Normal skin characters
+  ...Array(2).fill(150), // 2 Unique skin characters
 ]
 
 const lockOptions: LockOption[] = [
@@ -253,11 +202,27 @@ const lockOptions: LockOption[] = [
   },
 ]
 
-const verifier = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+const verifier = "0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de"
 
-const nonTokenMultiplier = 1
-const tokenMultiplier = 1
-const qstkPrice = parseEther('0.01')
+const nonTokenMultiplier = 1 // TODO: should be 100%, fetch from contract
+const tokenMultiplier = 1 // TODO: should be 80%, fetch from contract
+const qstkPrice = parseEther('0.000005') // in ETH
+
+////////////// latest configurations update for v1 sale //////////////
+// totalSupply: '2000000000',
+// airdrop: {
+//   qstkSupply: '50000000',
+//   signer: '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
+// },
+// NFT: {
+//   qstkSupply: '80000000', // v1 QSTK supply 80M
+//   maxSupply: '4000', // v1 max supply
+//   baseURL: 'https://emotional-nft-dapp.netlify.app/api/nfts/',
+//   multiplier: {
+//     token: '80', // 20% additional discount on v1 sale
+//     nonToken: '100', // no discount on characters and favcoins
+//   }
+// }
 
 export {
   characters,
