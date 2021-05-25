@@ -13,6 +13,7 @@ import {
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
+import { APINftCreateRequest } from '../types/api'
 import { QNFT, QNFTSettings } from '../types/contracts'
 import { Emotion } from '../types/nft'
 
@@ -159,19 +160,24 @@ export default function Mint(): JSX.Element {
 
   // create a new metadata on the API. Returns the created metadata id.
   const createMetadata = async (signature: string): Promise<string> => {
+    if (!chainId) throw new Error('chainId is falsy')
+    if (!account) throw new Error('account is falsy')
+
+    const data: APINftCreateRequest = {
+      author,
+      backgroundId,
+      description,
+      name,
+      creator: account,
+      signature,
+      chainId,
+      defaultEmotion,
+    }
     const res = await fetch('/api/nft/create', {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        author,
-        backgroundId,
-        description,
-        name,
-        owner: account,
-        signature,
-        chainId,
-      }),
+      body: JSON.stringify(data),
       method: 'POST',
     })
     if (!res.ok) {
