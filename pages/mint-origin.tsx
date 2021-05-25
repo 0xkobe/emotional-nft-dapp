@@ -13,6 +13,7 @@ import {
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
+import { APINftCreateRequest } from '../types/api'
 import { QNFT, QNFTSettings } from '../types/contracts'
 import { Emotion } from '../types/nft'
 
@@ -23,7 +24,12 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 }
 
 export default function Mint(): JSX.Element {
-  const { signer, account, library, chainId } = useWallet(metamaskConnector)
+  const {
+    account,
+    library,
+    chainId,
+    getSigner,
+  } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
@@ -154,19 +160,24 @@ export default function Mint(): JSX.Element {
 
   // create a new metadata on the API. Returns the created metadata id.
   const createMetadata = async (signature: string): Promise<string> => {
+    if (!chainId) throw new Error('chainId is falsy')
+    if (!account) throw new Error('account is falsy')
+
+    const data: APINftCreateRequest = {
+      author,
+      backgroundId,
+      description,
+      name,
+      creator: account,
+      signature,
+      chainId,
+      defaultEmotion,
+    }
     const res = await fetch('/api/nft/create', {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        author,
-        backgroundId,
-        description,
-        name,
-        owner: account,
-        signature,
-        chainId,
-      }),
+      body: JSON.stringify(data),
       method: 'POST',
     })
     if (!res.ok) {
@@ -181,13 +192,14 @@ export default function Mint(): JSX.Element {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    const signer = await getSigner()
+
     if (!signer) return setError('signer is falsy')
     if (!qnft) return setError('qnft is falsy')
 
     if (lockAmount.isZero() || lockAmount.isNegative())
       return setError('lockAmount must be positive and not zero')
-
-    // TODO: make sure metamask is connected or throw a nice error
 
     // generate signature
     // TODO: try to use useCallback to not call this if not changes. same for createMetadata if it works

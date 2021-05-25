@@ -208,7 +208,7 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: qstkAmount.add(airdropAmount)
+                    value: qstkAmount.add(airdropAmount).toString(),
                   },
                   {
                     trait_type: Traits.CreatorName,

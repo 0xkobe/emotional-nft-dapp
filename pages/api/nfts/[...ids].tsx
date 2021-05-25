@@ -67,7 +67,7 @@ export default async (
       },
       {
         trait_type: Traits.LockAmount,
-        value: metadata.lockAmount,
+        value: metadata.lockAmount.toString(),
       },
       {
         trait_type: Traits.CreatorName,
