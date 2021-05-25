@@ -217,8 +217,8 @@ const lockOptions: LockOption[] = [
 
 const verifier = "0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de"
 
-const nonTokenMultiplier = 1 // TODO: should be 100%, fetch from contract
-const tokenMultiplier = 1 // TODO: should be 80%, fetch from contract
+const nonTokenMultiplier = 1 // TODO: would be good to fetch from contract
+const tokenMultiplier = 0.8 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
 const qstkPrice = parseEther('0.000005') // in ETH
 
 ////////////// latest configurations update for v1 sale //////////////
