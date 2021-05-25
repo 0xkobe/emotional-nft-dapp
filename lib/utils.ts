@@ -2,7 +2,6 @@ import { getAddress, isAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ethers, utils } from 'ethers'
 import { VerifyAirdropKeyResponse } from '../types/airdrop'
-import { QAirdrop } from '../types/contracts'
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!isAddress(address)) return ''
@@ -10,32 +9,23 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
 }
 
-export function capitalize(s: string): string {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-export function formatDate(d: Date): string {
-  const year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-  const month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
-  const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-
-  return `${day}/${month}/${year}`
-}
+export const formatDate = (d: Date): string => d.toLocaleDateString()
 
 export function lockDurationToString(duration: number): string {
-  // TODO: need to be updated
+  if (duration === 100 * 12 * 30 * 24 * 3600) {
+    return '1 Century'
+  }
   if (duration === 12 * 30 * 24 * 3600) {
     return '1 Year'
   }
   if (duration === 6 * 30 * 24 * 3600) {
-    return '6 months'
+    return '6 Months'
   }
-  if (duration === 3 * 30 * 24 * 3600) {
-    return '3 months'
+  // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
+  if (duration === 1800) {
+    return '30 min'
   }
-
-  return '1 month'
+  throw new Error('Invalid Lock Duration')
 }
 
 // format number with comma
