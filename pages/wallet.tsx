@@ -63,7 +63,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -122,7 +122,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -181,7 +181,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -240,7 +240,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -299,7 +299,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -358,7 +358,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
