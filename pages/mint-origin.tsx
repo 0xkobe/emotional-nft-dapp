@@ -171,7 +171,7 @@ export default function Mint(): JSX.Element {
       creator: account,
       signature,
       chainId,
-      defaultEmotion: defaultEmotion,
+      defaultEmotion,
     }
     const res = await fetch('/api/nft/create', {
       headers: {
