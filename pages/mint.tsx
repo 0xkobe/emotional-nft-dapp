@@ -209,6 +209,7 @@ export default function Mint(): JSX.Element {
               ethPrice={bnToText(nftPrice)}
               metadata={{
                 name: nftName,
+                author: minterName,
                 description: nftDescription,
                 image: characters[characterId].emotions.normal, // TODO: confirm?
                 external_url: '/', // TODO: confirm?

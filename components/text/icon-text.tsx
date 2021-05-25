@@ -1,17 +1,20 @@
 import classNames from 'classnames'
-import { HTMLAttributes, FunctionComponent } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 
 export type IProps = HTMLAttributes<{}> & {
-    icon?: string
-    text?: string
+  icon?: string
+  text?: string
 }
 
-const IconText: FunctionComponent<IProps> = ({ icon, text, className, ...props }: IProps) => {
+const IconText: FunctionComponent<IProps> = ({
+  icon,
+  text,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div className={classNames(className, 'flex flex-row items-center')}>
-      {icon && (
-        <img className="w-5 h-5 mr-2" src={icon} />
-      )}
+      {icon && <img className="w-5 h-5 mr-2" src={icon} />}
       <span className="text-sm leading-5 font-medium text-gray-500">
         {text}
       </span>

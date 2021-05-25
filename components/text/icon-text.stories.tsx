@@ -11,11 +11,11 @@ const Template: Story<IProps> = (args) => <IconText {...args} />
 export const Sample1 = Template.bind({})
 Sample1.args = {
   icon: '/favcoin/btc.svg',
-  text: 'Bronze'
+  text: 'Bronze',
 }
 
 export const Sample2 = Template.bind({})
 Sample2.args = {
   icon: '/favcoin/btc.svg',
-  text: 'Diamond'
+  text: 'Diamond',
 }

@@ -6,9 +6,9 @@ export default {
   component: BackButton,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <BackButton {...args}/>
+const Template: Story<IProps> = (args) => <BackButton {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  text: 'Back to your space'
+  text: 'Back to your space',
 }

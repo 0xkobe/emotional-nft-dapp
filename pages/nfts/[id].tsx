@@ -1,50 +1,70 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
-import { characters, favCoins } from '../../data/nft'
-import { DisplayType, LockPeriod, Traits } from '../../types/metadata'
-import { Emotion } from '../../types/nft'
-import { RawNFTData } from '../../types/raw'
+import { backgrounds, favCoins, lockOptions } from '../../data/nft'
+import {
+  abi,
+  deployedAddresses,
+  metamaskConnector,
+} from '../../data/smartContract'
+import useContract from '../../hooks/useContract'
+import { attribute } from '../../lib/nft'
+import { APINftMetadataResponse, APIResponseError } from '../../types/api'
+import { QNFT } from '../../types/contracts'
+import { Traits } from '../../types/metadata'
 
 export default function NFT(): JSX.Element {
   const router = useRouter()
 
+  const {
+    contract,
+    error: contractError,
+    account,
+  } = useContract<QNFT>(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [metadata, setMetadata] = useState<APINftMetadataResponse>()
+  const [error, setError] = useState<Error>()
+  const [nftCount, setNFTCount] = useState<number>(0)
   const [id, setId] = useState<number>(0)
 
-  // const fetchMetadata = useCallback(
-  //   async (contract: Contract, id: number) => {
-  //     setLoading(true)
-  //     try {
-  //       console.log(contract, id)
-  //       const tokenURI = await contract.tokenURI(id)
-  //       console.log(tokenURI)
-  //       const res = await fetch(tokenURI)
-  //       const response: APINftMetadataResponse | APIResponseError =
-  //         await res.json()
-  //       if ('error' in response)
-  //         return setError(
-  //           new Error(`an error occurred while fetching metadata: ${error}`),
-  //         )
-  //       if (!res.ok)
-  //         return setError(
-  //           new Error(`an unknown error occurred while fetching metadata`),
-  //         )
-  //       setMetadata(response)
-  //     } catch (e) {
-  //       setError(e)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   },
-  //   [error],
-  // )
+  const fetchMetadata = useCallback(
+    async (contract: QNFT, account: string, id: number) => {
+      setLoading(true)
+      try {
+        const userNFTCount = (
+          await contract.callStatic.balanceOf(account)
+        ).toNumber()
+        setNFTCount(userNFTCount)
+        const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
+          account,
+          id,
+        )
+        const tokenURI = await contract.tokenURI(tokenId)
+        const res = await fetch(tokenURI)
+        const response: APINftMetadataResponse | APIResponseError =
+          await res.json()
+        if ('error' in response)
+          throw new Error(`an error occurred while fetching metadata`)
+        if (!res.ok)
+          throw new Error(`an unknown error occurred while fetching metadata`)
+        setMetadata(response)
+      } catch (e) {
+        setError(e)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
 
   useEffect(() => {
     if (!router.isReady) return
@@ -52,18 +72,12 @@ export default function NFT(): JSX.Element {
     setId(parseInt(router.query.id as string, 10))
   }, [router])
 
-  const nft: RawNFTData = {
-    id,
-    characterId: 0,
-    favCoinId: 0,
-    lockDuration: BigNumber.from(12 * 30 * 24 * 3600),
-    lockAmount: BigNumber.from("1000"),
-    createdAt: BigNumber.from("1000"),
-    withdrawn: false,
-    metaId: BigNumber.from("1000"),
-  }
-  const changePercentage = 20;
-  const ethPrice = "1000";
+  useEffect(() => {
+    if (!contract) return
+    if (!account) return
+    if (!id) return
+    void fetchMetadata(contract, account, id)
+  }, [account, contract, fetchMetadata, id, router])
 
   return (
     <>
@@ -73,138 +87,128 @@ export default function NFT(): JSX.Element {
 
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
         <div className="flex flex-row justify-between">
-          <BackButton text="Back to your space" />
+          <Link href="/wallet">
+            <a>
+              <BackButton text="Back to your space" />
+            </a>
+          </Link>
           <Pagination
-            total={10}
-            current={5}
-            onPrev={() => { console.log('prev') }}
-            onNext={() => { console.log('next') }}
+            total={nftCount}
+            current={id}
+            onPrev={() => {
+              if (id > 0) {
+                void router.push(`/nfts/${id - 1}`)
+              }
+            }}
+            onNext={() => {
+              if (id < nftCount - 1) {
+                void router.push(`/nfts/${id + 1}`)
+              }
+            }}
           />
         </div>
-        <div className="w-full flex flex-row justify-between">
-          <div className="flex flex-row space-x-8">
-            <NFTCard
-              size="big"
-              className="cursor-pointer hover:shadow"
-              changePercentage={changePercentage}
-              favcoin={favCoins[nft.favCoinId]}
-              ethPrice={ethPrice}
-              metadata={{
-                name: 'bear',
-                description: 'description',
-                image: characters[nft.characterId].emotions.normal,
-                external_url: '/',
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: characters[nft.characterId].creature,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: characters[nft.characterId].skin,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: 1,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: nft.favCoinId,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.SixMonths
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: characters[nft.characterId].artist.name,
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: characters[nft.characterId].artist.wallet,
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
-                  },
-                ]
-              }}
-            />
-            <div className="flex flex-col w-96 space-y-8">
-              <span className="text-2xl leading-8 font-bold text-gray-500">
-                Super Bitcoin Bear
-              </span>
-              <div className="flex flex-col space-y-2">
-                <span className="text-sm leading-5 font-normal text-gray-500">
-                  Minter: px4.eth
-                </span>
-                <span className="text-sm leading-5 font-normal text-gray-500">
-                  Created: 01/06/2021
-                </span>
-              </div>
-              <div className="flex flex-col space-y-4">
-                <span className="text-base leading-6 font-medium text-gray-500">
-                  Artists
+
+        {isLoading && <div>...loading</div>}
+        {contractError && <div>contract: {contractError.toString()}</div>}
+        {error && <div>meta: {error.toString()}</div>}
+
+        {metadata && (
+          <div className="w-full flex flex-row justify-between">
+            <div className="flex flex-row space-x-8">
+              <NFTCard
+                size="big"
+                className="cursor-pointer hover:shadow"
+                changePercentage={20}
+                favcoin={
+                  favCoins[attribute(metadata, Traits.FavCoin) as number]
+                }
+                ethPrice={'1000'}
+                metadata={metadata}
+              />
+              <div className="flex flex-col w-96 space-y-8">
+                <span className="text-2xl leading-8 font-bold text-gray-500">
+                  {metadata.name}
                 </span>
                 <div className="flex flex-col space-y-2">
                   <span className="text-sm leading-5 font-normal text-gray-500">
-                    Animal: @Beeple
+                    {metadata.author}
                   </span>
                   <span className="text-sm leading-5 font-normal text-gray-500">
-                    Background: @Beeple
+                    {attribute(metadata, Traits.CreatedDate)}
                   </span>
                 </div>
-              </div>
-              <div className="flex flex-col space-y-4">
-                <span className="text-base leading-6 font-medium text-gray-500">
-                  Design Properties
-                </span>
-                <div className="grid grid-cols-4 gap-4">
-                  <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                  <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                  <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                  <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                <div className="flex flex-col space-y-4">
+                  <span className="text-base leading-6 font-medium text-gray-500">
+                    Artists
+                  </span>
+                  <div className="flex flex-col space-y-2">
+                    <span className="text-sm leading-5 font-normal text-gray-500">
+                      Animal: {attribute(metadata, Traits.Creature)}
+                    </span>
+                    <span className="text-sm leading-5 font-normal text-gray-500">
+                      Background:{' '}
+                      {
+                        backgrounds[
+                          attribute(metadata, Traits.Background) as number
+                        ].name
+                      }
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-4">
+                  <span className="text-base leading-6 font-medium text-gray-500">
+                    Design Properties
+                  </span>
+                  <div className="grid grid-cols-4 gap-4">
+                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-4">
+                  <span className="text-base leading-6 font-medium text-gray-500">
+                    Description
+                  </span>
+                  <span className="text-sm leading-5 font-normal text-gray-500 overflow-ellipsis overflow-hidden">
+                    {metadata.description}
+                  </span>
+                </div>
+                <div className="flex flex-col space-y-4">
+                  <span className="text-base leading-6 font-medium text-gray-500">
+                    Token Allocated
+                  </span>
+                  <Allocation
+                    lockAmount={BigNumber.from(
+                      attribute(metadata, Traits.LockAmount),
+                    )}
+                    createdAt={
+                      new Date(
+                        attribute(metadata, Traits.CreatedDate) as string,
+                      )
+                    }
+                    lockDuration={
+                      lockOptions[
+                        attribute(metadata, Traits.LockPeriod) as number
+                      ].duration
+                    }
+                  />
                 </div>
               </div>
-              <div className="flex flex-col space-y-4">
-                <span className="text-base leading-6 font-medium text-gray-500">
-                  Description
-                </span>
-                <span className="text-sm leading-5 font-normal text-gray-500 overflow-ellipsis overflow-hidden">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis felis in tincidunt posuere. Nullam imperdiet convallis augue vulputate sollicitudin.
-                </span>
-              </div>
-              <div className="flex flex-col space-y-4">
-                <span className="text-base leading-6 font-medium text-gray-500">
-                  Token Allocated
-                </span>
-                <Allocation
-                  lockAmount={nft.lockAmount}
-                  createdAt={new Date(nft.createdAt.toNumber() * 1000)}
-                  lockDuration={nft.lockDuration.toNumber()}
-                />
-              </div>
             </div>
+            <NFTActions
+              onTransfer={() => {
+                console.log('transfer')
+              }}
+              onEdit={() => {
+                console.log('edit')
+              }}
+              onUpgrade={() => {
+                console.log('upgrade')
+              }}
+            />
           </div>
-          <NFTActions
-            onTransfer={() => { console.log('transfer') }}
-            onEdit={() => { console.log('edit') }}
-            onUpgrade={() => { console.log('upgrade') }}
-          />
-        </div>
+        )}
       </div>
     </>
   )

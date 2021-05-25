@@ -39,6 +39,7 @@ export default async (
   const metadata = hydrateMetadata(await fetchMetadata(qnft, tokenId))
 
   const response: APINftMetadataResponse = {
+    author: metadata.author,
     description: metadata.description,
     external_url: 'https://openseacreatures.io/' + tokenId, // TODO: replace URL
     image: metadata.character.emotions.normal, // TODO: load from default emotion??

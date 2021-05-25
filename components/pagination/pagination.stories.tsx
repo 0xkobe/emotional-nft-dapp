@@ -6,26 +6,25 @@ export default {
   component: Pagination,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <Pagination {...args}/>
+const Template: Story<IProps> = (args) => <Pagination {...args} />
 
 export const Default = Template.bind({})
-Default.args = {
-}
+Default.args = {}
 
 export const NextAvailable = Template.bind({})
 NextAvailable.args = {
   total: 10,
-  current: 0
+  current: 0,
 }
 
 export const PrevAvailable = Template.bind({})
 PrevAvailable.args = {
   total: 10,
-  current: 9
-} 
+  current: 9,
+}
 
 export const AllAvailable = Template.bind({})
 AllAvailable.args = {
   total: 10,
-  current: 5
+  current: 5,
 }

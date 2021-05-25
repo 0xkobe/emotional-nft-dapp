@@ -26,6 +26,7 @@ Angry.args = {
   ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'Gopher',
     description: 'Gopher bear',
     image: 'string', // TODO: what is image here?
     external_url: 'string', // TODO: what is external_url here?
@@ -86,6 +87,7 @@ Happy.args = {
   ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
@@ -146,6 +148,7 @@ Normal.args = {
   ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
