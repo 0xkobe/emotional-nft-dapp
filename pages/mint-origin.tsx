@@ -24,11 +24,10 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 
 export default function Mint(): JSX.Element {
   const {
-    signer,
     account,
     library,
     chainId,
-    activate: activateMetamask,
+    getSigner,
   } = useWallet(metamaskConnector)
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
@@ -188,23 +187,7 @@ export default function Mint(): JSX.Element {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    // activate metamask: option #1: promise
-    try {
-      await activateMetamask(metamaskConnector, undefined, true)
-    } catch (error) {
-      // metamask is not installed or injected. show nice error to user
-      setError(error.message)
-      return
-    }
-    // activate metamask: option #2: callback
-    // await activateMetamask(metamaskConnector, (error) => {
-    //   if (error) {
-    //     // metamask is not installed or injected. show nice error to user
-    //     setError(error.message)
-    //     return
-    //   }
-    //   // ...continue
-    // })
+    const signer = await getSigner()
 
     if (!signer) return setError('signer is falsy')
     if (!qnft) return setError('qnft is falsy')
