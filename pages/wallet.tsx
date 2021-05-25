@@ -29,8 +29,9 @@ export default function Wallet(): JSX.Element {
               Mint new NFT
             </Button>
           </div>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -62,7 +63,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -89,6 +90,7 @@ export default function Wallet(): JSX.Element {
               }}
             />
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -120,7 +122,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -147,6 +149,7 @@ export default function Wallet(): JSX.Element {
               }}
             />
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -178,7 +181,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -205,6 +208,7 @@ export default function Wallet(): JSX.Element {
               }}
             />
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -236,7 +240,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -263,6 +267,7 @@ export default function Wallet(): JSX.Element {
               }}
             />
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -294,7 +299,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,
@@ -321,6 +326,7 @@ export default function Wallet(): JSX.Element {
               }}
             />
             <NFTCard
+              className="cursor-pointer hover:shadow"
               changePercentage={-20}
               favcoin={favCoins[0]}
               ethPrice="0.8429"
@@ -352,123 +358,7 @@ export default function Wallet(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: 0
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
-                  },
-                ]
-              }}
-            />
-            <NFTCard
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 0
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal
-                  },
-                ]
-              }}
-            />
-            <NFTCard
-              changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: 0
+                    value: '0',
                   },
                   {
                     trait_type: Traits.CreatorName,

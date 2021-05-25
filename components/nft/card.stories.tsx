@@ -52,7 +52,7 @@ Angry.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: '10',
       },
       {
         trait_type: Traits.CreatorName,
@@ -112,7 +112,7 @@ Happy.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: '10',
       },
       {
         trait_type: Traits.CreatorName,
@@ -172,7 +172,7 @@ Normal.args = {
       },
       {
         trait_type: Traits.LockAmount,
-        value: 10,
+        value: '10',
       },
       {
         trait_type: Traits.CreatorName,

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useMemo, useState } from 'react'
 import { backgrounds, favCoins, skins, characters, charactersSupply, nonTokenMultiplier, qstkPrice, lockOptions, tokenMultiplier } from '../data/nft'
-import { DisplayType, Skin, Traits } from '../types/metadata'
+import { Skin, Traits, DisplayType } from '../types/metadata'
 import Title from '../components/title/title'
 import Stepper from '../components/stepper/stepper'
 import NFTCard from '../components/nft/card'
@@ -81,7 +81,7 @@ export default function Mint(): JSX.Element {
 
   const nftPrice = useMemo(() => {
     const nonTokenPrice = characters[characterId].mintPrice.add(favCoins[coinIndex].mintPrice).mul(nonTokenMultiplier)
-    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier)
+    const tokenPrice = qstkAmount.add(airdropAmount).mul(qstkPrice).mul(100 - lockOptions[lockOptionId].discount).div(100).mul(tokenMultiplier).div(BigNumber.from(10).pow(18))
     return nonTokenPrice.add(tokenPrice)
   }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
@@ -176,6 +176,7 @@ export default function Mint(): JSX.Element {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-8">
             <NFTCard
+              size="big"
               changePercentage={changePercentage}
               favcoin={favCoins[coinIndex]}
               ethPrice={bnToText(nftPrice)}
@@ -207,7 +208,7 @@ export default function Mint(): JSX.Element {
                   },
                   {
                     trait_type: Traits.LockAmount,
-                    value: qstkAmount.add(airdropAmount).toNumber() // Need to confirm if this is correct
+                    value: qstkAmount.add(airdropAmount).toString(),
                   },
                   {
                     trait_type: Traits.CreatorName,
