@@ -66,7 +66,7 @@ export default function Wallet(): JSX.Element {
                       changePercentage={-20}
                       favcoin={
                         favCoins[
-                        attribute(nft.metadata, Traits.FavCoin) as number
+                          attribute(nft.metadata, Traits.FavCoin) as number
                         ]
                       }
                       metadata={nft.metadata}
