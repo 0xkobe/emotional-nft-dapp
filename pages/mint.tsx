@@ -14,6 +14,7 @@ import ModalSucceed from '../components/modal/modal-succeed'
 import NFTCard from '../components/nft/card'
 import Stepper from '../components/stepper/stepper'
 import Title from '../components/title/title'
+import { chain } from '../data/chains'
 import {
   backgrounds,
   characters,
@@ -30,7 +31,6 @@ import {
   deployedAddresses,
   metamaskConnector,
   remoteConnector,
-  remoteProviderConfig,
 } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
@@ -46,8 +46,13 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = useRouter()
 
   // init wallet
-  const { account, chainId, activate, signer, signTypedDataV4 } =
-    useWallet(metamaskConnector)
+  const {
+    account,
+    chainId: walletChainId,
+    activate,
+    signer,
+    signTypedDataV4,
+  } = useWallet(metamaskConnector)
 
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(
@@ -104,9 +109,7 @@ export default function Mint(): JSX.Element {
   // fetch remaining free allocation
   useEffect(() => {
     qstk
-      ?.balanceOf(
-        deployedAddresses.qAirdrop[remoteProviderConfig.defaultChainId],
-      )
+      ?.balanceOf(deployedAddresses.qAirdrop[chain.id])
       .then((x) => {
         setAvailableFreeAllocation(x)
       })
@@ -283,12 +286,22 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!isMinting) return
     if (!account) return // don't sign if account is not set
-    if (!chainId) return
+    if (!walletChainId) return
+
+    // check chain id
+    if (walletChainId !== chain.id) {
+      setError(
+        `Wrong Ethereum network selected. Please open Metamask and switch to ${chain.name}`,
+      )
+      setIsMinting(false)
+      return
+    }
+
     // generate signature
     console.log('Signing metadata using Metamask...')
     signTypedDataV4(
       payloadForSignatureEIP712v4(
-        chainId,
+        chain.id,
         minterName,
         backgroundIndex,
         nftDescription,
@@ -310,25 +323,24 @@ export default function Mint(): JSX.Element {
     }
   }, [
     isMinting,
-    chainId,
     minterName,
     backgroundIndex,
     nftDescription,
     nftName,
     signTypedDataV4,
+    walletChainId,
     account,
   ])
 
   // create metadata
   useEffect(() => {
     if (!signature) return
-    if (!chainId) return
     if (!account) return
     // save meta
     console.log('Saving metadata on backend...')
     createMetadata(
       signature,
-      chainId,
+      chain.id,
       account,
       minterName,
       backgroundIndex,
@@ -349,15 +361,7 @@ export default function Mint(): JSX.Element {
       console.log('setMetaId(undefined)')
       setMetaId(undefined)
     }
-  }, [
-    signature,
-    chainId,
-    account,
-    minterName,
-    backgroundIndex,
-    nftDescription,
-    nftName,
-  ])
+  }, [signature, account, minterName, backgroundIndex, nftDescription, nftName])
 
   // sign & broadcast transaction
   useEffect(() => {
@@ -365,8 +369,6 @@ export default function Mint(): JSX.Element {
     if (!signer) return
     if (!metaId) return
     console.log('Signing and sending transaction using Metamask...')
-    // TODO: make sure chainId is the same with signer and qnft
-    // TODO: It seems the contracts hooks is also using the chain id from metamask: to investigate
     qnft
       .connect(signer)
       .mintNft(characterId, coinIndex, lockOptionId, metaId, qstkAmount, {
