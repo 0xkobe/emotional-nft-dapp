@@ -49,13 +49,14 @@ export default function Mint(): JSX.Element {
     useWallet(metamaskConnector)
 
   // init QNFT smart contract
-  const { contract: qnft, error: qnftError } = useContract<QNFT>(
+  const { contract: qnft } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
     abi.qnft,
   )
 
   // form variables
+  const [error, setError] = useState<string>()
   const [mintStep, setMintStep] = useState(0)
   const [characterId, setCharacterId] = useState(0)
   const [skinIndex, setSkinIndex] = useState(0)
@@ -69,12 +70,6 @@ export default function Mint(): JSX.Element {
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
-
-  // throw qnftError error
-  useEffect(() => {
-    if (!qnftError) return
-    console.error('qnftError', qnftError)
-  }, [qnftError])
 
   // reload characters supply when skin changes
   useEffect(() => {
@@ -235,7 +230,8 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!isMinting) return
     activate().catch((error) => {
-      console.error('activate metamask error', error)
+      setError('Make sure Metamask is installed and activated')
+      console.error(error)
     })
   }, [activate, isMinting])
 
@@ -260,6 +256,7 @@ export default function Mint(): JSX.Element {
       })
       .catch((error) => {
         console.error('sign metadata error', error)
+        setError(error.message)
         setIsMinting(false)
       })
     return () => {
@@ -299,6 +296,7 @@ export default function Mint(): JSX.Element {
       })
       .catch((error) => {
         console.error('metadata error', error)
+        setError(error.message)
         setIsMinting(false)
       })
     return () => {
@@ -325,7 +323,7 @@ export default function Mint(): JSX.Element {
     // TODO: It seems the contracts hooks is also using the chain id from metamask: to investigate
     qnft
       .connect(signer)
-      .mintNft(characterId, coinIndex, lockOptionId, qstkAmount, metaId, {
+      .mintNft(characterId, coinIndex, lockOptionId, metaId, qstkAmount, {
         value: nftPrice,
       })
       .then((tx) => {
@@ -333,7 +331,8 @@ export default function Mint(): JSX.Element {
         setTx(tx)
       })
       .catch((error) => {
-        console.error('sign tx', error)
+        console.error('sign and broadcast tx error', error)
+        setError(error.error?.message || error.message)
         setIsMinting(false)
       })
     return () => {
@@ -362,6 +361,7 @@ export default function Mint(): JSX.Element {
       })
       .catch((error) => {
         console.error('receipt error', error)
+        setError(error.message)
         setIsMinting(false)
       })
     return () => {
@@ -413,6 +413,21 @@ export default function Mint(): JSX.Element {
         isShown={true}
       >
         Check metamask
+      </Modal>
+    )
+  }
+
+  function errorUI() {
+    if (!error) return
+    return (
+      <Modal
+        onRequestClose={() => setError(undefined)}
+        onModalClose={() => {}}
+        isShown={true}
+      >
+        An error occurred:
+        <br />
+        {error}
       </Modal>
     )
   }
@@ -538,6 +553,8 @@ export default function Mint(): JSX.Element {
           </MintSummary>
 
           {isMinting && transactionUI()}
+
+          {error && errorUI()}
         </div>
       </div>
     </>
