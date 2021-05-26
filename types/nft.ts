@@ -3,11 +3,11 @@ import { Creature, FavCoinEnum, Skin } from '../types/metadata'
 import { APINftMetadataResponse } from './api'
 
 export enum Emotion {
-  Angry = 'angry',
-  Worry = 'worry',
-  Normal = 'normal',
-  Rest = 'rest',
   Happy = 'happy',
+  Rest = 'rest',
+  Normal = 'normal',
+  Worry = 'worry',
+  Angry = 'angry',
 }
 
 export type Artist = {

@@ -1,20 +1,21 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { backgrounds, characters } from '../../data/nft'
+import { backgrounds, characters, favCoins } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { APINftMetadataResponse } from '../../types/api'
 import { Creature, Skin, Traits } from '../../types/metadata'
-import { Character, Emotion, FavCoin } from '../../types/nft'
+import { Character, Emotion } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
 import styles from './card.module.css'
+import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
-  changePercentage: number // percentage of changes
-  favcoin: FavCoin
+  changePercentage?: number // percentage of changes
   metadata: APINftMetadataResponse
   size?: 'big' | 'medium' | 'small'
+  isDesign?: boolean
 }
 
 function trendIcon(changePercentage: number): any {
@@ -27,7 +28,7 @@ function trendIcon(changePercentage: number): any {
   return IconNormalTrend
 }
 
-function capitalizeFirstLetter(str: string) {
+export function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
@@ -53,42 +54,66 @@ function emotionFromPriceChange(changePercentage: number): Emotion {
   return Emotion.Happy
 }
 
-function bgColorFromPriceChange(changePercentage: number): string {
-  const emotion = emotionFromPriceChange(changePercentage)
+export function bgColorFromEmotion(emotion: Emotion): string {
   switch (emotion) {
     case Emotion.Angry:
+      return 'bg-red-50'
     case Emotion.Worry:
-      return 'bg-red-100'
-    case Emotion.Rest:
-    case Emotion.Happy:
-      return 'bg-green-100'
+      return 'bg-yellow-50'
     case Emotion.Normal:
-      return 'bg-gray-100'
+      return 'bg-gray-50'
+    case Emotion.Rest:
+      return 'bg-blue-50'
+    case Emotion.Happy:
+      return 'bg-green-50'
   }
 }
 
-function colorFromPriceChange(changePercentage: number): string {
-  const emotion = emotionFromPriceChange(changePercentage)
+export function colorFromEmotion(emotion: Emotion): string {
   switch (emotion) {
     case Emotion.Angry:
-    case Emotion.Worry:
       return 'text-red-500'
+    case Emotion.Worry:
+      return 'text-yellow-500'
+    case Emotion.Normal:
+      return 'text-gray-500'
     case Emotion.Rest:
+      return 'text-blue-500'
     case Emotion.Happy:
       return 'text-green-500'
+  }
+}
+
+export function borderColorFromEmotion(emotion: Emotion): string {
+  switch (emotion) {
+    case Emotion.Angry:
+      return 'border-red-500'
+    case Emotion.Worry:
+      return 'border-yellow-500'
     case Emotion.Normal:
-      return 'text-black'
+      return 'border-gray-500'
+    case Emotion.Rest:
+      return 'border-blue-500'
+    case Emotion.Happy:
+      return 'border-green-500'
   }
 }
 
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
-  favcoin,
   metadata,
   size,
+  isDesign,
   className,
 }: IProps) => {
   const [creature, setCreature] = useState<Character>()
+  const [emotion, setEmotion] = useState(
+    isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
+  )
+  const TrendIcon = trendIcon(changePercentage || 0)
+  const backgroundSrc =
+    backgrounds[attribute(metadata, Traits.Background) as number].image
+  const favCoin = favCoins[attribute(metadata, Traits.FavCoin) as number]
 
   useEffect(() => {
     const animalId = attribute(metadata, Traits.Creature) as Creature
@@ -105,52 +130,47 @@ const NFTCard: FunctionComponent<IProps> = ({
     setCreature(creature)
   }, [metadata])
 
+  console.log(creature?.emotions[emotion])
   if (!creature) return <div>not found</div>
 
-  const TrendIcon = trendIcon(changePercentage)
-  const backgroundSrc =
-    backgrounds[attribute(metadata, Traits.Background) as number].image
-  const emotion = emotionFromPriceChange(changePercentage)
-  const bgColor = bgColorFromPriceChange(changePercentage)
-  const color = colorFromPriceChange(changePercentage)
-
   return (
-    <div
-      className={classNames(
-        className,
-        'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
-        size === 'big'
-          ? 'w-96'
-          : size === 'medium'
-          ? 'w-80'
-          : size === 'small'
-          ? 'w-72'
-          : '',
-        styles.card,
-      )}
-    >
-      <div className="flex flex-row justify-between">
-        <div className={classNames('px-2 py-1 rounded-full', bgColor, color)}>
-          {capitalizeFirstLetter(emotion)}
-        </div>
-        <div className="flex flex-row items-center justify-center space-x-2">
-          <TrendIcon className="w-6 h-4" />
-          <img className="w-8 h-8" src={favcoin.meta.icon} />
-        </div>
-      </div>
-      <div className={classNames('relative rounded-xl overflow-hidden')}>
-        {backgroundSrc && (
-          <img src={backgroundSrc} className="top-0 right-0 left-0 bottom-0" />
+    <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
+      <div
+        className={classNames(
+          'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
+          size === 'big'
+            ? 'w-96'
+            : size === 'medium'
+              ? 'w-80'
+              : size === 'small'
+                ? 'w-72'
+                : '',
+          styles.card,
         )}
-        <img
-          src={creature.emotions[emotion]}
-          className={classNames(
-            'top-0 right-0 left-0 bottom-0',
-            backgroundSrc ? 'absolute' : '',
-          )}
-        />
-      </div>
-      <div className="flex flex-row justify-between space-u-4">
+      >
+        <div className="flex flex-row justify-between">
+          <div
+            className={classNames(
+              'px-2 py-1 rounded-full',
+              bgColorFromEmotion(emotion),
+              colorFromEmotion(emotion),
+            )}
+          >
+            {capitalizeFirstLetter(emotion)}
+          </div>
+          <div className="flex flex-row items-center justify-center space-x-2">
+            {!isDesign && <TrendIcon className="w-6 h-4" />}
+            <img className="w-8 h-8" src={favCoin.meta.icon} />
+          </div>
+        </div>
+        <div className={classNames('relative rounded-xl overflow-hidden')}>
+          <div className="mt-full"></div>
+          {backgroundSrc && <img className={classNames('absolute top-0 right-0 left-0 bottom-0')} src={backgroundSrc} />}
+          <img
+            src={creature.emotions[emotion]}
+            className={classNames('absolute top-0 right-0 left-0 bottom-0')}
+          />
+        </div>
         <div className="flex flex-col space-y-1">
           <span className="text-base leading-6 font-bold text-purple-900">
             {metadata.name}
@@ -160,18 +180,15 @@ const NFTCard: FunctionComponent<IProps> = ({
             {attribute(metadata, Traits.Creature)}]
           </span>
         </div>
-        <div className="flex flex-row justify-between space-u-4">
-          <div className="flex flex-col space-y-1">
-            <span className="text-base leading-6 font-bold text-purple-900">
-              {metadata.name}
-            </span>
-            <span className="text-xs leading-4 font-normal text-gray-400">
-              [{attribute(metadata, Traits.Skin)} -{' '}
-              {attribute(metadata, Traits.Creature)}]
-            </span>
-          </div>
-        </div>
       </div>
+      {isDesign && (
+        <NFTEmotions
+          current={emotion}
+          onChange={(e) => {
+            setEmotion(e)
+          }}
+        />
+      )}
     </div>
   )
 }

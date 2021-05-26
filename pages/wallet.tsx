@@ -6,7 +6,6 @@ import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
 import NFTCard from '../components/nft/card'
 import Title from '../components/title/title'
-import { favCoins } from '../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -24,6 +23,7 @@ export default function Wallet(): JSX.Element {
   } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
+  const [changePercentage, setChangePercentage] = useState(-20)
 
   useEffect(() => {
     if (isLoading || contractError || nfts.length === 0) return
@@ -63,12 +63,7 @@ export default function Wallet(): JSX.Element {
                     <NFTCard
                       key={nft.id}
                       className="cursor-pointer hover:shadow"
-                      changePercentage={-20}
-                      favcoin={
-                        favCoins[
-                          attribute(nft.metadata, Traits.FavCoin) as number
-                        ]
-                      }
+                      changePercentage={changePercentage}
                       metadata={nft.metadata}
                     />
                   </a>

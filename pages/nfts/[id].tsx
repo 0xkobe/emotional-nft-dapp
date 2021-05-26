@@ -9,7 +9,7 @@ import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
-import { backgrounds, favCoins, lockOptions } from '../../data/nft'
+import { backgrounds, lockOptions } from '../../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -35,6 +35,7 @@ export default function NFT(): JSX.Element {
   const [error, setError] = useState<Error>()
   const [nftCount, setNFTCount] = useState<number>(0)
   const [id, setId] = useState<number>(0)
+  const [changePercentage, setChangePercentage] = useState(-20)
 
   const fetchMetadata = useCallback(
     async (contract: QNFT, account: string, id: number) => {
@@ -118,10 +119,7 @@ export default function NFT(): JSX.Element {
               <NFTCard
                 size="big"
                 className="cursor-pointer hover:shadow"
-                changePercentage={20}
-                favcoin={
-                  favCoins[attribute(metadata, Traits.FavCoin) as number]
-                }
+                changePercentage={changePercentage}
                 metadata={metadata}
               />
               <div className="flex flex-col w-96 space-y-8">
