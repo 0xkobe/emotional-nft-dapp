@@ -21,7 +21,6 @@ export default function useContract<T extends Contract>(
   const [error, setError] = useState<Error>()
 
   // activate the connector on init
-  // TODO: maybe this can be moved outside of this hook to give more flexibility to the page
   useEffect(() => {
     void activate(connector, console.error, true)
   }, [activate, connector])
