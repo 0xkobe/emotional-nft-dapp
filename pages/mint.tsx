@@ -282,6 +282,7 @@ export default function Mint(): JSX.Element {
   // sign metadata
   useEffect(() => {
     if (!isMinting) return
+    if (!account) return // don't sign if account is not set
     if (!chainId) return
     // generate signature
     console.log('Signing metadata using Metamask...')
@@ -315,6 +316,7 @@ export default function Mint(): JSX.Element {
     nftDescription,
     nftName,
     signTypedDataV4,
+    account,
   ])
 
   // create metadata
