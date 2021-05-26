@@ -54,13 +54,3 @@ export type LockOption = {
   minAmount: BigNumber
   maxAmount: BigNumber
 }
-
-export type KeyValue = {
-  key: string
-  value: string
-}
-
-export type Property = {
-  title: string
-  keyValues: KeyValue[]
-}
