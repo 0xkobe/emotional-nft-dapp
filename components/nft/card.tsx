@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import NFTEmotions from './emotions'
 import { backgrounds, characters, favCoins } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { APINftMetadataResponse } from '../../types/api'
@@ -10,6 +9,7 @@ import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
 import styles from './card.module.css'
+import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
@@ -107,7 +107,9 @@ const NFTCard: FunctionComponent<IProps> = ({
   className,
 }: IProps) => {
   const [creature, setCreature] = useState<Character>()
-  const [emotion, setEmotion] = useState(isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0))
+  const [emotion, setEmotion] = useState(
+    isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
+  )
   const TrendIcon = trendIcon(changePercentage || 0)
   const backgroundSrc =
     backgrounds[attribute(metadata, Traits.Background) as number].image
@@ -139,15 +141,21 @@ const NFTCard: FunctionComponent<IProps> = ({
           size === 'big'
             ? 'w-96'
             : size === 'medium'
-              ? 'w-80'
-              : size === 'small'
-                ? 'w-72'
-                : '',
+            ? 'w-80'
+            : size === 'small'
+            ? 'w-72'
+            : '',
           styles.card,
         )}
       >
         <div className="flex flex-row justify-between">
-          <div className={classNames('px-2 py-1 rounded-full', bgColorFromEmotion(emotion), colorFromEmotion(emotion))}>
+          <div
+            className={classNames(
+              'px-2 py-1 rounded-full',
+              bgColorFromEmotion(emotion),
+              colorFromEmotion(emotion),
+            )}
+          >
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
@@ -157,9 +165,7 @@ const NFTCard: FunctionComponent<IProps> = ({
         </div>
         <div className={classNames('relative rounded-xl overflow-hidden')}>
           <div className="mt-full"></div>
-          {backgroundSrc && (
-            <img src={backgroundSrc} />
-          )}
+          {backgroundSrc && <img src={backgroundSrc} />}
           <img
             src={creature.emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
@@ -175,14 +181,14 @@ const NFTCard: FunctionComponent<IProps> = ({
           </span>
         </div>
       </div>
-      { isDesign &&
+      {isDesign && (
         <NFTEmotions
           current={emotion}
-          onChange={e => {
+          onChange={(e) => {
             setEmotion(e)
           }}
         />
-      }
+      )}
     </div>
   )
 }

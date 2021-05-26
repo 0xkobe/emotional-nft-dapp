@@ -12,5 +12,5 @@ const Template: Story<IProps> = (args) => <NFTEmotions {...args} />
 export const Angry = Template.bind({})
 Angry.args = {
   current: Emotion.Happy,
-  onChange: console.log
+  onChange: console.log,
 }

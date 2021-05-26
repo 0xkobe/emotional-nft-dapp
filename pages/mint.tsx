@@ -469,7 +469,7 @@ export default function Mint(): JSX.Element {
     return (
       <Modal
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => { }}
+        onModalClose={() => {}}
         isShown={true}
       >
         An error occurred:
