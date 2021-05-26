@@ -1,30 +1,36 @@
 import classNames from 'classnames'
-import { HTMLAttributes, FunctionComponent } from 'react'
-import { BackgroundOption } from '../../types/options';
+import { FunctionComponent, HTMLAttributes } from 'react'
+import { BackgroundOption } from '../../types/options'
 import styles from './character.module.css'
 
-export type IProps = HTMLAttributes<{}> & {
+export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
   background: BackgroundOption
   selected?: boolean
-  onSelect?: () => void
+  onChange?: () => void
 }
 
-const BackgroundItem: FunctionComponent<IProps> = ({ background, selected, onSelect, className, ...props }: IProps) => {
+const BackgroundItem: FunctionComponent<IProps> = ({
+  background,
+  selected,
+  onChange,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div
-      className={classNames(className, styles.background, selected && styles.selected )}
+      className={classNames(
+        className,
+        styles.background,
+        selected && styles.selected,
+      )}
       onClick={() => {
-        onSelect && onSelect()
+        onChange && onChange()
       }}
     >
       <div className={styles.image}>
-        <img
-          src={background.image}
-        />
+        <img src={background.image} />
       </div>
-      <div className={styles.name}>
-        {background.name}
-      </div>
+      <div className={styles.name}>{background.name}</div>
     </div>
   )
 }

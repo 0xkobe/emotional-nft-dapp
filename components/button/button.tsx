@@ -10,7 +10,7 @@ const Button: FunctionComponent<IProps> = (props) => {
       className={classNames(
         'bg-primary shadow-sm py-2 px-4 rounded-lg text-sm leading-5 font-medium text-white',
         props.className,
-        styles.button
+        styles.button,
       )}
       {...props}
     ></a>

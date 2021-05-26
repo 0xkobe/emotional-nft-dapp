@@ -43,6 +43,7 @@ import { CharacterOption } from '../types/options'
 
 export default function Mint(): JSX.Element {
   const { push: redirect } = useRouter()
+
   const { account, chainId, activate, signer, signTypedDataV4 } =
     useWallet(metamaskConnector)
 
@@ -119,12 +120,13 @@ export default function Mint(): JSX.Element {
     const nonTokenPrice = characters[characterId].mintPrice
       .add(favCoins[coinIndex].mintPrice)
       .mul(nonTokenMultiplier)
+      .div(100)
     const tokenPrice = qstkAmount
       .add(airdropAmount)
       .mul(qstkPrice)
       .mul(100 - lockOptions[lockOptionId].discount)
-      .div(100)
       .mul(tokenMultiplier)
+      .div(10000)
       .div(BigNumber.from(10).pow(18))
     return nonTokenPrice.add(tokenPrice)
   }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])

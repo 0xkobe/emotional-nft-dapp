@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react'
-import CharacterView, { IProps } from './character-view'
 import { characters } from '../../data/nft'
+import CharacterView, { IProps } from './character-view'
 
 export default {
   title: 'Gallery/CharacterView',
@@ -46,8 +46,8 @@ Default.args = {
       ...characters[26],
       maxSupply: 100,
       currentSupply: 100,
-    }
+    },
   ],
   selectedCharacterId: 0,
-  onSelectOption: (_) => { },
+  onChange: (_) => {},
 }

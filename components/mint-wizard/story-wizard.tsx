@@ -13,33 +13,52 @@ export type IProps = HTMLAttributes<{}> & {
 }
 
 const StoryWizard: FunctionComponent<IProps> = ({
-  className, nftName, minterName, nftDescription, onNftNameChange, onMinterNameChange, onNftDescriptionChange, ...props 
+  className,
+  nftName,
+  minterName,
+  nftDescription,
+  onNftNameChange,
+  onMinterNameChange,
+  onNftDescriptionChange,
+  ...props
 }: IProps) => {
-
   return (
-    <div className={classNames(className, "flex flex-col w-96 space-y-8")}>
+    <div className={classNames(className, 'flex flex-col w-96 space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">NFT name</div>
+        <div className="text-base leading-6 font-medium text-gray-500">
+          NFT name
+        </div>
         <Input
           placeholder="Super Bitcoin Bear"
           value={nftName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onNftNameChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            onNftNameChange(e.target.value)
+          }
         />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">Minter Name</div>
-        <Input 
+        <div className="text-base leading-6 font-medium text-gray-500">
+          Minter Name
+        </div>
+        <Input
           placeholder="px4.eth"
           value={minterName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onMinterNameChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            onMinterNameChange(e.target.value)
+          }
         />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">NFT Description</div>
-        <TextArea noResize 
+        <div className="text-base leading-6 font-medium text-gray-500">
+          NFT Description
+        </div>
+        <TextArea
+          noResize
           placeholder="The best bear in the universe to watch my Bitcoins"
           value={nftDescription}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onNftDescriptionChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            onNftDescriptionChange(e.target.value)
+          }
         />
       </div>
     </div>

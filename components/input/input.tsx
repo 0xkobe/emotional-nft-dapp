@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { InputHTMLAttributes, FunctionComponent } from 'react'
+import { FunctionComponent, InputHTMLAttributes } from 'react'
 import styles from './input.module.css'
 
 export type IProps = InputHTMLAttributes<{}> & {
@@ -7,11 +7,19 @@ export type IProps = InputHTMLAttributes<{}> & {
   isError?: boolean
 }
 
-const Input: FunctionComponent<IProps> = ({ unit, isError, className, ...props }: IProps) => {
+const Input: FunctionComponent<IProps> = ({
+  unit,
+  isError,
+  className,
+  ...props
+}: IProps) => {
   return (
     <div className={classNames(className, styles.input)}>
       <div className={styles.inputWrapper}>
-        <input className={classNames(isError ? "border-red-500" : "border-gray-300")} {...props} />
+        <input
+          className={classNames(isError ? 'border-red-500' : 'border-gray-300')}
+          {...props}
+        />
         <div className={styles.inputUnit}>{unit}</div>
       </div>
     </div>

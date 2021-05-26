@@ -327,22 +327,9 @@
     "name": "NFT_SALE_DURATION",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PERCENT_MAX",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -751,6 +738,19 @@
       }
     ],
     "name": "setOnlyAirdropUsers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IQSettings",
+        "name": "_settings",
+        "type": "address"
+      }
+    ],
+    "name": "setSettings",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
-import { HTMLAttributes, FunctionComponent } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
+import { formatDate, formatNumber, lockDurationToString } from '../../lib/utils'
 import styles from './allocation.module.css'
-import { formatDate, lockDurationToString, formatNumber } from '../../lib/utils'
 
 export type IProps = HTMLAttributes<{}> & {
   lockAmount: number
@@ -9,13 +9,19 @@ export type IProps = HTMLAttributes<{}> & {
   lockDuration: number
 }
 
-const Allocation: FunctionComponent<IProps> = ({ lockAmount, createdAt, lockDuration, className, ...props }: IProps) => {
+const Allocation: FunctionComponent<IProps> = ({
+  lockAmount,
+  createdAt,
+  lockDuration,
+  className,
+  ...props
+}: IProps) => {
   const headers = [
     'COIN',
     'AMOUNT',
     'SUBSCRIPTION',
     'LOCK PERIOD',
-    'REDEMPTION'
+    'REDEMPTION',
   ]
 
   const values = [
@@ -26,34 +32,28 @@ const Allocation: FunctionComponent<IProps> = ({ lockAmount, createdAt, lockDura
     formatNumber(lockAmount),
     formatDate(createdAt),
     lockDurationToString(lockDuration),
-    formatDate(new Date(createdAt.getTime() + lockDuration * 1000))
+    formatDate(new Date(createdAt.getTime() + lockDuration * 1000)),
   ]
 
   return (
-    <div
-      className={classNames(className, styles.allocation)}
-    >
+    <div className={classNames(className, styles.allocation)}>
       <div className={styles.headers}>
-        {
-          headers.map(header => {
-            return (
-              <div key={header} className={styles.header}>
-                {header}
-              </div>
-            )
-          })
-        }
+        {headers.map((header) => {
+          return (
+            <div key={header} className={styles.header}>
+              {header}
+            </div>
+          )
+        })}
       </div>
       <div className={styles.values}>
-        {
-          values.map(value => {
-            return (
-              <div key={value.toString()} className={styles.value}>
-                {value}
-              </div>
-            )
-          })
-        }
+        {values.map((value) => {
+          return (
+            <div key={value.toString()} className={styles.value}>
+              {value}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
