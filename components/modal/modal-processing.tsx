@@ -1,4 +1,5 @@
 import React, { FunctionComponent, HTMLAttributes } from 'react'
+import { chain } from '../../data/chains'
 import IconSpinner from '../icon/spinner'
 import Modal from './modal'
 import styles from './modal.module.css'
@@ -32,7 +33,7 @@ const ModalProcessing: FunctionComponent<IProps> = ({
         </p>
         <p className={styles.processingFooter}>
           View details on Etherscan:
-          <br /> https://etherscan.com/tx/{transactionHash}
+          <br /> {chain.explorerUrlForTx(transactionHash)}
         </p>
       </div>
     </Modal>
