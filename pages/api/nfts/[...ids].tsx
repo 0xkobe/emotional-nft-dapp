@@ -1,11 +1,8 @@
 import { Contract } from '@ethersproject/contracts'
 import { StaticJsonRpcProvider } from '@ethersproject/providers'
 import { NextApiRequest, NextApiResponse } from 'next'
-import {
-  abi,
-  deployedAddresses,
-  remoteProviderConfig,
-} from '../../../data/smartContract'
+import { chain } from '../../../data/chains'
+import { abi, deployedAddresses } from '../../../data/smartContract'
 import { fetchMetadata, hydrateMetadata } from '../../../lib/nft'
 import { APINftMetadataResponse } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
@@ -25,12 +22,12 @@ export default async (
   // init ethereum provider
   const provider = new StaticJsonRpcProvider({
     allowGzip: true,
-    url: remoteProviderConfig.urls[remoteProviderConfig.defaultChainId],
+    url: chain.remoteProvider,
   })
 
   // // init smart contract
   const qnft = new Contract(
-    deployedAddresses.qnft[remoteProviderConfig.defaultChainId],
+    deployedAddresses.qnft[chain.id],
     abi.qnft,
     provider,
   ) as QNFT

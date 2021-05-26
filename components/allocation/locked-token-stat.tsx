@@ -1,10 +1,11 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
-import { formatNumber } from '../../lib/utils'
+import { bnToText } from '../../lib/utils'
 import LockIcon from '../icon/lock'
 
 export type IProps = HTMLAttributes<{}> & {
-  lockAmount: number
+  lockAmount: BigNumber
 }
 
 const LockedTokenStat: FunctionComponent<IProps> = ({
@@ -28,7 +29,7 @@ const LockedTokenStat: FunctionComponent<IProps> = ({
       <div className="flex flex-col text-gray-500 mr-4">
         <span className="text-sm leading-5 font-medium">Your Locked Token</span>
         <span className="text-xl leading-7 font-semibold">
-          {formatNumber(lockAmount)} QSTK
+          {bnToText(lockAmount)} QSTK
         </span>
       </div>
     </div>

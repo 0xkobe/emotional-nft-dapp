@@ -14,7 +14,6 @@ export type IProps = HTMLAttributes<any> & {
   changePercentage: number // percentage of changes
   favcoin: FavCoin
   metadata: APINftMetadataResponse
-  ethPrice: string
   size?: 'big' | 'medium' | 'small'
 }
 
@@ -85,7 +84,6 @@ function colorFromPriceChange(changePercentage: number): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   favcoin,
-  ethPrice,
   metadata,
   size,
   className,
@@ -96,9 +94,9 @@ const NFTCard: FunctionComponent<IProps> = ({
     const animalId = attribute(metadata, Traits.Creature) as Creature
     const skinId = attribute(metadata, Traits.Skin) as Skin
     let creature: Character | undefined
-    if (animalId === Creature.Fish) {
+    if (animalId === Creature.Minotaur) {
       creature = characters[25]
-    } else if (animalId === Creature.Minotaur) {
+    } else if (animalId === Creature.Fish) {
       creature = characters[26]
     } else {
       creature = getCreature(animalId, skinId)
@@ -162,11 +160,16 @@ const NFTCard: FunctionComponent<IProps> = ({
             {attribute(metadata, Traits.Creature)}]
           </span>
         </div>
-        <div className="flex flex-row items-center justify-center space-x-1">
-          <img className="h-3" src="/favcoin/eth.svg" />
-          <span className="text-sm leading-6 font-bold text-purple-900 pt-px">
-            {ethPrice}
-          </span>
+        <div className="flex flex-row justify-between space-u-4">
+          <div className="flex flex-col space-y-1">
+            <span className="text-base leading-6 font-bold text-purple-900">
+              {metadata.name}
+            </span>
+            <span className="text-xs leading-4 font-normal text-gray-400">
+              [{attribute(metadata, Traits.Skin)} -{' '}
+              {attribute(metadata, Traits.Creature)}]
+            </span>
+          </div>
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
         <CharacterView
           characters={charactersData}
           selectedCharacterId={characterId}
-          onSelectOption={(id: number) => setCharacterId(id)}
+          onChange={(id: number) => setCharacterId(id)}
         />
       </div>
       <div className="flex flex-row space-x-8">
@@ -82,7 +82,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
         <BackgroundView
           backgrounds={backgrounds}
           selectedIndex={backgroundIndex}
-          onSelectOption={(index: number) => setBackgroundIndex(index)}
+          onChange={(index: number) => setBackgroundIndex(index)}
         />
       </div>
     </div>

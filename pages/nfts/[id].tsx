@@ -122,7 +122,6 @@ export default function NFT(): JSX.Element {
                 favcoin={
                   favCoins[attribute(metadata, Traits.FavCoin) as number]
                 }
-                ethPrice={'1000'}
                 metadata={metadata}
               />
               <div className="flex flex-col w-96 space-y-8">

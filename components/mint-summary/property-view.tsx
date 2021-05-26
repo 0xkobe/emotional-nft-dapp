@@ -1,7 +1,16 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
-import { Property } from '../../types/nft'
 import styles from './mint-summary.module.css'
+
+export type KeyValue = {
+  key: string
+  value: string
+}
+
+export type Property = {
+  title: string
+  keyValues: KeyValue[]
+}
 
 export type IProps = HTMLAttributes<{}> & {
   value: Property

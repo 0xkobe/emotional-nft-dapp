@@ -49,5 +49,5 @@ Default.args = {
     },
   ],
   selectedCharacterId: 0,
-  onSelectOption: (_) => {},
+  onChange: (_) => {},
 }

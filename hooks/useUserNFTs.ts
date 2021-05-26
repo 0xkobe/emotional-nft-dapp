@@ -2,8 +2,9 @@ import { ContractInterface } from '@ethersproject/contracts'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
+import { APINftMetadataResponse, APIResponseError } from '../types/api'
 import { QNFT } from '../types/contracts'
-import { RawNFTData } from '../types/raw'
+import { NFTData } from '../types/nft'
 import useContract from './useContract'
 
 export default function useUserNFTs(
@@ -11,7 +12,7 @@ export default function useUserNFTs(
   addresses: { [chainId: number]: string },
   abi: ContractInterface,
 ): {
-  nfts: RawNFTData[]
+  nfts: NFTData[]
   isLoading: boolean
   error?: Error
 } {
@@ -23,7 +24,7 @@ export default function useUserNFTs(
   //   )
   const { contract, account } = useContract<QNFT>(connector, addresses, abi)
 
-  const [nfts, setNFTs] = useState<RawNFTData[]>([])
+  const [nfts, setNFTs] = useState<NFTData[]>([])
   const [error, setError] = useState<Error>()
   const [isLoading, setLoading] = useState<boolean>(false)
 
@@ -41,24 +42,42 @@ export default function useUserNFTs(
         )
       }
       const resTokenIds: BigNumber[] = await Promise.all(requestTokenIds)
-      const requestNFTs = []
+      // const requestNFTs = []
+      const requestTokenURIs = []
       for (let i = 0; i < userNFTCount; i++) {
-        requestNFTs.push(
-          contract.callStatic.nftData(resTokenIds[i]).then(
-            (x): RawNFTData => ({
-              id: i,
-              characterId: x.characterId,
-              favCoinId: x.favCoinId,
-              lockDuration: x.lockDuration,
-              lockAmount: x.lockAmount,
-              createdAt: x.createdAt,
-              withdrawn: x.withdrawn,
-              metaId: x.metaId,
-            }),
-          ),
+        // requestNFTs.push(
+        //   contract.callStatic.nftData(resTokenIds[i]).then(
+        //     (x): RawNFTData => ({
+        //       id: i,
+        //       characterId: x.characterId,
+        //       favCoinId: x.favCoinId,
+        //       lockDuration: x.lockDuration,
+        //       lockAmount: x.lockAmount,
+        //       createdAt: x.createdAt,
+        //       withdrawn: x.withdrawn,
+        //       metaId: x.metaId,
+        //     }),
+        //   ),
+        // )
+        requestTokenURIs.push(
+          contract.tokenURI(resTokenIds[i])
         )
       }
-      const resNFTs: RawNFTData[] = await Promise.all(requestNFTs)
+      // const resRawNFTs: RawNFTData[] = await Promise.all(requestNFTs)
+      const resTokenURIs: string[] = await Promise.all(requestTokenURIs)
+      const resNFTs = await Promise.all(resTokenURIs.map(async (tokenURI, index) => {
+        const res = await fetch(tokenURI)
+        const response: APINftMetadataResponse | APIResponseError =
+          await res.json()
+        if ('error' in response)
+          throw new Error(`an error occurred while fetching metadata`)
+        if (!res.ok)
+          throw new Error(`an unknown error occurred while fetching metadata`)
+        return {
+          id: index,
+          metadata: response
+        }
+      }))
       setNFTs(resNFTs)
     } catch (e) {
       setError(e)
