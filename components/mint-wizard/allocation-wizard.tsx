@@ -5,7 +5,6 @@ import { verifier } from '../../data/nft'
 import {
   bnToInput,
   bnToText,
-  formatNumber,
   inputToBn,
   lockDurationToString,
   verifyAirdropKey,
@@ -102,10 +101,16 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
-            QSTK to Mint: {availableMintAmount ? bnToText(availableMintAmount) : 'unknown'} QSTK
+            QSTK to Mint:{' '}
+            {availableMintAmount ? bnToText(availableMintAmount) : 'unknown'}{' '}
+            QSTK
           </div>
           <div className="text-sm leading-5 font-normal text-gray-500">
-            Free allocation: {availableFreeAllocation ? bnToText(availableFreeAllocation) : 'unknown'} QSTK
+            Free allocation:{' '}
+            {availableFreeAllocation
+              ? bnToText(availableFreeAllocation)
+              : 'unknown'}{' '}
+            QSTK
           </div>
         </div>
       </div>

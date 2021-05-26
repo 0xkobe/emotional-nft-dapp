@@ -83,7 +83,6 @@ export default function Mint(): JSX.Element {
   const [coinIndex, setCoinIndex] = useState(0)
   const [backgroundIndex, setBackgroundIndex] = useState(0)
   const [charactersData, setCharactersData] = useState([] as CharacterOption[])
-  const [changePercentage, setChangePercentage] = useState(0)
   const [nftName, setNftName] = useState('')
   const [minterName, setMinterName] = useState('')
   const [nftDescription, setNftDescription] = useState('')
@@ -470,7 +469,7 @@ export default function Mint(): JSX.Element {
     return (
       <Modal
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => {}}
+        onModalClose={() => { }}
         isShown={true}
       >
         An error occurred:
@@ -497,6 +496,7 @@ export default function Mint(): JSX.Element {
               isDesign
               metadata={{
                 name: nftName,
+                author: minterName,
                 description: nftDescription,
                 image: characters[characterId].emotions.normal, // TODO: confirm?
                 external_url: '/', // TODO: confirm?

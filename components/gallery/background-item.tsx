@@ -3,7 +3,7 @@ import { FunctionComponent, HTMLAttributes } from 'react'
 import { BackgroundOption } from '../../types/options'
 import styles from './character.module.css'
 
-export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
+export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   background: BackgroundOption
   selected?: boolean
   onChange?: () => void

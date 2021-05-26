@@ -1,32 +1,49 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import Head from 'next/head'
-import React from 'react'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
 import NFTCard from '../components/nft/card'
 import Title from '../components/title/title'
-import { favCoins } from '../data/nft'
 import {
-  Background,
-  Creature,
-  DisplayType,
-  FavCoinEnum,
-  LockPeriod,
-  Skin,
-  Traits,
-} from '../types/metadata'
-import { Emotion } from '../types/nft'
+  abi,
+  deployedAddresses,
+  metamaskConnector,
+} from '../data/smartContract'
+import useUserNFTs from '../hooks/useUserNFTs'
+import { attribute } from '../lib/nft'
+import { Traits } from '../types/metadata'
 
 export default function Wallet(): JSX.Element {
+  const {
+    nfts,
+    error: contractError,
+    isLoading,
+  } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+
+  const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
+  const [changePercentage, setChangePercentage] = useState(-20)
+
+  useEffect(() => {
+    if (isLoading || contractError || nfts.length === 0) return
+    const sum = BigNumber.from(0)
+    nfts.forEach((nft) => {
+      const nftLockAmount = attribute(nft.metadata, Traits.LockAmount) as string
+      sum.add(BigNumber.from(nftLockAmount))
+    })
+    setLockAmount(sum)
+  }, [contractError, isLoading, nfts])
+
   return (
     <>
       <Head>
         <title>Wallet</title>
       </Head>
-
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
         <div className="flex flex-row items-center justify-between">
           <Title>Your Investor Space</Title>
-          <LockedTokenStat lockAmount={48000} />
+          <LockedTokenStat lockAmount={lockAmount} />
         </div>
         <div className="flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
@@ -36,348 +53,22 @@ export default function Wallet(): JSX.Element {
             <Button href="/mint">Mint new NFT</Button>
           </div>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
-            <NFTCard
-              className="cursor-pointer hover:shadow"
-              changePercentage={-20}
-              metadata={{
-                name: 'bear',
-                description: 'Gopher bear',
-                image: 'string', // TODO: what is image here?
-                external_url: 'string', // TODO: what is external_url here?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: Creature.Bear,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: Skin.Silver,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: Background.NoCloudNightSky,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: FavCoinEnum.MATIC,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: LockPeriod.OneCentury,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: '0',
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: 'gopher',
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: '0x0992',
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0,
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal,
-                  },
-                ],
-              }}
-            />
+            {isLoading && <div>loading...</div>}
+            {contractError && <div>{contractError.toString()}</div>}
+            {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
+            {!isLoading &&
+              nfts.map((nft) => (
+                <Link href={`/nfts/${nft.id}`}>
+                  <a>
+                    <NFTCard
+                      key={nft.id}
+                      className="cursor-pointer hover:shadow"
+                      changePercentage={changePercentage}
+                      metadata={nft.metadata}
+                    />
+                  </a>
+                </Link>
+              ))}
           </div>
         </div>
       </div>

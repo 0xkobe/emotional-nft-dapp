@@ -139,10 +139,10 @@ const NFTCard: FunctionComponent<IProps> = ({
           size === 'big'
             ? 'w-96'
             : size === 'medium'
-            ? 'w-80'
-            : size === 'small'
-            ? 'w-72'
-            : '',
+              ? 'w-80'
+              : size === 'small'
+                ? 'w-72'
+                : '',
           styles.card,
         )}
       >
@@ -158,7 +158,7 @@ const NFTCard: FunctionComponent<IProps> = ({
         <div className={classNames('relative rounded-xl overflow-hidden')}>
           <div className="mt-full"></div>
           {backgroundSrc && (
-            <img src={backgroundSrc}/>
+            <img src={backgroundSrc} />
           )}
           <img
             src={creature.emotions[emotion]}
@@ -175,7 +175,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           </span>
         </div>
       </div>
-      { isDesign && 
+      { isDesign &&
         <NFTEmotions
           current={emotion}
           onChange={e => {

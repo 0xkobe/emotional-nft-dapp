@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react'
-import { favCoins } from '../../data/nft'
 import {
   Background,
   Creature,
@@ -24,6 +23,7 @@ Angry.args = {
   changePercentage: -20,
   metadata: {
     name: 'bear',
+    author: 'Gopher',
     description: 'Gopher bear',
     image: 'string', // TODO: what is image here?
     external_url: 'string', // TODO: what is external_url here?
@@ -82,6 +82,7 @@ Happy.args = {
   changePercentage: 20,
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
@@ -140,6 +141,7 @@ Normal.args = {
   changePercentage: 0,
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
