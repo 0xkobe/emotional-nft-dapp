@@ -23,7 +23,6 @@ export const Angry = Template.bind({})
 Angry.args = {
   changePercentage: -20,
   favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
     description: 'Gopher bear',
@@ -83,7 +82,6 @@ export const Happy = Template.bind({})
 Happy.args = {
   changePercentage: 20,
   favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
     description: 'icrabbit bear',
@@ -143,7 +141,6 @@ export const Normal = Template.bind({})
 Normal.args = {
   changePercentage: 0,
   favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
     description: 'icrabbit bear',

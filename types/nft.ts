@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Creature, FavCoinEnum, Skin } from '../types/metadata'
+import { APINftMetadataResponse } from './api'
 
 export enum Emotion {
   Angry = 'angry',
@@ -53,4 +54,19 @@ export type LockOption = {
   discount: number
   minAmount: BigNumber
   maxAmount: BigNumber
+}
+
+export type KeyValue = {
+  key: string
+  value: string
+}
+
+export type Property = {
+  title: string
+  keyValues: KeyValue[]
+}
+
+export type NFTData = {
+  id: number
+  metadata: APINftMetadataResponse
 }

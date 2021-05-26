@@ -3,7 +3,7 @@ import { FunctionComponent, HTMLAttributes } from 'react'
 import { CharacterOption } from '../../types/options'
 import styles from './character.module.css'
 
-export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
+export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   character: CharacterOption
   selected?: boolean
   onChange?: () => void
