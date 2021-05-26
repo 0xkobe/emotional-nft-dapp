@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { parseEther } from '@ethersproject/units'
 import { Creature, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, LockOption } from '../types/nft'
@@ -185,7 +184,7 @@ const lockOptions: LockOption[] = [
     duration: 6 * 30 * 86400, // 6 months
     description: '6 months',
     discount: 10, // percentage
-    minAmount:  parseEther('1000'), // 1K QSTK
+    minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('100000'), // 100K QSTK
   },
   {
@@ -211,6 +210,7 @@ const verifier = "0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de"
 const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
 const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
 const qstkPrice = parseEther('0.000005') // in ETH
+const nftBaseURL = 'https://emotional-nft-dapp.netlify.app/api/nfts/'
 
 ////////////// latest configurations update for v1 sale //////////////
 // totalSupply: '2000000000',
@@ -240,5 +240,6 @@ export {
   verifier,
   nonTokenMultiplier,
   tokenMultiplier,
-  qstkPrice
+  qstkPrice,
+  nftBaseURL
 }
