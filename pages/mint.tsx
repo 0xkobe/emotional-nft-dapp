@@ -44,21 +44,18 @@ import { CharacterOption } from '../types/options'
 export default function Mint(): JSX.Element {
   const { push: redirect } = useRouter()
 
+  // init wallet
   const { account, chainId, activate, signer, signTypedDataV4 } =
     useWallet(metamaskConnector)
 
+  // init QNFT smart contract
   const { contract: qnft, error: qnftError } = useContract<QNFT>(
     remoteConnector,
     deployedAddresses.qnft,
     abi.qnft,
   )
-  // const { contract: qnftSettings, error: qnftSettingsError } =
-  //   useContract<QNFTSettings>(
-  //     remoteConnector,
-  //     deployedAddresses.qnftSettings,
-  //     abi.qnftSettings,
-  //   )
 
+  // form variables
   const [mintStep, setMintStep] = useState(0)
   const [characterId, setCharacterId] = useState(0)
   const [skinIndex, setSkinIndex] = useState(0)
@@ -73,6 +70,28 @@ export default function Mint(): JSX.Element {
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
 
+  // throw qnftError error
+  useEffect(() => {
+    if (!qnftError) return
+    throw new Error(`qnftError: ${qnftError}`)
+  }, [qnftError])
+
+  // reload characters supply when skin changes
+  useEffect(() => {
+    if (!qnft) return
+    try {
+      const filteredCharacters = characters.filter(
+        (character) =>
+          character.skin === skins[skinIndex].skin ||
+          character.skin === Skin.None,
+      )
+      void getCharactersSupply(qnft, filteredCharacters)
+    } catch (err) {
+      console.error(' qnft getCharactersSupply fail')
+    }
+  }, [qnft, skinIndex])
+
+  // fetch characters supply function
   const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
     for (let i = 0; i < characters.length; i++) {
@@ -94,28 +113,7 @@ export default function Mint(): JSX.Element {
     )
   }
 
-  useEffect(() => {
-    if (!qnftError) return
-    console.error('qnftError', qnftError)
-  }, [qnftError])
-  // useEffect(() => {
-  //   if (!qnftSettingsError) return
-  //   console.error('qnftSettingsError', qnftSettingsError)
-  // }, [qnftSettingsError])
-  useEffect(() => {
-    if (!qnft) return
-    try {
-      const filteredCharacters = characters.filter(
-        (character) =>
-          character.skin === skins[skinIndex].skin ||
-          character.skin === Skin.None,
-      )
-      void getCharactersSupply(qnft, filteredCharacters)
-    } catch (err) {
-      console.error(' qnft getCharactersSupply fail')
-    }
-  }, [qnft, skinIndex])
-
+  // calculate nft price
   const nftPrice = useMemo(() => {
     const nonTokenPrice = characters[characterId].mintPrice
       .add(favCoins[coinIndex].mintPrice)
@@ -131,6 +129,7 @@ export default function Mint(): JSX.Element {
     return nonTokenPrice.add(tokenPrice)
   }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
 
+  // calculate summary
   const summary = useMemo(() => {
     const mintSummaryProperties = [
       {
@@ -215,16 +214,19 @@ export default function Mint(): JSX.Element {
     airdropAmount,
   ])
 
+  // calculate mint summary button name
   const mintSummaryBtnName = useMemo(() => {
     return ['Validate Design', 'Validate Story', 'Mint my NFT'][mintStep]
   }, [mintStep])
 
+  // button handle function
   const handleSubmit = () => {
     if (mintStep < 2) return setMintStep(mintStep + 1)
     // TODO: mint with airdrop
     setIsMinting(true)
   }
 
+  // minting state variables
   const [isMinting, setIsMinting] = useState(false)
   const [receipt, setReceipt] = useState<ContractReceipt>()
   const [tx, setTx] = useState<ContractTransaction>()
