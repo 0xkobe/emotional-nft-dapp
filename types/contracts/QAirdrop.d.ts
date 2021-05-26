@@ -22,13 +22,14 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface QAirdropInterface extends ethers.utils.Interface {
   functions: {
     "addWhitelistedContract(address)": FunctionFragment;
+    "airdropClaimable()": FunctionFragment;
     "claimQStk(address,uint256,bytes)": FunctionFragment;
     "claimed(bytes)": FunctionFragment;
     "getMessageHash(address,uint256)": FunctionFragment;
     "initialize(address,address,address[])": FunctionFragment;
-    "locked()": FunctionFragment;
     "removeWhitelistedContract(address)": FunctionFragment;
-    "setLocked(bool)": FunctionFragment;
+    "setAirdropClaimable(bool)": FunctionFragment;
+    "setSettings(address)": FunctionFragment;
     "setVerifier(address)": FunctionFragment;
     "settings()": FunctionFragment;
     "verifier()": FunctionFragment;
@@ -40,6 +41,10 @@ interface QAirdropInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "addWhitelistedContract",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "airdropClaimable",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "claimQStk",
@@ -54,12 +59,15 @@ interface QAirdropInterface extends ethers.utils.Interface {
     functionFragment: "initialize",
     values: [string, string, string[]]
   ): string;
-  encodeFunctionData(functionFragment: "locked", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "removeWhitelistedContract",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "setLocked", values: [boolean]): string;
+  encodeFunctionData(
+    functionFragment: "setAirdropClaimable",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
   encodeFunctionData(functionFragment: "setVerifier", values: [string]): string;
   encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(functionFragment: "verifier", values?: undefined): string;
@@ -80,6 +88,10 @@ interface QAirdropInterface extends ethers.utils.Interface {
     functionFragment: "addWhitelistedContract",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "airdropClaimable",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "claimQStk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claimed", data: BytesLike): Result;
   decodeFunctionResult(
@@ -87,12 +99,18 @@ interface QAirdropInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "locked", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "removeWhitelistedContract",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setLocked", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAirdropClaimable",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSettings",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setVerifier",
     data: BytesLike
@@ -171,6 +189,8 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    airdropClaimable(overrides?: CallOverrides): Promise<[boolean]>;
+
     claimQStk(
       _recipient: string,
       _qstkAmount: BigNumberish,
@@ -193,15 +213,18 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    locked(overrides?: CallOverrides): Promise<[boolean]>;
-
     removeWhitelistedContract(
       _contract: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setLocked(
-      _locked: boolean,
+    setAirdropClaimable(
+      _airdropClaimable: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -239,6 +262,8 @@ export class QAirdrop extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  airdropClaimable(overrides?: CallOverrides): Promise<boolean>;
+
   claimQStk(
     _recipient: string,
     _qstkAmount: BigNumberish,
@@ -261,15 +286,18 @@ export class QAirdrop extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  locked(overrides?: CallOverrides): Promise<boolean>;
-
   removeWhitelistedContract(
     _contract: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setLocked(
-    _locked: boolean,
+  setAirdropClaimable(
+    _airdropClaimable: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSettings(
+    _settings: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -307,6 +335,8 @@ export class QAirdrop extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    airdropClaimable(overrides?: CallOverrides): Promise<boolean>;
+
     claimQStk(
       _recipient: string,
       _qstkAmount: BigNumberish,
@@ -329,14 +359,17 @@ export class QAirdrop extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    locked(overrides?: CallOverrides): Promise<boolean>;
-
     removeWhitelistedContract(
       _contract: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setLocked(_locked: boolean, overrides?: CallOverrides): Promise<void>;
+    setAirdropClaimable(
+      _airdropClaimable: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
 
     setVerifier(_verifier: string, overrides?: CallOverrides): Promise<void>;
 
@@ -392,6 +425,8 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    airdropClaimable(overrides?: CallOverrides): Promise<BigNumber>;
+
     claimQStk(
       _recipient: string,
       _qstkAmount: BigNumberish,
@@ -414,15 +449,18 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    locked(overrides?: CallOverrides): Promise<BigNumber>;
-
     removeWhitelistedContract(
       _contract: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setLocked(
-      _locked: boolean,
+    setAirdropClaimable(
+      _airdropClaimable: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -461,6 +499,8 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    airdropClaimable(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     claimQStk(
       _recipient: string,
       _qstkAmount: BigNumberish,
@@ -486,15 +526,18 @@ export class QAirdrop extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    locked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     removeWhitelistedContract(
       _contract: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setLocked(
-      _locked: boolean,
+    setAirdropClaimable(
+      _airdropClaimable: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

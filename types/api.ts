@@ -103,7 +103,7 @@ export type MetadataOnChain = {
   lockAmount: BigNumber
   createdAt: BigNumber
   withdrawn: boolean
-  metaId: BigNumber
+  metaId: number
 }
 
 export type Metadata = MetadataOffChain & MetadataOnChain
