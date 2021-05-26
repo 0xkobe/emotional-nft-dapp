@@ -3,7 +3,7 @@ import { BackgroundOption } from '../../types/options'
 import BackgroundItem from './background-item'
 import styles from './character.module.css'
 
-export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
+export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   backgrounds: BackgroundOption[]
   selectedIndex: number
   onChange: (index: number) => void
