@@ -108,15 +108,15 @@ const artists: { [key: string]: Artist } = {
 const skins = [
   {
     skin: Skin.Bronze,
-    icon: '/nft/skins/gold.svg'
+    icon: '/nft/skins/bronze.svg'
   },
   {
     skin: Skin.Diamond,
-    icon: '/nft/skins/gold.svg'
+    icon: '/nft/skins/diamond.svg'
   },
   {
     skin: Skin.Silver,
-    icon: '/nft/skins/gold.svg'
+    icon: '/nft/skins/silver.svg'
   },
   {
     skin: Skin.Gold,
@@ -124,7 +124,7 @@ const skins = [
   },
   {
     skin: Skin.Platinum,
-    icon: '/nft/skins/gold.svg'
+    icon: '/nft/skins/platinum.svg'
   }
 ]
 
