@@ -22,7 +22,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface QNFTSettingsInterface extends ethers.utils.Interface {
   functions: {
     "NFT_SALE_DURATION()": FunctionFragment;
-    "PERCENT_MAX()": FunctionFragment;
     "addCharacters(uint256[],uint256)": FunctionFragment;
     "addFavCoinPrices(uint256[])": FunctionFragment;
     "addLockOption(uint256,uint256,uint256,uint8)": FunctionFragment;
@@ -47,6 +46,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     "qstkPrice()": FunctionFragment;
     "setNonTokenPriceMultiplier(uint256)": FunctionFragment;
     "setOnlyAirdropUsers(bool)": FunctionFragment;
+    "setSettings(address)": FunctionFragment;
     "setTokenPriceMultiplier(uint256)": FunctionFragment;
     "setTransferAllowedAfterRedeem(bool)": FunctionFragment;
     "setUpgradePriceMultiplier(uint256)": FunctionFragment;
@@ -68,10 +68,6 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "NFT_SALE_DURATION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PERCENT_MAX",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -167,6 +163,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "setOnlyAirdropUsers",
     values: [boolean]
   ): string;
+  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setTokenPriceMultiplier",
     values: [BigNumberish]
@@ -238,10 +235,6 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "NFT_SALE_DURATION",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PERCENT_MAX",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -326,6 +319,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setOnlyAirdropUsers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSettings",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -478,9 +475,7 @@ export class QNFTSettings extends BaseContract {
   interface: QNFTSettingsInterface;
 
   functions: {
-    NFT_SALE_DURATION(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    PERCENT_MAX(overrides?: CallOverrides): Promise<[BigNumber]>;
+    NFT_SALE_DURATION(overrides?: CallOverrides): Promise<[number]>;
 
     addCharacters(
       _prices: BigNumberish[],
@@ -589,6 +584,11 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setSettings(
+      _settings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setTokenPriceMultiplier(
       _tokenPriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -674,9 +674,7 @@ export class QNFTSettings extends BaseContract {
     upgradePriceMultiplier(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
-  NFT_SALE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
+  NFT_SALE_DURATION(overrides?: CallOverrides): Promise<number>;
 
   addCharacters(
     _prices: BigNumberish[],
@@ -785,6 +783,11 @@ export class QNFTSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setSettings(
+    _settings: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setTokenPriceMultiplier(
     _tokenPriceMultiplier: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -870,9 +873,7 @@ export class QNFTSettings extends BaseContract {
   upgradePriceMultiplier(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    NFT_SALE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
+    NFT_SALE_DURATION(overrides?: CallOverrides): Promise<number>;
 
     addCharacters(
       _prices: BigNumberish[],
@@ -975,6 +976,8 @@ export class QNFTSettings extends BaseContract {
       _onlyAirdropUsers: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
 
     setTokenPriceMultiplier(
       _tokenPriceMultiplier: BigNumberish,
@@ -1188,8 +1191,6 @@ export class QNFTSettings extends BaseContract {
   estimateGas: {
     NFT_SALE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
 
-    PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
-
     addCharacters(
       _prices: BigNumberish[],
       _maxSupply: BigNumberish,
@@ -1284,6 +1285,11 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setSettings(
+      _settings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setTokenPriceMultiplier(
       _tokenPriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1371,8 +1377,6 @@ export class QNFTSettings extends BaseContract {
 
   populateTransaction: {
     NFT_SALE_DURATION(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PERCENT_MAX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     addCharacters(
       _prices: BigNumberish[],
@@ -1467,6 +1471,11 @@ export class QNFTSettings extends BaseContract {
 
     setOnlyAirdropUsers(
       _onlyAirdropUsers: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -22,7 +22,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface QNFTGovInterface extends ethers.utils.Interface {
   functions: {
     "MIN_VOTE_DURATION()": FunctionFragment;
-    "PERCENT_MAX()": FunctionFragment;
     "SAFE_VOTE_END_DURATION()": FunctionFragment;
     "VOTE_QUORUM()": FunctionFragment;
     "canVote(address)": FunctionFragment;
@@ -30,7 +29,9 @@ interface QNFTGovInterface extends ethers.utils.Interface {
     "qnft()": FunctionFragment;
     "qnftSettings()": FunctionFragment;
     "safeWithdraw(address)": FunctionFragment;
+    "setNFTSettings(address)": FunctionFragment;
     "setQNft(address)": FunctionFragment;
+    "setSettings(address)": FunctionFragment;
     "settings()": FunctionFragment;
     "totalUsers()": FunctionFragment;
     "updateVote(address,uint256,uint256)": FunctionFragment;
@@ -43,10 +44,6 @@ interface QNFTGovInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "MIN_VOTE_DURATION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PERCENT_MAX",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -71,7 +68,12 @@ interface QNFTGovInterface extends ethers.utils.Interface {
     functionFragment: "safeWithdraw",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setNFTSettings",
+    values: [string]
+  ): string;
   encodeFunctionData(functionFragment: "setQNft", values: [string]): string;
+  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
   encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalUsers",
@@ -104,10 +106,6 @@ interface QNFTGovInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "PERCENT_MAX",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "SAFE_VOTE_END_DURATION",
     data: BytesLike
   ): Result;
@@ -126,7 +124,15 @@ interface QNFTGovInterface extends ethers.utils.Interface {
     functionFragment: "safeWithdraw",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setNFTSettings",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setQNft", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setSettings",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "totalUsers", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "updateVote", data: BytesLike): Result;
@@ -204,13 +210,11 @@ export class QNFTGov extends BaseContract {
   interface: QNFTGovInterface;
 
   functions: {
-    MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<[BigNumber]>;
+    MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<[number]>;
 
-    PERCENT_MAX(overrides?: CallOverrides): Promise<[BigNumber]>;
+    SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<[number]>;
 
-    SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    VOTE_QUORUM(overrides?: CallOverrides): Promise<[BigNumber]>;
+    VOTE_QUORUM(overrides?: CallOverrides): Promise<[number]>;
 
     canVote(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -229,8 +233,18 @@ export class QNFTGov extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setNFTSettings(
+      _qnftSettings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setQNft(
       _qnft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -274,13 +288,11 @@ export class QNFTGov extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
+  MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<number>;
 
-  PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
+  SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<number>;
 
-  SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  VOTE_QUORUM(overrides?: CallOverrides): Promise<BigNumber>;
+  VOTE_QUORUM(overrides?: CallOverrides): Promise<number>;
 
   canVote(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -299,8 +311,18 @@ export class QNFTGov extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setNFTSettings(
+    _qnftSettings: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setQNft(
     _qnft: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSettings(
+    _settings: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -341,13 +363,11 @@ export class QNFTGov extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
+    MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<number>;
 
-    PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
+    SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<number>;
 
-    SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    VOTE_QUORUM(overrides?: CallOverrides): Promise<BigNumber>;
+    VOTE_QUORUM(overrides?: CallOverrides): Promise<number>;
 
     canVote(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -363,7 +383,14 @@ export class QNFTGov extends BaseContract {
 
     safeWithdraw(multisig: string, overrides?: CallOverrides): Promise<void>;
 
+    setNFTSettings(
+      _qnftSettings: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setQNft(_qnft: string, overrides?: CallOverrides): Promise<void>;
+
+    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
 
     settings(overrides?: CallOverrides): Promise<string>;
 
@@ -442,8 +469,6 @@ export class QNFTGov extends BaseContract {
   estimateGas: {
     MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
 
-    PERCENT_MAX(overrides?: CallOverrides): Promise<BigNumber>;
-
     SAFE_VOTE_END_DURATION(overrides?: CallOverrides): Promise<BigNumber>;
 
     VOTE_QUORUM(overrides?: CallOverrides): Promise<BigNumber>;
@@ -465,8 +490,18 @@ export class QNFTGov extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setNFTSettings(
+      _qnftSettings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setQNft(
       _qnft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -504,8 +539,6 @@ export class QNFTGov extends BaseContract {
   populateTransaction: {
     MIN_VOTE_DURATION(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    PERCENT_MAX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     SAFE_VOTE_END_DURATION(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -532,8 +565,18 @@ export class QNFTGov extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setNFTSettings(
+      _qnftSettings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setQNft(
       _qnft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
