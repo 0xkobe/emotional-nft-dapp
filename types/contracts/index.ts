@@ -26,6 +26,7 @@ export type { QNFTSettings } from "./QNFTSettings";
 export type { QRep } from "./QRep";
 export type { QSettings } from "./QSettings";
 export type { QStk } from "./QStk";
+export type { MockMultisig } from "./MockMultisig";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory";
@@ -52,3 +53,4 @@ export { QNFTSettings__factory } from "./factories/QNFTSettings__factory";
 export { QRep__factory } from "./factories/QRep__factory";
 export { QSettings__factory } from "./factories/QSettings__factory";
 export { QStk__factory } from "./factories/QStk__factory";
+export { MockMultisig__factory } from "./factories/MockMultisig__factory";

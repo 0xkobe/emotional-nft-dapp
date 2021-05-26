@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { parseEther } from '@ethersproject/units'
-import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
-import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
+import { Creature, LockPeriod, Skin } from '../types/metadata'
+import { Artist, Character, Emotion, LockOption } from '../types/nft'
 import { favCoins } from './favCoins'
 
 const backgrounds = [

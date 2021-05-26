@@ -110,6 +110,12 @@
       },
       {
         "indexed": false,
+        "internalType": "uint32",
+        "name": "metaId",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "lockDuration",
         "type": "uint256"
@@ -117,7 +123,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "metaId",
+        "name": "mintAmount",
         "type": "uint256"
       }
     ],
@@ -256,19 +262,6 @@
   },
   {
     "inputs": [],
-    "name": "PERCENT_MAX",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "airdrop",
     "outputs": [
       {
@@ -388,6 +381,11 @@
         "internalType": "string",
         "name": "_quiverBaseUrl",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxSupply",
+        "type": "uint256"
       }
     ],
     "name": "initialize",
@@ -450,13 +448,13 @@
         "type": "uint32"
       },
       {
-        "internalType": "uint256",
-        "name": "_lockAmount",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "_metaId",
+        "type": "uint32"
       },
       {
         "internalType": "uint256",
-        "name": "_metaId",
+        "name": "_lockAmount",
         "type": "uint256"
       }
     ],
@@ -483,13 +481,13 @@
         "type": "uint32"
       },
       {
-        "internalType": "uint256",
-        "name": "_lockAmount",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "_metaId",
+        "type": "uint32"
       },
       {
         "internalType": "uint256",
-        "name": "_metaId",
+        "name": "_lockAmount",
         "type": "uint256"
       },
       {
@@ -561,6 +559,11 @@
         "type": "uint32"
       },
       {
+        "internalType": "uint32",
+        "name": "metaId",
+        "type": "uint32"
+      },
+      {
         "internalType": "uint256",
         "name": "lockDuration",
         "type": "uint256"
@@ -579,11 +582,6 @@
         "internalType": "bool",
         "name": "withdrawn",
         "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "metaId",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -720,6 +718,19 @@
   {
     "inputs": [
       {
+        "internalType": "contract IQAirdrop",
+        "name": "_airdrop",
+        "type": "address"
+      }
+    ],
+    "name": "setAirdrop",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "operator",
         "type": "address"
@@ -738,12 +749,51 @@
   {
     "inputs": [
       {
+        "internalType": "contract IQNFTGov",
+        "name": "_governance",
+        "type": "address"
+      }
+    ],
+    "name": "setGovernance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_maxSupply",
         "type": "uint256"
       }
     ],
     "name": "setMaxSupply",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IQNFTSettings",
+        "name": "_nftSettings",
+        "type": "address"
+      }
+    ],
+    "name": "setNFTSettings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IQSettings",
+        "name": "_settings",
+        "type": "address"
+      }
+    ],
+    "name": "setSettings",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
