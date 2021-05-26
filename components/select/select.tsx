@@ -1,5 +1,11 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useEffect, useRef, useState } from 'react'
+import {
+  FunctionComponent,
+  HTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
 import IconChevron from '../icon/chevron'
 
@@ -26,11 +32,11 @@ const Select: FunctionComponent<IProps> = ({
   ...props
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState('')
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
-    setKeyword('');
+    setKeyword('')
   }
 
   const onOptionClick = (option: Option, index: number) => (e: any) => {
@@ -56,18 +62,30 @@ const Select: FunctionComponent<IProps> = ({
     return (
       <div className="flex flex-row pl-2 items-center">
         {option.icon && <img className="w-5 h-5 mr-2" src={option.icon} />}
-        <span className="text-sm leading-5 font-medium truncate">{option.text}</span>
+        <span className="text-sm leading-5 font-medium truncate">
+          {option.text}
+        </span>
       </div>
     )
   }
 
-  const filteredOptions = options.map((option, index) => ({
-    option, index
-  })).filter(({ option }) => !canSearch || option.text?.toLowerCase().includes(keyword.toLowerCase()))
+  const filteredOptions = options
+    .map((option, index) => ({
+      option,
+      index,
+    }))
+    .filter(
+      ({ option }) =>
+        !canSearch ||
+        option.text?.toLowerCase().includes(keyword.toLowerCase()),
+    )
 
   return (
     <div
-      className={classNames(className, 'relative cursor-pointer text-gray-500 w-full')}
+      className={classNames(
+        className,
+        'relative cursor-pointer text-gray-500 w-full',
+      )}
       ref={wrapperRef}
     >
       <div
@@ -76,7 +94,7 @@ const Select: FunctionComponent<IProps> = ({
         )}
         onClick={toggleDropdown}
       >
-        {(!canSearch || !isOpen) &&
+        {(!canSearch || !isOpen) && (
           <>
             <div>
               {selectedIndex < options.length
@@ -90,8 +108,8 @@ const Select: FunctionComponent<IProps> = ({
               )}
             />
           </>
-        }
-        {canSearch && isOpen &&
+        )}
+        {canSearch && isOpen && (
           <input
             ref={inputRef}
             className={classNames('w-full outline-none pl-2')}
@@ -101,7 +119,7 @@ const Select: FunctionComponent<IProps> = ({
               setKeyword(e.target.value)
             }
           />
-        }
+        )}
       </div>
       {isOpen && filteredOptions.length > 0 && (
         <div className="absolute left-0 max-h-48 min-w-full z-50 border border-gray-400 overflow-auto">
