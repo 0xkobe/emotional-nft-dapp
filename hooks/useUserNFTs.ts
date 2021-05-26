@@ -2,7 +2,7 @@ import { ContractInterface } from '@ethersproject/contracts'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
-import { nftBaseURL } from '../data/nft'
+import { nftAPIURL, nftBaseURL } from '../data/nft'
 import { APINftMetadataResponse, APIResponseError } from '../types/api'
 import { QNFT } from '../types/contracts'
 import { NFTData } from '../types/nft'
@@ -67,7 +67,7 @@ export default function useUserNFTs(
       // const resRawNFTs: RawNFTData[] = await Promise.all(requestNFTs)
       const resTokenURIs: string[] = await Promise.all(requestTokenURIs)
       const resNFTs = await Promise.all(resTokenURIs.map(async (tokenURI, index) => {
-        const newTokenURI = process.env.NEXT_API_URL ? tokenURI.replace(nftBaseURL, process.env.NEXT_API_URL) : tokenURI
+        const newTokenURI = nftAPIURL ? tokenURI.replace(nftBaseURL, nftAPIURL) : tokenURI
         const res = await fetch(newTokenURI)
         const response: APINftMetadataResponse | APIResponseError =
           await res.json()

@@ -9,7 +9,14 @@ import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
-import { backgrounds, lockOptions } from '../../data/nft'
+import {
+  backgrounds,
+  characters,
+  favCoins,
+  nftAPIURL,
+  nftBaseURL,
+  skins,
+} from '../../data/nft'
 import {
   abi,
   deployedAddresses,
@@ -19,7 +26,7 @@ import useContract from '../../hooks/useContract'
 import { attribute } from '../../lib/nft'
 import { APINftMetadataResponse, APIResponseError } from '../../types/api'
 import { QNFT } from '../../types/contracts'
-import { Traits } from '../../types/metadata'
+import { Creature, Skin, Traits } from '../../types/metadata'
 
 export default function NFT(): JSX.Element {
   const router = useRouter()
@@ -34,8 +41,12 @@ export default function NFT(): JSX.Element {
   const [metadata, setMetadata] = useState<APINftMetadataResponse>()
   const [error, setError] = useState<Error>()
   const [nftCount, setNFTCount] = useState<number>(0)
-  const [id, setId] = useState<number>(0)
+  const [id, setId] = useState<number>(-1)
   const [changePercentage, setChangePercentage] = useState(-20)
+  const [coinInfo, setCoinInfo] = useState({ text: '', icon: '' })
+  const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
+  const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
+  const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
 
   const fetchMetadata = useCallback(
     async (contract: QNFT, account: string, id: number) => {
@@ -50,7 +61,10 @@ export default function NFT(): JSX.Element {
           id,
         )
         const tokenURI = await contract.tokenURI(tokenId)
-        const res = await fetch(tokenURI)
+        const newTokenURI = nftAPIURL
+          ? tokenURI.replace(nftBaseURL, nftAPIURL)
+          : tokenURI
+        const res = await fetch(newTokenURI)
         const response: APINftMetadataResponse | APIResponseError =
           await res.json()
         if ('error' in response)
@@ -58,6 +72,38 @@ export default function NFT(): JSX.Element {
         if (!res.ok)
           throw new Error(`an unknown error occurred while fetching metadata`)
         setMetadata(response)
+        const favCoin = favCoins[attribute(response, Traits.FavCoin) as number]
+        setCoinInfo({
+          text: favCoin.meta.name,
+          icon: favCoin.meta.icon,
+        })
+        const skin = skins.find(
+          (val) => val.skin == (attribute(response, Traits.Skin) as Skin),
+        )
+        if (skin) {
+          setSkinInfo({
+            text: skin.skin,
+            icon: skin.icon,
+          })
+          const character = characters.find(
+            (character) =>
+              character.creature ===
+                (attribute(response, Traits.Creature) as Creature) &&
+              character.skin === skin.skin,
+          )
+          if (character) {
+            setCreatureInfo({
+              text: character.name,
+              icon: character.emotions.normal,
+            })
+          }
+        }
+        const background =
+          backgrounds[attribute(response, Traits.Background) as number]
+        setBackgroundInfo({
+          text: background.name,
+          icon: background.image,
+        })
       } catch (e) {
         setError(e)
       } finally {
@@ -76,7 +122,7 @@ export default function NFT(): JSX.Element {
   useEffect(() => {
     if (!contract) return
     if (!account) return
-    if (!id) return
+    if (id < 0) return
     void fetchMetadata(contract, account, id)
   }, [account, contract, fetchMetadata, id, router])
 
@@ -131,7 +177,10 @@ export default function NFT(): JSX.Element {
                     {metadata.author}
                   </span>
                   <span className="text-sm leading-5 font-normal text-gray-500">
-                    {attribute(metadata, Traits.CreatedDate)}
+                    {new Date(
+                      1000 *
+                        (attribute(metadata, Traits.CreatedDate) as number),
+                    ).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-4">
@@ -157,10 +206,16 @@ export default function NFT(): JSX.Element {
                     Design Properties
                   </span>
                   <div className="grid grid-cols-4 gap-4">
-                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
-                    <IconText text="Bitcoin" icon="/favcoin/btc.svg" />
+                    <IconText text={coinInfo.text} icon={coinInfo.icon} />
+                    <IconText
+                      text={creatureInfo.text}
+                      icon={creatureInfo.icon}
+                    />
+                    <IconText text={skinInfo.text} icon={skinInfo.icon} />
+                    <IconText
+                      text={backgroundInfo.text}
+                      icon={backgroundInfo.icon}
+                    />
                   </div>
                 </div>
                 <div className="flex flex-col space-y-4">
@@ -177,17 +232,16 @@ export default function NFT(): JSX.Element {
                   </span>
                   <Allocation
                     lockAmount={BigNumber.from(
-                      attribute(metadata, Traits.LockAmount),
+                      attribute(metadata, Traits.LockAmount) as string,
                     )}
                     createdAt={
                       new Date(
-                        attribute(metadata, Traits.CreatedDate) as string,
+                        (attribute(metadata, Traits.CreatedDate) as number) *
+                          1000,
                       )
                     }
                     lockDuration={
-                      lockOptions[
-                        attribute(metadata, Traits.LockPeriod) as number
-                      ].duration
+                      attribute(metadata, Traits.LockPeriod) as number
                     }
                   />
                 </div>
