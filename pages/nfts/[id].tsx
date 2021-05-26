@@ -87,8 +87,6 @@ export default function NFT(): JSX.Element {
           <div className="flex">
             <NFTCard
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice={'0.8429'}
               metadata={metadata}
             />
             <div>

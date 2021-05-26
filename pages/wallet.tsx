@@ -39,8 +39,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',
@@ -98,8 +96,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',
@@ -157,8 +153,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',
@@ -216,8 +210,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',
@@ -275,8 +267,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',
@@ -334,8 +324,6 @@ export default function Wallet(): JSX.Element {
             <NFTCard
               className="cursor-pointer hover:shadow"
               changePercentage={-20}
-              favcoin={favCoins[0]}
-              ethPrice="0.8429"
               metadata={{
                 name: 'bear',
                 description: 'Gopher bear',

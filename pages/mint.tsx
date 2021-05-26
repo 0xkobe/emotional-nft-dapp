@@ -205,9 +205,7 @@ export default function Mint(): JSX.Element {
           <div className="flex flex-row space-x-8">
             <NFTCard
               size="big"
-              changePercentage={changePercentage}
-              favcoin={favCoins[coinIndex]}
-              ethPrice={bnToText(nftPrice)}
+              isDesign
               metadata={{
                 name: nftName,
                 description: nftDescription,
