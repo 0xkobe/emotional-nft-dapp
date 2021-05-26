@@ -7,8 +7,8 @@ import { favCoins } from './favCoins'
 const backgrounds = [
   {
     id: 0,
-    name: "",
-    image: ''
+    name: 'transparent',
+    image: '/nft/background/00_transparent.png'
   },
   {
     id: 1,
@@ -184,34 +184,25 @@ const lockOptions: LockOption[] = [
     id: LockPeriod.SixMonths,
     duration: 6 * 30 * 86400, // 6 months
     description: '6 months',
-    discount: 20, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(10).pow(18)), // 100K QSTK
+    discount: 10, // percentage
+    minAmount:  parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('100000'), // 100K QSTK
   },
   {
     id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
     description: '12 months',
-    discount: 30, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(10).pow(18)), // 200K QSTK
+    discount: 20, // percentage
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('200000'), // 200K QSTK
   },
   {
     id: LockPeriod.OneCentury,
     duration: 100 * 12 * 30 * 86400, // 1 century
     description: '1 century',
-    discount: 40, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
-  },
-  {
-    // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
-    id: LockPeriod.ThirtyMinutes,
-    duration: 1800,
-    description: '30 min',
-    discount: 2, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
+    discount: 30, // percentage
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('200000'), // 400K QSTK
   },
 ]
 

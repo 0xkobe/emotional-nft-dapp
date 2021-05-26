@@ -128,20 +128,21 @@ const NFTCard: FunctionComponent<IProps> = ({
     setCreature(creature)
   }, [metadata])
 
+  console.log(creature?.emotions[emotion])
   if (!creature) return <div>not found</div>
 
   return (
     <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
       <div
         className={classNames(
-          'flex flex-col space-y-8 p-8 border rounded-xl max-w-sm',
+          'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
           size === 'big'
             ? 'w-96'
             : size === 'medium'
-              ? 'w-80'
-              : size === 'small'
-                ? 'w-72'
-                : '',
+            ? 'w-80'
+            : size === 'small'
+            ? 'w-72'
+            : '',
           styles.card,
         )}
       >
@@ -150,20 +151,18 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            { !isDesign && <TrendIcon className="w-6 h-4" /> }
+            <TrendIcon className="w-6 h-4" />
             <img className="w-8 h-8" src={favCoin.meta.icon} />
           </div>
         </div>
         <div className={classNames('relative rounded-xl overflow-hidden')}>
+          <div className="mt-full"></div>
           {backgroundSrc && (
-            <img src={backgroundSrc} className="top-0 right-0 left-0 bottom-0" />
+            <img src={backgroundSrc}/>
           )}
           <img
             src={creature.emotions[emotion]}
-            className={classNames(
-              'top-0 right-0 left-0 bottom-0',
-              backgroundSrc ? 'absolute' : '',
-            )}
+            className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
         <div className="flex flex-col space-y-1">

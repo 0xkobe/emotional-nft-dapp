@@ -3,16 +3,16 @@ import { BackgroundOption } from '../../types/options'
 import BackgroundItem from './background-item'
 import styles from './character.module.css'
 
-export type IProps = HTMLAttributes<{}> & {
+export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
   backgrounds: BackgroundOption[]
   selectedIndex: number
-  onSelectOption: (index: number) => void
+  onChange: (index: number) => void
 }
 
 const BackgroundView: FunctionComponent<IProps> = ({
   backgrounds,
   selectedIndex,
-  onSelectOption,
+  onChange,
   className,
   ...props
 }: IProps) => {
@@ -24,8 +24,8 @@ const BackgroundView: FunctionComponent<IProps> = ({
             key={background.id}
             background={background}
             selected={index === selectedIndex}
-            onSelect={() => {
-              onSelectOption(index)
+            onChange={() => {
+              onChange(index)
             }}
           />
         )
