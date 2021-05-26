@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react'
-import { favCoins } from '../../data/nft'
 import {
   Background,
   Creature,
@@ -22,10 +21,9 @@ const Template: Story<IProps> = (args) => <Card {...args} />
 export const Angry = Template.bind({})
 Angry.args = {
   changePercentage: -20,
-  favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'Gopher',
     description: 'Gopher bear',
     image: 'string', // TODO: what is image here?
     external_url: 'string', // TODO: what is external_url here?
@@ -82,10 +80,9 @@ Angry.args = {
 export const Happy = Template.bind({})
 Happy.args = {
   changePercentage: 20,
-  favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
@@ -142,10 +139,9 @@ Happy.args = {
 export const Normal = Template.bind({})
 Normal.args = {
   changePercentage: 0,
-  favcoin: favCoins[0],
-  ethPrice: '0.8429',
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',

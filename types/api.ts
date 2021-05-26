@@ -31,6 +31,7 @@ export type APINftCreateResponse = {
 
 export type APINftMetadataResponse = {
   name: string
+  author: string
   description: string
   image: string
   external_url: string
@@ -102,7 +103,7 @@ export type MetadataOnChain = {
   lockAmount: BigNumber
   createdAt: BigNumber
   withdrawn: boolean
-  metaId: BigNumber
+  metaId: number
 }
 
 export type Metadata = MetadataOffChain & MetadataOnChain

@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Meta, Story } from '@storybook/react'
 import LockedTokenStat, { IProps } from './locked-token-stat'
 
@@ -10,5 +11,5 @@ const Template: Story<IProps> = (args) => <LockedTokenStat {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  lockAmount: 48000,
+  lockAmount: BigNumber.from(48000),
 }

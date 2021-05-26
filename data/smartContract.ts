@@ -1,9 +1,12 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '@web3-react/network-connector'
+import { chainId, chains } from './chains'
 
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
+  qstk: require('../abi/QStk.json'),
+  qAirdrop: require('../abi/QAirdrop.json'),
 }
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
@@ -17,44 +20,36 @@ export const deployedAddresses: {
   qnft: { [key: number]: string }
 } = {
   qstk: {
-    3: '0x084d31777d2De81426a83A9Ea90C353d20811113',
+    3: '0x0D96f9bc404F231B7E3D53779F5c9F2e2C7E4a19',
     31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
   },
   qSettings: {
-    3: '0x43Fcd66139c3f0FaFDA39E1C7997DC14f8196b01',
+    3: '0xceaeAf2D412078f2221EeD1933efB172828F57CF',
     31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
   },
   qAirdrop: {
-    3: '0x7f16851eB79CE793C668f309F65F5D32db4C4cC2',
+    3: '0x884752667867555510d1F24BDaB1a64235679b64',
     31337: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
   },
   qnftSettings: {
-    3: '0xC3Adb6896870029Ced9244554293519716F68481',
+    3: '0xF74091079C0FB00485d59661CbF881ec7e291C7b',
     31337: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
   },
   qnftGov: {
-    3: '0x4BF93C82D3522B73ebBEC74980086B8CA58cA8d5',
+    3: '0x9e56FA038Fdaa945BBc3aC3Ced3eC55D114719Eb',
     31337: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
   },
   qnft: {
-    3: '0x88BF476638cfEfbc2c7540e9864A8F6642Cb68B2',
+    3: '0xCaf39813C73F255d6ab013c3210Ff54af19aB8bd',
     31337: '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0',
   },
 }
 
-export const remoteProviderConfig: {
-  urls: { [key: number]: string }
-  defaultChainId: number
-} = {
-  urls: {
-    1: 'https://eth-mainnet.alchemyapi.io/v2/jte2TvgFm5Uqjz6lYLUfnBsMd7TXS6SW', // dedicated alchemy app to use in prod
-    3: 'https://eth-ropsten.alchemyapi.io/v2/j3511RMZjDGkirYD0QPu8nGn1sIY0Y7c', // dedicated alchemy app to use in dev/staging
-    31337: 'http://127.0.0.1:8545/', // local dev
-  },
-  defaultChainId: process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID
-    ? parseInt(process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID)
-    : 3, // default is ropsten
-}
-
 export const metamaskConnector = new InjectedConnector({})
-export const remoteConnector = new NetworkConnector(remoteProviderConfig)
+export const remoteConnector = new NetworkConnector({
+  urls: {
+    1: chains[1].remoteProvider,
+    3: chains[3].remoteProvider,
+  },
+  defaultChainId: chainId,
+})

@@ -1,14 +1,13 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { parseEther } from '@ethersproject/units'
-import { Creature, FavCoinEnum, LockPeriod, Skin } from '../types/metadata'
-import { Artist, Character, Emotion, FavCoin, LockOption } from '../types/nft'
+import { Creature, LockPeriod, Skin } from '../types/metadata'
+import { Artist, Character, Emotion, LockOption } from '../types/nft'
 import { favCoins } from './favCoins'
 
 const backgrounds = [
   {
     id: 0,
-    name: "",
-    image: ''
+    name: 'transparent',
+    image: '/nft/background/00_transparent.png'
   },
   {
     id: 1,
@@ -205,16 +204,16 @@ const lockOptions: LockOption[] = [
     duration: 6 * 30 * 86400, // 6 months
     description: '6 months',
     discount: 10, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(1e5).mul(BigNumber.from(10).pow(18)), // 100K QSTK
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('100000'), // 100K QSTK
   },
   {
     id: LockPeriod.TwelveMonths,
     duration: 12 * 30 * 86400, // 12 months
     description: '12 months',
     discount: 20, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(2e5).mul(BigNumber.from(10).pow(18)), // 200K QSTK
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('200000'), // 200K QSTK
   },
   {
     id: LockPeriod.OneCentury,
@@ -230,8 +229,8 @@ const lockOptions: LockOption[] = [
     duration: 1800,
     description: '30 min',
     discount: 2, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('400000'), // 400K QSTK
   },
 ]
 
@@ -240,6 +239,8 @@ const verifier = "0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de"
 const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
 const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
 const qstkPrice = parseEther('0.000005') // in ETH
+const nftBaseURL = 'https://emotional-nft-dapp.netlify.app/api/nfts/'
+const nftAPIURL = process.env.NEXT_API_URL ? process.env.NEXT_API_URL : 'http://localhost:3000/api/nfts/'
 
 ////////////// latest configurations update for v1 sale //////////////
 // totalSupply: '2000000000',
@@ -269,5 +270,7 @@ export {
   verifier,
   nonTokenMultiplier,
   tokenMultiplier,
-  qstkPrice
+  qstkPrice,
+  nftBaseURL,
+  nftAPIURL
 }

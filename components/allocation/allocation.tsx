@@ -1,10 +1,11 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
-import { formatDate, formatNumber, lockDurationToString } from '../../lib/utils'
+import { bnToText, formatDate, lockDurationToString } from '../../lib/utils'
 import styles from './allocation.module.css'
 
 export type IProps = HTMLAttributes<{}> & {
-  lockAmount: number
+  lockAmount: BigNumber
   createdAt: Date
   lockDuration: number
 }
@@ -29,7 +30,7 @@ const Allocation: FunctionComponent<IProps> = ({
       <img src="/quiver.svg" />
       <div>QSTK</div>
     </>,
-    formatNumber(lockAmount),
+    bnToText(lockAmount),
     formatDate(createdAt),
     lockDurationToString(lockDuration),
     formatDate(new Date(createdAt.getTime() + lockDuration * 1000)),
