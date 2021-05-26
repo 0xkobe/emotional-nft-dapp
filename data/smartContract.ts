@@ -4,6 +4,7 @@ import { NetworkConnector } from '@web3-react/network-connector'
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
+  qAirdrop: require('../abi/QAirdrop.json'),
 }
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
