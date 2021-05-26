@@ -30,13 +30,14 @@ import {
   deployedAddresses,
   metamaskConnector,
   remoteConnector,
+  remoteProviderConfig,
 } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { createMetadata } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
-import { QNFT } from '../types/contracts'
+import { QNFT, QStk } from '../types/contracts'
 import { DisplayType, Skin, Traits } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
@@ -55,6 +56,13 @@ export default function Mint(): JSX.Element {
     abi.qnft,
   )
 
+  // init QSTK smart contract
+  const { contract: qstk } = useContract<QStk>(
+    remoteConnector,
+    deployedAddresses.qstk,
+    abi.qstk,
+  )
+
   // form variables
   const [error, setError] = useState<string>()
   const [mintStep, setMintStep] = useState(0)
@@ -70,6 +78,35 @@ export default function Mint(): JSX.Element {
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
+  const [availableMintAmount, setAvailableMintAmount] = useState<BigNumber>()
+  const [availableFreeAllocation, setAvailableFreeAllocation] =
+    useState<BigNumber>()
+
+  // fetch remaining qstk
+  useEffect(() => {
+    qnft
+      ?.remainingQstk()
+      .then((x) => {
+        setAvailableMintAmount(x)
+      })
+      .catch((error) => {
+        console.error('error during fetch of remaining qstk', error)
+      })
+  }, [qnft])
+
+  // fetch remaining free allocation
+  useEffect(() => {
+    qstk
+      ?.balanceOf(
+        deployedAddresses.qAirdrop[remoteProviderConfig.defaultChainId],
+      )
+      .then((x) => {
+        setAvailableFreeAllocation(x)
+      })
+      .catch((error) => {
+        console.error('error during fetch of remaining free allocation', error)
+      })
+  }, [qstk])
 
   // reload characters supply when skin changes
   useEffect(() => {
@@ -531,8 +568,8 @@ export default function Mint(): JSX.Element {
             {mintStep === 2 && (
               <AllocationWizard
                 account={account || ''}
-                availableMintAmount={BigNumber.from('540000')} // TODO: Get actual value from the contract
-                availableFreeAllocation={BigNumber.from('1520000')} // TODO: Get actual value from the contract
+                availableMintAmount={availableMintAmount}
+                availableFreeAllocation={availableFreeAllocation}
                 lockOptions={lockOptions}
                 lockOptionId={lockOptionId}
                 qstkAmount={qstkAmount}
