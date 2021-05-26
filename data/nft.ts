@@ -7,8 +7,8 @@ import { favCoins } from './favCoins'
 const backgrounds = [
   {
     id: 0,
-    name: "",
-    image: ''
+    name: 'transparent',
+    image: '/nft/background/00_transparent.png'
   },
   {
     id: 1,
