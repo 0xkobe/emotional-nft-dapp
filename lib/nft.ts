@@ -7,16 +7,17 @@ import {
   lockOptions,
   skins,
 } from '../data/nft'
-import { QNFT, QNFTSettings } from '../types/contracts'
 import {
+  APINftCreateRequest,
   APINftMetadataResponse,
   HydratedMetadata,
   Metadata,
   MetadataOffChain,
   MetadataOnChain,
 } from '../types/api'
+import { QNFT, QNFTSettings } from '../types/contracts'
 import { Creature, Skin, Traits } from '../types/metadata'
-import { Character } from '../types/nft'
+import { Character, Emotion } from '../types/nft'
 import { supabase } from './supabase'
 
 export const attribute = (metadata: APINftMetadataResponse, trait: Traits): string | number | BigNumber | boolean => {
@@ -101,6 +102,46 @@ export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
   }
 }
 
+// create a new metadata on the API. Returns the created metadata id.
+export const createMetadata = async (
+  signature: string,
+  chainId: number,
+  account: string,
+  author: string,
+  backgroundId: number,
+  description: string,
+  name: string,
+  emotion: Emotion,
+): Promise<string> => {
+  if (!chainId) throw new Error('chainId is falsy')
+  if (!account) throw new Error('account is falsy')
+
+  const data: APINftCreateRequest = {
+    author,
+    backgroundId,
+    description,
+    name,
+    creator: account,
+    signature,
+    chainId,
+    defaultEmotion: emotion,
+  }
+  const res = await fetch('/api/nft/create', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    method: 'POST',
+  })
+  if (!res.ok) {
+    const error = (await res.json()).error
+    if (error)
+      throw new Error(`an error occurred while creating metadata: ${error}`)
+    throw new Error(`an unknown error occurred while creating metadata`)
+  }
+  const metaId = (await res.json()).metaId
+  return metaId
+}
 
 // get mint price
 export const getMintPrice = async (

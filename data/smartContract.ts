@@ -1,9 +1,12 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '@web3-react/network-connector'
+import { chainId, chains } from './chains'
 
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
+  qstk: require('../abi/QStk.json'),
+  qAirdrop: require('../abi/QAirdrop.json'),
 }
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
@@ -42,19 +45,11 @@ export const deployedAddresses: {
   },
 }
 
-export const remoteProviderConfig: {
-  urls: { [key: number]: string }
-  defaultChainId: number
-} = {
-  urls: {
-    1: 'https://eth-mainnet.alchemyapi.io/v2/jte2TvgFm5Uqjz6lYLUfnBsMd7TXS6SW', // dedicated alchemy app to use in prod
-    3: 'https://eth-ropsten.alchemyapi.io/v2/j3511RMZjDGkirYD0QPu8nGn1sIY0Y7c', // dedicated alchemy app to use in dev/staging
-    31337: 'http://127.0.0.1:8545/', // local dev
-  },
-  defaultChainId: process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID
-    ? parseInt(process.env.NEXT_PUBLIC_DEFAULT_CHAIN_ID)
-    : 3, // default is ropsten
-}
-
 export const metamaskConnector = new InjectedConnector({})
-export const remoteConnector = new NetworkConnector(remoteProviderConfig)
+export const remoteConnector = new NetworkConnector({
+  urls: {
+    1: chains[1].remoteProvider,
+    3: chains[3].remoteProvider,
+  },
+  defaultChainId: chainId,
+})

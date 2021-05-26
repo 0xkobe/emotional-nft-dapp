@@ -3,16 +3,16 @@ import { FunctionComponent, HTMLAttributes } from 'react'
 import { CharacterOption } from '../../types/options'
 import styles from './character.module.css'
 
-export type IProps = HTMLAttributes<{}> & {
+export type IProps = Omit<HTMLAttributes<{}>, "onChange"> & {
   character: CharacterOption
   selected?: boolean
-  onSelect?: () => void
+  onChange?: () => void
 }
 
 const CharacterItem: FunctionComponent<IProps> = ({
   character,
   selected,
-  onSelect,
+  onChange,
   className,
   ...props
 }: IProps) => {
@@ -24,7 +24,7 @@ const CharacterItem: FunctionComponent<IProps> = ({
         selected && styles.selected,
       )}
       onClick={() => {
-        onSelect && onSelect()
+        onChange && onChange()
       }}
     >
       <div className={styles.image}>

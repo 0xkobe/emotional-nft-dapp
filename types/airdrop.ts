@@ -2,5 +2,6 @@ import { BigNumber } from "@ethersproject/bignumber";
 
 export type VerifyAirdropKeyResponse = {
     isValid: boolean,
-    amount: BigNumber
+    amount: BigNumber,
+    signature: string
 }

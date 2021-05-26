@@ -94,9 +94,9 @@ const NFTCard: FunctionComponent<IProps> = ({
     const animalId = attribute(metadata, Traits.Creature) as Creature
     const skinId = attribute(metadata, Traits.Skin) as Skin
     let creature: Character | undefined
-    if (animalId === Creature.Fish) {
+    if (animalId === Creature.Minotaur) {
       creature = characters[25]
-    } else if (animalId === Creature.Minotaur) {
+    } else if (animalId === Creature.Fish) {
       creature = characters[26]
     } else {
       creature = getCreature(animalId, skinId)

@@ -3,7 +3,7 @@ import IconCheck from '../icon/check'
 import Modal from './modal'
 
 export type IProps = HTMLAttributes<{}> & {
-  nftId: number
+  nftId: string
   isShown?: boolean
   onRequestClose: () => void
   onModalClose: () => void
