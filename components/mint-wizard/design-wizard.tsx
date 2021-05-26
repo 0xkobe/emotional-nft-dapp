@@ -66,6 +66,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
           <Select
             className="w-full"
             placeholder="Select a coin"
+            canSearch
             options={favCoins.map((val) => ({
               icon: val.meta.icon,
               text: val.meta.name,
