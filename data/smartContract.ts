@@ -4,6 +4,7 @@ import { NetworkConnector } from '@web3-react/network-connector'
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
+  qstk: require('../abi/QStk.json'),
   qAirdrop: require('../abi/QAirdrop.json'),
 }
 

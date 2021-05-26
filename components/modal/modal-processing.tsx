@@ -4,6 +4,7 @@ import Modal from './modal'
 import styles from './modal.module.css'
 
 export type IProps = HTMLAttributes<{}> & {
+  transactionHash: string
   isShown?: boolean
   onRequestClose: () => void
   onModalClose: () => void
@@ -13,6 +14,7 @@ const ModalProcessing: FunctionComponent<IProps> = ({
   isShown,
   onModalClose,
   onRequestClose,
+  transactionHash,
 }: IProps) => {
   return (
     <Modal
@@ -26,11 +28,11 @@ const ModalProcessing: FunctionComponent<IProps> = ({
         </div>
         <h1 className={styles.processingTitle}>Processing the Transaction</h1>
         <p className={styles.processingBody}>
-          Transaction submitted with hash: 0x00000000000000000000000000000
+          Transaction submitted with hash: {transactionHash}
         </p>
         <p className={styles.processingFooter}>
           View details on Etherscan:
-          <br /> https://etherscan.com/...
+          <br /> https://etherscan.com/tx/{transactionHash}
         </p>
       </div>
     </Modal>

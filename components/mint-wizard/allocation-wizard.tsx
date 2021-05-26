@@ -19,8 +19,8 @@ import Select from '../select/select'
 export type IProps = HTMLAttributes<{}> & {
   qAirdrop?: QAirdrop
   account: string
-  availableMintAmount: BigNumber
-  availableFreeAllocation: BigNumber
+  availableMintAmount?: BigNumber
+  availableFreeAllocation?: BigNumber
   lockOptions: LockOption[]
   lockOptionId: number
   qstkAmount: BigNumber
@@ -102,10 +102,10 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
-            QSTK to Mint: {formatNumber(availableMintAmount)} QSTK
+            QSTK to Mint: {availableMintAmount ? bnToText(availableMintAmount) : 'unknown'} QSTK
           </div>
           <div className="text-sm leading-5 font-normal text-gray-500">
-            Free allocation: {formatNumber(availableFreeAllocation)} QSTK
+            Free allocation: {availableFreeAllocation ? bnToText(availableFreeAllocation) : 'unknown'} QSTK
           </div>
         </div>
       </div>
