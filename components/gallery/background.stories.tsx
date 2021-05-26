@@ -13,5 +13,5 @@ export const Default = Template.bind({})
 Default.args = {
   backgrounds,
   selectedIndex: 3,
-  onSelectOption: (_): void => {},
+  onChange: (_): void => {},
 }
