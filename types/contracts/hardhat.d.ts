@@ -112,6 +112,10 @@ declare module "hardhat/types/runtime" {
       name: "QStk",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.QStk__factory>;
+    getContractFactory(
+      name: "MockMultisig",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockMultisig__factory>;
 
     // default types
     getContractFactory(

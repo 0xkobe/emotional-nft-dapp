@@ -102,22 +102,9 @@
     "name": "MIN_VOTE_DURATION",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PERCENT_MAX",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -128,9 +115,9 @@
     "name": "SAFE_VOTE_END_DURATION",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -141,9 +128,9 @@
     "name": "VOTE_QUORUM",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -228,12 +215,38 @@
   {
     "inputs": [
       {
+        "internalType": "contract IQNFTSettings",
+        "name": "_qnftSettings",
+        "type": "address"
+      }
+    ],
+    "name": "setNFTSettings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IQNFT",
         "name": "_qnft",
         "type": "address"
       }
     ],
     "name": "setQNft",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IQSettings",
+        "name": "_settings",
+        "type": "address"
+      }
+    ],
+    "name": "setSettings",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
