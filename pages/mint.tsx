@@ -14,7 +14,7 @@ import ModalSucceed from '../components/modal/modal-succeed'
 import NFTCard from '../components/nft/card'
 import Stepper from '../components/stepper/stepper'
 import Title from '../components/title/title'
-import { chain, chainId } from '../data/chains'
+import { chain } from '../data/chains'
 import {
   backgrounds,
   characters,
@@ -37,7 +37,7 @@ import useWallet from '../hooks/useWallet'
 import { createMetadata } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
-import { QNFT, QStk } from '../types/contracts'
+import { QAirdrop, QNFT, QStk } from '../types/contracts'
 import { DisplayType, Skin, Traits } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
@@ -66,6 +66,13 @@ export default function Mint(): JSX.Element {
     remoteConnector,
     deployedAddresses.qstk,
     abi.qstk,
+  )
+
+  // init qAirdrop smart contract
+  const { contract: qAirdrop } = useContract<QAirdrop>(
+    remoteConnector,
+    deployedAddresses.qAirdrop,
+    abi.qAirdrop,
   )
 
   // form variables
@@ -102,7 +109,7 @@ export default function Mint(): JSX.Element {
   // fetch remaining free allocation
   useEffect(() => {
     qstk
-      ?.balanceOf(deployedAddresses.qAirdrop[chainId])
+      ?.balanceOf(deployedAddresses.qAirdrop[chain.id])
       .then((x) => {
         setAvailableFreeAllocation(x)
       })
@@ -278,6 +285,8 @@ export default function Mint(): JSX.Element {
   // sign metadata
   useEffect(() => {
     if (!isMinting) return
+    if (!account) return // don't sign if account is not set
+    if (!walletChainId) return
 
     // check chain id
     if (walletChainId !== chain.id) {
@@ -292,7 +301,7 @@ export default function Mint(): JSX.Element {
     console.log('Signing metadata using Metamask...')
     signTypedDataV4(
       payloadForSignatureEIP712v4(
-        chainId,
+        chain.id,
         minterName,
         backgroundIndex,
         nftDescription,
@@ -320,6 +329,7 @@ export default function Mint(): JSX.Element {
     nftName,
     signTypedDataV4,
     walletChainId,
+    account,
   ])
 
   // create metadata
@@ -330,7 +340,7 @@ export default function Mint(): JSX.Element {
     console.log('Saving metadata on backend...')
     createMetadata(
       signature,
-      chainId,
+      chain.id,
       account,
       minterName,
       backgroundIndex,
@@ -568,6 +578,7 @@ export default function Mint(): JSX.Element {
             )}
             {mintStep === 2 && (
               <AllocationWizard
+                qAirdrop={qAirdrop}
                 account={account || ''}
                 availableMintAmount={availableMintAmount}
                 availableFreeAllocation={availableFreeAllocation}

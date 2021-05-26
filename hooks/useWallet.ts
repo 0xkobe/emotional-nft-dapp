@@ -13,7 +13,7 @@ export default function useWallet(connector: InjectedConnector): {
   signTypedDataV4: (payload: any) => Promise<string>
 } {
   const context = useWeb3React<Web3Provider>()
-  const { library, activate: activeProvider, account } = context
+  const { library, activate: activateProvider, account } = context
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
 
@@ -21,7 +21,7 @@ export default function useWallet(connector: InjectedConnector): {
   useEffect(() => {
     void connector.isAuthorized().then((isAuthorized) => {
       if (!isAuthorized) return
-      return activeProvider(connector, undefined, true)
+      return activateProvider(connector, undefined, true)
     })
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
@@ -35,8 +35,8 @@ export default function useWallet(connector: InjectedConnector): {
   const activate = useCallback(() => {
     if (account) return Promise.resolve() // if account is already available, no need to activate metamask again
     console.log('Activate provider...')
-    return activeProvider(connector, undefined, true)
-  }, [account, activeProvider, connector])
+    return activateProvider(connector, undefined, true)
+  }, [account, activateProvider, connector])
 
   const signTypedDataV4 = useCallback(
     (payload: any) => {

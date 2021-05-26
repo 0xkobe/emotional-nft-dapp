@@ -10,11 +10,14 @@ import {
   lockDurationToString,
   verifyAirdropKey,
 } from '../../lib/utils'
+import { VerifyAirdropKeyResponse } from '../../types/airdrop'
+import { QAirdrop } from '../../types/contracts'
 import { LockOption } from '../../types/nft'
 import Input from '../input/input'
 import Select from '../select/select'
 
 export type IProps = HTMLAttributes<{}> & {
+  qAirdrop?: QAirdrop
   account: string
   availableMintAmount?: BigNumber
   availableFreeAllocation?: BigNumber
@@ -28,6 +31,7 @@ export type IProps = HTMLAttributes<{}> & {
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
+  qAirdrop,
   account,
   availableMintAmount,
   availableFreeAllocation,
@@ -48,7 +52,18 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   const [airdropKey, setAirdropKey] = useState('')
   const [airdropKeyError, setAirdropKeyError] = useState('')
 
-  // TODO: already used key validation
+  const validateAirdropKeyOnChain = async (
+    result: VerifyAirdropKeyResponse,
+  ) => {
+    if (!qAirdrop) return
+    const isUsed = await qAirdrop.claimed(result.signature)
+    if (isUsed) {
+      setAirdropAmount(BigNumber.from(0))
+      setAirdropKeyError('the airdrop key was already used')
+    }
+    setAirdropAmount(result.amount)
+    setAirdropKeyError('')
+  }
 
   const onChangeQstkAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQstkAmountInput(e.target.value)
@@ -75,8 +90,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
       setAirdropAmount(BigNumber.from(0))
       setAirdropKeyError('invalid airdrop key')
     } else {
-      setAirdropAmount(result.amount)
-      setAirdropKeyError('')
+      void validateAirdropKeyOnChain(result)
     }
   }
 

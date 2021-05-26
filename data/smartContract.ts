@@ -6,6 +6,7 @@ export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
   qstk: require('../abi/QStk.json'),
+  qAirdrop: require('../abi/QAirdrop.json'),
 }
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
