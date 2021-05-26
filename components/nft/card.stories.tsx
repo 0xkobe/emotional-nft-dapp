@@ -25,6 +25,7 @@ Angry.args = {
   favcoin: favCoins[0],
   metadata: {
     name: 'bear',
+    author: 'Gopher',
     description: 'Gopher bear',
     image: 'string', // TODO: what is image here?
     external_url: 'string', // TODO: what is external_url here?
@@ -84,6 +85,7 @@ Happy.args = {
   favcoin: favCoins[0],
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',
@@ -143,6 +145,7 @@ Normal.args = {
   favcoin: favCoins[0],
   metadata: {
     name: 'bear',
+    author: 'icrabbit',
     description: 'icrabbit bear',
     image: 'string',
     external_url: 'string',

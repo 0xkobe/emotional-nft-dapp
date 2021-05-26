@@ -33,7 +33,16 @@ const PropertyView: FunctionComponent<IProps> = ({
           return (
             <div key={keyValue.key} className={styles.keyValue}>
               <div className={styles.key}>{keyValue.key}</div>
-              <div className={styles.value}>{keyValue.value}</div>
+              <div
+                className={classNames(
+                  styles.value,
+                  'overflow-ellipsis overflow-hidden',
+                )}
+              >
+                {keyValue.value}
+              </div>
+              {/* <div className={styles.key}>{keyValue.key}</div>
+              <div className={styles.value}>{keyValue.value}</div> */}
             </div>
           )
         })}
