@@ -21,6 +21,9 @@ export function lockDurationToString(duration: number): string {
   if (duration === 6 * 30 * 24 * 3600) {
     return '6 Months'
   }
+  if (duration === 1800) {
+    return '30 Minutes'
+  }
   throw new Error('Invalid Lock Duration')
 }
 
