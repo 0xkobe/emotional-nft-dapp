@@ -220,8 +220,8 @@ const lockOptions: LockOption[] = [
     duration: 100 * 12 * 30 * 86400, // 1 century
     description: '1 century',
     discount: 30, // percentage
-    minAmount: BigNumber.from(1e3).mul(BigNumber.from(10).pow(18)), // 1K QSTK
-    maxAmount: BigNumber.from(4e5).mul(BigNumber.from(10).pow(18)), // 400K QSTK
+    minAmount: parseEther('1000'), // 1K QSTK
+    maxAmount: parseEther('400000'), // 400K QSTK
   },
   {
     // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
