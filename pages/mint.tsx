@@ -416,20 +416,6 @@ export default function Mint(): JSX.Element {
     )
   }
 
-  // TODO: remove following code
-  // const mintNft = async () => {
-
-  //   if (!signer) throw new Error('signer is falsy')
-  //   if (!qnft) throw new Error('qnft is falsy')
-  //   if (!account) throw new Error('account is falsy')
-  //   if (!library) throw new Error('library is falsy')
-  //   if (!chainId) throw new Error('chainId is falsy')
-
-  //   // FIXME: are the following check still necessary?
-  //   if (qstkAmount.isZero() || qstkAmount.isNegative())
-  //     throw new Error('qstkAmount must be positive and not zero')
-  // }
-
   return (
     <>
       <Head>
