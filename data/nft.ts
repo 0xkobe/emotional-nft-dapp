@@ -41,13 +41,33 @@ const backgrounds = [
   },
   {
     id: 7,
-    name: "No Cloudy Night Sky",
-    image: '/nft/background/07_no_cloud_night_sky.png'
+    name: "Rainy Night Sky",
+    image: '/nft/background/07_rainy_night_sky.png'
   },
   {
     id: 8,
-    name: "Rainy Night Sky",
-    image: '/nft/background/08_rainy_night_sky.png'
+    name: "Cave",
+    image: '/nft/background/08_cave.png'
+  },
+  {
+    id: 9,
+    name: "Dark Cave",
+    image: '/nft/background/09_dark_cave.png'
+  },
+  {
+    id: 10,
+    name: "Forest",
+    image: '/nft/background/10_forest.png'
+  },
+  {
+    id: 11,
+    name: "Forest",
+    image: '/nft/background/11_jungle.png'
+  },
+  {
+    id: 12,
+    name: "Snow",
+    image: '/nft/background/12_snow.png'
   },
 ]
 
