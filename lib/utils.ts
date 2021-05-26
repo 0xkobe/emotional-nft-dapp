@@ -53,7 +53,8 @@ export const verifyAirdropKey = (
   if (airdropKey.length !== 158 && airdropKey.length !== 162) {
     return {
       isValid: false,
-      amount: BigNumber.from(0)
+      amount: BigNumber.from(0),
+      signature: ''
     }
   }
 
@@ -66,6 +67,7 @@ export const verifyAirdropKey = (
 
   return {
     isValid: res === verifier,
-    amount: BigNumber.from(amountBuffer)
+    amount: BigNumber.from(amountBuffer),
+    signature: `0x${airdropKey.slice(32)}`
   }
 }

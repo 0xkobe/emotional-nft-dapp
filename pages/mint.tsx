@@ -37,7 +37,7 @@ import useWallet from '../hooks/useWallet'
 import { createMetadata } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
-import { QNFT, QStk } from '../types/contracts'
+import { QAirdrop, QNFT, QStk } from '../types/contracts'
 import { DisplayType, Skin, Traits } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
@@ -61,6 +61,13 @@ export default function Mint(): JSX.Element {
     remoteConnector,
     deployedAddresses.qstk,
     abi.qstk,
+  )
+
+  // init qAirdrop smart contract
+  const { contract: qAirdrop } = useContract<QAirdrop>(
+    remoteConnector,
+    deployedAddresses.qAirdrop,
+    abi.qAirdrop,
   )
 
   // form variables
@@ -567,6 +574,7 @@ export default function Mint(): JSX.Element {
             )}
             {mintStep === 2 && (
               <AllocationWizard
+                qAirdrop={qAirdrop}
                 account={account || ''}
                 availableMintAmount={availableMintAmount}
                 availableFreeAllocation={availableFreeAllocation}
