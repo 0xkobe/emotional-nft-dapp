@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 export default function useWallet(connector: InjectedConnector): {
   signer: JsonRpcSigner | undefined
-  activate: () => void
+  activate: () => Promise<void>
   deactivate: () => void
   chainId?: number
   account?: null | string
@@ -33,9 +33,9 @@ export default function useWallet(connector: InjectedConnector): {
   }, [account, library])
 
   const activate = useCallback(() => {
-    if (account) return // if account is already available, no need to activate metamask again
+    if (account) return Promise.resolve() // if account is already available, no need to activate metamask again
     console.log('Activate provider...')
-    void activeProvider(connector, undefined, true)
+    return activeProvider(connector, undefined, true)
   }, [account, activeProvider, connector])
 
   const signTypedDataV4 = useCallback(

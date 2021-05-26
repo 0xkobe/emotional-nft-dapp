@@ -73,22 +73,20 @@ export default function Mint(): JSX.Element {
   // throw qnftError error
   useEffect(() => {
     if (!qnftError) return
-    throw new Error(`qnftError: ${qnftError}`)
+    console.error('qnftError', qnftError)
   }, [qnftError])
 
   // reload characters supply when skin changes
   useEffect(() => {
     if (!qnft) return
-    try {
-      const filteredCharacters = characters.filter(
-        (character) =>
-          character.skin === skins[skinIndex].skin ||
-          character.skin === Skin.None,
-      )
-      void getCharactersSupply(qnft, filteredCharacters)
-    } catch (err) {
-      console.error(' qnft getCharactersSupply fail')
-    }
+    const filteredCharacters = characters.filter(
+      (character) =>
+        character.skin === skins[skinIndex].skin ||
+        character.skin === Skin.None,
+    )
+    getCharactersSupply(qnft, filteredCharacters).catch((error) => {
+      console.error('getCharactersSupply error', error)
+    })
   }, [qnft, skinIndex])
 
   // fetch characters supply function
@@ -236,7 +234,9 @@ export default function Mint(): JSX.Element {
   // activate metamask when start minting
   useEffect(() => {
     if (!isMinting) return
-    activate()
+    activate().catch((error) => {
+      console.error('activate metamask error', error)
+    })
   }, [activate, isMinting])
 
   // sign metadata
@@ -245,7 +245,7 @@ export default function Mint(): JSX.Element {
     if (!chainId) return
     // generate signature
     console.log('Signing metadata using Metamask...')
-    void signTypedDataV4(
+    signTypedDataV4(
       payloadForSignatureEIP712v4(
         chainId,
         minterName,
@@ -283,7 +283,7 @@ export default function Mint(): JSX.Element {
     if (!account) return
     // save meta
     console.log('Saving metadata on backend...')
-    void createMetadata(
+    createMetadata(
       signature,
       chainId,
       account,
@@ -323,7 +323,7 @@ export default function Mint(): JSX.Element {
     console.log('Signing and sending transaction using Metamask...')
     // TODO: make sure chainId is the same with signer and qnft
     // TODO: It seems the contracts hooks is also using the chain id from metamask: to investigate
-    void qnft
+    qnft
       .connect(signer)
       .mintNft(characterId, coinIndex, lockOptionId, qstkAmount, metaId, {
         value: nftPrice,
@@ -355,8 +355,7 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!tx) return
     console.log('Waiting for tx to be mined...')
-    void tx
-      .wait()
+    tx.wait()
       .then((receipt) => {
         console.log('receipt', receipt)
         setReceipt(receipt)
@@ -523,11 +522,9 @@ export default function Mint(): JSX.Element {
                 lockOptionId={lockOptionId}
                 qstkAmount={qstkAmount}
                 airdropAmount={airdropAmount}
-                setLockOptionId={(id: number): void => setLockOptionId(id)}
-                setQstkAmount={(amount: BigNumber): void =>
-                  setQstkAmount(amount)
-                }
-                setAirdropAmount={(amount: BigNumber): void =>
+                setLockOptionId={(id: number) => setLockOptionId(id)}
+                setQstkAmount={(amount: BigNumber) => setQstkAmount(amount)}
+                setAirdropAmount={(amount: BigNumber) =>
                   setAirdropAmount(amount)
                 }
               />
