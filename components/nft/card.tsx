@@ -124,10 +124,10 @@ const NFTCard: FunctionComponent<IProps> = ({
         size === 'big'
           ? 'w-96'
           : size === 'medium'
-            ? 'w-80'
-            : size === 'small'
-              ? 'w-72'
-              : '',
+          ? 'w-80'
+          : size === 'small'
+          ? 'w-72'
+          : '',
         styles.card,
       )}
     >

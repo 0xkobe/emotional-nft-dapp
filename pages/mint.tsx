@@ -23,7 +23,7 @@ import {
 import { abi, deployedAddresses, remoteConnector } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import { bnToText } from '../lib/utils'
-import { QNFT } from '../types/contracts'
+import { QAirdrop, QNFT } from '../types/contracts'
 import { DisplayType, Skin, Traits } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
@@ -34,6 +34,11 @@ export default function Mint(): JSX.Element {
     error: qnftError,
     account,
   } = useContract<QNFT>(remoteConnector, deployedAddresses.qnft, abi.qnft)
+  const { contract: qAirdrop, error: qAirdropError } = useContract<QAirdrop>(
+    remoteConnector,
+    deployedAddresses.qAirdrop,
+    abi.qAirdrop,
+  )
   // const { contract: qnftSettings, error: qnftSettingsError } =
   //   useContract<QNFTSettings>(
   //     remoteConnector,
@@ -80,6 +85,10 @@ export default function Mint(): JSX.Element {
     if (!qnftError) return
     console.error('qnftError', qnftError)
   }, [qnftError])
+  useEffect(() => {
+    if (!qAirdropError) return
+    console.error('qAirdropError', qAirdropError)
+  }, [qAirdropError])
   // useEffect(() => {
   //   if (!qnftSettingsError) return
   //   console.error('qnftSettingsError', qnftSettingsError)
@@ -289,6 +298,7 @@ export default function Mint(): JSX.Element {
             )}
             {mintStep === 2 && (
               <AllocationWizard
+                qAirdrop={qAirdrop}
                 account={account || ''}
                 availableMintAmount={BigNumber.from('540000')} // TODO: Get actual value from the contract
                 availableFreeAllocation={BigNumber.from('1520000')} // TODO: Get actual value from the contract
