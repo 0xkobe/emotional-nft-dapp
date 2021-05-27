@@ -9,10 +9,10 @@ import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
+import { favCoins } from '../../data/favCoins'
 import {
   backgrounds,
   characters,
-  favCoins,
   nftAPIURL,
   nftBaseURL,
   skins,
@@ -42,7 +42,7 @@ export default function NFT(): JSX.Element {
   const [error, setError] = useState<Error>()
   const [nftCount, setNFTCount] = useState<number>(0)
   const [id, setId] = useState<number>(-1)
-  const [changePercentage, setChangePercentage] = useState(-20)
+  const [changePercentage, setChangePercentage] = useState(0)
   const [coinInfo, setCoinInfo] = useState({ text: '', icon: '' })
   const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
   const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
@@ -77,6 +77,25 @@ export default function NFT(): JSX.Element {
           text: favCoin.meta.name,
           icon: favCoin.meta.icon,
         })
+        if (favCoin.meta.coingeckoId) {
+          const res = await fetch(
+            `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+          )
+          const response = await res.json()
+          if ('error' in response)
+            throw new Error(
+              `an error occurred while fetching coingecko pricefeed`,
+            )
+          if (!res.ok)
+            throw new Error(
+              `an unknown error occurred while fetching coingecko pricefeed`,
+            )
+          setChangePercentage(
+            response.market_data.price_change_percentage_24h || 0,
+          )
+        } else {
+          setChangePercentage(0)
+        }
         const skin = skins.find(
           (val) => val.skin == (attribute(response, Traits.Skin) as Skin),
         )

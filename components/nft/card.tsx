@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { backgrounds, characters, favCoins } from '../../data/nft'
+import { favCoins } from '../../data/favCoins'
+import { backgrounds, characters } from '../../data/nft'
 import { attribute, getCreature } from '../../lib/nft'
 import { APINftMetadataResponse } from '../../types/api'
 import { Creature, Skin, Traits } from '../../types/metadata'

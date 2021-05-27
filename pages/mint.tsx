@@ -15,11 +15,11 @@ import NFTCard from '../components/nft/card'
 import Stepper from '../components/stepper/stepper'
 import Title from '../components/title/title'
 import { chain } from '../data/chains'
+import { favCoins } from '../data/favCoins'
 import {
   backgrounds,
   characters,
   charactersSupply,
-  favCoins,
   lockOptions,
   nonTokenMultiplier,
   qstkPrice,
