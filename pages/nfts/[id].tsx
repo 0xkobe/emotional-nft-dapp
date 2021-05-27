@@ -47,20 +47,17 @@ export default function NFT(): JSX.Element {
   const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
   const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
   const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
+  const [isOwner, setOwner] = useState(true)
 
   const fetchMetadata = useCallback(
     async (contract: QNFT, account: string, id: number) => {
       setLoading(true)
       try {
         const userNFTCount = (
-          await contract.callStatic.balanceOf(account)
+          await contract.totalSupply()
         ).toNumber()
         setNFTCount(userNFTCount)
-        const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-          account,
-          id,
-        )
-        const tokenURI = await contract.tokenURI(tokenId)
+        const tokenURI = await contract.tokenURI(id)
         const newTokenURI = nftAPIURL
           ? tokenURI.replace(nftBaseURL, nftAPIURL)
           : tokenURI
@@ -107,7 +104,7 @@ export default function NFT(): JSX.Element {
           const character = characters.find(
             (character) =>
               character.creature ===
-                (attribute(response, Traits.Creature) as Creature) &&
+              (attribute(response, Traits.Creature) as Creature) &&
               character.skin === skin.skin,
           )
           if (character) {
@@ -123,6 +120,8 @@ export default function NFT(): JSX.Element {
           text: background.name,
           icon: background.image,
         })
+        const ownerAddress = await contract.ownerOf(id)
+        setOwner(ownerAddress === account)
       } catch (e) {
         setError(e)
       } finally {
@@ -159,15 +158,16 @@ export default function NFT(): JSX.Element {
             </a>
           </Link>
           <Pagination
-            total={nftCount}
+            total={nftCount + 1}  // nft index starts from 1 so total was set to nftCount + 1
             current={id}
+            min={1}
             onPrev={() => {
-              if (id > 0) {
+              if (id > 1) {
                 void router.push(`/nfts/${id - 1}`)
               }
             }}
             onNext={() => {
-              if (id < nftCount - 1) {
+              if (id < nftCount) {
                 void router.push(`/nfts/${id + 1}`)
               }
             }}
@@ -198,7 +198,7 @@ export default function NFT(): JSX.Element {
                   <span className="text-sm leading-5 font-normal text-gray-500">
                     {new Date(
                       1000 *
-                        (attribute(metadata, Traits.CreatedDate) as number),
+                      (attribute(metadata, Traits.CreatedDate) as number),
                     ).toLocaleDateString()}
                   </span>
                 </div>
@@ -256,7 +256,7 @@ export default function NFT(): JSX.Element {
                     createdAt={
                       new Date(
                         (attribute(metadata, Traits.CreatedDate) as number) *
-                          1000,
+                        1000,
                       )
                     }
                     lockDuration={
@@ -266,17 +266,19 @@ export default function NFT(): JSX.Element {
                 </div>
               </div>
             </div>
-            <NFTActions
-              onTransfer={() => {
-                console.log('transfer')
-              }}
-              onEdit={() => {
-                console.log('edit')
-              }}
-              onUpgrade={() => {
-                console.log('upgrade')
-              }}
-            />
+            {isOwner && (
+              <NFTActions
+                onTransfer={() => {
+                  console.log('transfer')
+                }}
+                onEdit={() => {
+                  console.log('edit')
+                }}
+                onUpgrade={() => {
+                  console.log('upgrade')
+                }}
+              />
+            )}
           </div>
         )}
       </div>

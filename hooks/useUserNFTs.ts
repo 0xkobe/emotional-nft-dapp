@@ -76,7 +76,7 @@ export default function useUserNFTs(
         if (!res.ok)
           throw new Error(`an unknown error occurred while fetching metadata`)
         return {
-          id: index,
+          id: resTokenIds[index].toNumber(),
           metadata: response
         }
       }))

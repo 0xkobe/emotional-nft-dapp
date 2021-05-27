@@ -6,6 +6,7 @@ import IconPrev from '../icon/prev'
 export type IProps = AnchorHTMLAttributes<{}> & {
   total: number
   current: number
+  min: number
   onPrev: () => void
   onNext: () => void
 }
@@ -14,6 +15,7 @@ const Pagination: FunctionComponent<IProps> = ({
   className,
   total,
   current,
+  min = 0,
   onPrev,
   onNext,
 }: IProps) => {
@@ -22,13 +24,14 @@ const Pagination: FunctionComponent<IProps> = ({
       <div
         className={classNames(
           'flex flex-row space-x-3 items-center cursor-pointer',
-          current > 0 ? 'text-gray-500' : 'text-gray-200 cursor-not-allowed',
+          current > min ? 'text-gray-500' : 'text-gray-200 cursor-not-allowed',
         )}
+        onClick={onPrev}
       >
         <IconPrev
           className={classNames(
             'stroke-current',
-            current > 0 ? 'text-gray-500' : 'text-gray-200',
+            current > min ? 'text-gray-500' : 'text-gray-200',
           )}
         />
         <span className="text-sm leading-5 font-medium">Previous</span>
@@ -40,6 +43,7 @@ const Pagination: FunctionComponent<IProps> = ({
             ? 'text-gray-500'
             : 'text-gray-200 cursor-not-allowed',
         )}
+        onClick={onNext}
       >
         <span className="text-sm leading-5 font-medium">Next</span>
         <IconNext
