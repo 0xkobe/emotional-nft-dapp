@@ -14,6 +14,7 @@ export const Angry = Template.bind({})
 Angry.args = {
   changePercentage: -20,
   metadata: {
+    tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
     lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
@@ -35,6 +36,7 @@ export const Happy = Template.bind({})
 Happy.args = {
   changePercentage: 20,
   metadata: {
+    tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
     lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
@@ -56,6 +58,7 @@ export const Normal = Template.bind({})
 Normal.args = {
   changePercentage: 0,
   metadata: {
+    tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
     lockDuration: BigNumber.from(100 * 12 * 30 * 86400),

@@ -495,6 +495,7 @@ export default function Mint(): JSX.Element {
               size="big"
               isDesign
               metadata={{
+                tokenId: BigNumber.from(1), // random value
                 characterId: characterId,
                 favCoinId: coinIndex,
                 lockDuration: BigNumber.from(

@@ -37,6 +37,7 @@ export const fetchMetadata = async (
   return {
     ...nftDataOnChain,
     ...nftDataOffChain,
+    tokenId,
   }
 }
 

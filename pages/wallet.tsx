@@ -83,7 +83,7 @@ export default function Wallet(): JSX.Element {
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
               nfts.map((nft, i) => (
-                <Link href={`/nfts/${i}`}>
+                <Link href={`/nfts/${nft.tokenId}`}>
                   <a>
                     <NFTCard
                       key={i}
