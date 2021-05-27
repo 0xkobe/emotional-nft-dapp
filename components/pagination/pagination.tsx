@@ -24,6 +24,7 @@ const Pagination: FunctionComponent<IProps> = ({
           'flex flex-row space-x-3 items-center cursor-pointer',
           current > 0 ? 'text-gray-500' : 'text-gray-200 cursor-not-allowed',
         )}
+        onClick={() => onPrev()}
       >
         <IconPrev
           className={classNames(
@@ -40,6 +41,7 @@ const Pagination: FunctionComponent<IProps> = ({
             ? 'text-gray-500'
             : 'text-gray-200 cursor-not-allowed',
         )}
+        onClick={() => onNext()}
       >
         <span className="text-sm leading-5 font-medium">Next</span>
         <IconNext
