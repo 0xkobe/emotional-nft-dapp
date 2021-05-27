@@ -38,7 +38,7 @@ import { createMetadata } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
 import { QAirdrop, QNFT, QStk } from '../types/contracts'
-import { DisplayType, Skin, Traits } from '../types/metadata'
+import { Skin } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
 
@@ -495,58 +495,22 @@ export default function Mint(): JSX.Element {
               size="big"
               isDesign
               metadata={{
-                name: nftName,
+                characterId: characterId,
+                favCoinId: coinIndex,
+                lockDuration: BigNumber.from(
+                  lockOptions[lockOptionId].duration,
+                ),
+                lockAmount: qstkAmount.add(airdropAmount),
+                createdAt: BigNumber.from(Date.now()),
+                withdrawn: false,
+                metaId: 0, // zero as none
                 author: minterName,
+                backgroundId: backgroundIndex,
                 description: nftDescription,
-                image: characters[characterId].emotions.normal, // TODO: confirm?
-                external_url: '/', // TODO: confirm?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: characters[characterId].creature,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: characters[characterId].skin,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: backgroundIndex,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: coinIndex,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: lockOptionId,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: qstkAmount.add(airdropAmount).toString(),
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: characters[characterId].artist.name,
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: characters[characterId].artist.wallet,
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0, // Need to be updated with actual value
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal, // Need to be updated with actual value
-                  },
-                ],
+                name: nftName, // nft name
+                chainId: chain.id,
+                creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
+                defaultEmotion: Emotion.Happy,
               }}
             />
             {mintStep === 0 && (

@@ -1,11 +1,7 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { favCoins } from '../../data/favCoins'
-import { backgrounds, characters } from '../../data/nft'
-import { attribute, getCreature } from '../../lib/nft'
-import { APINftMetadataResponse } from '../../types/api'
-import { Creature, Skin, Traits } from '../../types/metadata'
-import { Character, Emotion } from '../../types/nft'
+import { FunctionComponent, HTMLAttributes, useState } from 'react'
+import { hydrateMetadata } from '../../lib/nft'
+import { Emotion, Metadata } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
@@ -14,7 +10,7 @@ import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
-  metadata: APINftMetadataResponse
+  metadata: Metadata
   size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
 }
@@ -107,32 +103,11 @@ const NFTCard: FunctionComponent<IProps> = ({
   isDesign,
   className,
 }: IProps) => {
-  const [creature, setCreature] = useState<Character>()
   const [emotion, setEmotion] = useState(
     isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
   )
   const TrendIcon = trendIcon(changePercentage || 0)
-  const backgroundSrc =
-    backgrounds[attribute(metadata, Traits.Background) as number].image
-  const favCoin = favCoins[attribute(metadata, Traits.FavCoin) as number]
-
-  useEffect(() => {
-    const animalId = attribute(metadata, Traits.Creature) as Creature
-    const skinId = attribute(metadata, Traits.Skin) as Skin
-    let creature: Character | undefined
-    if (animalId === Creature.Minotaur) {
-      creature = characters[25]
-    } else if (animalId === Creature.Fish) {
-      creature = characters[26]
-    } else {
-      creature = getCreature(animalId, skinId)
-    }
-    if (!creature) return
-    setCreature(creature)
-  }, [metadata])
-
-  console.log(creature?.emotions[emotion])
-  if (!creature) return <div>not found</div>
+  const hydratedMetadata = hydrateMetadata(metadata)
 
   return (
     <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
@@ -161,29 +136,29 @@ const NFTCard: FunctionComponent<IProps> = ({
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
             {!isDesign && <TrendIcon className="w-6 h-4" />}
-            <img className="w-8 h-8" src={favCoin.meta.icon} />
+            <img className="w-8 h-8" src={hydratedMetadata.favCoin.meta.icon} />
           </div>
         </div>
         <div className={classNames('relative rounded-xl overflow-hidden')}>
           <div className="mt-full"></div>
-          {backgroundSrc && (
+          {hydratedMetadata.backgroundUrl && (
             <img
               className={classNames('absolute top-0 right-0 left-0 bottom-0')}
-              src={backgroundSrc}
+              src={hydratedMetadata.backgroundUrl}
             />
           )}
           <img
-            src={creature.emotions[emotion]}
+            src={hydratedMetadata.character.emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
         <div className="flex flex-col space-y-1">
           <span className="text-base leading-6 font-bold text-purple-900">
-            {metadata.name}
+            {hydratedMetadata.name}
           </span>
           <span className="text-xs leading-4 font-normal text-gray-400">
-            [{attribute(metadata, Traits.Skin)} -{' '}
-            {attribute(metadata, Traits.Creature)}]
+            [{hydratedMetadata.character.skin} -{' '}
+            {hydratedMetadata.character.creature}]
           </span>
         </div>
       </div>

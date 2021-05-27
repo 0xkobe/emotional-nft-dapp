@@ -13,9 +13,7 @@ import {
   metamaskConnector,
 } from '../data/smartContract'
 import useUserNFTs from '../hooks/useUserNFTs'
-import { attribute } from '../lib/nft'
-import { Traits } from '../types/metadata'
-import { NFTData } from '../types/nft'
+import { Metadata } from '../types/nft'
 
 export default function Wallet(): JSX.Element {
   const {
@@ -25,14 +23,15 @@ export default function Wallet(): JSX.Element {
   } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
-  const [pricechanges, setPricechanges] = useState<number[]>([])
+  const [priceChanges, setPriceChanges] = useState<number[]>([])
 
-  const fetchPriceChanges = useCallback(async (nfts: NFTData[]) => {
-    const data = []
-    for (let i = 0; i < nfts.length; i++) {
-      const favCoin =
-        favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
-      if (favCoin.meta.coingeckoId) {
+  const fetchPriceChanges = useCallback(async (nfts: Metadata[]) => {
+    const prices = await Promise.all(
+      nfts.map(async (nft) => {
+        const favCoin = favCoins[nft.favCoinId]
+        if (!favCoin.meta.coingeckoId) return 0
+
+        // FIXME: move to utils (this is used somewhere else)
         const res = await fetch(
           `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
         )
@@ -45,21 +44,18 @@ export default function Wallet(): JSX.Element {
           throw new Error(
             `an unknown error occurred while fetching coingecko pricefeed`,
           )
-        data.push(response.market_data.price_change_percentage_24h || 0)
-      } else {
-        data.push(0)
-      }
-    }
-    setPricechanges(data)
+        return response.market_data.price_change_percentage_24h || 0
+      }),
+    )
+    setPriceChanges(prices)
   }, [])
 
   useEffect(() => {
     if (isLoading || contractError || nfts.length === 0) return
-    const sum = BigNumber.from(0)
-    nfts.forEach((nft) => {
-      const nftLockAmount = attribute(nft.metadata, Traits.LockAmount) as string
-      sum.add(BigNumber.from(nftLockAmount))
-    })
+    const sum = nfts.reduce(
+      (sum, nft) => sum.add(nft.lockAmount),
+      BigNumber.from(0),
+    )
     setLockAmount(sum)
     void fetchPriceChanges(nfts)
   }, [contractError, fetchPriceChanges, isLoading, nfts])
@@ -92,8 +88,8 @@ export default function Wallet(): JSX.Element {
                     <NFTCard
                       key={i}
                       className="cursor-pointer hover:shadow"
-                      changePercentage={pricechanges[i]}
-                      metadata={nft.metadata}
+                      changePercentage={priceChanges[i]}
+                      metadata={nft}
                     />
                   </a>
                 </Link>

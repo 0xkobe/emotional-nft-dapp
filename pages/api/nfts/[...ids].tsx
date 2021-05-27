@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { StaticJsonRpcProvider } from '@ethersproject/providers'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -8,6 +9,19 @@ import { APINftMetadataResponse } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
 import { DisplayType, Traits } from '../../../types/metadata'
 
+// init ethereum provider
+const provider = new StaticJsonRpcProvider({
+  allowGzip: true,
+  url: chain.remoteProvider,
+})
+
+// // init smart contract
+const qnft = new Contract(
+  deployedAddresses.qnft[chain.id],
+  abi.qnft,
+  provider,
+) as QNFT
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -16,21 +30,7 @@ export default async (
   const ids = req.query.ids
   if (!Array.isArray(ids) || ids.length === 0)
     throw new Error('ids is not an array or has zero length')
-  const tokenId = parseInt(ids[0])
-  if (Number.isNaN(tokenId)) throw new Error('tokenId is not a number')
-
-  // init ethereum provider
-  const provider = new StaticJsonRpcProvider({
-    allowGzip: true,
-    url: chain.remoteProvider,
-  })
-
-  // // init smart contract
-  const qnft = new Contract(
-    deployedAddresses.qnft[chain.id],
-    abi.qnft,
-    provider,
-  ) as QNFT
+  const tokenId = BigNumber.from(ids[0])
 
   // fetch metadata
   const metadata = hydrateMetadata(await fetchMetadata(qnft, tokenId))
