@@ -78,7 +78,10 @@ export type MetadataOnChain = {
   metaId: number
 }
 
-export type Metadata = MetadataOffChain & MetadataOnChain
+export type Metadata = MetadataOffChain &
+  MetadataOnChain & {
+    tokenId: BigNumber
+  }
 
 export type HydratedMetadata = Metadata & {
   character: Character
