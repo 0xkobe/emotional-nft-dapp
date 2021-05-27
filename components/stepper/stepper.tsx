@@ -32,7 +32,7 @@ const Stepper: FunctionComponent<IProps> = ({
             className={classNames(
               'flex items-center justify-center w-10 h-10 p-1.5 text-center border-2 rounded-full text-sm leading-4 font-medium',
               index === step ? 'border-purple-700' : ' border-purple-100',
-              index <= step ? 'text-purple-700' : 'text-gray-500'
+              index <= step ? 'text-purple-700' : 'text-gray-500',
             )}
           >
             {index < step ? (
@@ -41,11 +41,7 @@ const Stepper: FunctionComponent<IProps> = ({
               '0' + (index + 1)
             )}
           </div>
-          <div
-            className={classNames(
-              'flex items-center',
-            )}
-          >
+          <div className={classNames('flex items-center')}>
             <div className="flex flex-col">
               {index < step && (
                 <a
@@ -55,7 +51,14 @@ const Stepper: FunctionComponent<IProps> = ({
                   EDIT
                 </a>
               )}
-              <span className={classNames('text-sm leading-5 font-medium', index === step ? 'text-purple-700' : 'text-gray-500')}>{option}</span>
+              <span
+                className={classNames(
+                  'text-sm leading-5 font-medium',
+                  index === step ? 'text-purple-700' : 'text-gray-500',
+                )}
+              >
+                {option}
+              </span>
             </div>
           </div>
         </div>

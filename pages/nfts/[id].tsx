@@ -53,9 +53,7 @@ export default function NFT(): JSX.Element {
     async (contract: QNFT, account: string, id: number) => {
       setLoading(true)
       try {
-        const userNFTCount = (
-          await contract.totalSupply()
-        ).toNumber()
+        const userNFTCount = (await contract.totalSupply()).toNumber()
         setNFTCount(userNFTCount)
         const tokenURI = await contract.tokenURI(id)
         const newTokenURI = nftAPIURL
@@ -104,7 +102,7 @@ export default function NFT(): JSX.Element {
           const character = characters.find(
             (character) =>
               character.creature ===
-              (attribute(response, Traits.Creature) as Creature) &&
+                (attribute(response, Traits.Creature) as Creature) &&
               character.skin === skin.skin,
           )
           if (character) {
@@ -158,7 +156,7 @@ export default function NFT(): JSX.Element {
             </a>
           </Link>
           <Pagination
-            total={nftCount + 1}  // nft index starts from 1 so total was set to nftCount + 1
+            total={nftCount + 1} // nft index starts from 1 so total was set to nftCount + 1
             current={id}
             min={1}
             onPrev={() => {
@@ -198,7 +196,7 @@ export default function NFT(): JSX.Element {
                   <span className="text-sm leading-5 font-normal text-gray-500">
                     {new Date(
                       1000 *
-                      (attribute(metadata, Traits.CreatedDate) as number),
+                        (attribute(metadata, Traits.CreatedDate) as number),
                     ).toLocaleDateString()}
                   </span>
                 </div>
@@ -256,7 +254,7 @@ export default function NFT(): JSX.Element {
                     createdAt={
                       new Date(
                         (attribute(metadata, Traits.CreatedDate) as number) *
-                        1000,
+                          1000,
                       )
                     }
                     lockDuration={

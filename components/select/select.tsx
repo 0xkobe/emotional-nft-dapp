@@ -97,9 +97,13 @@ const Select: FunctionComponent<IProps> = ({
         {(!canSearch || !isOpen) && (
           <>
             <div>
-              {selectedIndex < options.length
-                ? renderOption(options[selectedIndex])
-                : <span className="text-tray-400">{placeholder || 'Select an option'}</span>}
+              {selectedIndex < options.length ? (
+                renderOption(options[selectedIndex])
+              ) : (
+                <span className="text-tray-400">
+                  {placeholder || 'Select an option'}
+                </span>
+              )}
             </div>
             <IconChevron
               className={classNames(
@@ -112,7 +116,9 @@ const Select: FunctionComponent<IProps> = ({
         {canSearch && isOpen && (
           <input
             ref={inputRef}
-            className={classNames('w-full outline-none pl-2 placeholder-gray-400')}
+            className={classNames(
+              'w-full outline-none pl-2 placeholder-gray-400',
+            )}
             value={keyword}
             placeholder={options[selectedIndex].text}
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
