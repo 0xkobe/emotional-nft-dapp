@@ -86,13 +86,13 @@ export default function Wallet(): JSX.Element {
             {contractError && <div>{contractError.toString()}</div>}
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
-              nfts.map((nft) => (
-                <Link href={`/nfts/${nft.id}`}>
+              nfts.map((nft, i) => (
+                <Link href={`/nfts/${i}`}>
                   <a>
                     <NFTCard
-                      key={nft.id}
+                      key={i}
                       className="cursor-pointer hover:shadow"
-                      changePercentage={pricechanges[nft.id]}
+                      changePercentage={pricechanges[i]}
                       metadata={nft.metadata}
                     />
                   </a>
