@@ -27,6 +27,7 @@ export type IProps = HTMLAttributes<{}> & {
   setLockOptionId: (id: number) => void
   setQstkAmount: (amount: BigNumber) => void
   setAirdropAmount: (amount: BigNumber) => void
+  setAirdropSignature: (signature?: string) => void
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
@@ -42,6 +43,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   setLockOptionId,
   setQstkAmount,
   setAirdropAmount,
+  setAirdropSignature,
 }: IProps) => {
   const lockOption = lockOptions[lockOptionId]
 
@@ -58,9 +60,11 @@ const AllocationWizard: FunctionComponent<IProps> = ({
     const isUsed = await qAirdrop.claimed(result.signature)
     if (isUsed) {
       setAirdropAmount(BigNumber.from(0))
+      setAirdropSignature(undefined)
       setAirdropKeyError('the airdrop key was already used')
     }
     setAirdropAmount(result.amount)
+    setAirdropSignature(result.signature)
     setAirdropKeyError('')
   }
 

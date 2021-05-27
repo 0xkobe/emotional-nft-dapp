@@ -89,6 +89,7 @@ export default function Mint(): JSX.Element {
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
+  const [airdropSignature, setAirdropSignature] = useState<string>()
   const [availableMintAmount, setAvailableMintAmount] = useState<BigNumber>()
   const [availableFreeAllocation, setAvailableFreeAllocation] =
     useState<BigNumber>()
@@ -261,7 +262,6 @@ export default function Mint(): JSX.Element {
   // button handle function
   const handleSubmit = () => {
     if (mintStep < 2) return setMintStep(mintStep + 1)
-    // TODO: mint with airdrop
     setIsMinting(true)
   }
 
@@ -368,11 +368,33 @@ export default function Mint(): JSX.Element {
     if (!signer) return
     if (!metaId) return
     console.log('Signing and sending transaction using Metamask...')
-    qnft
-      .connect(signer)
-      .mintNft(characterId, coinIndex, lockOptionId, metaId, qstkAmount, {
-        value: nftPrice,
-      })
+
+    const qnftWithSigner = qnft.connect(signer)
+    const mintPromise = airdropSignature
+      ? qnftWithSigner.mintNftForAirdropUser(
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          airdropAmount,
+          airdropSignature,
+          {
+            value: nftPrice,
+          },
+        )
+      : qnftWithSigner.mintNft(
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          {
+            value: nftPrice,
+          },
+        )
+
+    mintPromise
       .then((tx) => {
         console.log('Tx signed and broadcasted with success', tx.hash)
         setTx(tx)
@@ -395,6 +417,8 @@ export default function Mint(): JSX.Element {
     qstkAmount,
     metaId,
     nftPrice,
+    airdropSignature,
+    airdropAmount,
   ])
 
   // wait for receipt
@@ -584,11 +608,10 @@ export default function Mint(): JSX.Element {
                 lockOptionId={lockOptionId}
                 qstkAmount={qstkAmount}
                 airdropAmount={airdropAmount}
-                setLockOptionId={(id: number) => setLockOptionId(id)}
-                setQstkAmount={(amount: BigNumber) => setQstkAmount(amount)}
-                setAirdropAmount={(amount: BigNumber) =>
-                  setAirdropAmount(amount)
-                }
+                setLockOptionId={setLockOptionId}
+                setQstkAmount={setQstkAmount}
+                setAirdropAmount={setAirdropAmount}
+                setAirdropSignature={setAirdropSignature}
               />
             )}
           </div>

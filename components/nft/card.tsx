@@ -131,7 +131,6 @@ const NFTCard: FunctionComponent<IProps> = ({
     setCreature(creature)
   }, [metadata])
 
-  console.log(creature?.emotions[emotion])
   if (!creature) return <div>not found</div>
 
   return (
