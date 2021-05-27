@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
-import { verifier, tokenMultiplier } from '../../data/nft'
+import { tokenMultiplier, verifier } from '../../data/nft'
 import {
   bnToInput,
   bnToText,
@@ -158,9 +158,10 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               placeholder=""
               options={lockOptions.map((option) => {
                 return {
-                  text: `${lockDurationToString(option.duration)} - ${
-                    (100 - ((100 - option.discount) * tokenMultiplier)/100).toFixed(0)
-                  }%`,
+                  text: `${lockDurationToString(option.duration)} - ${(
+                    100 -
+                    ((100 - option.discount) * tokenMultiplier) / 100
+                  ).toFixed(0)}%`,
                 }
               })}
               selectedIndex={lockOptionId}

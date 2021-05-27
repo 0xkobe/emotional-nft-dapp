@@ -36,9 +36,10 @@ export type FavCoinMeta = {
   name: string
   symbol: string
   icon: string
-  website: string
-  social: string
-  other: string
+  coingeckoId?: string
+  website?: string
+  social?: string
+  other?: string
 }
 
 export type FavCoin = {

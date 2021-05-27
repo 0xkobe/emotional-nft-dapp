@@ -1,11 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
 import NFTCard from '../components/nft/card'
 import Title from '../components/title/title'
+import { favCoins } from '../data/favCoins'
 import {
   abi,
   deployedAddresses,
@@ -14,6 +15,7 @@ import {
 import useUserNFTs from '../hooks/useUserNFTs'
 import { attribute } from '../lib/nft'
 import { Traits } from '../types/metadata'
+import { NFTData } from '../types/nft'
 
 export default function Wallet(): JSX.Element {
   const {
@@ -23,7 +25,33 @@ export default function Wallet(): JSX.Element {
   } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
-  const [changePercentage, setChangePercentage] = useState(-20)
+  const [pricechanges, setPricechanges] = useState<number[]>([])
+
+  const fetchPriceChanges = useCallback(async (nfts: NFTData[]) => {
+    const data = []
+    for (let i = 0; i < nfts.length; i++) {
+      const favCoin =
+        favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
+      if (favCoin.meta.coingeckoId) {
+        const res = await fetch(
+          `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+        )
+        const response = await res.json()
+        if ('error' in response)
+          throw new Error(
+            `an error occurred while fetching coingecko pricefeed`,
+          )
+        if (!res.ok)
+          throw new Error(
+            `an unknown error occurred while fetching coingecko pricefeed`,
+          )
+        data.push(response.market_data.price_change_percentage_24h || 0)
+      } else {
+        data.push(0)
+      }
+    }
+    setPricechanges(data)
+  }, [])
 
   useEffect(() => {
     if (isLoading || contractError || nfts.length === 0) return
@@ -33,7 +61,8 @@ export default function Wallet(): JSX.Element {
       sum.add(BigNumber.from(nftLockAmount))
     })
     setLockAmount(sum)
-  }, [contractError, isLoading, nfts])
+    void fetchPriceChanges(nfts)
+  }, [contractError, fetchPriceChanges, isLoading, nfts])
 
   return (
     <>
@@ -57,13 +86,13 @@ export default function Wallet(): JSX.Element {
             {contractError && <div>{contractError.toString()}</div>}
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
-              nfts.map((nft) => (
-                <Link href={`/nfts/${nft.id}`}>
+              nfts.map((nft, i) => (
+                <Link href={`/nfts/${i}`}>
                   <a>
                     <NFTCard
-                      key={nft.id}
+                      key={i}
                       className="cursor-pointer hover:shadow"
-                      changePercentage={changePercentage}
+                      changePercentage={pricechanges[i]}
                       metadata={nft.metadata}
                     />
                   </a>

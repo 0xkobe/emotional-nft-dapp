@@ -1,9 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { favCoins } from '../data/favCoins'
 import {
   animals,
   backgrounds,
   characters,
-  favCoins,
   lockOptions,
   skins,
 } from '../data/nft'
