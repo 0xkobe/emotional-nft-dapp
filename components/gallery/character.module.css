@@ -11,32 +11,3 @@
   width: 72px;
   margin: 8px 16px;
 }
-
-.selected .image {
-  border: 1px solid #000000;
-}
-
-.image {
-  width: 72px;
-  height: 72px;
-  margin-bottom: 8px;
-  border: 1px solid #e5e7eb;
-  box-sizing: border-box;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.supply {
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 16px;
-  color: #6b7280;
-}
-
-.name {
-  margin-top: 4px;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 20px;
-  color: #6b7280;
-}
