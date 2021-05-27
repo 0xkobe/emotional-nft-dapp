@@ -17,12 +17,9 @@ import {
   nftBaseURL,
   skins,
 } from '../../data/nft'
-import {
-  abi,
-  deployedAddresses,
-  metamaskConnector,
-} from '../../data/smartContract'
+import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
+import useWallet from '../../hooks/useWallet'
 import { attribute } from '../../lib/nft'
 import { APINftMetadataResponse, APIResponseError } from '../../types/api'
 import { QNFT } from '../../types/contracts'
@@ -31,11 +28,11 @@ import { Creature, Skin, Traits } from '../../types/metadata'
 export default function NFT(): JSX.Element {
   const router = useRouter()
 
-  const {
-    contract,
-    error: contractError,
-    account,
-  } = useContract<QNFT>(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+  const { contract, error: contractError } = useContract<QNFT>(
+    deployedAddresses.qnft,
+    abi.qnft,
+  )
+  const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [metadata, setMetadata] = useState<APINftMetadataResponse>()

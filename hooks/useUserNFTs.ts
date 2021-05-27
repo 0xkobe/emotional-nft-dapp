@@ -1,5 +1,4 @@
 import { ContractInterface } from '@ethersproject/contracts'
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
 import { nftAPIURL, nftBaseURL } from '../data/nft'
@@ -7,9 +6,9 @@ import { APINftMetadataResponse, APIResponseError } from '../types/api'
 import { QNFT } from '../types/contracts'
 import { NFTData } from '../types/nft'
 import useContract from './useContract'
+import useWallet from './useWallet'
 
 export default function useUserNFTs(
-  connector: AbstractConnector,
   addresses: { [chainId: number]: string },
   abi: ContractInterface,
 ): {
@@ -23,7 +22,8 @@ export default function useUserNFTs(
   //       'https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e',
   //     ),
   //   )
-  const { contract, account } = useContract<QNFT>(connector, addresses, abi)
+  const { contract } = useContract<QNFT>(addresses, abi)
+  const { account } = useWallet()
 
   const [nfts, setNFTs] = useState<NFTData[]>([])
   const [error, setError] = useState<Error>()

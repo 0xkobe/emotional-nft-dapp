@@ -1,7 +1,3 @@
-import { InjectedConnector } from '@web3-react/injected-connector'
-import { NetworkConnector } from '@web3-react/network-connector'
-import { chainId, chains } from './chains'
-
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
@@ -44,12 +40,3 @@ export const deployedAddresses: {
     31337: '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0',
   },
 }
-
-export const metamaskConnector = new InjectedConnector({})
-export const remoteConnector = new NetworkConnector({
-  urls: {
-    1: chains[1].remoteProvider,
-    3: chains[3].remoteProvider,
-  },
-  defaultChainId: chainId,
-})
