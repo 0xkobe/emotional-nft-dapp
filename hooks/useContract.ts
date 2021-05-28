@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useEffect, useState } from 'react'
 
 export default function useContract<T extends Contract>(
-  addresses: { [chainId: number]: string },
+  address: string,
   abi: ContractInterface,
 ): {
   contract?: T
@@ -26,7 +26,7 @@ export default function useContract<T extends Contract>(
     return () => {
       setContract(undefined)
     }
-  }, [library, chainId, addresses, abi])
+  }, [library, chainId, address, abi])
 
   return { contract, error }
 }
