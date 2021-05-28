@@ -54,7 +54,7 @@ export default function useWallet(): {
   )
 
   useEffect(() => {
-    setHasWallet(!!window.ethereum)
+    setHasWallet(!!(window as any).ethereum)
   }, []) //only execute once
 
   return {
