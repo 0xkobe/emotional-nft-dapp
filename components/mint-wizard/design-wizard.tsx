@@ -1,7 +1,7 @@
 import classNames from 'classnames'
-import React, { FunctionComponent, HTMLAttributes } from 'react'
+import React,{ FunctionComponent,HTMLAttributes } from 'react'
 import { favCoins } from '../../data/favCoins'
-import { backgrounds, skins } from '../../data/nft'
+import { backgrounds,skins } from '../../data/nft'
 import { CharacterOption } from '../../types/options'
 import BackgroundView from '../gallery/background-view'
 import CharacterView from '../gallery/character-view'
@@ -36,7 +36,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
   } = props
 
   return (
-    <div className={classNames(className, 'flex flex-col space-y-8')}>
+    <div className={classNames('flex flex-col space-y-8', className)}>
       <div className="flex flex-col space-y-4">
         <div className="text-base leading-6 font-medium text-purple-900">
           Animal Set

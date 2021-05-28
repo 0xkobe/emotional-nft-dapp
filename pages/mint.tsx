@@ -555,9 +555,9 @@ export default function Mint(): JSX.Element {
             onChangeStep={setMintStep}
           />
         </div>
-        <div className="grid grid-cols-4 gap-8">
-          <div className="col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm overflow-hidden">
-            <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
                 size="big"
                 isDesign

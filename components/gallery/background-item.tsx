@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { BackgroundOption } from '../../types/options'
-import styles from './character.module.css'
 
 export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   background: BackgroundOption
@@ -17,7 +16,7 @@ const BackgroundItem: FunctionComponent<IProps> = ({
 }: IProps) => {
   return (
     <div
-      className={classNames(className, styles.background)}
+      className={classNames(className)}
       onClick={() => {
         onChange && onChange()
       }}

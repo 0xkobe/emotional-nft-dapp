@@ -1,7 +1,6 @@
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { CharacterOption } from '../../types/options'
 import CharacterItem from './character-item'
-import styles from './character.module.css'
 
 export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   characters: CharacterOption[]
@@ -15,7 +14,7 @@ const CharacterView: FunctionComponent<IProps> = ({
   onChange,
 }: IProps) => {
   return (
-    <div className={styles.characters}>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
       {characters.map((character) => {
         return (
           <CharacterItem
