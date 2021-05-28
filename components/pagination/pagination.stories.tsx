@@ -13,18 +13,18 @@ Default.args = {}
 
 export const NextAvailable = Template.bind({})
 NextAvailable.args = {
-  total: 10,
-  current: 0,
+  hasPrev: false,
+  hasNext: true,
 }
 
 export const PrevAvailable = Template.bind({})
 PrevAvailable.args = {
-  total: 10,
-  current: 9,
+  hasPrev: true,
+  hasNext: false,
 }
 
 export const AllAvailable = Template.bind({})
 AllAvailable.args = {
-  total: 10,
-  current: 5,
+  hasPrev: true,
+  hasNext: true,
 }
