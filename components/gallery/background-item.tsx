@@ -14,7 +14,6 @@ const BackgroundItem: FunctionComponent<IProps> = ({
   selected,
   onChange,
   className,
-  ...props
 }: IProps) => {
   return (
     <div

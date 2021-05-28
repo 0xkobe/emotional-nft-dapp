@@ -12,6 +12,6 @@ export const Default = Template.bind({})
 Default.args = {
   nftId: '100',
   isShown: true,
-  onRequestClose: (): void => {},
-  onModalClose: (): void => {},
+  onRequestClose: console.log,
+  onModalClose: console.log,
 }

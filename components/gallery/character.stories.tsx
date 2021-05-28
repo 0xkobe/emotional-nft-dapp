@@ -49,5 +49,5 @@ Default.args = {
     },
   ],
   selectedCharacterId: 0,
-  onChange: (_) => {},
+  onChange: console.log,
 }

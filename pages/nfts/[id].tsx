@@ -22,16 +22,15 @@ import { NFT } from '../../types/nft'
 export default function (): JSX.Element {
   const router = useRouter()
 
-  const {
-    contract,
-    error: contractError,
-    account, // TODO: this is wrong. useContract should not return the account. useWallet
-  } = useContract<QNFT>(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+  const { contract, error: contractError } = useContract<QNFT>(
+    metamaskConnector,
+    deployedAddresses.qnft,
+    abi.qnft,
+  )
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
   const [error, setError] = useState<Error>()
-  const [nftCount, setNFTCount] = useState<number>(0)
   const [tokenId, setTokenId] = useState<BigNumber>()
   const [changePercentage, setChangePercentage] = useState(0)
   const [coinInfo, setCoinInfo] = useState({ text: '', icon: '' })
@@ -39,70 +38,67 @@ export default function (): JSX.Element {
   const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
   const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
 
-  const _fetchData = useCallback(
-    async (contract: QNFT, account: string, tokenId: BigNumber) => {
-      setLoading(true)
-      try {
-        // FIXME: put back logic to get the next and previous token of the owner
-        // const userNFTCount = (
-        //   await contract.callStatic.balanceOf(account)
-        // ).toNumber()
-        // setNFTCount(userNFTCount)
-        // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-        //   account,
-        //   id,
-        // )
-        const nft = await fetchNFT(contract, tokenId)
-        setNFT(nft)
+  const _fetchData = useCallback(async (contract: QNFT, tokenId: BigNumber) => {
+    setLoading(true)
+    try {
+      // FIXME: put back logic to get the next and previous token of the owner
+      // const userNFTCount = (
+      //   await contract.callStatic.balanceOf(account)
+      // ).toNumber()
+      // setNFTCount(userNFTCount)
+      // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
+      //   account,
+      //   id,
+      // )
+      const nft = await fetchNFT(contract, tokenId)
+      setNFT(nft)
 
-        // fetch coingecko
-        const favCoin = getFavCoin(nft.favCoinId)
-        setCoinInfo({
-          text: favCoin.meta.name,
-          icon: favCoin.meta.icon,
-        })
-        if (favCoin.meta.coingeckoId) {
-          const res = await fetch(
-            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
+      // fetch coingecko
+      const favCoin = getFavCoin(nft.favCoinId)
+      setCoinInfo({
+        text: favCoin.meta.name,
+        icon: favCoin.meta.icon,
+      })
+      if (favCoin.meta.coingeckoId) {
+        const res = await fetch(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
+        )
+        const response = await res.json()
+        if ('error' in response)
+          throw new Error(
+            `an error occurred while fetching coingecko pricefeed`,
           )
-          const response = await res.json()
-          if ('error' in response)
-            throw new Error(
-              `an error occurred while fetching coingecko pricefeed`,
-            )
-          if (!res.ok)
-            throw new Error(
-              `an unknown error occurred while fetching coingecko pricefeed`,
-            )
-          setChangePercentage(response[0].price_change_percentage_24h || 0)
-        } else {
-          setChangePercentage(0)
-        }
-        const character = getCharacter(nft.characterId)
-        const skin = skins.find((val) => val.skin == character.skin)
-        if (skin) {
-          setSkinInfo({
-            text: skin.skin,
-            icon: skin.icon,
-          })
-          setCreatureInfo({
-            text: character.name,
-            icon: character.emotions.normal,
-          })
-        }
-        const background = backgrounds[nft.backgroundId]
-        setBackgroundInfo({
-          text: background.name,
-          icon: background.image,
-        })
-      } catch (e) {
-        setError(e)
-      } finally {
-        setLoading(false)
+        if (!res.ok)
+          throw new Error(
+            `an unknown error occurred while fetching coingecko pricefeed`,
+          )
+        setChangePercentage(response[0].price_change_percentage_24h || 0)
+      } else {
+        setChangePercentage(0)
       }
-    },
-    [],
-  )
+      const character = getCharacter(nft.characterId)
+      const skin = skins.find((val) => val.skin == character.skin)
+      if (skin) {
+        setSkinInfo({
+          text: skin.skin,
+          icon: skin.icon,
+        })
+        setCreatureInfo({
+          text: character.name,
+          icon: character.emotions.normal,
+        })
+      }
+      const background = backgrounds[nft.backgroundId]
+      setBackgroundInfo({
+        text: background.name,
+        icon: background.image,
+      })
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -113,10 +109,9 @@ export default function (): JSX.Element {
 
   useEffect(() => {
     if (!contract) return
-    if (!account) return
     if (!tokenId) return
-    void _fetchData(contract, account, tokenId)
-  }, [account, contract, _fetchData, tokenId, router])
+    void _fetchData(contract, tokenId)
+  }, [contract, _fetchData, tokenId, router])
 
   return (
     <>

@@ -6,7 +6,6 @@ export type IProps = HTMLAttributes<{}> & {}
 const Title: FunctionComponent<IProps> = ({
   children,
   className,
-  ...props
 }: IProps) => {
   return (
     <div

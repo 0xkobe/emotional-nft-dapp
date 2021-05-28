@@ -13,8 +13,6 @@ const CharacterView: FunctionComponent<IProps> = ({
   characters,
   selectedCharacterId,
   onChange,
-  className,
-  ...props
 }: IProps) => {
   return (
     <div className={styles.characters}>
