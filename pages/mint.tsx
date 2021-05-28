@@ -549,7 +549,10 @@ export default function Mint(): JSX.Element {
         coinIndex === undefined ||
         characterId === undefined,
       () => nftName === '' || minterName === '' || nftDescription === '',
-      () => lockOptionId === undefined || qstkAmount === undefined || qstkAmount.eq(0),
+      () =>
+        lockOptionId === undefined ||
+        qstkAmount === undefined ||
+        qstkAmount.eq(0),
     ][mintStep]()
   }
 
@@ -568,7 +571,7 @@ export default function Mint(): JSX.Element {
           />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm overflow-hidden">
+          <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
                 size="big"
@@ -596,7 +599,7 @@ export default function Mint(): JSX.Element {
               {step()}
             </div>
           </div>
-          <div>
+          <aside>
             <MintSummary
               properties={summary}
               mintPrice={`${bnToText(nftPrice)} ETH`}
@@ -605,7 +608,7 @@ export default function Mint(): JSX.Element {
                 {mintSummaryBtnName}
               </Button>
             </MintSummary>
-          </div>
+          </aside>
         </div>
         {isMinting && transactionUI()}
         {error && errorUI()}
