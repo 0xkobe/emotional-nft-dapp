@@ -503,12 +503,50 @@ export default function Mint(): JSX.Element {
     )
   }
 
+  function step() {
+    return [
+      <DesignWizard
+        charactersData={charactersData}
+        characterId={characterId}
+        setCharacterId={setCharacterId}
+        skinIndex={skinIndex}
+        setSkinIndex={setSkinIndex}
+        coinIndex={coinIndex}
+        setCoinIndex={setCoinIndex}
+        backgroundIndex={backgroundIndex}
+        setBackgroundIndex={setBackgroundIndex}
+      />,
+      <StoryWizard
+        nftName={nftName}
+        minterName={minterName}
+        nftDescription={nftDescription}
+        onNftNameChange={(value: string) => setNftName(value)}
+        onMinterNameChange={(value: string) => setMinterName(value)}
+        onNftDescriptionChange={(value: string) => setNftDescription(value)}
+      />,
+      <AllocationWizard
+        qAirdrop={qAirdrop}
+        account={account || ''}
+        availableMintAmount={availableMintAmount}
+        availableFreeAllocation={availableFreeAllocation}
+        lockOptions={lockOptions}
+        lockOptionId={lockOptionId}
+        qstkAmount={qstkAmount}
+        airdropAmount={airdropAmount}
+        setLockOptionId={setLockOptionId}
+        setQstkAmount={setQstkAmount}
+        setAirdropAmount={setAirdropAmount}
+        setAirdropSignature={setAirdropSignature}
+      />,
+    ][mintStep]
+  }
+
   return (
     <>
       <Head>
         <title>Mint NFT</title>
       </Head>
-      <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
+      <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <Title>Create Your own Quiver Emotional NFT</Title>
           <Stepper
@@ -517,84 +555,48 @@ export default function Mint(): JSX.Element {
             onChangeStep={setMintStep}
           />
         </div>
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-row space-x-8 p-8 border border-purple-100 rounded-2xl shadow-sm">
-            <NFTCard
-              size="big"
-              isDesign
-              nft={{
-                tokenId: BigNumber.from(1), // random value
-                characterId: characterId,
-                favCoinId: coinIndex,
-                lockDuration: BigNumber.from(
-                  lockOptions[lockOptionId].duration,
-                ),
-                lockAmount: qstkAmount.add(airdropAmount),
-                createdAt: BigNumber.from(Date.now()),
-                withdrawn: false,
-                metaId: 0, // zero as none
-                author: minterName,
-                backgroundId: backgroundIndex,
-                description: nftDescription,
-                name: nftName, // nft name
-                chainId: chain.id,
-                creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
-                defaultEmotion: Emotion.Normal,
-              }}
-            />
-            {mintStep === 0 && (
-              <DesignWizard
-                charactersData={charactersData}
-                characterId={characterId}
-                setCharacterId={setCharacterId}
-                skinIndex={skinIndex}
-                setSkinIndex={setSkinIndex}
-                coinIndex={coinIndex}
-                setCoinIndex={setCoinIndex}
-                backgroundIndex={backgroundIndex}
-                setBackgroundIndex={setBackgroundIndex}
+        <div className="grid grid-cols-4 gap-8">
+          <div className="col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="grid grid-cols-2 gap-8">
+              <NFTCard
+                size="big"
+                isDesign
+                nft={{
+                  tokenId: BigNumber.from(1), // random value
+                  characterId: characterId,
+                  favCoinId: coinIndex,
+                  lockDuration: BigNumber.from(
+                    lockOptions[lockOptionId].duration,
+                  ),
+                  lockAmount: qstkAmount.add(airdropAmount),
+                  createdAt: BigNumber.from(Date.now()),
+                  withdrawn: false,
+                  metaId: 0, // zero as none
+                  author: minterName,
+                  backgroundId: backgroundIndex,
+                  description: nftDescription,
+                  name: nftName, // nft name
+                  chainId: chain.id,
+                  creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
+                  defaultEmotion: Emotion.Normal,
+                }}
               />
-            )}
-            {mintStep === 1 && (
-              <StoryWizard
-                nftName={nftName}
-                minterName={minterName}
-                nftDescription={nftDescription}
-                onNftNameChange={(value: string) => setNftName(value)}
-                onMinterNameChange={(value: string) => setMinterName(value)}
-                onNftDescriptionChange={(value: string) =>
-                  setNftDescription(value)
-                }
-              />
-            )}
-            {mintStep === 2 && (
-              <AllocationWizard
-                qAirdrop={qAirdrop}
-                account={account || ''}
-                availableMintAmount={availableMintAmount}
-                availableFreeAllocation={availableFreeAllocation}
-                lockOptions={lockOptions}
-                lockOptionId={lockOptionId}
-                qstkAmount={qstkAmount}
-                airdropAmount={airdropAmount}
-                setLockOptionId={setLockOptionId}
-                setQstkAmount={setQstkAmount}
-                setAirdropAmount={setAirdropAmount}
-                setAirdropSignature={setAirdropSignature}
-              />
-            )}
+              {step()}
+            </div>
           </div>
-          <MintSummary
-            properties={summary}
-            mintPrice={`${bnToText(nftPrice)} ETH`}
-          >
-            <Button onClick={() => handleSubmit()}>{mintSummaryBtnName}</Button>
-          </MintSummary>
-
-          {isMinting && transactionUI()}
-
-          {error && errorUI()}
+          <div>
+            <MintSummary
+              properties={summary}
+              mintPrice={`${bnToText(nftPrice)} ETH`}
+            >
+              <Button onClick={() => handleSubmit()}>
+                {mintSummaryBtnName}
+              </Button>
+            </MintSummary>
+          </div>
         </div>
+        {isMinting && transactionUI()}
+        {error && errorUI()}
       </div>
     </>
   )
