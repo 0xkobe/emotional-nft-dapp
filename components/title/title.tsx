@@ -3,10 +3,7 @@ import { FunctionComponent, HTMLAttributes } from 'react'
 
 export type IProps = HTMLAttributes<{}> & {}
 
-const Title: FunctionComponent<IProps> = ({
-  children,
-  className,
-}: IProps) => {
+const Title: FunctionComponent<IProps> = ({ children, className }: IProps) => {
   return (
     <div
       className={classNames(
