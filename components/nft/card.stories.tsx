@@ -1,13 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Meta, Story } from '@storybook/react'
-import {
-  Background,
-  Creature,
-  DisplayType,
-  FavCoinEnum,
-  LockPeriod,
-  Skin,
-  Traits,
-} from '../../types/metadata'
 import { Emotion } from '../../types/nft'
 import Card, { IProps } from './card'
 
@@ -21,176 +13,65 @@ const Template: Story<IProps> = (args) => <Card {...args} />
 export const Angry = Template.bind({})
 Angry.args = {
   changePercentage: -20,
-  metadata: {
-    name: 'bear',
-    author: 'Gopher',
+  nft: {
+    tokenId: BigNumber.from(1), // random value
+    characterId: 12,
+    favCoinId: 58,
+    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    lockAmount: BigNumber.from(10),
+    createdAt: BigNumber.from(Date.now()),
+    withdrawn: false,
+    metaId: 1, // random id
+    author: 'gopher', // author name
+    backgroundId: 7,
     description: 'Gopher bear',
-    image: 'string', // TODO: what is image here?
-    external_url: 'string', // TODO: what is external_url here?
-    attributes: [
-      {
-        trait_type: Traits.Creature,
-        value: Creature.Bear,
-      },
-      {
-        trait_type: Traits.Skin,
-        value: Skin.Silver,
-      },
-      {
-        trait_type: Traits.Background,
-        value: Background.NoCloudNightSky,
-      },
-      {
-        trait_type: Traits.FavCoin,
-        value: FavCoinEnum.MATIC,
-      },
-      {
-        trait_type: Traits.LockPeriod,
-        value: LockPeriod.OneCentury,
-      },
-      {
-        trait_type: Traits.LockAmount,
-        value: '10',
-      },
-      {
-        trait_type: Traits.CreatorName,
-        value: 'gopher',
-      },
-      {
-        trait_type: Traits.CreatorWallet,
-        value: '0x0992',
-      },
-      {
-        display_type: DisplayType.Date,
-        trait_type: Traits.CreatedDate,
-        value: Date.now(),
-      },
-      {
-        trait_type: Traits.Withdrawn,
-        value: false,
-      },
-      {
-        trait_type: Traits.DefaultEmotion,
-        value: Emotion.Angry,
-      },
-    ],
+    name: 'bear', // nft name
+    chainId: 3,
+    creator: '0x0992', // creator wallet
+    defaultEmotion: Emotion.Angry,
   },
 }
 
 export const Happy = Template.bind({})
 Happy.args = {
   changePercentage: 20,
-  metadata: {
-    name: 'bear',
-    author: 'icrabbit',
+  nft: {
+    tokenId: BigNumber.from(1), // random value
+    characterId: 12,
+    favCoinId: 58,
+    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    lockAmount: BigNumber.from(10),
+    createdAt: BigNumber.from(Date.now()),
+    withdrawn: false,
+    metaId: 1, // random id
+    author: 'gopher', // author name
+    backgroundId: 1,
     description: 'icrabbit bear',
-    image: 'string',
-    external_url: 'string',
-    attributes: [
-      {
-        trait_type: Traits.Creature,
-        value: Creature.Bear,
-      },
-      {
-        trait_type: Traits.Skin,
-        value: Skin.Silver,
-      },
-      {
-        trait_type: Traits.Background,
-        value: Background.None,
-      },
-      {
-        trait_type: Traits.FavCoin,
-        value: FavCoinEnum.MATIC,
-      },
-      {
-        trait_type: Traits.LockPeriod,
-        value: LockPeriod.OneCentury,
-      },
-      {
-        trait_type: Traits.LockAmount,
-        value: '10',
-      },
-      {
-        trait_type: Traits.CreatorName,
-        value: 'gopher',
-      },
-      {
-        trait_type: Traits.CreatorWallet,
-        value: '0x0992',
-      },
-      {
-        display_type: DisplayType.Date,
-        trait_type: Traits.CreatedDate,
-        value: Date.now(),
-      },
-      {
-        trait_type: Traits.Withdrawn,
-        value: false,
-      },
-      {
-        trait_type: Traits.DefaultEmotion,
-        value: Emotion.Happy,
-      },
-    ],
+    name: 'bear', // nft name
+    chainId: 3,
+    creator: '0x0992', // creator wallet
+    defaultEmotion: Emotion.Happy,
   },
 }
 
 export const Normal = Template.bind({})
 Normal.args = {
   changePercentage: 0,
-  metadata: {
-    name: 'bear',
-    author: 'icrabbit',
+  nft: {
+    tokenId: BigNumber.from(1), // random value
+    characterId: 12,
+    favCoinId: 58,
+    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    lockAmount: BigNumber.from(10),
+    createdAt: BigNumber.from(Date.now()),
+    withdrawn: false,
+    metaId: 1, // random id
+    author: 'gopher', // author name
+    backgroundId: 2,
     description: 'icrabbit bear',
-    image: 'string',
-    external_url: 'string',
-    attributes: [
-      {
-        trait_type: Traits.Creature,
-        value: Creature.Bear,
-      },
-      {
-        trait_type: Traits.Skin,
-        value: Skin.Silver,
-      },
-      {
-        trait_type: Traits.Background,
-        value: Background.None,
-      },
-      {
-        trait_type: Traits.FavCoin,
-        value: FavCoinEnum.MATIC,
-      },
-      {
-        trait_type: Traits.LockPeriod,
-        value: LockPeriod.OneCentury,
-      },
-      {
-        trait_type: Traits.LockAmount,
-        value: '10',
-      },
-      {
-        trait_type: Traits.CreatorName,
-        value: 'gopher',
-      },
-      {
-        trait_type: Traits.CreatorWallet,
-        value: '0x0992',
-      },
-      {
-        display_type: DisplayType.Date,
-        trait_type: Traits.CreatedDate,
-        value: Date.now(),
-      },
-      {
-        trait_type: Traits.Withdrawn,
-        value: false,
-      },
-      {
-        trait_type: Traits.DefaultEmotion,
-        value: Emotion.Normal,
-      },
-    ],
+    name: 'bear', // nft name
+    chainId: 3,
+    creator: '0x0992', // creator wallet
+    defaultEmotion: Emotion.Normal,
   },
 }
