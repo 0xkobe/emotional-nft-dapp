@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { AnchorHTMLAttributes, FunctionComponent } from 'react'
-import styles from './button.module.css'
 
 export type IProps = AnchorHTMLAttributes<{}> & {}
 
@@ -8,9 +7,8 @@ const Button: FunctionComponent<IProps> = (props) => {
   return (
     <a
       className={classNames(
-        'bg-primary shadow-sm py-2 px-4 rounded-lg text-sm leading-5 font-medium text-white',
+        'text-sm leading-5 font-medium bg-purple-700 text-white hover:bg-purple-900 hover:shadow-md shadow rounded-2xl px-4 py-2 w-full text-center',
         props.className,
-        styles.button,
       )}
       {...props}
     ></a>
