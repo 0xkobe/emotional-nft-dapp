@@ -7,6 +7,7 @@ import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
+import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
 import {
@@ -19,7 +20,7 @@ import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
 import { FavCoin, NFT } from '../../types/nft'
 
-export default function (): JSX.Element {
+export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
   const {
@@ -31,17 +32,15 @@ export default function (): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
   const [error, setError] = useState<Error>()
-  const [nftCount, setNFTCount] = useState<number>(0)
   const [changePercentage, setChangePercentage] = useState(0)
+  const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
+  const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
 
   const tokenId = useMemo(() => {
     if (!router.isReady) return undefined
     if (!router.query.id) return undefined
     return BigNumber.from(router.query.id)
   }, [router])
-
-  // FIXME: maybe useful
-  // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(account, id)
 
   const favCoin = useMemo(() => {
     if (!nft) return null
@@ -64,29 +63,18 @@ export default function (): JSX.Element {
     return backgrounds[nft.backgroundId]
   }, [nft])
 
-  // const _fetchData = useCallback(
-  //   async (contract: QNFT, account: string, tokenId: BigNumber) => {
-  //     setLoading(true)
-  //     try {
-  //       // FIXME: put back logic to get the next and previous token of the owner
-  //       // const userNFTCount = (
-  //       //   await contract.callStatic.balanceOf(account)
-  //       // ).toNumber()
-  //       // setNFTCount(userNFTCount)
-  //       // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-  //       //   account,
-  //       //   id,
-  //       // )
-  //       const nft = await fetchNFT(contract, tokenId)
-  //       setNFT(nft)
-  //     } catch (e) {
-  //       setError(e)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   },
-  //   [],
-  // )
+  const fetchOwnerTokenIds = useCallback(
+    async (qnft: QNFT, account: string) => {
+      const count = await qnft.balanceOf(account)
+      const tokenIds = await Promise.all(
+        Array.from(Array(count.toNumber()).keys()).map(async (index) => {
+          return qnft.tokenOfOwnerByIndex(account, index)
+        }),
+      )
+      return tokenIds
+    },
+    [],
+  )
 
   const fetchPercentage = useCallback(async (favCoin: FavCoin) => {
     if (!favCoin) return 0
@@ -106,10 +94,8 @@ export default function (): JSX.Element {
 
   useEffect(() => {
     if (!contract) return
-    if (!account) return
     if (!tokenId) return
     setLoading(true)
-    console.log('fetch  nft data', tokenId)
     fetchNFT(contract, tokenId)
       .then(setNFT)
       .catch(setError)
@@ -119,7 +105,7 @@ export default function (): JSX.Element {
       setLoading(false)
       setError(undefined)
     }
-  }, [account, /* contract, */ tokenId]) // TODO: Add contract when the contract is not refreshed at every changes
+  }, [contract, tokenId]) // FIXME: contract is reloaded when the tokenId changes
 
   useEffect(() => {
     if (!favCoin) return
@@ -132,15 +118,21 @@ export default function (): JSX.Element {
   useEffect(() => {
     if (!contract) return
     if (!account) return
-    contract.callStatic
-      .balanceOf(account)
-      .then((x) => x.toNumber())
-      .then(setNFTCount)
-      .catch(setError)
+    fetchOwnerTokenIds(contract, account).then(setOwnerTokenIds).catch(setError)
     return () => {
-      setNFTCount(0)
+      setOwnerTokenIds(undefined)
     }
-  }, [contract, account])
+  }, [contract, account, fetchOwnerTokenIds])
+
+  useEffect(() => {
+    if (!ownerTokenIds) return
+    if (!tokenId) return
+    const tokenIndex = ownerTokenIds.findIndex((x) => x.eq(tokenId))
+    if (tokenIndex > -1) setTokenIndex(tokenIndex)
+    return () => {
+      setTokenIndex(undefined)
+    }
+  }, [ownerTokenIds, tokenId])
 
   return (
     <>
@@ -155,20 +147,22 @@ export default function (): JSX.Element {
               <BackButton text="Back to your space" />
             </a>
           </Link>
-          {/* <Pagination // FIXME: to put back with system based on the nft id
-            total={nftCount}
-            current={id}
+          <Pagination
+            hasPrev={tokenIndex ? tokenIndex > 0 : false}
+            hasNext={
+              ownerTokenIds && tokenIndex !== undefined
+                ? ownerTokenIds.length - 1 > tokenIndex
+                : false
+            }
             onPrev={() => {
-              if (id > 0) {
-                void router.push(`/nfts/${id - 1}`)
-              }
+              if (ownerTokenIds && tokenIndex !== undefined)
+                void router.push(`/nfts/${ownerTokenIds[tokenIndex - 1]}`)
             }}
             onNext={() => {
-              if (id < nftCount - 1) {
-                void router.push(`/nfts/${id + 1}`)
-              }
+              if (ownerTokenIds && tokenIndex !== undefined)
+                void router.push(`/nfts/${ownerTokenIds[tokenIndex + 1]}`)
             }}
-          /> */}
+          />
         </div>
 
         {isLoading && <div>...loading</div>}
