@@ -1,14 +1,5 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import {
-  Background,
-  Creature,
-  DisplayType,
-  FavCoinEnum,
-  LockPeriod,
-  Skin,
-  Traits,
-} from './metadata'
-import { Character, Emotion, FavCoin, LockOption } from './nft'
+import { Background, Creature, FavCoinEnum, LockPeriod, Skin } from './metadata'
+import { Emotion } from './nft'
 
 export type APIResponseError = {
   error: string
@@ -84,33 +75,23 @@ export type APINftMetadataResponse = {
   ]
 }
 
-// Structure used to save the metadata in database
-export type MetadataOffChain = {
-  author: string
-  backgroundId: number
-  description: string
-  name: string
-  chainId: number
-  creator: string
-  defaultEmotion: Emotion
+export enum Traits {
+  Creature = 'Creature',
+  Skin = 'Skin',
+  Background = 'Background',
+  FavCoin = 'Favorite Coin',
+  LockPeriod = 'Lock Period',
+  LockAmount = 'Lock Amount',
+  CreatorName = "Creator's Name",
+  CreatorWallet = "Creator's Address",
+  CreatedDate = 'Created Date',
+  Withdrawn = 'Withdrawn',
+  DefaultEmotion = 'Default Emotion',
 }
 
-// Structure of the nft data onchain
-export type MetadataOnChain = {
-  characterId: number
-  favCoinId: number
-  lockDuration: BigNumber
-  lockAmount: BigNumber
-  createdAt: BigNumber
-  withdrawn: boolean
-  metaId: number
-}
-
-export type Metadata = MetadataOffChain & MetadataOnChain
-
-export type HydratedMetadata = Metadata & {
-  character: Character
-  favCoin: FavCoin
-  lockOption: LockOption
-  backgroundUrl: string
+export enum DisplayType {
+  Date = 'date',
+  Number = 'number', // can also set optional max_value
+  BoostPercentage = 'boost_percentage', // can also set optional max_value
+  BoostNumber = 'boost_number', // can also set optional max_value
 }

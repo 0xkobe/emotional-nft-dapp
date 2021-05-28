@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Creature, FavCoinEnum, Skin } from '../types/metadata'
-import { APINftMetadataResponse } from './api'
+import { Creature, FavCoinEnum, Skin } from './metadata'
 
 export enum Emotion {
   Happy = 'happy',
@@ -20,7 +19,7 @@ export type Character = {
   id: number // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#character-id
   name: string
   creature: Creature
-  skin: Skin
+  skin: Skin // TODO: should be an object with image and not just the enum
   emotions: {
     [Emotion.Angry]: string
     [Emotion.Worry]: string
@@ -57,17 +56,29 @@ export type LockOption = {
   maxAmount: BigNumber
 }
 
-export type KeyValue = {
-  key: string
-  value: string
+// Structure used to save the nft data in database
+export type NFTOffChain = {
+  author: string // author name
+  backgroundId: number
+  description: string
+  name: string // nft name
+  chainId: number
+  creator: string // creator wallet
+  defaultEmotion: Emotion
 }
 
-export type Property = {
-  title: string
-  keyValues: KeyValue[]
+// Structure of the nft data onchain
+export type NFTOnChain = {
+  characterId: number
+  favCoinId: number
+  lockDuration: BigNumber
+  lockAmount: BigNumber
+  createdAt: BigNumber
+  withdrawn: boolean
+  metaId: number
 }
 
-export type NFTData = {
-  id: number
-  metadata: APINftMetadataResponse
-}
+export type NFT = NFTOffChain &
+  NFTOnChain & {
+    tokenId: BigNumber
+  }

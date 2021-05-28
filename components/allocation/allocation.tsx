@@ -15,7 +15,6 @@ const Allocation: FunctionComponent<IProps> = ({
   createdAt,
   lockDuration,
   className,
-  ...props
 }: IProps) => {
   const headers = [
     'COIN',

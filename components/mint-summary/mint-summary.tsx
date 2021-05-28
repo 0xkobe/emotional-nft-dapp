@@ -13,7 +13,6 @@ const MintSummary: FunctionComponent<IProps> = ({
   mintPrice,
   className,
   children,
-  ...props
 }: IProps) => {
   return (
     <div className={classNames(className, styles.mintSummary, 'mb-auto')}>

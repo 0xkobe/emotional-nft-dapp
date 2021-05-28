@@ -10,7 +10,6 @@ const IconText: FunctionComponent<IProps> = ({
   icon,
   text,
   className,
-  ...props
 }: IProps) => {
   return (
     <div className={classNames(className, 'flex flex-row items-center')}>

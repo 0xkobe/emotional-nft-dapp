@@ -14,8 +14,6 @@ const Pagination: FunctionComponent<IProps> = ({
   className,
   total,
   current,
-  onPrev,
-  onNext,
 }: IProps) => {
   return (
     <div className={classNames(className, 'flex flex-row space-x-8')}>

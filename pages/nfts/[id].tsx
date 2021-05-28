@@ -7,140 +7,106 @@ import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
-import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
-import { favCoins } from '../../data/favCoins'
-import {
-  backgrounds,
-  characters,
-  nftAPIURL,
-  nftBaseURL,
-  skins,
-} from '../../data/nft'
+import { backgrounds, skins } from '../../data/nft'
 import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
-import useWallet from '../../hooks/useWallet'
-import { attribute } from '../../lib/nft'
-import { APINftMetadataResponse, APIResponseError } from '../../types/api'
+import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
-import { Creature, Skin, Traits } from '../../types/metadata'
+import { NFT } from '../../types/nft'
 
-export default function NFT(): JSX.Element {
+export default function (): JSX.Element {
   const router = useRouter()
 
   const { contract, error: contractError } = useContract<QNFT>(
     deployedAddresses.qnft,
     abi.qnft,
   )
-  const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [metadata, setMetadata] = useState<APINftMetadataResponse>()
+  const [nft, setNFT] = useState<NFT>()
   const [error, setError] = useState<Error>()
-  const [nftCount, setNFTCount] = useState<number>(0)
-  const [id, setId] = useState<number>(-1)
+  const [tokenId, setTokenId] = useState<BigNumber>()
   const [changePercentage, setChangePercentage] = useState(0)
   const [coinInfo, setCoinInfo] = useState({ text: '', icon: '' })
   const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
   const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
   const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
 
-  const fetchMetadata = useCallback(
-    async (contract: QNFT, account: string, id: number) => {
-      setLoading(true)
-      try {
-        const userNFTCount = (
-          await contract.callStatic.balanceOf(account)
-        ).toNumber()
-        setNFTCount(userNFTCount)
-        const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-          account,
-          id,
+  const _fetchData = useCallback(async (contract: QNFT, tokenId: BigNumber) => {
+    setLoading(true)
+    try {
+      // FIXME: put back logic to get the next and previous token of the owner
+      // const userNFTCount = (
+      //   await contract.callStatic.balanceOf(account)
+      // ).toNumber()
+      // setNFTCount(userNFTCount)
+      // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
+      //   account,
+      //   id,
+      // )
+      const nft = await fetchNFT(contract, tokenId)
+      setNFT(nft)
+
+      // fetch coingecko
+      const favCoin = getFavCoin(nft.favCoinId)
+      setCoinInfo({
+        text: favCoin.meta.name,
+        icon: favCoin.meta.icon,
+      })
+      if (favCoin.meta.coingeckoId) {
+        const res = await fetch(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
         )
-        const tokenURI = await contract.tokenURI(tokenId)
-        const newTokenURI = nftAPIURL
-          ? tokenURI.replace(nftBaseURL, nftAPIURL)
-          : tokenURI
-        const res = await fetch(newTokenURI)
-        const response: APINftMetadataResponse | APIResponseError =
-          await res.json()
+        const response = await res.json()
         if ('error' in response)
-          throw new Error(`an error occurred while fetching metadata`)
+          throw new Error(
+            `an error occurred while fetching coingecko pricefeed`,
+          )
         if (!res.ok)
-          throw new Error(`an unknown error occurred while fetching metadata`)
-        setMetadata(response)
-        const favCoin = favCoins[attribute(response, Traits.FavCoin) as number]
-        setCoinInfo({
-          text: favCoin.meta.name,
-          icon: favCoin.meta.icon,
-        })
-        if (favCoin.meta.coingeckoId) {
-          const res = await fetch(
-            `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+          throw new Error(
+            `an unknown error occurred while fetching coingecko pricefeed`,
           )
-          const response = await res.json()
-          if ('error' in response)
-            throw new Error(
-              `an error occurred while fetching coingecko pricefeed`,
-            )
-          if (!res.ok)
-            throw new Error(
-              `an unknown error occurred while fetching coingecko pricefeed`,
-            )
-          setChangePercentage(
-            response.market_data.price_change_percentage_24h || 0,
-          )
-        } else {
-          setChangePercentage(0)
-        }
-        const skin = skins.find(
-          (val) => val.skin == (attribute(response, Traits.Skin) as Skin),
-        )
-        if (skin) {
-          setSkinInfo({
-            text: skin.skin,
-            icon: skin.icon,
-          })
-          const character = characters.find(
-            (character) =>
-              character.creature ===
-                (attribute(response, Traits.Creature) as Creature) &&
-              character.skin === skin.skin,
-          )
-          if (character) {
-            setCreatureInfo({
-              text: character.name,
-              icon: character.emotions.normal,
-            })
-          }
-        }
-        const background =
-          backgrounds[attribute(response, Traits.Background) as number]
-        setBackgroundInfo({
-          text: background.name,
-          icon: background.image,
-        })
-      } catch (e) {
-        setError(e)
-      } finally {
-        setLoading(false)
+        setChangePercentage(response[0].price_change_percentage_24h || 0)
+      } else {
+        setChangePercentage(0)
       }
-    },
-    [],
-  )
+      const character = getCharacter(nft.characterId)
+      const skin = skins.find((val) => val.skin == character.skin)
+      if (skin) {
+        setSkinInfo({
+          text: skin.skin,
+          icon: skin.icon,
+        })
+        setCreatureInfo({
+          text: character.name,
+          icon: character.emotions.normal,
+        })
+      }
+      const background = backgrounds[nft.backgroundId]
+      setBackgroundInfo({
+        text: background.name,
+        icon: background.image,
+      })
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     if (!router.isReady) return
     if (!router.query.id) return
-    setId(parseInt(router.query.id as string, 10))
+    if (Array.isArray(router.query.id)) return
+    setTokenId(BigNumber.from(router.query.id))
   }, [router])
 
   useEffect(() => {
     if (!contract) return
-    if (!account) return
-    if (id < 0) return
-    void fetchMetadata(contract, account, id)
-  }, [account, contract, fetchMetadata, id, router])
+    if (!tokenId) return
+    void _fetchData(contract, tokenId)
+  }, [contract, _fetchData, tokenId, router])
 
   return (
     <>
@@ -155,7 +121,7 @@ export default function NFT(): JSX.Element {
               <BackButton text="Back to your space" />
             </a>
           </Link>
-          <Pagination
+          {/* <Pagination // FIXME: to put back with system based on the nft id
             total={nftCount}
             current={id}
             onPrev={() => {
@@ -168,34 +134,33 @@ export default function NFT(): JSX.Element {
                 void router.push(`/nfts/${id + 1}`)
               }
             }}
-          />
+          /> */}
         </div>
 
         {isLoading && <div>...loading</div>}
         {contractError && <div>contract: {contractError.toString()}</div>}
         {error && <div>meta: {error.toString()}</div>}
 
-        {metadata && (
+        {nft && (
           <div className="w-full flex flex-row justify-between">
             <div className="flex flex-row space-x-8">
               <NFTCard
                 size="big"
                 className="cursor-pointer hover:shadow"
                 changePercentage={changePercentage}
-                metadata={metadata}
+                nft={nft}
               />
               <div className="flex flex-col w-96 space-y-8">
                 <span className="text-2xl leading-8 font-bold text-gray-500">
-                  {metadata.name}
+                  {nft.name}
                 </span>
                 <div className="flex flex-col space-y-2">
                   <span className="text-sm leading-5 font-normal text-gray-500">
-                    {metadata.author}
+                    {nft.author}
                   </span>
                   <span className="text-sm leading-5 font-normal text-gray-500">
                     {new Date(
-                      1000 *
-                        (attribute(metadata, Traits.CreatedDate) as number),
+                      1000 * nft.createdAt.toNumber(),
                     ).toLocaleDateString()}
                   </span>
                 </div>
@@ -205,15 +170,10 @@ export default function NFT(): JSX.Element {
                   </span>
                   <div className="flex flex-col space-y-2">
                     <span className="text-sm leading-5 font-normal text-gray-500">
-                      Animal: {attribute(metadata, Traits.Creature)}
+                      Animal: {getCharacter(nft.characterId).creature}
                     </span>
                     <span className="text-sm leading-5 font-normal text-gray-500">
-                      Background:{' '}
-                      {
-                        backgrounds[
-                          attribute(metadata, Traits.Background) as number
-                        ].name
-                      }
+                      Background: {backgrounds[nft.backgroundId].name}
                     </span>
                   </div>
                 </div>
@@ -239,7 +199,7 @@ export default function NFT(): JSX.Element {
                     Description
                   </span>
                   <span className="text-sm leading-5 font-normal text-gray-500 overflow-ellipsis overflow-hidden">
-                    {metadata.description}
+                    {nft.description}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-4">
@@ -247,18 +207,9 @@ export default function NFT(): JSX.Element {
                     Token Allocated
                   </span>
                   <Allocation
-                    lockAmount={BigNumber.from(
-                      attribute(metadata, Traits.LockAmount) as string,
-                    )}
-                    createdAt={
-                      new Date(
-                        (attribute(metadata, Traits.CreatedDate) as number) *
-                          1000,
-                      )
-                    }
-                    lockDuration={
-                      attribute(metadata, Traits.LockPeriod) as number
-                    }
+                    lockAmount={nft.lockAmount}
+                    createdAt={new Date(nft.createdAt.toNumber() * 1000)}
+                    lockDuration={nft.lockDuration.toNumber()}
                   />
                 </div>
               </div>

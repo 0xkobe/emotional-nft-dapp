@@ -29,7 +29,6 @@ const Select: FunctionComponent<IProps> = ({
   selectedIndex,
   canSearch,
   className,
-  ...props
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
@@ -62,7 +61,7 @@ const Select: FunctionComponent<IProps> = ({
     return (
       <div className="flex flex-row pl-2 items-center">
         {option.icon && <img className="w-5 h-5 mr-2" src={option.icon} />}
-        <span className="text-sm leading-5 font-medium truncate">
+        <span className="text-sm leading-5 font-medium text-purple-900 truncate">
           {option.text}
         </span>
       </div>
@@ -90,20 +89,24 @@ const Select: FunctionComponent<IProps> = ({
     >
       <div
         className={classNames(
-          'flex flex-row w-full items-center justify-between h-10 p-2 pr-8 border border-solid border-gray-300 rounded-lg',
+          'flex flex-row w-full items-center justify-between h-10 p-2 pr-8 border border-solid border-gray-300 rounded-lg shadow-sm hover:shadow-md',
         )}
         onClick={toggleDropdown}
       >
         {(!canSearch || !isOpen) && (
           <>
             <div>
-              {selectedIndex < options.length
-                ? renderOption(options[selectedIndex])
-                : placeholder || 'Select an option'}
+              {selectedIndex < options.length ? (
+                renderOption(options[selectedIndex])
+              ) : (
+                <span className="text-tray-400">
+                  {placeholder || 'Select an option'}
+                </span>
+              )}
             </div>
             <IconChevron
               className={classNames(
-                'absolute top-4 right-4 transition duration-400 transition-transform',
+                'absolute top-4 right-4 transition duration-400 transition-transform fill-current text-purple-700',
                 isOpen ? 'transform rotate-180' : '',
               )}
             />
@@ -112,7 +115,9 @@ const Select: FunctionComponent<IProps> = ({
         {canSearch && isOpen && (
           <input
             ref={inputRef}
-            className={classNames('w-full outline-none pl-2')}
+            className={classNames(
+              'w-full outline-none pl-2 placeholder-gray-400',
+            )}
             value={keyword}
             placeholder={options[selectedIndex].text}
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
@@ -139,7 +144,7 @@ const Select: FunctionComponent<IProps> = ({
                   {option.icon && (
                     <img className="w-5 h-5 mr-2" src={option.icon} />
                   )}
-                  <span className="text-sm leading-5 font-medium whitespace-nowrap">
+                  <span className="text-sm leading-5 font-medium text-purple-900 whitespace-nowrap">
                     {option.text}
                   </span>
                 </div>

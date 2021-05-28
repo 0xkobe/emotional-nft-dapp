@@ -29,11 +29,11 @@ import {
 import { abi, deployedAddresses } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
-import { createMetadata } from '../lib/nft'
+import { createNFTOffChain } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
 import { QAirdrop, QNFT, QStk } from '../types/contracts'
-import { DisplayType, Skin, Traits } from '../types/metadata'
+import { Skin } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
 
@@ -69,6 +69,7 @@ export default function Mint(): JSX.Element {
   const [qstkAmount, setQstkAmount] = useState(BigNumber.from(0))
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
+  const [airdropSignature, setAirdropSignature] = useState<string>()
   const [availableMintAmount, setAvailableMintAmount] = useState<BigNumber>()
   const [availableFreeAllocation, setAvailableFreeAllocation] =
     useState<BigNumber>()
@@ -241,7 +242,6 @@ export default function Mint(): JSX.Element {
   // button handle function
   const handleSubmit = () => {
     if (mintStep < 2) return setMintStep(mintStep + 1)
-    // TODO: mint with airdrop
     setIsMinting(true)
   }
 
@@ -306,7 +306,7 @@ export default function Mint(): JSX.Element {
     if (!account) return
     // save meta
     console.log('Saving metadata on backend...')
-    createMetadata(
+    createNFTOffChain(
       signature,
       chain.id,
       account,
@@ -337,11 +337,33 @@ export default function Mint(): JSX.Element {
     if (!signer) return
     if (!metaId) return
     console.log('Signing and sending transaction using Metamask...')
-    qnft
-      .connect(signer)
-      .mintNft(characterId, coinIndex, lockOptionId, metaId, qstkAmount, {
-        value: nftPrice,
-      })
+
+    const qnftWithSigner = qnft.connect(signer)
+    const mintPromise = airdropSignature
+      ? qnftWithSigner.mintNftForAirdropUser(
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          airdropAmount,
+          airdropSignature,
+          {
+            value: nftPrice,
+          },
+        )
+      : qnftWithSigner.mintNft(
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          {
+            value: nftPrice,
+          },
+        )
+
+    mintPromise
       .then((tx) => {
         console.log('Tx signed and broadcasted with success', tx.hash)
         setTx(tx)
@@ -364,6 +386,8 @@ export default function Mint(): JSX.Element {
     qstkAmount,
     metaId,
     nftPrice,
+    airdropSignature,
+    airdropAmount,
   ])
 
   // wait for receipt
@@ -438,7 +462,7 @@ export default function Mint(): JSX.Element {
     return (
       <Modal
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => {}}
+        onModalClose={() => console.log('modal close')}
         isShown={true}
       >
         An error occurred:
@@ -459,63 +483,28 @@ export default function Mint(): JSX.Element {
           <Stepper step={mintStep} onChangeStep={(step) => setMintStep(step)} />
         </div>
         <div className="flex flex-row justify-between">
-          <div className="flex flex-row space-x-8">
+          <div className="flex flex-row space-x-8 p-8 border border-purple-100 rounded-2xl shadow-sm">
             <NFTCard
               size="big"
               isDesign
-              metadata={{
-                name: nftName,
+              nft={{
+                tokenId: BigNumber.from(1), // random value
+                characterId: characterId,
+                favCoinId: coinIndex,
+                lockDuration: BigNumber.from(
+                  lockOptions[lockOptionId].duration,
+                ),
+                lockAmount: qstkAmount.add(airdropAmount),
+                createdAt: BigNumber.from(Date.now()),
+                withdrawn: false,
+                metaId: 0, // zero as none
                 author: minterName,
+                backgroundId: backgroundIndex,
                 description: nftDescription,
-                image: characters[characterId].emotions.normal, // TODO: confirm?
-                external_url: '/', // TODO: confirm?
-                attributes: [
-                  {
-                    trait_type: Traits.Creature,
-                    value: characters[characterId].creature,
-                  },
-                  {
-                    trait_type: Traits.Skin,
-                    value: characters[characterId].skin,
-                  },
-                  {
-                    trait_type: Traits.Background,
-                    value: backgroundIndex,
-                  },
-                  {
-                    trait_type: Traits.FavCoin,
-                    value: coinIndex,
-                  },
-                  {
-                    trait_type: Traits.LockPeriod,
-                    value: lockOptionId,
-                  },
-                  {
-                    trait_type: Traits.LockAmount,
-                    value: qstkAmount.add(airdropAmount).toString(),
-                  },
-                  {
-                    trait_type: Traits.CreatorName,
-                    value: characters[characterId].artist.name,
-                  },
-                  {
-                    trait_type: Traits.CreatorWallet,
-                    value: characters[characterId].artist.wallet,
-                  },
-                  {
-                    display_type: DisplayType.Date,
-                    trait_type: Traits.CreatedDate,
-                    value: 0, // Need to be updated with actual value
-                  },
-                  {
-                    trait_type: Traits.Withdrawn,
-                    value: false,
-                  },
-                  {
-                    trait_type: Traits.DefaultEmotion,
-                    value: Emotion.Normal, // Need to be updated with actual value
-                  },
-                ],
+                name: nftName, // nft name
+                chainId: chain.id,
+                creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
+                defaultEmotion: Emotion.Normal,
               }}
             />
             {mintStep === 0 && (
@@ -553,11 +542,10 @@ export default function Mint(): JSX.Element {
                 lockOptionId={lockOptionId}
                 qstkAmount={qstkAmount}
                 airdropAmount={airdropAmount}
-                setLockOptionId={(id: number) => setLockOptionId(id)}
-                setQstkAmount={(amount: BigNumber) => setQstkAmount(amount)}
-                setAirdropAmount={(amount: BigNumber) =>
-                  setAirdropAmount(amount)
-                }
+                setLockOptionId={setLockOptionId}
+                setQstkAmount={setQstkAmount}
+                setAirdropAmount={setAirdropAmount}
+                setAirdropSignature={setAirdropSignature}
               />
             )}
           </div>

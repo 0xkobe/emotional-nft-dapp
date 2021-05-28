@@ -11,7 +11,6 @@ export type IProps = HTMLAttributes<{}> & {
 const LockedTokenStat: FunctionComponent<IProps> = ({
   lockAmount,
   className,
-  ...props
 }: IProps) => {
   return (
     <div
