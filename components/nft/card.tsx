@@ -164,7 +164,11 @@ const NFTCard: FunctionComponent<IProps> = ({
             <img className="w-8 h-8" src={favCoin.meta.icon} />
           </div>
         </div>
-        <div className={classNames('relative overflow-hidden border border-purple-300 rounded-xl')}>
+        <div
+          className={classNames(
+            'relative overflow-hidden border border-purple-300 rounded-xl',
+          )}
+        >
           <div className="mt-full"></div>
           {backgroundSrc && (
             <img
