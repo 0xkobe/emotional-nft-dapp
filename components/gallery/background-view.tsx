@@ -13,8 +13,6 @@ const BackgroundView: FunctionComponent<IProps> = ({
   backgrounds,
   selectedIndex,
   onChange,
-  className,
-  ...props
 }: IProps) => {
   return (
     <div className={styles.backgrounds}>

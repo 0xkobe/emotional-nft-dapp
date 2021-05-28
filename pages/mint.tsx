@@ -493,7 +493,7 @@ export default function Mint(): JSX.Element {
     return (
       <Modal
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => {}}
+        onModalClose={() => console.log('modal close')}
         isShown={true}
       >
         An error occurred:

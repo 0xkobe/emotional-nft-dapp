@@ -19,7 +19,6 @@ export type IProps = HTMLAttributes<{}> & {
 const PropertyView: FunctionComponent<IProps> = ({
   value,
   className,
-  ...props
 }: IProps) => {
   // TODO: Mint summary description to 1 line with ellipsis
   // since there are few fields that are long that could break whole style,

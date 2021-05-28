@@ -7,12 +7,7 @@ export type IProps = HTMLAttributes<any> & {
   onUpgrade: () => void
 }
 
-const NFTActions: FunctionComponent<IProps> = ({
-  onTransfer,
-  onEdit,
-  onUpgrade,
-  className,
-}: IProps) => {
+const NFTActions: FunctionComponent<IProps> = ({ className }: IProps) => {
   return (
     <div
       className={classNames(

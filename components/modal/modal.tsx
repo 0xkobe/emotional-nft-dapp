@@ -17,12 +17,10 @@ export type IProps = HTMLAttributes<{}> & {
 }
 
 const Modal: FunctionComponent<IProps> = ({
-  className,
   isShown,
   children,
   onModalClose,
   onRequestClose,
-  ...props
 }: IProps) => {
   const [closeRequestSent, setCloseRequest] = useState(false)
   useEffect(() => {
@@ -38,7 +36,7 @@ const Modal: FunctionComponent<IProps> = ({
 
   useKeyDown('Escape', () => isShown && requestClose())
 
-  let modal = (
+  const modal = (
     <React.Fragment>
       <div className={styles.backdrop} onClick={requestClose} />
       <div className={styles.modalWrapper}>
