@@ -7,7 +7,7 @@ export type RawNFTData = {
   id: number
   characterId: number
   favCoinId: number
-  lockDuration: BigNumber
+  unlockTime: BigNumber
   lockAmount: BigNumber
   createdAt: BigNumber
   withdrawn: boolean

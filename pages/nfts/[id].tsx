@@ -250,8 +250,7 @@ export default function PageNFT(): JSX.Element {
             <aside>
               <Allocation
                 lockAmount={nft.lockAmount}
-                createdAt={new Date(nft.createdAt.toNumber() * 1000)}
-                lockDuration={nft.lockDuration.toNumber()}
+                unlockTime={new Date(nft.unlockTime.toNumber() * 1000)}
               />
               <NFTActions
                 className="mt-8"

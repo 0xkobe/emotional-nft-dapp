@@ -265,9 +265,9 @@ const lockOptions: LockOption[] = [
     maxAmount: parseEther('200000'), // 200K QSTK
   },
   {
-    id: LockPeriod.OneCentury,
-    duration: 100 * 12 * 30 * 86400, // 1 century
-    description: '1 century',
+    id: LockPeriod.OneDecade,
+    duration: 100 * 12 * 30 * 86400, // 1 decade
+    description: '1 decade',
     discount: 30, // percentage
     minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('400000'), // 400K QSTK

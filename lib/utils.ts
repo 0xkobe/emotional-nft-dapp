@@ -11,9 +11,30 @@ export function shortenAddress(address: string, chars = 4): string {
 
 export const formatDate = (d: Date): string => d.toLocaleDateString()
 
+export const formatDuration = (duration: number): string => {
+  const minute = 60
+  const hour = 60 * minute
+  const day = 24 * hour
+  const month = 30 * day
+  const year = 12 * month
+  if (duration > year) { // more than 1 year
+    return `${Math.floor(duration/year)} Years ${Math.floor((duration%year)/month)} Months`
+  }
+  if (duration > month) { // more than 1 month
+    return `${Math.floor(duration/month)} Months ${Math.floor((duration%month)/day)} Days`
+  }
+  if (duration > day) { // more than 1 day
+    return `${Math.floor(duration/day)} Days`
+  }
+  if (duration > hour) { // more than 1 hour
+    return `${Math.floor(duration/hour)} Hours`
+  }
+  return `${Math.floor(duration/minute)} Minutes`
+}
+
 export function lockDurationToString(duration: number): string {
   if (duration === 100 * 12 * 30 * 24 * 3600) {
-    return '1 Century'
+    return '1 Decade'
   }
   if (duration === 12 * 30 * 24 * 3600) {
     return '1 Year'
