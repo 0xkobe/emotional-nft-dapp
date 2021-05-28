@@ -5,9 +5,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { chain } from '../../../data/chains'
 import { abi, deployedAddresses } from '../../../data/smartContract'
 import { fetchMetadata, hydrateMetadata } from '../../../lib/nft'
-import { APINftMetadataResponse } from '../../../types/api'
+import { APINftMetadataResponse, DisplayType, Traits } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
-import { DisplayType, Traits } from '../../../types/metadata'
 
 // init ethereum provider
 const provider = new StaticJsonRpcProvider({
