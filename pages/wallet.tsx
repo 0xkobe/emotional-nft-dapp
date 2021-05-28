@@ -29,18 +29,17 @@ export default function Wallet(): JSX.Element {
 
   const fetchPriceChanges = useCallback(async (nfts: NFTData[]) => {
     const data = []
-    let coingeckoIds = ''
+    const coingeckoIds = []
     for (let i = 0; i < nfts.length; i++) {
       const favCoin =
         favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
       if (favCoin.meta.coingeckoId) {
-        coingeckoIds += favCoin.meta.coingeckoId + ','
+        coingeckoIds.push(favCoin.meta.coingeckoId)
       }
     }
     const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coingeckoIds.slice(
-        0,
-        coingeckoIds.length - 1,
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coingeckoIds.join(
+        ',',
       )}&price_change_percentage=24h`,
     )
     const response = await res.json()
