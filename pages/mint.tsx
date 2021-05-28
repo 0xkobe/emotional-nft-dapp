@@ -509,9 +509,13 @@ export default function Mint(): JSX.Element {
         <title>Mint NFT</title>
       </Head>
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between">
           <Title>Create Your own Quiver Emotional NFT</Title>
-          <Stepper step={mintStep} onChangeStep={(step) => setMintStep(step)} />
+          <Stepper
+            className="mt-4 md:mt-0"
+            step={mintStep}
+            onChangeStep={setMintStep}
+          />
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-8 p-8 border border-purple-100 rounded-2xl shadow-sm">
