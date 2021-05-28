@@ -53,6 +53,7 @@ const StoryWizard: FunctionComponent<IProps> = ({
         </div>
         <TextArea
           noResize
+          rows={12}
           placeholder="The best bear in the universe to watch my Bitcoins"
           value={nftDescription}
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>

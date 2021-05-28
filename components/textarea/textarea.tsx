@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { FunctionComponent, TextareaHTMLAttributes } from 'react'
-import styles from './textarea.module.css'
 
 export type IProps = TextareaHTMLAttributes<{}> & {
   noResize?: boolean
@@ -12,11 +11,13 @@ const TextArea: FunctionComponent<IProps> = ({
   ...props
 }: IProps) => {
   return (
-    <div className={classNames(className, styles.textarea)}>
-      <div className={styles.textareaWrapper}>
-        <textarea {...props} className={noResize ? 'resize-none' : ''} />
-      </div>
-    </div>
+    <textarea
+      {...props}
+      className={classNames(
+        'border border-purple-100 shadow rounded-2xl text-sm leading-5 font-normal text-purple-900 px-4 py-2 outline-none placeholder-purple-200 focus:ring-2 ring-purple-400',
+        noResize ? 'resize-none' : '',
+      )}
+    />
   )
 }
 
