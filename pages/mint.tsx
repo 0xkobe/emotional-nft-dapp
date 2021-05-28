@@ -511,7 +511,7 @@ export default function Mint(): JSX.Element {
                 name: nftName, // nft name
                 chainId: chain.id,
                 creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
-                defaultEmotion: Emotion.Happy,
+                defaultEmotion: Emotion.Normal,
               }}
             />
             {mintStep === 0 && (
