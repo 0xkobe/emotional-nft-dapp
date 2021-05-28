@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useState } from 'react'
-import { hydrateMetadata } from '../../lib/nft'
-import { Emotion, Metadata } from '../../types/nft'
+import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
+import { Emotion, NFT } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
@@ -10,7 +10,7 @@ import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
-  metadata: Metadata
+  nft: NFT
   size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
 }
@@ -98,7 +98,7 @@ export function borderColorFromEmotion(emotion: Emotion): string {
 
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
-  metadata,
+  nft,
   size,
   isDesign,
   className,
@@ -107,7 +107,9 @@ const NFTCard: FunctionComponent<IProps> = ({
     isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
   )
   const TrendIcon = trendIcon(changePercentage || 0)
-  const hydratedMetadata = hydrateMetadata(metadata)
+  const favCoin = getFavCoin(nft.favCoinId)
+  const backgroundUrl = getBackgroundImage(nft.backgroundId)
+  const character = getCharacter(nft.characterId)
 
   return (
     <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
@@ -136,7 +138,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
             {!isDesign && <TrendIcon className="w-6 h-4" />}
-            <img className="w-8 h-8" src={hydratedMetadata.favCoin.meta.icon} />
+            <img className="w-8 h-8" src={favCoin.meta.icon} />
           </div>
         </div>
         <div
@@ -145,24 +147,23 @@ const NFTCard: FunctionComponent<IProps> = ({
           )}
         >
           <div className="mt-full"></div>
-          {hydratedMetadata.backgroundUrl && (
+          {backgroundUrl && (
             <img
               className={classNames('absolute top-0 right-0 left-0 bottom-0')}
-              src={hydratedMetadata.backgroundUrl}
+              src={backgroundUrl}
             />
           )}
           <img
-            src={hydratedMetadata.character.emotions[emotion]}
+            src={character.emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
         <div className="flex flex-col space-y-1">
           <span className="text-xl leading-7 font-bold text-purple-900">
-            {hydratedMetadata.name}
+            {nft.name}
           </span>
           <span className="text-sm leading-5 font-normal text-gray-500">
-            [{hydratedMetadata.character.skin} -{' '}
-            {hydratedMetadata.character.creature}]
+            [{character.skin} - {character.creature}]
           </span>
         </div>
       </div>

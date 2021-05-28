@@ -4,23 +4,23 @@ import { backgrounds, characters, lockOptions } from '../data/nft'
 import { APINftCreateRequest } from '../types/api'
 import { QNFT } from '../types/contracts'
 import {
+  Character,
   Emotion,
-  HydratedMetadata,
-  Metadata,
-  MetadataOffChain,
-  MetadataOnChain,
+  FavCoin,
+  LockOption,
+  NFT,
+  NFTOffChain,
+  NFTOnChain,
 } from '../types/nft'
 import { supabase } from './supabase'
 
-// fetches metadata from on-chain and off-chain
-export const fetchMetadata = async (
+// fetches NFT from on-chain, metadata from off-chain, and fetch related local data
+export const fetchNFT = async (
   qnftContract: QNFT,
   tokenId: BigNumber,
-): Promise<Metadata> => {
+): Promise<NFT> => {
   // // fetch info on-chain
-  const nftDataOnChain = (await qnftContract.nftData(
-    tokenId,
-  )) as MetadataOnChain
+  const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
 
   // fetch info off-chain from database
   const { data, error } = await supabase
@@ -32,7 +32,7 @@ export const fetchMetadata = async (
     throw new Error(
       `metadata with id "${nftDataOnChain.metaId.toString()}" not found`,
     )
-  const nftDataOffChain = data.pop() as MetadataOffChain
+  const nftDataOffChain = data.pop() as NFTOffChain
 
   return {
     ...nftDataOnChain,
@@ -41,44 +41,38 @@ export const fetchMetadata = async (
   }
 }
 
-// put all related structure into the metadata
-export const hydrateMetadata = (metadata: Metadata): HydratedMetadata => {
-  // character
-  const character = characters[metadata.characterId]
-  if (!character)
-    throw new Error(`character with id ${metadata.characterId} not found`)
+// character
+export const getCharacter = (characterId: number): Character => {
+  const character = characters[characterId]
+  if (!character) throw new Error(`character with id ${characterId} not found`)
+  return character
+}
 
-  // favCoin
-  const favCoin = favCoins[metadata.favCoinId]
-  if (!favCoin)
-    throw new Error(`favCoin with id ${metadata.favCoinId} not found`)
+// favCoin
+export const getFavCoin = (favCoinId: number): FavCoin => {
+  const favCoin = favCoins[favCoinId]
+  if (!favCoin) throw new Error(`favCoin with id ${favCoinId} not found`)
+  return favCoin
+}
 
-  // lockOption
-  const lockOption = lockOptions.find((x) =>
-    metadata.lockDuration.eq(x.duration),
-  )
+// lockOption
+export const getLockOption = (lockDuration: BigNumber): LockOption => {
+  const lockOption = lockOptions.find((x) => lockDuration.eq(x.duration))
   if (!lockOption)
-    throw new Error(
-      `lockOption with duration ${metadata.lockDuration} not found`,
-    )
+    throw new Error(`lockOption with duration ${lockDuration} not found`)
+  return lockOption
+}
 
-  // backgroundUrl
-  if (!backgrounds[metadata.backgroundId])
-    throw new Error(`background with id ${metadata.backgroundId} not found`)
-  const backgroundUrl = backgrounds[metadata.backgroundId].image
-
-  // finally
-  return {
-    ...metadata,
-    character: characters[metadata.characterId],
-    favCoin,
-    lockOption,
-    backgroundUrl,
-  }
+// background
+// TODO: update to a more generic getBackground function. Add a new Background type
+export const getBackgroundImage = (backgroundId: number): string => {
+  if (!backgrounds[backgroundId])
+    throw new Error(`background with id ${backgroundId} not found`)
+  return backgrounds[backgroundId].image
 }
 
 // create a new metadata on the API. Returns the created metadata id.
-export const createMetadata = async (
+export const createNFTOffChain = async (
   signature: string,
   chainId: number,
   account: string,

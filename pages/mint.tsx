@@ -34,7 +34,7 @@ import {
 } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
-import { createMetadata } from '../lib/nft'
+import { createNFTOffChain } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
 import { QAirdrop, QNFT, QStk } from '../types/contracts'
@@ -337,7 +337,7 @@ export default function Mint(): JSX.Element {
     if (!account) return
     // save meta
     console.log('Saving metadata on backend...')
-    createMetadata(
+    createNFTOffChain(
       signature,
       chain.id,
       account,
@@ -494,7 +494,7 @@ export default function Mint(): JSX.Element {
             <NFTCard
               size="big"
               isDesign
-              metadata={{
+              nft={{
                 tokenId: BigNumber.from(1), // random value
                 characterId: characterId,
                 favCoinId: coinIndex,

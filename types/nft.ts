@@ -56,8 +56,8 @@ export type LockOption = {
   maxAmount: BigNumber
 }
 
-// Structure used to save the metadata in database
-export type MetadataOffChain = {
+// Structure used to save the nft data in database
+export type NFTOffChain = {
   author: string // author name
   backgroundId: number
   description: string
@@ -68,7 +68,7 @@ export type MetadataOffChain = {
 }
 
 // Structure of the nft data onchain
-export type MetadataOnChain = {
+export type NFTOnChain = {
   characterId: number
   favCoinId: number
   lockDuration: BigNumber
@@ -78,14 +78,7 @@ export type MetadataOnChain = {
   metaId: number
 }
 
-export type Metadata = MetadataOffChain &
-  MetadataOnChain & {
+export type NFT = NFTOffChain &
+  NFTOnChain & {
     tokenId: BigNumber
   }
-
-export type HydratedMetadata = Metadata & {
-  character: Character
-  favCoin: FavCoin
-  lockOption: LockOption
-  backgroundUrl: string // TODO: should load the whole background object. not just the url
-}

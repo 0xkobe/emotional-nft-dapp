@@ -1,9 +1,9 @@
 import { ContractInterface } from '@ethersproject/contracts'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useEffect, useState } from 'react'
-import { fetchMetadata } from '../lib/nft'
+import { fetchNFT } from '../lib/nft'
 import { QNFT } from '../types/contracts'
-import { Metadata } from '../types/nft'
+import { NFT } from '../types/nft'
 import useContract from './useContract'
 
 export default function useUserNFTs(
@@ -11,7 +11,7 @@ export default function useUserNFTs(
   addresses: { [chainId: number]: string },
   abi: ContractInterface,
 ): {
-  nfts: Metadata[]
+  nfts: NFT[]
   isLoading: boolean
   error?: Error
 } {
@@ -21,7 +21,7 @@ export default function useUserNFTs(
     abi,
   )
 
-  const [nfts, setNFTs] = useState<Metadata[]>([])
+  const [nfts, setNFTs] = useState<NFT[]>([])
   const [error, setError] = useState<Error>()
   const [isLoading, setLoading] = useState<boolean>(false)
 
@@ -33,7 +33,7 @@ export default function useUserNFTs(
       const nfts = await Promise.all(
         userNFTIndex.map(async (index) => {
           const tokenId = await qnft.tokenOfOwnerByIndex(account, index)
-          return fetchMetadata(qnft, tokenId)
+          return fetchNFT(qnft, tokenId)
         }),
       )
       setNFTs(nfts)

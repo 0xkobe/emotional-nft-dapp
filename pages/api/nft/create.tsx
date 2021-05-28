@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { payloadForSignatureEIP712v4 } from '../../../lib/signature'
 import { supabase } from '../../../lib/supabase'
 import { APINftCreateRequest, APINftCreateResponse } from '../../../types/api'
-import { MetadataOffChain } from '../../../types/nft'
+import { NFTOffChain } from '../../../types/nft'
 
 export default async (
   req: NextApiRequest,
@@ -50,7 +50,7 @@ export default async (
     return res.status(400).json({ error: 'signature verification failed' })
   }
 
-  const metadata: MetadataOffChain = {
+  const metadata: NFTOffChain = {
     author,
     backgroundId,
     description,

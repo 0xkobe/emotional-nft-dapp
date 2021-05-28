@@ -13,7 +13,7 @@ const Template: Story<IProps> = (args) => <Card {...args} />
 export const Angry = Template.bind({})
 Angry.args = {
   changePercentage: -20,
-  metadata: {
+  nft: {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
@@ -35,7 +35,7 @@ Angry.args = {
 export const Happy = Template.bind({})
 Happy.args = {
   changePercentage: 20,
-  metadata: {
+  nft: {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
@@ -57,7 +57,7 @@ Happy.args = {
 export const Normal = Template.bind({})
 Normal.args = {
   changePercentage: 0,
-  metadata: {
+  nft: {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,

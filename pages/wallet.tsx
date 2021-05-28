@@ -13,7 +13,7 @@ import {
   metamaskConnector,
 } from '../data/smartContract'
 import useUserNFTs from '../hooks/useUserNFTs'
-import { Metadata } from '../types/nft'
+import { NFT } from '../types/nft'
 
 export default function Wallet(): JSX.Element {
   const {
@@ -25,7 +25,7 @@ export default function Wallet(): JSX.Element {
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
   const [pricechanges, setPricechanges] = useState<number[]>([])
 
-  const fetchPriceChanges = useCallback(async (nfts: Metadata[]) => {
+  const fetchPriceChanges = useCallback(async (nfts: NFT[]) => {
     const data = []
     const coingeckoIds = []
     for (let i = 0; i < nfts.length; i++) {
@@ -99,7 +99,7 @@ export default function Wallet(): JSX.Element {
                       key={i}
                       className="cursor-pointer hover:shadow"
                       changePercentage={pricechanges[i]}
-                      metadata={nft}
+                      nft={nft}
                     />
                   </a>
                 </Link>
