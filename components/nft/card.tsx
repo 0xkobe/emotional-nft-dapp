@@ -1,11 +1,7 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
-import { favCoins } from '../../data/favCoins'
-import { backgrounds, characters } from '../../data/nft'
-import { attribute, getCreature } from '../../lib/nft'
-import { APINftMetadataResponse } from '../../types/api'
-import { Creature, Skin, Traits } from '../../types/metadata'
-import { Character, Emotion } from '../../types/nft'
+import { FunctionComponent, HTMLAttributes, useState } from 'react'
+import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
+import { Emotion, NFT } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
@@ -14,7 +10,7 @@ import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
-  metadata: APINftMetadataResponse
+  nft: NFT
   size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
 }
@@ -102,43 +98,24 @@ export function borderColorFromEmotion(emotion: Emotion): string {
 
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
-  metadata,
+  nft,
   size,
   isDesign,
   className,
 }: IProps) => {
-  const [creature, setCreature] = useState<Character>()
   const [emotion, setEmotion] = useState(
     isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
   )
   const TrendIcon = trendIcon(changePercentage || 0)
-  const backgroundSrc =
-    backgrounds[attribute(metadata, Traits.Background) as number].image
-  const favCoin = favCoins[attribute(metadata, Traits.FavCoin) as number]
-
-  useEffect(() => {
-    const animalId = attribute(metadata, Traits.Creature) as Creature
-    const skinId = attribute(metadata, Traits.Skin) as Skin
-    let creature: Character | undefined
-    if (animalId === Creature.Minotaur) {
-      creature = characters[25]
-    } else if (animalId === Creature.Fish) {
-      creature = characters[26]
-    } else {
-      creature = getCreature(animalId, skinId)
-    }
-    if (!creature) return
-    setCreature(creature)
-  }, [metadata])
-
-  console.log(creature?.emotions[emotion])
-  if (!creature) return <div>not found</div>
+  const favCoin = getFavCoin(nft.favCoinId)
+  const backgroundSrc = getBackgroundImage(nft.backgroundId)
+  const character = getCharacter(nft.characterId)
 
   return (
     <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
       <div
         className={classNames(
-          'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
+          'flex flex-col space-y-8 p-8 border border-2 border-purple-300 rounded-2xl shadow max-w-sm',
           size === 'big'
             ? 'w-96'
             : size === 'medium'
@@ -164,7 +141,11 @@ const NFTCard: FunctionComponent<IProps> = ({
             <img className="w-8 h-8" src={favCoin.meta.icon} />
           </div>
         </div>
-        <div className={classNames('relative rounded-xl overflow-hidden')}>
+        <div
+          className={classNames(
+            'relative overflow-hidden border border-purple-300 rounded-xl',
+          )}
+        >
           <div className="mt-full"></div>
           {backgroundSrc && (
             <img
@@ -173,17 +154,16 @@ const NFTCard: FunctionComponent<IProps> = ({
             />
           )}
           <img
-            src={creature.emotions[emotion]}
+            src={character.emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
         <div className="flex flex-col space-y-1">
-          <span className="text-base leading-6 font-bold text-purple-900">
-            {metadata.name}
+          <span className="text-xl leading-7 font-bold text-purple-900">
+            {nft.name}
           </span>
-          <span className="text-xs leading-4 font-normal text-gray-400">
-            [{attribute(metadata, Traits.Skin)} -{' '}
-            {attribute(metadata, Traits.Creature)}]
+          <span className="text-sm leading-5 font-normal text-gray-500">
+            [{character.skin} - {character.creature}]
           </span>
         </div>
       </div>

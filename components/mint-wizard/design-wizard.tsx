@@ -38,7 +38,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
   return (
     <div className={classNames(className, 'flex flex-col space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
+        <div className="text-base leading-6 font-medium text-purple-900">
           Animal Set
         </div>
         <CharacterView
@@ -49,8 +49,8 @@ const DesignWizard: FunctionComponent<IProps> = ({
       </div>
       <div className="flex flex-row space-x-8">
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">
-            Animal Skine
+          <div className="text-base leading-6 font-medium text-purple-900">
+            Animal Skin
           </div>
           <Select
             className="w-full"
@@ -61,7 +61,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
           />
         </div>
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">
+          <div className="text-base leading-6 font-medium text-purple-900">
             Favorite Coin
           </div>
           <Select
@@ -78,7 +78,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
+        <div className="text-base leading-6 font-medium text-purple-900">
           Background
         </div>
         <BackgroundView

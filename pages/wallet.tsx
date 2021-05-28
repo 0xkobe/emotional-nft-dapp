@@ -13,9 +13,7 @@ import {
   metamaskConnector,
 } from '../data/smartContract'
 import useUserNFTs from '../hooks/useUserNFTs'
-import { attribute } from '../lib/nft'
-import { Traits } from '../types/metadata'
-import { NFTData } from '../types/nft'
+import { NFT } from '../types/nft'
 
 export default function Wallet(): JSX.Element {
   const {
@@ -27,25 +25,34 @@ export default function Wallet(): JSX.Element {
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
   const [pricechanges, setPricechanges] = useState<number[]>([])
 
-  const fetchPriceChanges = useCallback(async (nfts: NFTData[]) => {
+  const fetchPriceChanges = useCallback(async (nfts: NFT[]) => {
     const data = []
+    const coingeckoIds = []
     for (let i = 0; i < nfts.length; i++) {
-      const favCoin =
-        favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
+      const favCoin = favCoins[nfts[i].favCoinId]
       if (favCoin.meta.coingeckoId) {
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+        coingeckoIds.push(favCoin.meta.coingeckoId)
+      }
+    }
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coingeckoIds.join(
+        ',',
+      )}&price_change_percentage=24h`,
+    )
+    const response = await res.json()
+    if ('error' in response)
+      throw new Error(`an error occurred while fetching coingecko pricefeed`)
+    if (!res.ok)
+      throw new Error(
+        `an unknown error occurred while fetching coingecko pricefeed`,
+      )
+    for (let i = 0; i < nfts.length; i++) {
+      const favCoin = favCoins[nfts[i].favCoinId]
+      if (favCoin.meta.coingeckoId) {
+        const favCoinData = response.find(
+          (val: any) => val.id === favCoin.meta.coingeckoId,
         )
-        const response = await res.json()
-        if ('error' in response)
-          throw new Error(
-            `an error occurred while fetching coingecko pricefeed`,
-          )
-        if (!res.ok)
-          throw new Error(
-            `an unknown error occurred while fetching coingecko pricefeed`,
-          )
-        data.push(response.market_data.price_change_percentage_24h || 0)
+        data.push(favCoinData.price_change_percentage_24h || 0)
       } else {
         data.push(0)
       }
@@ -55,11 +62,10 @@ export default function Wallet(): JSX.Element {
 
   useEffect(() => {
     if (isLoading || contractError || nfts.length === 0) return
-    const sum = BigNumber.from(0)
-    nfts.forEach((nft) => {
-      const nftLockAmount = attribute(nft.metadata, Traits.LockAmount) as string
-      sum.add(BigNumber.from(nftLockAmount))
-    })
+    const sum = nfts.reduce(
+      (sum, nft) => sum.add(nft.lockAmount),
+      BigNumber.from(0),
+    )
     setLockAmount(sum)
     void fetchPriceChanges(nfts)
   }, [contractError, fetchPriceChanges, isLoading, nfts])
@@ -87,13 +93,13 @@ export default function Wallet(): JSX.Element {
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
               nfts.map((nft, i) => (
-                <Link href={`/nfts/${i}`}>
+                <Link key={i} href={`/nfts/${nft.tokenId}`}>
                   <a>
                     <NFTCard
                       key={i}
                       className="cursor-pointer hover:shadow"
                       changePercentage={pricechanges[i]}
-                      metadata={nft.metadata}
+                      nft={nft}
                     />
                   </a>
                 </Link>
