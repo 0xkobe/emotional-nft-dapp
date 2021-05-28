@@ -14,8 +14,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
+      <Navigation route={route} className="mb-4" />
       <div className="max-w-7xl mx-auto relative min-h-screen flex flex-col">
-        <Navigation route={route} className="mb-4" />
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 flex items-stretch overflow-hidden">
             <Component {...pageProps} />
