@@ -50,7 +50,7 @@ const Allocation: FunctionComponent<IProps> = ({
       <div className={styles.values}>
         {values.map((value, index) => {
           return (
-            <div key={value.toString() + '-' + index} className={styles.value}>
+            <div key={index} className={styles.value}>
               {value}
             </div>
           )
