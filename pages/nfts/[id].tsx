@@ -7,6 +7,7 @@ import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
+import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
 import {
@@ -22,7 +23,7 @@ import { NFT } from '../../types/nft'
 export default function (): JSX.Element {
   const router = useRouter()
 
-  const { contract, error: contractError } = useContract<QNFT>(
+  const { contract, error: contractError, account } = useContract<QNFT>(
     metamaskConnector,
     deployedAddresses.qnft,
     abi.qnft,
@@ -37,19 +38,16 @@ export default function (): JSX.Element {
   const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
   const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
   const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
+  const [nftCount, setNFTCount] = useState<number>(0)
+  const [isOwner, setOwner] = useState(false)
 
   const _fetchData = useCallback(async (contract: QNFT, tokenId: BigNumber) => {
     setLoading(true)
     try {
-      // FIXME: put back logic to get the next and previous token of the owner
-      // const userNFTCount = (
-      //   await contract.callStatic.balanceOf(account)
-      // ).toNumber()
-      // setNFTCount(userNFTCount)
-      // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-      //   account,
-      //   id,
-      // )
+      const userNFTCount = (await contract.totalSupply()).toNumber()
+      setNFTCount(userNFTCount)
+      const ownerAddress = await contract.ownerOf(tokenId)
+      setOwner(ownerAddress === account)
       const nft = await fetchNFT(contract, tokenId)
       setNFT(nft)
 
@@ -98,7 +96,7 @@ export default function (): JSX.Element {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [account])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -126,20 +124,23 @@ export default function (): JSX.Element {
               <BackButton text="Back to your space" />
             </a>
           </Link>
-          {/* <Pagination // FIXME: to put back with system based on the nft id
-            total={nftCount}
-            current={id}
-            onPrev={() => {
-              if (id > 0) {
-                void router.push(`/nfts/${id - 1}`)
-              }
-            }}
-            onNext={() => {
-              if (id < nftCount - 1) {
-                void router.push(`/nfts/${id + 1}`)
-              }
-            }}
-          /> */}
+          {tokenId && (
+            <Pagination
+              total={nftCount + 1}  // nft index starts from 1 so total was set to nftCount + 1
+              current={tokenId.toNumber()}
+              min={1}
+              onPrev={() => {
+                if (tokenId.toNumber() > 1) {
+                  void router.push(`/nfts/${tokenId.toNumber() - 1}`)
+                }
+              }}
+              onNext={() => {
+                if (tokenId.toNumber() < nftCount) {
+                  void router.push(`/nfts/${tokenId.toNumber() + 1}`)
+                }
+              }}
+            />
+          )}
         </div>
 
         {isLoading && <div>...loading</div>}
@@ -219,17 +220,19 @@ export default function (): JSX.Element {
                 </div>
               </div>
             </div>
-            <NFTActions
-              onTransfer={() => {
-                console.log('transfer')
-              }}
-              onEdit={() => {
-                console.log('edit')
-              }}
-              onUpgrade={() => {
-                console.log('upgrade')
-              }}
-            />
+            {isOwner && (
+              <NFTActions
+                onTransfer={() => {
+                  console.log('transfer')
+                }}
+                onEdit={() => {
+                  console.log('edit')
+                }}
+                onUpgrade={() => {
+                  console.log('upgrade')
+                }}
+              />
+            )}
           </div>
         )}
       </div>
