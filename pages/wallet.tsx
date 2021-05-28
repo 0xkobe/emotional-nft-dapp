@@ -62,7 +62,6 @@ export default function Wallet(): JSX.Element {
         data.push(0)
       }
     }
-    console.log(data)
     setPricechanges(data)
   }, [])
 
