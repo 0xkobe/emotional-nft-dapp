@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { bnToText, formatDate, lockDurationToString } from '../../lib/utils'
-import styles from './allocation.module.css'
+import PropertyView from '../mint-summary/property-view'
 
 export type IProps = HTMLAttributes<{}> & {
   lockAmount: BigNumber
@@ -16,46 +16,39 @@ const Allocation: FunctionComponent<IProps> = ({
   lockDuration,
   className,
 }: IProps) => {
-  const headers = [
-    'COIN',
-    'AMOUNT',
-    'SUBSCRIPTION',
-    'LOCK PERIOD',
-    'REDEMPTION',
-  ]
-
-  const values = [
-    <>
-      <img src="/quiver.svg" />
-      <div>QSTK</div>
-    </>,
-    bnToText(lockAmount),
-    formatDate(createdAt),
-    lockDurationToString(lockDuration),
-    formatDate(new Date(createdAt.getTime() + lockDuration * 1000)),
+  const properties = [
+    {
+      key: 'Coind',
+      value: 'QSTK',
+    },
+    { key: 'Amount', value: bnToText(lockAmount) },
+    { key: 'Subscription', value: formatDate(createdAt) },
+    { key: 'Lock period', value: lockDurationToString(lockDuration) },
+    {
+      key: 'Redemption',
+      value: formatDate(new Date(createdAt.getTime() + lockDuration * 1000)),
+    },
   ]
 
   return (
-    <div className={classNames(className, styles.allocation)}>
-      <div className={styles.headers}>
-        {headers.map((header) => {
-          return (
-            <div key={header} className={styles.header}>
-              {header}
-            </div>
-          )
-        })}
+    <>
+      <div
+        className={classNames(
+          className,
+          'bg-white shadow border border-purple-100 p-8 rounded-2xl',
+        )}
+      >
+        <div className="text-base leading-6 font-bold text-purple-900 mb-8">
+          Token Allocated
+        </div>
+        <PropertyView
+          value={{
+            title: '',
+            keyValues: properties,
+          }}
+        />
       </div>
-      <div className={styles.values}>
-        {values.map((value) => {
-          return (
-            <div key={value.toString()} className={styles.value}>
-              {value}
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    </>
   )
 }
 

@@ -254,6 +254,7 @@ export default function PageNFT(): JSX.Element {
                 lockDuration={nft.lockDuration.toNumber()}
               />
               <NFTActions
+                className="mt-8"
                 onTransfer={() => {
                   console.log('transfer')
                 }}
