@@ -5,68 +5,93 @@ import { Artist, Character, Emotion, LockOption } from '../types/nft'
 const backgrounds = [
   {
     id: 0,
-    name: 'transparent',
+    name: 'Transparent',
     image: '/nft/background/00_transparent.png'
   },
   {
     id: 1,
-    name: "Sunrise Boat",
-    image: '/nft/background/01_sunrise_boat.png'
+    name: "Cave",
+    image: '/nft/background/01_cave.png'
   },
   {
     id: 2,
-    name: "Noon Boat",
-    image: '/nft/background/02_noon_boat.png'
+    name: "Dark Cave",
+    image: '/nft/background/02_dark_cave.png'
   },
   {
     id: 3,
-    name: "Evening Boat",
-    image: '/nft/background/03_evening_boat.png',
+    name: "Forest",
+    image: '/nft/background/03_forest.png'
   },
   {
     id: 4,
-    name: "Night Boat",
-    image: '/nft/background/04_night_boat.png',
+    name: "Jungle",
+    image: '/nft/background/04_jungle.png'
   },
   {
     id: 5,
-    name: "Bright Night Sky Moon",
-    image: '/nft/background/05_bright_night_sky_moon.png',
+    name: "Snow",
+    image: '/nft/background/05_snow.png'
   },
   {
     id: 6,
-    name: "Cloudy Night Sky",
-    image: '/nft/background/06_cloudy_night_sky.png',
+    name: "Barn",
+    image: '/nft/background/06_barn.png'
   },
   {
     id: 7,
-    name: "Rainy Night Sky",
-    image: '/nft/background/07_rainy_night_sky.png'
+    name: "Field",
+    image: '/nft/background/07_field.png'
   },
   {
     id: 8,
-    name: "Cave",
-    image: '/nft/background/08_cave.png'
+    name: "Dark Forest",
+    image: '/nft/background/08_dark_forest.png'
   },
   {
     id: 9,
-    name: "Dark Cave",
-    image: '/nft/background/09_dark_cave.png'
+    name: "Enchanted Mountains",
+    image: '/nft/background/09_enchanted_mountains.png'
   },
   {
     id: 10,
-    name: "Forest",
-    image: '/nft/background/10_forest.png'
+    name: "Paradise",
+    image: '/nft/background/10_paradise.png'
   },
   {
     id: 11,
-    name: "Forest",
-    image: '/nft/background/11_jungle.png'
+    name: "Volcano",
+    image: '/nft/background/11_volcano.png'
   },
   {
     id: 12,
-    name: "Snow",
-    image: '/nft/background/12_snow.png'
+    name: "Green underwater",
+    image: '/nft/background/12_green_underwater.png'
+  },
+  {
+    id: 13,
+    name: "Light blue underwater",
+    image: '/nft/background/13_light_blue_underwater.png'
+  },
+  {
+    id: 14,
+    name: "Dungeon lava",
+    image: '/nft/background/14_dungeon_lava.png'
+  },
+  {
+    id: 15,
+    name: "Outer space",
+    image: '/nft/background/15_outer_space.png'
+  },
+  {
+    id: 16,
+    name: "Dark green underwater",
+    image: '/nft/background/16_dark_green_underwater.png'
+  },
+  {
+    id: 17,
+    name: "Huge rock underwater",
+    image: '/nft/background/17_huge_rock_underwater.png'
   },
 ]
 

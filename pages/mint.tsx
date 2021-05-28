@@ -514,7 +514,7 @@ export default function Mint(): JSX.Element {
           <Stepper step={mintStep} onChangeStep={(step) => setMintStep(step)} />
         </div>
         <div className="flex flex-row justify-between">
-          <div className="flex flex-row space-x-8">
+          <div className="flex flex-row space-x-8 p-8 border border-purple-100 rounded-2xl shadow-sm">
             <NFTCard
               size="big"
               isDesign

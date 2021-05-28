@@ -21,19 +21,30 @@ const CharacterItem: FunctionComponent<IProps> = ({
       className={classNames(
         className,
         styles.character,
-        selected && styles.selected,
+        character.currentSupply >= character.maxSupply ? 'opacity-25' : '',
       )}
       onClick={() => {
         onChange && onChange()
       }}
     >
-      <div className={styles.image}>
-        <img src={character.emotions.normal} />
+      <div className="w-18 h-18 mb-2">
+        <img
+          className={classNames(
+            'rounded-2xl hover:shadow-md',
+            selected
+              ? 'border-2 border-purple-700'
+              : 'border border-purple-100',
+            selected ? 'shadow-md' : 'shadow-sm',
+          )}
+          src={character.emotions.normal}
+        />
       </div>
-      <div className={styles.supply}>
+      <div className="text-xs leading-4 font-normal text-gray-500 mb-1">
         {character.currentSupply}/{character.maxSupply}
       </div>
-      <div className={styles.name}>{character.name}</div>
+      <div className="text-sm leading-5 font-normal text-purple-900">
+        {character.name}
+      </div>
     </div>
   )
 }

@@ -88,7 +88,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   const onChangeAirdropKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAirdropKey(e.target.value)
     if (!account) return
-    const result = verifyAirdropKey(verifier, account, airdropKey)
+    const result = verifyAirdropKey(verifier, account, e.target.value)
     if (!result.isValid) {
       setAirdropAmount(BigNumber.from(0))
       setAirdropKeyError('invalid airdrop key')
