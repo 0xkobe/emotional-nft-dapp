@@ -15,11 +15,7 @@ const provider = new StaticJsonRpcProvider({
 })
 
 // // init smart contract
-const qnft = new Contract(
-  deployedAddresses.qnft[chain.id],
-  abi.qnft,
-  provider,
-) as QNFT
+const qnft = new Contract(deployedAddresses.qnft, abi.qnft, provider) as QNFT
 
 export default async (
   req: NextApiRequest,
