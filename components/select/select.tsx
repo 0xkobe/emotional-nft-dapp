@@ -89,7 +89,7 @@ const Select: FunctionComponent<IProps> = ({
     >
       <div
         className={classNames(
-          'flex flex-row w-full items-center justify-between h-10 p-2 pr-8 border border-solid border-gray-300 rounded-lg shadow-sm hover:shadow-md',
+          'flex flex-row w-full items-center justify-between h-10 p-2 pr-8 border border-solid border-purple-100 rounded-2xl shadow hover:shadow-md text-sm leading-5 font-normal text-purple-900 focus:ring-2 ring-purple-400',
         )}
         onClick={toggleDropdown}
       >
@@ -116,7 +116,7 @@ const Select: FunctionComponent<IProps> = ({
           <input
             ref={inputRef}
             className={classNames(
-              'w-full outline-none pl-2 placeholder-gray-400',
+              'w-full outline-none pl-2 placeholder-purple-400',
             )}
             value={keyword}
             placeholder={options[selectedIndex].text}
@@ -127,7 +127,7 @@ const Select: FunctionComponent<IProps> = ({
         )}
       </div>
       {isOpen && filteredOptions.length > 0 && (
-        <div className="absolute left-0 max-h-48 min-w-full z-50 border border-gray-400 overflow-auto">
+        <div className="absolute left-0 max-h-48 min-w-full z-50 border border-purple-400 overflow-auto">
           {filteredOptions.map(({ option, index }) => {
             return (
               <div
@@ -136,8 +136,8 @@ const Select: FunctionComponent<IProps> = ({
                 className={classNames(
                   'flex flex-row items-center p-2 min-w-full',
                   selectedIndex === index
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-gray-500 hover:bg-gray-100',
+                    ? 'bg-purple-500 text-white'
+                    : 'bg-white text-purple-500 hover:bg-purple-100',
                 )}
               >
                 <div className="flex flex-row pl-2 items-center min-w-full w-max">
