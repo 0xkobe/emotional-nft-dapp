@@ -23,31 +23,41 @@ export default function Wallet(): JSX.Element {
   } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
-  const [priceChanges, setPriceChanges] = useState<number[]>([])
+  const [pricechanges, setPricechanges] = useState<number[]>([])
 
   const fetchPriceChanges = useCallback(async (nfts: Metadata[]) => {
-    const prices = await Promise.all(
-      nfts.map(async (nft) => {
-        const favCoin = favCoins[nft.favCoinId]
-        if (!favCoin.meta.coingeckoId) return 0
-
-        // FIXME: move to utils (this is used somewhere else)
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
-        )
-        const response = await res.json()
-        if ('error' in response)
-          throw new Error(
-            `an error occurred while fetching coingecko pricefeed`,
-          )
-        if (!res.ok)
-          throw new Error(
-            `an unknown error occurred while fetching coingecko pricefeed`,
-          )
-        return response.market_data.price_change_percentage_24h || 0
-      }),
+    const data = []
+    const coingeckoIds = []
+    for (let i = 0; i < nfts.length; i++) {
+      const favCoin = favCoins[nfts[i].favCoinId]
+      if (favCoin.meta.coingeckoId) {
+        coingeckoIds.push(favCoin.meta.coingeckoId)
+      }
+    }
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coingeckoIds.join(
+        ',',
+      )}&price_change_percentage=24h`,
     )
-    setPriceChanges(prices)
+    const response = await res.json()
+    if ('error' in response)
+      throw new Error(`an error occurred while fetching coingecko pricefeed`)
+    if (!res.ok)
+      throw new Error(
+        `an unknown error occurred while fetching coingecko pricefeed`,
+      )
+    for (let i = 0; i < nfts.length; i++) {
+      const favCoin = favCoins[nfts[i].favCoinId]
+      if (favCoin.meta.coingeckoId) {
+        const favCoinData = response.find(
+          (val: any) => val.id === favCoin.meta.coingeckoId,
+        )
+        data.push(favCoinData.price_change_percentage_24h || 0)
+      } else {
+        data.push(0)
+      }
+    }
+    setPricechanges(data)
   }, [])
 
   useEffect(() => {
@@ -83,12 +93,12 @@ export default function Wallet(): JSX.Element {
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
               nfts.map((nft, i) => (
-                <Link href={`/nfts/${nft.tokenId}`}>
+                <Link key={i} href={`/nfts/${nft.tokenId}`}>
                   <a>
                     <NFTCard
                       key={i}
                       className="cursor-pointer hover:shadow"
-                      changePercentage={priceChanges[i]}
+                      changePercentage={pricechanges[i]}
                       metadata={nft}
                     />
                   </a>

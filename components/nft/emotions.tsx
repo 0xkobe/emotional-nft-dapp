@@ -20,7 +20,7 @@ const NFTEmotions: FunctionComponent<IProps> = ({
 }: IProps) => {
   const emotions = Object.values(Emotion)
   return (
-    <div className={classNames(className, 'flex flex-col space-y-4')}>
+    <div className={classNames(className, 'flex flex-col space-y-4 p-4')}>
       <span className="text-sm leading-5 font-medium text-purple-900">
         Preview the NFT Emotions
       </span>

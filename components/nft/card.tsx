@@ -113,7 +113,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
       <div
         className={classNames(
-          'flex flex-col space-y-8 p-8 border rounded-xl mb-auto max-w-sm',
+          'flex flex-col space-y-8 p-8 border border-2 border-purple-300 rounded-2xl shadow max-w-sm',
           size === 'big'
             ? 'w-96'
             : size === 'medium'
@@ -139,7 +139,11 @@ const NFTCard: FunctionComponent<IProps> = ({
             <img className="w-8 h-8" src={hydratedMetadata.favCoin.meta.icon} />
           </div>
         </div>
-        <div className={classNames('relative rounded-xl overflow-hidden')}>
+        <div
+          className={classNames(
+            'relative overflow-hidden border border-purple-300 rounded-xl',
+          )}
+        >
           <div className="mt-full"></div>
           {hydratedMetadata.backgroundUrl && (
             <img
@@ -153,10 +157,10 @@ const NFTCard: FunctionComponent<IProps> = ({
           />
         </div>
         <div className="flex flex-col space-y-1">
-          <span className="text-base leading-6 font-bold text-purple-900">
+          <span className="text-xl leading-7 font-bold text-purple-900">
             {hydratedMetadata.name}
           </span>
-          <span className="text-xs leading-4 font-normal text-gray-400">
+          <span className="text-sm leading-5 font-normal text-gray-500">
             [{hydratedMetadata.character.skin} -{' '}
             {hydratedMetadata.character.creature}]
           </span>

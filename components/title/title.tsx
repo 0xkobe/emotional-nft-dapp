@@ -12,7 +12,7 @@ const Title: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         className,
-        'text-xl leading-7 font-bold text-gray-500',
+        'text-xl leading-7 font-bold text-purple-900',
       )}
     >
       {children}
