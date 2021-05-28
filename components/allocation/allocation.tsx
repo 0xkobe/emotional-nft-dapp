@@ -47,9 +47,9 @@ const Allocation: FunctionComponent<IProps> = ({
         })}
       </div>
       <div className={styles.values}>
-        {values.map((value) => {
+        {values.map((value, i) => {
           return (
-            <div key={value.toString()} className={styles.value}>
+            <div key={i} className={styles.value}>
               {value}
             </div>
           )

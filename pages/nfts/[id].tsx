@@ -35,6 +35,7 @@ export default function PageNFT(): JSX.Element {
   const [changePercentage, setChangePercentage] = useState(0)
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
+  const [isOwner, setOwner] = useState(false)
 
   const tokenId = useMemo(() => {
     if (!router.isReady) return undefined
@@ -96,6 +97,9 @@ export default function PageNFT(): JSX.Element {
     if (!contract) return
     if (!tokenId) return
     setLoading(true)
+    void contract.ownerOf(tokenId).then(ownerAddress => {
+      setOwner(ownerAddress === account)
+    })
     fetchNFT(contract, tokenId)
       .then(setNFT)
       .catch(setError)
@@ -105,7 +109,7 @@ export default function PageNFT(): JSX.Element {
       setLoading(false)
       setError(undefined)
     }
-  }, [contract, tokenId]) // FIXME: contract is reloaded when the tokenId changes
+  }, [account, contract, tokenId]) // FIXME: contract is reloaded when the tokenId changes
 
   useEffect(() => {
     if (!favCoin) return
@@ -251,17 +255,19 @@ export default function PageNFT(): JSX.Element {
                 </div>
               </div>
             </div>
-            <NFTActions
-              onTransfer={() => {
-                console.log('transfer')
-              }}
-              onEdit={() => {
-                console.log('edit')
-              }}
-              onUpgrade={() => {
-                console.log('upgrade')
-              }}
-            />
+            {isOwner && (
+              <NFTActions
+                onTransfer={() => {
+                  console.log('transfer')
+                }}
+                onEdit={() => {
+                  console.log('edit')
+                }}
+                onUpgrade={() => {
+                  console.log('upgrade')
+                }}
+              />
+            )}
           </div>
         )}
       </div>
