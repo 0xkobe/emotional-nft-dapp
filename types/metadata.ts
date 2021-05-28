@@ -76,7 +76,7 @@ export enum FavCoinEnum {
   SHFT,
   GSWAP,
   IOTX,
-  DXD, 
+  DXD,
   GAME,
   ONE,
   CSPR,
@@ -130,25 +130,4 @@ export enum LockPeriod {
   TwelveMonths = 1,
   OneCentury = 2,
   ThirtyMinutes = 3, // FIXME: for dev only
-}
-
-export enum Traits {
-  Creature = 'Creature',
-  Skin = 'Skin',
-  Background = 'Background',
-  FavCoin = 'Favorite Coin',
-  LockPeriod = 'Lock Period',
-  LockAmount = 'Lock Amount',
-  CreatorName = "Creator's Name",
-  CreatorWallet = "Creator's Address",
-  CreatedDate = 'Created Date',
-  Withdrawn = 'Withdrawn',
-  DefaultEmotion = 'Default Emotion',
-}
-
-export enum DisplayType {
-  Date = 'date',
-  Number = 'number', // can also set optional max_value
-  BoostPercentage = 'boost_percentage', // can also set optional max_value
-  BoostNumber = 'boost_number', // can also set optional max_value
 }
