@@ -29,23 +29,35 @@ export default function Wallet(): JSX.Element {
 
   const fetchPriceChanges = useCallback(async (nfts: NFTData[]) => {
     const data = []
+    let coingeckoIds = ''
     for (let i = 0; i < nfts.length; i++) {
       const favCoin =
         favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
       if (favCoin.meta.coingeckoId) {
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+        coingeckoIds += favCoin.meta.coingeckoId + ','
+      }
+    }
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coingeckoIds.slice(
+        0,
+        coingeckoIds.length - 1,
+      )}&price_change_percentage=24h`,
+    )
+    const response = await res.json()
+    if ('error' in response)
+      throw new Error(`an error occurred while fetching coingecko pricefeed`)
+    if (!res.ok)
+      throw new Error(
+        `an unknown error occurred while fetching coingecko pricefeed`,
+      )
+    for (let i = 0; i < nfts.length; i++) {
+      const favCoin =
+        favCoins[attribute(nfts[i].metadata, Traits.FavCoin) as number]
+      if (favCoin.meta.coingeckoId) {
+        const favCoinData = response.find(
+          (val: any) => val.id === favCoin.meta.coingeckoId,
         )
-        const response = await res.json()
-        if ('error' in response)
-          throw new Error(
-            `an error occurred while fetching coingecko pricefeed`,
-          )
-        if (!res.ok)
-          throw new Error(
-            `an unknown error occurred while fetching coingecko pricefeed`,
-          )
-        data.push(response.market_data.price_change_percentage_24h || 0)
+        data.push(favCoinData.price_change_percentage_24h || 0)
       } else {
         data.push(0)
       }
@@ -87,7 +99,7 @@ export default function Wallet(): JSX.Element {
             {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
             {!isLoading &&
               nfts.map((nft, i) => (
-                <Link href={`/nfts/${i}`}>
+                <Link key={i} href={`/nfts/${i}`}>
                   <a>
                     <NFTCard
                       key={i}

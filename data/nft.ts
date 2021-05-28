@@ -25,7 +25,7 @@ const backgrounds = [
   },
   {
     id: 4,
-    name: "Forest",
+    name: "Jungle",
     image: '/nft/background/04_jungle.png'
   },
   {
@@ -90,7 +90,7 @@ const backgrounds = [
   },
   {
     id: 17,
-    name: "Dark green underwater",
+    name: "Huge rock underwater",
     image: '/nft/background/17_huge_rock_underwater.png'
   },
 ]

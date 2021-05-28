@@ -79,7 +79,7 @@ export default function NFT(): JSX.Element {
         })
         if (favCoin.meta.coingeckoId) {
           const res = await fetch(
-            `https://api.coingecko.com/api/v3/coins/${favCoin.meta.coingeckoId}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
           )
           const response = await res.json()
           if ('error' in response)
@@ -90,9 +90,7 @@ export default function NFT(): JSX.Element {
             throw new Error(
               `an unknown error occurred while fetching coingecko pricefeed`,
             )
-          setChangePercentage(
-            response.market_data.price_change_percentage_24h || 0,
-          )
+          setChangePercentage(response[0].price_change_percentage_24h || 0)
         } else {
           setChangePercentage(0)
         }
