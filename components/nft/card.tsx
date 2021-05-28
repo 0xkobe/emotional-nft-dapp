@@ -108,7 +108,7 @@ const NFTCard: FunctionComponent<IProps> = ({
   )
   const TrendIcon = trendIcon(changePercentage || 0)
   const favCoin = getFavCoin(nft.favCoinId)
-  const backgroundUrl = getBackgroundImage(nft.backgroundId)
+  const backgroundSrc = getBackgroundImage(nft.backgroundId)
   const character = getCharacter(nft.characterId)
 
   return (
@@ -147,10 +147,10 @@ const NFTCard: FunctionComponent<IProps> = ({
           )}
         >
           <div className="mt-full"></div>
-          {backgroundUrl && (
+          {backgroundSrc && (
             <img
               className={classNames('absolute top-0 right-0 left-0 bottom-0')}
-              src={backgroundUrl}
+              src={backgroundSrc}
             />
           )}
           <img
