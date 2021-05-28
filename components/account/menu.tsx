@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import useWallet from '../../hooks/useWallet'
 import { shortenAddress } from '../../lib/utils'
+import Modal from '../modal/modal'
 import AccountImage from './image'
 
 const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
@@ -10,12 +11,27 @@ const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
 
   if (!account)
     return (
-      <a
-        onClick={() => activate()}
-        className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
-      >
-        Connect wallet
-      </a>
+      <>
+        <a
+          onClick={() => activate()}
+          className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
+        >
+          Connect wallet
+        </a>
+        <Modal
+          onRequestClose={() => console.error('cannot close this modal')}
+          onModalClose={() => console.error('cannot close this modal')}
+          isShown={true}
+        >
+          Please connect Metamask:
+          <a
+            onClick={() => activate()}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
+          >
+            Connect
+          </a>
+        </Modal>
+      </>
     )
 
   return (
