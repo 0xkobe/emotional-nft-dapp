@@ -201,15 +201,15 @@ export default function Mint(): JSX.Element {
         keyValues: [
           {
             key: 'Name',
-            value: nftName,
+            value: nftName ? 'filled' : '-',
           },
           {
             key: 'Minter',
-            value: minterName,
+            value: minterName ? 'filled' : '-',
           },
           {
             key: 'Description',
-            value: nftDescription,
+            value: nftDescription ? 'filled' : '-',
           },
         ],
       })
@@ -261,6 +261,7 @@ export default function Mint(): JSX.Element {
 
   // button handle function
   const handleSubmit = () => {
+    if (isDisabled()) return
     if (mintStep < 2) return setMintStep(mintStep + 1)
     setIsMinting(true)
   }
@@ -520,9 +521,9 @@ export default function Mint(): JSX.Element {
         nftName={nftName}
         minterName={minterName}
         nftDescription={nftDescription}
-        onNftNameChange={(value: string) => setNftName(value)}
-        onMinterNameChange={(value: string) => setMinterName(value)}
-        onNftDescriptionChange={(value: string) => setNftDescription(value)}
+        onNftNameChange={setNftName}
+        onMinterNameChange={setMinterName}
+        onNftDescriptionChange={setNftDescription}
       />,
       <AllocationWizard
         qAirdrop={qAirdrop}
@@ -539,6 +540,17 @@ export default function Mint(): JSX.Element {
         setAirdropSignature={setAirdropSignature}
       />,
     ][mintStep]
+  }
+
+  function isDisabled() {
+    return [
+      () =>
+        backgroundIndex === undefined ||
+        coinIndex === undefined ||
+        characterId === undefined,
+      () => nftName === '' || minterName === '' || nftDescription === '',
+      () => lockOptionId === undefined || qstkAmount === undefined || qstkAmount.eq(0),
+    ][mintStep]()
   }
 
   return (
@@ -589,7 +601,7 @@ export default function Mint(): JSX.Element {
               properties={summary}
               mintPrice={`${bnToText(nftPrice)} ETH`}
             >
-              <Button onClick={() => handleSubmit()}>
+              <Button disabled={isDisabled()} onClick={handleSubmit}>
                 {mintSummaryBtnName}
               </Button>
             </MintSummary>
