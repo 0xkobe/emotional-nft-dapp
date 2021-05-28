@@ -2,111 +2,134 @@ import { BigNumber } from '@ethersproject/bignumber'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
+import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
 import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
+import useWallet from '../../hooks/useWallet'
 import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
-import { NFT } from '../../types/nft'
+import { FavCoin, NFT } from '../../types/nft'
 
-export default function (): JSX.Element {
+export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
   const { contract, error: contractError } = useContract<QNFT>(
     deployedAddresses.qnft,
     abi.qnft,
   )
+  const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
   const [error, setError] = useState<Error>()
-  const [tokenId, setTokenId] = useState<BigNumber>()
   const [changePercentage, setChangePercentage] = useState(0)
-  const [coinInfo, setCoinInfo] = useState({ text: '', icon: '' })
-  const [creatureInfo, setCreatureInfo] = useState({ text: '', icon: '' })
-  const [skinInfo, setSkinInfo] = useState({ text: '', icon: '' })
-  const [backgroundInfo, setBackgroundInfo] = useState({ text: '', icon: '' })
+  const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
+  const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
 
-  const _fetchData = useCallback(async (contract: QNFT, tokenId: BigNumber) => {
-    setLoading(true)
-    try {
-      // FIXME: put back logic to get the next and previous token of the owner
-      // const userNFTCount = (
-      //   await contract.callStatic.balanceOf(account)
-      // ).toNumber()
-      // setNFTCount(userNFTCount)
-      // const tokenId = await contract.callStatic.tokenOfOwnerByIndex(
-      //   account,
-      //   id,
-      // )
-      const nft = await fetchNFT(contract, tokenId)
-      setNFT(nft)
-
-      // fetch coingecko
-      const favCoin = getFavCoin(nft.favCoinId)
-      setCoinInfo({
-        text: favCoin.meta.name,
-        icon: favCoin.meta.icon,
-      })
-      if (favCoin.meta.coingeckoId) {
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
-        )
-        const response = await res.json()
-        if ('error' in response)
-          throw new Error(
-            `an error occurred while fetching coingecko pricefeed`,
-          )
-        if (!res.ok)
-          throw new Error(
-            `an unknown error occurred while fetching coingecko pricefeed`,
-          )
-        setChangePercentage(response[0].price_change_percentage_24h || 0)
-      } else {
-        setChangePercentage(0)
-      }
-      const character = getCharacter(nft.characterId)
-      const skin = skins.find((val) => val.skin == character.skin)
-      if (skin) {
-        setSkinInfo({
-          text: skin.skin,
-          icon: skin.icon,
-        })
-        setCreatureInfo({
-          text: character.name,
-          icon: character.emotions.normal,
-        })
-      }
-      const background = backgrounds[nft.backgroundId]
-      setBackgroundInfo({
-        text: background.name,
-        icon: background.image,
-      })
-    } catch (e) {
-      setError(e)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!router.isReady) return
-    if (!router.query.id) return
-    if (Array.isArray(router.query.id)) return
-    setTokenId(BigNumber.from(router.query.id))
+  const tokenId = useMemo(() => {
+    if (!router.isReady) return undefined
+    if (!router.query.id) return undefined
+    return BigNumber.from(router.query.id)
   }, [router])
+
+  const favCoin = useMemo(() => {
+    if (!nft) return null
+    return getFavCoin(nft.favCoinId)
+  }, [nft])
+
+  const skin = useMemo(() => {
+    if (!nft) return null
+    const character = getCharacter(nft.characterId)
+    return skins.find((val) => val.skin === character.skin)
+  }, [nft])
+
+  const character = useMemo(() => {
+    if (!nft) return null
+    return getCharacter(nft.characterId)
+  }, [nft])
+
+  const background = useMemo(() => {
+    if (!nft) return null
+    return backgrounds[nft.backgroundId]
+  }, [nft])
+
+  const fetchOwnerTokenIds = useCallback(
+    async (qnft: QNFT, account: string) => {
+      const count = await qnft.balanceOf(account)
+      const tokenIds = await Promise.all(
+        Array.from(Array(count.toNumber()).keys()).map(async (index) => {
+          return qnft.tokenOfOwnerByIndex(account, index)
+        }),
+      )
+      return tokenIds
+    },
+    [],
+  )
+
+  const fetchPercentage = useCallback(async (favCoin: FavCoin) => {
+    if (!favCoin) return 0
+    if (!favCoin.meta.coingeckoId) return 0
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
+    )
+    const response = await res.json()
+    if ('error' in response)
+      throw new Error(`an error occurred while fetching coingecko pricefeed`)
+    if (!res.ok)
+      throw new Error(
+        `an unknown error occurred while fetching coingecko pricefeed`,
+      )
+    return response[0].price_change_percentage_24h || 0
+  }, [])
 
   useEffect(() => {
     if (!contract) return
     if (!tokenId) return
-    void _fetchData(contract, tokenId)
-  }, [contract, _fetchData, tokenId, router])
+    setLoading(true)
+    fetchNFT(contract, tokenId)
+      .then(setNFT)
+      .catch(setError)
+      .finally(() => setLoading(false))
+    return () => {
+      setNFT(undefined)
+      setLoading(false)
+      setError(undefined)
+    }
+  }, [contract, tokenId])
+
+  useEffect(() => {
+    if (!favCoin) return
+    fetchPercentage(favCoin).then(setChangePercentage).catch(setError)
+    return () => {
+      setChangePercentage(0)
+    }
+  }, [favCoin, fetchPercentage])
+
+  useEffect(() => {
+    if (!contract) return
+    if (!account) return
+    fetchOwnerTokenIds(contract, account).then(setOwnerTokenIds).catch(setError)
+    return () => {
+      setOwnerTokenIds(undefined)
+    }
+  }, [contract, account, fetchOwnerTokenIds])
+
+  useEffect(() => {
+    if (!ownerTokenIds) return
+    if (!tokenId) return
+    const tokenIndex = ownerTokenIds.findIndex((x) => x.eq(tokenId))
+    if (tokenIndex > -1) setTokenIndex(tokenIndex)
+    return () => {
+      setTokenIndex(undefined)
+    }
+  }, [ownerTokenIds, tokenId])
 
   return (
     <>
@@ -121,20 +144,22 @@ export default function (): JSX.Element {
               <BackButton text="Back to your space" />
             </a>
           </Link>
-          {/* <Pagination // FIXME: to put back with system based on the nft id
-            total={nftCount}
-            current={id}
+          <Pagination
+            hasPrev={tokenIndex ? tokenIndex > 0 : false}
+            hasNext={
+              ownerTokenIds && tokenIndex !== undefined
+                ? ownerTokenIds.length - 1 > tokenIndex
+                : false
+            }
             onPrev={() => {
-              if (id > 0) {
-                void router.push(`/nfts/${id - 1}`)
-              }
+              if (ownerTokenIds && tokenIndex !== undefined)
+                void router.push(`/nfts/${ownerTokenIds[tokenIndex - 1]}`)
             }}
             onNext={() => {
-              if (id < nftCount - 1) {
-                void router.push(`/nfts/${id + 1}`)
-              }
+              if (ownerTokenIds && tokenIndex !== undefined)
+                void router.push(`/nfts/${ownerTokenIds[tokenIndex + 1]}`)
             }}
-          /> */}
+          />
         </div>
 
         {isLoading && <div>...loading</div>}
@@ -173,7 +198,7 @@ export default function (): JSX.Element {
                       Animal: {getCharacter(nft.characterId).creature}
                     </span>
                     <span className="text-sm leading-5 font-normal text-gray-500">
-                      Background: {backgrounds[nft.backgroundId].name}
+                      Background: {background && background.name}
                     </span>
                   </div>
                 </div>
@@ -182,16 +207,25 @@ export default function (): JSX.Element {
                     Design Properties
                   </span>
                   <div className="grid grid-cols-4 gap-4">
-                    <IconText text={coinInfo.text} icon={coinInfo.icon} />
-                    <IconText
-                      text={creatureInfo.text}
-                      icon={creatureInfo.icon}
-                    />
-                    <IconText text={skinInfo.text} icon={skinInfo.icon} />
-                    <IconText
-                      text={backgroundInfo.text}
-                      icon={backgroundInfo.icon}
-                    />
+                    {favCoin && (
+                      <IconText
+                        text={favCoin.meta.name}
+                        icon={favCoin.meta.icon}
+                      />
+                    )}
+                    {character && (
+                      <IconText
+                        text={character.name}
+                        icon={character.emotions.normal}
+                      />
+                    )}
+                    {skin && <IconText text={skin.skin} icon={skin.icon} />}
+                    {background && (
+                      <IconText
+                        text={background.name}
+                        icon={background.image}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col space-y-4">
