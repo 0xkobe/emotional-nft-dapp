@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { CharacterOption } from '../../types/options'
-import styles from './character.module.css'
 
 export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   character: CharacterOption
@@ -19,7 +18,6 @@ const CharacterItem: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         className,
-        styles.character,
         character.currentSupply >= character.maxSupply ? 'opacity-25' : '',
       )}
       onClick={() => {

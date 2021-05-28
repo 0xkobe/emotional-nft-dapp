@@ -30,8 +30,8 @@ const Navigation: FunctionComponent<IProps> = (props) => {
   return (
     <Disclosure as="nav" className="bg-white" {...props}>
       {({ open }) => (
-        <>
-          <div className="px-2 sm:px-6 lg:px-8">
+        <div className="bg-white border-b border-purple-100">
+          <div className="max-w-7xl mx-auto relative flex flex-col px-2 sm:px-6 lg:px-8">
             <div className="relative flex justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
@@ -49,10 +49,10 @@ const Navigation: FunctionComponent<IProps> = (props) => {
                     <Link key={x.href} href={x.href}>
                       <a
                         className={classNames(
-                          'inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200',
+                          'inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow',
                           x.href === props.route
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-500',
+                            ? 'text-purple-700 border-purple-700 bg-purple-50 shadow'
+                            : 'text-purple-900 border-purple-100',
                         )}
                       >
                         {x.text}
@@ -86,7 +86,7 @@ const Navigation: FunctionComponent<IProps> = (props) => {
               ))}
             </div>
           </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   )

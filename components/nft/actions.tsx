@@ -12,7 +12,7 @@ const NFTActions: FunctionComponent<IProps> = ({ className }: IProps) => {
     <div
       className={classNames(
         className,
-        'flex flex-col w-72 p-8 mb-auto border border-gray-200 rounded-2xl space-y-8',
+        'flex flex-col w-72 p-8 mb-auto bg-white shadow border border-purple-100 p-8 rounded-2xl space-y-8',
       )}
     >
       <span className="text-base leading-6 font-bold text-gray-500">

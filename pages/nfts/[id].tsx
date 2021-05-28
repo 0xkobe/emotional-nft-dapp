@@ -131,6 +131,14 @@ export default function PageNFT(): JSX.Element {
     }
   }, [ownerTokenIds, tokenId])
 
+  function item(key: string, value: string) {
+    return (
+      <div className="text-sm leading-5 font-normal text-gray-500 mb-2">
+        {key}: <span className="text-purple-900">{value}</span>
+      </div>
+    )
+  }
+
   return (
     <>
       <Head>
@@ -167,98 +175,94 @@ export default function PageNFT(): JSX.Element {
         {error && <div>meta: {error.toString()}</div>}
 
         {nft && (
-          <div className="w-full flex flex-row justify-between">
-            <div className="flex flex-row space-x-8">
-              <NFTCard
-                size="big"
-                className="cursor-pointer hover:shadow"
-                changePercentage={changePercentage}
-                nft={nft}
-              />
-              <div className="flex flex-col w-96 space-y-8">
-                <span className="text-2xl leading-8 font-bold text-gray-500">
-                  {nft.name}
-                </span>
-                <div className="flex flex-col space-y-2">
-                  <span className="text-sm leading-5 font-normal text-gray-500">
-                    {nft.author}
-                  </span>
-                  <span className="text-sm leading-5 font-normal text-gray-500">
-                    {new Date(
+          <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <NFTCard
+                  size="big"
+                  className="cursor-pointer hover:shadow"
+                  changePercentage={changePercentage}
+                  nft={nft}
+                />
+                <div>
+                  <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
+                    {nft.name}
+                  </h1>
+                  {item('Minter', nft.author)}
+                  {item(
+                    'Created',
+                    new Date(
                       1000 * nft.createdAt.toNumber(),
-                    ).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex flex-col space-y-4">
-                  <span className="text-base leading-6 font-medium text-gray-500">
+                    ).toLocaleDateString(),
+                  )}
+
+                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                     Artists
-                  </span>
-                  <div className="flex flex-col space-y-2">
-                    <span className="text-sm leading-5 font-normal text-gray-500">
-                      Animal: {getCharacter(nft.characterId).creature}
-                    </span>
-                    <span className="text-sm leading-5 font-normal text-gray-500">
-                      Background: {background && background.name}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-4">
-                  <span className="text-base leading-6 font-medium text-gray-500">
+                  </h3>
+
+                  {item('Animal', getCharacter(nft.characterId).artist.name)}
+                  {item('Background', backgrounds[nft.backgroundId].name)}
+
+                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                     Design Properties
-                  </span>
-                  <div className="grid grid-cols-4 gap-4">
-                    {favCoin && (
-                      <IconText
-                        text={favCoin.meta.name}
-                        icon={favCoin.meta.icon}
-                      />
-                    )}
-                    {character && (
-                      <IconText
-                        text={character.name}
-                        icon={character.emotions.normal}
-                      />
-                    )}
-                    {skin && <IconText text={skin.skin} icon={skin.icon} />}
-                    {background && (
-                      <IconText
-                        text={background.name}
-                        icon={background.image}
-                      />
-                    )}
+                  </h3>
+
+                  <div className="flex flex-col space-y-4">
+                    <span className="text-base leading-6 font-medium text-gray-500">
+                      Design Properties
+                    </span>
+                    <div className="grid grid-cols-4 gap-8">
+                      {favCoin && (
+                        <IconText
+                          text={favCoin.meta.name}
+                          icon={favCoin.meta.icon}
+                        />
+                      )}
+                      {character && (
+                        <IconText
+                          text={character.name}
+                          icon={character.emotions.normal}
+                        />
+                      )}
+                      {skin && <IconText text={skin.skin} icon={skin.icon} />}
+                      {background && (
+                        <IconText
+                          text={background.name}
+                          icon={background.image}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col space-y-4">
-                  <span className="text-base leading-6 font-medium text-gray-500">
+
+                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                     Description
-                  </span>
-                  <span className="text-sm leading-5 font-normal text-gray-500 overflow-ellipsis overflow-hidden">
+                  </h3>
+
+                  <p className="text-sm leading-5 font-normal text-purple-900">
                     {nft.description}
-                  </span>
-                </div>
-                <div className="flex flex-col space-y-4">
-                  <span className="text-base leading-6 font-medium text-gray-500">
-                    Token Allocated
-                  </span>
-                  <Allocation
-                    lockAmount={nft.lockAmount}
-                    createdAt={new Date(nft.createdAt.toNumber() * 1000)}
-                    lockDuration={nft.lockDuration.toNumber()}
-                  />
+                  </p>
                 </div>
               </div>
             </div>
-            <NFTActions
-              onTransfer={() => {
-                console.log('transfer')
-              }}
-              onEdit={() => {
-                console.log('edit')
-              }}
-              onUpgrade={() => {
-                console.log('upgrade')
-              }}
-            />
+            <aside>
+              <Allocation
+                lockAmount={nft.lockAmount}
+                createdAt={new Date(nft.createdAt.toNumber() * 1000)}
+                lockDuration={nft.lockDuration.toNumber()}
+              />
+              <NFTActions
+                className="mt-8"
+                onTransfer={() => {
+                  console.log('transfer')
+                }}
+                onEdit={() => {
+                  console.log('edit')
+                }}
+                onUpgrade={() => {
+                  console.log('upgrade')
+                }}
+              />
+            </aside>
           </div>
         )}
       </div>

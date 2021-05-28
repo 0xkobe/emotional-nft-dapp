@@ -6,92 +6,92 @@ const backgrounds = [
   {
     id: 0,
     name: 'Transparent',
-    image: '/nft/background/00_transparent.png'
+    image: '/nft/background/00_transparent.png',
   },
   {
     id: 1,
-    name: "Cave",
-    image: '/nft/background/01_cave.png'
+    name: 'Cave',
+    image: '/nft/background/01_cave.png',
   },
   {
     id: 2,
-    name: "Dark Cave",
-    image: '/nft/background/02_dark_cave.png'
+    name: 'Dark Cave',
+    image: '/nft/background/02_dark_cave.png',
   },
   {
     id: 3,
-    name: "Forest",
-    image: '/nft/background/03_forest.png'
+    name: 'Forest',
+    image: '/nft/background/03_forest.png',
   },
   {
     id: 4,
-    name: "Jungle",
-    image: '/nft/background/04_jungle.png'
+    name: 'Jungle',
+    image: '/nft/background/04_jungle.png',
   },
   {
     id: 5,
-    name: "Snow",
-    image: '/nft/background/05_snow.png'
+    name: 'Snow',
+    image: '/nft/background/05_snow.png',
   },
   {
     id: 6,
-    name: "Barn",
-    image: '/nft/background/06_barn.png'
+    name: 'Barn',
+    image: '/nft/background/06_barn.png',
   },
   {
     id: 7,
-    name: "Field",
-    image: '/nft/background/07_field.png'
+    name: 'Field',
+    image: '/nft/background/07_field.png',
   },
   {
     id: 8,
-    name: "Dark Forest",
-    image: '/nft/background/08_dark_forest.png'
+    name: 'Dark Forest',
+    image: '/nft/background/08_dark_forest.png',
   },
   {
     id: 9,
-    name: "Enchanted Mountains",
-    image: '/nft/background/09_enchanted_mountains.png'
+    name: 'Enchanted Mountains',
+    image: '/nft/background/09_enchanted_mountains.png',
   },
   {
     id: 10,
-    name: "Paradise",
-    image: '/nft/background/10_paradise.png'
+    name: 'Paradise',
+    image: '/nft/background/10_paradise.png',
   },
   {
     id: 11,
-    name: "Volcano",
-    image: '/nft/background/11_volcano.png'
+    name: 'Volcano',
+    image: '/nft/background/11_volcano.png',
   },
   {
     id: 12,
-    name: "Green underwater",
-    image: '/nft/background/12_green_underwater.png'
+    name: 'Green underwater',
+    image: '/nft/background/12_green_underwater.png',
   },
   {
     id: 13,
-    name: "Light blue underwater",
-    image: '/nft/background/13_light_blue_underwater.png'
+    name: 'Light blue underwater',
+    image: '/nft/background/13_light_blue_underwater.png',
   },
   {
     id: 14,
-    name: "Dungeon lava",
-    image: '/nft/background/14_dungeon_lava.png'
+    name: 'Dungeon lava',
+    image: '/nft/background/14_dungeon_lava.png',
   },
   {
     id: 15,
-    name: "Outer space",
-    image: '/nft/background/15_outer_space.png'
+    name: 'Outer space',
+    image: '/nft/background/15_outer_space.png',
   },
   {
     id: 16,
-    name: "Dark green underwater",
-    image: '/nft/background/16_dark_green_underwater.png'
+    name: 'Dark green underwater',
+    image: '/nft/background/16_dark_green_underwater.png',
   },
   {
     id: 17,
-    name: "Huge rock underwater",
-    image: '/nft/background/17_huge_rock_underwater.png'
+    name: 'Huge rock underwater',
+    image: '/nft/background/17_huge_rock_underwater.png',
   },
 ]
 
@@ -132,32 +132,57 @@ const artists: { [key: string]: Artist } = {
 const skins = [
   {
     skin: Skin.Bronze,
-    icon: '/nft/skins/bronze.svg'
+    icon: '/nft/skins/bronze.svg',
   },
   {
     skin: Skin.Diamond,
-    icon: '/nft/skins/diamond.svg'
+    icon: '/nft/skins/diamond.svg',
   },
   {
     skin: Skin.Silver,
-    icon: '/nft/skins/silver.svg'
+    icon: '/nft/skins/silver.svg',
   },
   {
     skin: Skin.Gold,
-    icon: '/nft/skins/gold.svg'
+    icon: '/nft/skins/gold.svg',
   },
   {
     skin: Skin.Platinum,
-    icon: '/nft/skins/platinum.svg'
-  }
+    icon: '/nft/skins/platinum.svg',
+  },
 ]
 
 const animals = [
-  { name: Creature.Deer, artist: artists.mehak, price: parseEther('0.075') },
-  { name: Creature.Bull, artist: artists.clive, price: parseEther('0.1') },
-  { name: Creature.Bear, artist: artists.rogan, price: parseEther('0.125') },
-  { name: Creature.Whale, artist: artists.keili, price: parseEther('0.15') },
-  { name: Creature.Dragon, artist: artists.jatin, price: parseEther('0.2') },
+  {
+    id: Creature.Deer,
+    name: 'Deer',
+    artist: artists.mehak,
+    price: parseEther('0.075'),
+  },
+  {
+    id: Creature.Bull,
+    name: 'Bull',
+    artist: artists.clive,
+    price: parseEther('0.1'),
+  },
+  {
+    id: Creature.Bear,
+    name: 'Bear',
+    artist: artists.rogan,
+    price: parseEther('0.125'),
+  },
+  {
+    id: Creature.Whale,
+    name: 'Whale',
+    artist: artists.keili,
+    price: parseEther('0.15'),
+  },
+  {
+    id: Creature.Dragon,
+    name: 'Dragon',
+    artist: artists.jatin,
+    price: parseEther('0.2'),
+  },
 ]
 
 const characters: Character[] = []
@@ -169,9 +194,9 @@ for (const animalIndex in animals) {
     const baseUrl = `/nft/characters/${animal.name.toLowerCase()}/${skin.toLowerCase()}`
     characters.push({
       id: parseInt(animalIndex) * skins.length + parseInt(skinIndex),
-      name: `${skin} ${animal.name}`,
+      name: animal.name,
       artist: animal.artist,
-      creature: animal.name,
+      creature: animal.id,
       mintPrice: animal.price,
       skin: skin,
       emotions: {
@@ -258,7 +283,7 @@ const lockOptions: LockOption[] = [
   },
 ]
 
-const verifier = "0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de"
+const verifier = '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
 
 const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
 const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract

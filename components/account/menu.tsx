@@ -10,21 +10,19 @@ const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
 
   if (!account)
     return (
-      <>
-        <a
-          onClick={() => activate()}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
-        >
-          Connect wallet
-        </a>
-      </>
+      <a
+        onClick={() => activate()}
+        className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow"
+      >
+        Connect wallet
+      </a>
     )
 
   return (
     <Menu as="div" className="relative inline-block" {...props}>
       {({ open }) => (
         <>
-          <Menu.Button className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border">
+          <Menu.Button className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow">
             <span className="hidden md:block mr-2">
               {shortenAddress(account)}
             </span>

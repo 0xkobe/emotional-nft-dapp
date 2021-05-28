@@ -17,14 +17,14 @@ const Stepper: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         className,
-        'flex flex-row w-6/12	h-18 border-2 border-solid border-purple-100 rounded-2xl shadow-sm',
+        'bg-white flex flex-col sm:flex-row border-1 border-solid border-purple-100 rounded-2xl shadow-sm',
       )}
     >
       {options.map((option, index) => (
         <div
           key={option.toString()}
           className={classNames(
-            'flex flex-row w-1/3 p-4 space-x-4',
+            'flex flex-row w-full sm:w-1/3 p-4 space-x-4',
             index === step ? 'text-black' : 'text-gray-500',
           )}
         >

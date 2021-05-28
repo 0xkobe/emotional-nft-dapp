@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TODO: setup global font correctly */
 body {
-  font-family: Inter;
+  @apply bg-purple-50;
 }
 
 .mt-full {

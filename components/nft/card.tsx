@@ -5,7 +5,6 @@ import { Emotion, NFT } from '../../types/nft'
 import IconDownTrend from '../icon/downtrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconUptrend from '../icon/uptrend'
-import styles from './card.module.css'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
@@ -96,6 +95,21 @@ export function borderColorFromEmotion(emotion: Emotion): string {
   }
 }
 
+export function gradient(emotion: Emotion): string {
+  switch (emotion) {
+    case Emotion.Angry:
+      return 'bg-gradient-to-t from-red-50 via-transparent to-transparent'
+    case Emotion.Worry:
+      return 'bg-gradient-to-t from-yellow-50 via-transparent to-transparent'
+    case Emotion.Normal:
+      return 'bg-gradient-to-t from-gray-50 via-transparent to-transparent'
+    case Emotion.Rest:
+      return 'bg-gradient-to-t from-blue-50 via-transparent to-transparent'
+    case Emotion.Happy:
+      return 'bg-gradient-to-t from-green-50 via-transparent to-transparent'
+  }
+}
+
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
@@ -112,18 +126,11 @@ const NFTCard: FunctionComponent<IProps> = ({
   const character = getCharacter(nft.characterId)
 
   return (
-    <div className={classNames(className, 'flex flex-col mb-auto space-y-8')}>
+    <div className={classNames('flex flex-col mb-auto space-y-8', className)}>
       <div
         className={classNames(
-          'flex flex-col space-y-8 p-8 border border-2 border-purple-300 rounded-2xl shadow max-w-sm',
-          size === 'big'
-            ? 'w-96'
-            : size === 'medium'
-            ? 'w-80'
-            : size === 'small'
-            ? 'w-72'
-            : '',
-          styles.card,
+          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8',
+          gradient(emotion),
         )}
       >
         <div className="flex flex-row justify-between">
@@ -160,10 +167,10 @@ const NFTCard: FunctionComponent<IProps> = ({
         </div>
         <div className="flex flex-col space-y-1">
           <span className="text-xl leading-7 font-bold text-purple-900">
-            {nft.name}
+            {nft.name || 'My Emotional NFT'}
           </span>
-          <span className="text-sm leading-5 font-normal text-gray-500">
-            [{character.skin} - {character.creature}]
+          <span className="text-sm leading-5 font-normal text-gray-500 mt-1">
+            [ {character.skin.toUpperCase()} ]
           </span>
         </div>
       </div>

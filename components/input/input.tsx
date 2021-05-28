@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { FunctionComponent, InputHTMLAttributes } from 'react'
-import styles from './input.module.css'
 
 export type IProps = InputHTMLAttributes<{}> & {
   unit?: string
@@ -14,15 +13,13 @@ const Input: FunctionComponent<IProps> = ({
   ...props
 }: IProps) => {
   return (
-    <div className={classNames(className, styles.input)}>
-      <div className={styles.inputWrapper}>
-        <input
-          className={classNames(isError ? 'border-red-500' : 'border-gray-300')}
-          {...props}
-        />
-        <div className={styles.inputUnit}>{unit}</div>
-      </div>
-    </div>
+    <input
+      className={classNames(
+        'border border-purple-100 shadow rounded-2xl text-sm leading-5 font-normal text-purple-900 px-4 py-2 outline-none placeholder-purple-200 focus:ring-2 ring-purple-400',
+        isError ? 'border-red-500' : 'border-gray-300',
+      )}
+      {...props}
+    />
   )
 }
 
