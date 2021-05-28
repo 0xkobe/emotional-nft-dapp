@@ -11,6 +11,6 @@ const Template: Story<IProps> = (args) => <ModalProcessing {...args} />
 export const Default = Template.bind({})
 Default.args = {
   isShown: true,
-  onRequestClose: (): void => {},
-  onModalClose: (): void => {},
+  onRequestClose: console.log,
+  onModalClose: console.log,
 }

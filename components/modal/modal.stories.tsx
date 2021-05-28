@@ -16,6 +16,6 @@ Default.args = {
       <h1>Modal basic</h1>
     </div>
   ),
-  onRequestClose: (): void => {},
-  onModalClose: (): void => {},
+  onRequestClose: console.log,
+  onModalClose: console.log,
 }

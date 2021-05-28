@@ -20,7 +20,6 @@ const StoryWizard: FunctionComponent<IProps> = ({
   onNftNameChange,
   onMinterNameChange,
   onNftDescriptionChange,
-  ...props
 }: IProps) => {
   return (
     <div className={classNames(className, 'flex flex-col w-96 space-y-8')}>

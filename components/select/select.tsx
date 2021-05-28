@@ -29,7 +29,6 @@ const Select: FunctionComponent<IProps> = ({
   selectedIndex,
   canSearch,
   className,
-  ...props
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
