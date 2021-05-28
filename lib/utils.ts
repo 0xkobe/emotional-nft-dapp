@@ -53,24 +53,32 @@ export const verifyAirdropKey = (
   address: string,
   airdropKey: string
 ): VerifyAirdropKeyResponse => {
-  if (airdropKey.length !== 158 && airdropKey.length !== 162) {
+  try {
+    const keyBuffer = Buffer.from(airdropKey, 'base64')
+    if (keyBuffer.length !== 80 && keyBuffer.length !== 81) {
+      return {
+        isValid: false,
+        amount: BigNumber.from(0),
+        signature: ''
+      }
+    }
+
+    const amountBuffer = keyBuffer.slice(0, 16)
+    const signature = keyBuffer.slice(16)
+    const messageHash = ethers.utils.solidityKeccak256(['address', 'uint256'], [address, `0x${amountBuffer.toString('hex')}`])
+    // messageHash starts with '0x'
+    const res = ethers.utils.verifyMessage(Buffer.from(messageHash.slice(2), 'hex'), signature)
+
+    return {
+      isValid: res === verifier,
+      amount: BigNumber.from(amountBuffer),
+      signature: '0x' + signature.toString('hex')
+    }
+  } catch (e) {
     return {
       isValid: false,
       amount: BigNumber.from(0),
       signature: ''
     }
-  }
-
-  const keyBuffer = Buffer.from(airdropKey, 'hex')
-  const amountBuffer = keyBuffer.slice(0, 16)
-  const signature = keyBuffer.slice(16)
-  const messageHash = ethers.utils.solidityKeccak256(['address', 'uint256'], [address, `0x${amountBuffer.toString('hex')}`])
-  // messageHash starts with '0x'
-  const res = ethers.utils.verifyMessage(Buffer.from(messageHash.slice(2), 'hex'), signature)
-
-  return {
-    isValid: res === verifier,
-    amount: BigNumber.from(amountBuffer),
-    signature: `0x${airdropKey.slice(32)}`
   }
 }
