@@ -68,22 +68,22 @@ export enum FavCoinEnum {
   CRV, // 114
   BAL, // 153
   // Coins that we want to support (16)
-  DG,
-  KEX,
-  BTSG,
-  INJ,
-  RUNE,
-  SHFT,
-  ALICE,
-  IOTX,
-  DXD,
-  GAME,
-  KLV,
-  CSPR,
-  VETH,
-  REEF,
-  VISR,
-  TFUEL,
+  RUNE, // 47
+  CSPR, // ?
+  TFUEL, // 65
+  REEF, // 149
+  IOTX, // 167
+  INJ, // 174
+  KLV, // 192
+  ALICE, // 294
+  VISR, // 546
+  DG, // 557
+  BTSG, // ?
+  VETH, // 637
+  KEX, // 761
+  DXD, // 793
+  GAME, // 794
+  SHFT, // 967
   // Trend coins (meme/NFT) (13)
   DOGE, // 6
   MATIC, // 15
@@ -99,16 +99,16 @@ export enum FavCoinEnum {
   JUST, // 312
   PMON, // 848
   // Extra coins suggested by the community (10)
-  AKT,
-  CTSI,
-  START,
-  XPRT,
-  EROWAN,
-  PRQ,
-  KIT,
-  CHR,
-  RNDR,
-  MIST,
+  AKT, // 184
+  XPRT, // 195
+  CTSI, // 207
+  RNDR, // 272
+  MIST, // 299
+  PRQ, // 318
+  CHR, // 334
+  KIT, // 905
+  START, // 960
+  EROWAN, // ?
 }
 
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#background-image-id
