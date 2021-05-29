@@ -28,14 +28,14 @@ const ModalConnectMetamask: FunctionComponent<IProps> = ({
           <img src="/metamask.png" />
         </div>
         <div className="flex flex-col space-y-4">
-          <h1 className="text-lg leading-6 font-semibold">{title}</h1>
+          <h1 className="text-lg leading-6 font-semibold text-purple-900">{title}</h1>
           {content && (
-            <div className="flex flex-col text-sm leading-5 font-normal">
+            <div className="flex flex-col text-sm leading-5 font-normal text-gray-500">
               {content}
             </div>
           )}
           {children && (
-            <div className="flex flex-col">
+            <div className="flex flex-col mr-auto ml-auto">
               {children}
             </div>
           )}

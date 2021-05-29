@@ -11,6 +11,7 @@ import StoryWizard from '../components/mint-wizard/story-wizard'
 import Modal from '../components/modal/modal'
 import ModalProcessing from '../components/modal/modal-processing'
 import ModalSucceed from '../components/modal/modal-succeed'
+import ModalMetamask from '../components/modal/modal-metamask'
 import NFTCard from '../components/nft/card'
 import Stepper from '../components/stepper/stepper'
 import Title from '../components/title/title'
@@ -532,15 +533,18 @@ export default function Mint(): JSX.Element {
     ][mintStep]()
   }
 
-  // FIXME: move this logic and UI to a better place
-  const [modalContent, setModalContent] = useState<JSX.Element>()
+  const CONNECTION_OK = 0
+  const CONNECTION_INSTALL_METAMASK = 1
+  const CONNECTION_CONNECT_METAMASK = 2
+  const CONNECTION_WRONG_NETWORK = 3
+  const [walletConenction, setWalletConenction] = useState(CONNECTION_OK)
 
   useEffect(() => {
     if (hasWallet === undefined) return
     if (hasWallet) return
-    setModalContent(<>Please install Metamask</>)
+    setWalletConenction(CONNECTION_INSTALL_METAMASK)
     return () => {
-      setModalContent(undefined)
+      setWalletConenction(CONNECTION_OK)
     }
   }, [hasWallet])
 
@@ -548,41 +552,68 @@ export default function Mint(): JSX.Element {
     if (!hasWallet) return // give priority to hasWallet error
     console.log('account', account)
     if (account) return
-    setModalContent(
-      <>
-        Please connect Metamask:
-        <a
-          onClick={() => activate()}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
-        >
-          Connect
-        </a>
-      </>,
-    )
+    setWalletConenction(CONNECTION_CONNECT_METAMASK)
     return () => {
-      setModalContent(undefined)
+      setWalletConenction(CONNECTION_OK)
     }
   }, [hasWallet, account, activate])
 
   useEffect(() => {
     if (!metamaskChainId) return
-    if (metamaskChainId !== chain.id)
-      setModalContent(<>wrong chain selected. please switch to {chain.name}</>)
+    if (metamaskChainId !== chain.id) {
+      setWalletConenction(CONNECTION_WRONG_NETWORK)
+    }
 
     return () => {
-      setModalContent(undefined)
+      setWalletConenction(CONNECTION_OK)
     }
   }, [metamaskChainId])
 
   return (
     <>
-      <Modal
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown={!!modalContent}
-      >
-        {modalContent}
-      </Modal>
+      {walletConenction == CONNECTION_INSTALL_METAMASK && 
+          <ModalMetamask
+            title="You Need an Ethereum Wallet"
+            content={<>To use Quiver Emotional NFTs DApp you need to install a MetaMask wallet.</>}
+            onRequestClose={() => console.error('cannot close this modal')}
+            onModalClose={() => console.error('cannot close this modal')}
+            isShown
+          >
+            <a
+              className="text-sm leading-5 font-medium shadow rounded-2xl px-8 py-3 w-full text-center block bg-purple-700 text-white"
+              href="https://metamask.io/"
+              target="_blank"
+            >
+              Get MetaMask
+            </a>
+          </ModalMetamask>
+      }
+      {walletConenction == CONNECTION_CONNECT_METAMASK && 
+          <ModalMetamask
+            title="Connect to Your Wallet"
+            content={<>To use Quiver Emotional NFTs DApp you need to sign in to your MetaMask wallet.</>}
+            onRequestClose={() => console.error('cannot close this modal')}
+            onModalClose={() => console.error('cannot close this modal')}
+            isShown
+          >
+            <a
+              onClick={() => activate()}
+              className="text-sm leading-5 font-medium shadow rounded-2xl px-8 py-3 w-full text-center block bg-purple-700 text-white"
+            >
+              Sign In
+            </a>
+          </ModalMetamask>
+      }
+      {walletConenction == CONNECTION_WRONG_NETWORK && 
+          <ModalMetamask
+            title="Wrong network"
+            content={<>Wrong chain selected. please switch to {chain.name}</>}
+            onRequestClose={() => console.error('cannot close this modal')}
+            onModalClose={() => console.error('cannot close this modal')}
+            isShown
+          >
+          </ModalMetamask>
+      }
       <Head>
         <title>Mint NFT</title>
       </Head>
