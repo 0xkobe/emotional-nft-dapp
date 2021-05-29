@@ -23,18 +23,29 @@ const ModalProcessing: FunctionComponent<IProps> = ({
       onModalClose={onModalClose}
       onRequestClose={onRequestClose}
     >
-      <div className={styles.processing}>
-        <div className={styles.spinner}>
+      <div className="flex flex-col space-y-8 w-80 text-center">
+        <div className="flex justify-center">
           <IconSpinner />
         </div>
-        <h1 className={styles.processingTitle}>Processing the Transaction</h1>
-        <p className={styles.processingBody}>
-          Transaction submitted with hash: {transactionHash}
-        </p>
-        <p className={styles.processingFooter}>
-          View details on Etherscan:
-          <br /> {chain.explorerUrlForTx(transactionHash)}
-        </p>
+        <div className="flex flex-col space-y-4">
+          <h1 className="text-lg leading-6 font-semibold text-purple-900">Processing the Transaction</h1>
+          <div className="flex flex-col">
+            <span className="text-sm leading-5 font-normal text-gray-500">
+              Transaction submitted with hash: 
+            </span>
+            <span className="text-sm leading-5 font-medium text-gray-500 truncate">
+              {transactionHash}
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm leading-5 font-normal text-gray-500">
+              View details on Etherscan:
+            </span>
+            <a href={chain.explorerUrlForTx(transactionHash)} className="text-sm leading-5 font-medium text-purple-700 truncate">
+              {chain.explorerUrlForTx(transactionHash)}
+            </a>
+          </div>
+        </div>
       </div>
     </Modal>
   )

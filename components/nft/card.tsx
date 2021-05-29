@@ -145,7 +145,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         'flex flex-col mb-auto space-y-8',
-        size === 'big' ? 'w-96' : (size === 'medium' ? 'w-64' : 'w-52'),
+        size ? (size === 'big' ? 'w-96' : (size === 'medium' ? 'w-64' : 'w-52')) : '',
         className
       )}
       {...props}
