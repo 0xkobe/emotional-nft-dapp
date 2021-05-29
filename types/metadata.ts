@@ -38,35 +38,35 @@ export enum FavCoinEnum {
   // Top coins (31)
   BTC,
   ETH,
-  THETA,
-  SOL,
-  YFI,
-  AAVE,
-  ATOM,
-  FILE,
-  BTT,
-  DOT,
-  BNB,
-  CAKE,
-  SUSHI,
-  CRV,
-  BAL,
-  AVAX,
-  FEI,
-  UNI,
-  MANA,
-  GRT,
-  LINK,
-  TRX,
-  ICP,
-  FTM,
-  FTT,
-  XRP,
-  COMP,
-  XTZ,
-  BAT,
-  ADA,
-  ANKR,
+  BNB, // 4
+  ADA, // 5
+  XRP, // 7
+  DOT, // 9
+  ICP, // 10
+  UNI, // 12
+  LINK, // 14
+  SOL, // 19
+  THETA, // 22
+  FILE, // 24
+  TRX, // 25
+  AAVE, // 29
+  ATOM, // 39
+  FTT, // 42
+  XTZ, // 43
+  CAKE, // 45
+  BTT, // 49
+  AVAX, // 52
+  COMP, // 56
+  SUSHI, // 59
+  YFI, // 68
+  FEI, // 79
+  BAT, // 83
+  MANA, // 85
+  GRT, // 95
+  FTM, // 101
+  ANKR, // 105
+  CRV, // 114
+  BAL, // 153
   // Coins that we want to support (16)
   DG,
   KEX,
@@ -74,7 +74,7 @@ export enum FavCoinEnum {
   INJ,
   RUNE,
   SHFT,
-  ALICE, // TODO update favcoin list details from here
+  ALICE,
   IOTX,
   DXD,
   GAME,
@@ -85,19 +85,19 @@ export enum FavCoinEnum {
   VISR,
   TFUEL,
   // Trend coins (meme/NFT) (13)
-  MATIC,
-  DOGE,
-  SAFE,
-  CHZ,
-  SHIB,
-  PMON,
-  TLM,
-  TOWER,
-  JUST,
-  WAXP,
-  STMX,
-  AXS,
-  ENJIN,
+  DOGE, // 6
+  MATIC, // 15
+  SHIB, // 28
+  SAFE, // 50
+  CHZ, // 66
+  ENJIN, // 75
+  TOWER, // ?
+  AXS, // 159
+  WAXP, // 173
+  TLM, // 181
+  STMX, // 196
+  JUST, // 312
+  PMON, // 848
   // Extra coins suggested by the community (10)
   AKT,
   CTSI,
