@@ -7,6 +7,7 @@ import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
+import NFTPreview from '../../components/nft/preview'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
@@ -35,6 +36,7 @@ export default function PageNFT(): JSX.Element {
   const [changePercentage, setChangePercentage] = useState(0)
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
+  const [isPreview, setIsPreview] = useState(false)
 
   const tokenId = useMemo(() => {
     if (!router.isReady) return undefined
@@ -178,95 +180,111 @@ export default function PageNFT(): JSX.Element {
         {error && <div>meta: {error.toString()}</div>}
 
         {nft && (
-          <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <NFTCard
-                  size="big"
-                  className="cursor-pointer hover:shadow"
-                  changePercentage={changePercentage}
-                  nft={nft}
-                />
-                <div>
-                  <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
-                    {nft.name}
-                  </h1>
-                  {item('Minter', nft.author)}
-                  {item(
-                    'Created',
-                    new Date(
-                      1000 * nft.createdAt.toNumber(),
-                    ).toLocaleDateString(),
-                  )}
+          <>
+            <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <NFTCard
+                    size="big"
+                    className="cursor-pointer hover:shadow"
+                    changePercentage={changePercentage}
+                    nft={nft}
+                    onClick={() => {
+                      console.log('here')
+                      setIsPreview(true)
+                    }}
+                  />
+                  <div>
+                    <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
+                      {nft.name}
+                    </h1>
+                    {item('Minter', nft.author)}
+                    {item(
+                      'Created',
+                      new Date(
+                        1000 * nft.createdAt.toNumber(),
+                      ).toLocaleDateString(),
+                    )}
 
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Artists
-                  </h3>
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
+                      Artists
+                    </h3>
 
-                  {item('Animal', getCharacter(nft.characterId).artist.name)}
-                  {item('Background', backgrounds[nft.backgroundId].name)}
+                    {item('Animal', getCharacter(nft.characterId).artist.name)}
+                    {item('Background', backgrounds[nft.backgroundId].name)}
 
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Design Properties
-                  </h3>
-
-                  <div className="flex flex-col space-y-4">
-                    <span className="text-base leading-6 font-medium text-gray-500">
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                       Design Properties
-                    </span>
-                    <div className="grid grid-cols-4 gap-8">
-                      {favCoin && (
-                        <IconText
-                          text={favCoin.meta.name}
-                          icon={favCoin.meta.icon}
-                        />
-                      )}
-                      {character && (
-                        <IconText
-                          text={character.name}
-                          icon={character.emotions.normal}
-                        />
-                      )}
-                      {skin && <IconText text={skin.skin} icon={skin.icon} />}
-                      {background && (
-                        <IconText
-                          text={background.name}
-                          icon={background.image}
-                        />
-                      )}
+                    </h3>
+
+                    <div className="flex flex-col space-y-4">
+                      <span className="text-base leading-6 font-medium text-gray-500">
+                        Design Properties
+                      </span>
+                      <div className="grid grid-cols-4 gap-8">
+                        {favCoin && (
+                          <IconText
+                            text={favCoin.meta.name}
+                            icon={favCoin.meta.icon}
+                          />
+                        )}
+                        {character && (
+                          <IconText
+                            text={character.name}
+                            icon={character.emotions.normal}
+                          />
+                        )}
+                        {skin && <IconText text={skin.skin} icon={skin.icon} />}
+                        {background && (
+                          <IconText
+                            text={background.name}
+                            icon={background.image}
+                          />
+                        )}
+                      </div>
                     </div>
+
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
+                      Description
+                    </h3>
+
+                    <p className="text-sm leading-5 font-normal text-purple-900">
+                      {nft.description}
+                    </p>
                   </div>
-
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Description
-                  </h3>
-
-                  <p className="text-sm leading-5 font-normal text-purple-900">
-                    {nft.description}
-                  </p>
                 </div>
               </div>
+              <aside>
+                <Allocation
+                  lockAmount={nft.lockAmount}
+                  createdAt={new Date(nft.createdAt.toNumber() * 1000)}
+                  lockDuration={nft.lockDuration.toNumber()}
+                />
+                <NFTActions
+                  className="mt-8"
+                  onTransfer={() => {
+                    console.log('transfer')
+                  }}
+                  onEdit={() => {
+                    console.log('edit')
+                  }}
+                  onUpgrade={() => {
+                    console.log('upgrade')
+                  }}
+                />
+              </aside>
             </div>
-            <aside>
-              <Allocation
-                lockAmount={nft.lockAmount}
-                createdAt={new Date(nft.createdAt.toNumber() * 1000)}
-                lockDuration={nft.lockDuration.toNumber()}
-              />
-              <NFTActions
-                className="mt-8"
-                onTransfer={() => {
-                  console.log('transfer')
-                }}
-                onEdit={() => {
-                  console.log('edit')
-                }}
-                onUpgrade={() => {
-                  console.log('upgrade')
-                }}
-              />
-            </aside>
-          </div>
+            <NFTPreview
+              nft={nft}
+              isShown={isPreview}
+              onModalClose={() => {
+                setIsPreview(false)
+              }}
+              onRequestClose={() => {
+                setIsPreview(false)
+              }}
+            />
+          </>
         )}
       </div>
     </>
