@@ -183,7 +183,7 @@ export default function PageNFT(): JSX.Element {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <NFTCard
                   size="big"
-                  className="cursor-pointer hover:shadow"
+                  className="cursor-pointer"
                   changePercentage={changePercentage}
                   nft={nft}
                 />

@@ -143,7 +143,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     <div className={classNames('flex flex-col mb-auto space-y-8', className)}>
       <div
         className={classNames(
-          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8',
+          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8 hover:shadow-md',
           gradient(emotion),
         )}
       >
