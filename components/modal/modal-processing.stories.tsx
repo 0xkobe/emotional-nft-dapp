@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import ModalProcessing, { IProps } from './modal-processing'
 
 export default {
-  title: 'ModalProcessing/ModalProcessing',
+  title: 'Modal/ModalProcessing',
   component: ModalProcessing,
 } as Meta<IProps>
 
