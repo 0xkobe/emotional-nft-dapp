@@ -211,9 +211,6 @@ export default function PageNFT(): JSX.Element {
                   </h3>
 
                   <div className="flex flex-col space-y-4">
-                    <span className="text-base leading-6 font-medium text-gray-500">
-                      Design Properties
-                    </span>
                     <div className="grid grid-cols-4 gap-8">
                       {favCoin && (
                         <IconText
