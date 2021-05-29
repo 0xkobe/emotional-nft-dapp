@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useCallback, useEffect, useState } from 'react'
 import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
+import IconCardView from '../components/icon/cardview'
 import NFTCard from '../components/nft/card'
 import Title from '../components/title/title'
 import { favCoins } from '../data/favCoins'
@@ -102,6 +103,9 @@ export default function Wallet(): JSX.Element {
                       className="cursor-pointer hover:shadow"
                       changePercentage={pricechanges[i]}
                       nft={nft}
+                      action={
+                        <IconCardView />
+                      }
                     />
                   </a>
                 </Link>

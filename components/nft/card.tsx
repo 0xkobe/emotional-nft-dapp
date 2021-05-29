@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useState } from 'react'
+import { FunctionComponent, HTMLAttributes, ReactNode, useState } from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
 import IconWorryTrend from '../icon/worrytrend'
@@ -15,6 +15,7 @@ export type IProps = HTMLAttributes<any> & {
   size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
   defaultEmotion?: Emotion
+  action?: ReactNode
 }
 
 function trendIconFromEmotion(emotion: Emotion): any {
@@ -126,6 +127,7 @@ const NFTCard: FunctionComponent<IProps> = ({
   size,
   isDesign,
   defaultEmotion,
+  action,
   className,
   ...props
 }: IProps) => {
@@ -144,7 +146,7 @@ const NFTCard: FunctionComponent<IProps> = ({
   return (
     <div
       className={classNames(
-        'flex flex-col mb-auto space-y-8',
+        'relative flex flex-col mb-auto space-y-8',
         size ? (size === 'big' ? 'w-96' : (size === 'medium' ? 'w-64' : 'w-52')) : '',
         className
       )}
@@ -213,6 +215,15 @@ const NFTCard: FunctionComponent<IProps> = ({
             [ {character.skin.toUpperCase()} ]
           </span>
         </div>
+        {
+          !!action && (
+            <>
+              <div className="absolute -top-8 left-0 bottom-0 right-0 opacity-0 hover:opacity-100 hover:bg-opacity-75 bg-white flex justify-center items-center">
+                {action}
+              </div>
+            </>
+          )
+        }
       </div>
       {isDesign && (
         <NFTEmotions

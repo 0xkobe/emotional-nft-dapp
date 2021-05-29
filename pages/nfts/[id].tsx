@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
+import IconCardPreview from '../../components/icon/cardpreview'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import NFTPreview from '../../components/nft/preview'
@@ -193,6 +194,9 @@ export default function PageNFT(): JSX.Element {
                       console.log('here')
                       setIsPreview(true)
                     }}
+                    action={
+                      <IconCardPreview />
+                    }
                   />
                   <div>
                     <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
