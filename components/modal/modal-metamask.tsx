@@ -9,7 +9,7 @@ export type IProps = HTMLAttributes<{}> & {
   onModalClose: () => void
 }
 
-const ModalConnectMetamask: FunctionComponent<IProps> = ({
+const ModalMetamask: FunctionComponent<IProps> = ({
   isShown,
   title,
   content,
@@ -45,4 +45,4 @@ const ModalConnectMetamask: FunctionComponent<IProps> = ({
   )
 }
 
-export default ModalConnectMetamask
+export default ModalMetamask
