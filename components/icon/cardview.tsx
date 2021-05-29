@@ -9,11 +9,11 @@ const IconCardView: FunctionComponent<IProps> = (props) => {
     <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_dd)">
         <rect x="3" y="2" width="40" height="40" rx="16" fill="#5540DB"/>
-        <path d="M28 18L32 22M32 22L28 26M32 22L14 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 18L32 22M32 22L28 26M32 22L14 22" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </g>
       <defs>
-        <filter id="filter0_dd" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter0_dd" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
           <feOffset dy="1"/>
           <feGaussianBlur stdDeviation="1"/>
