@@ -373,27 +373,27 @@ export default function Mint(): JSX.Element {
     const qnftWithSigner = qnft.connect(signer)
     const mintPromise = airdropSignature
       ? qnftWithSigner.mintNftForAirdropUser(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          airdropAmount,
-          airdropSignature,
-          {
-            value: nftPrice,
-          },
-        )
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaId,
+        qstkAmount,
+        airdropAmount,
+        airdropSignature,
+        {
+          value: nftPrice,
+        },
+      )
       : qnftWithSigner.mintNft(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          {
-            value: nftPrice,
-          },
-        )
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaId,
+        qstkAmount,
+        {
+          value: nftPrice,
+        },
+      )
 
     mintPromise
       .then((tx) => {
@@ -604,9 +604,11 @@ export default function Mint(): JSX.Element {
               properties={summary}
               mintPrice={`${bnToText(nftPrice)} ETH`}
             >
-              <Button disabled={isDisabled()} onClick={handleSubmit}>
-                {mintSummaryBtnName}
-              </Button>
+              <span className='cursor-pointer'>
+                <Button disabled={isDisabled()} onClick={handleSubmit}>
+                  {mintSummaryBtnName}
+                </Button>
+              </span>
             </MintSummary>
           </aside>
         </div>
