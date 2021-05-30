@@ -189,9 +189,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
       </div>
       <div className="flex flex-col space-y-4 w-full">
         <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
-          <span>Free Allocation Key (Whitelist key)</span>
+          <span>Whitelist key (Airdrop key)</span>
           <Tooltip
-            tooltip="Whiltelist key (base64) you receive from the team for your airdrop and early access for mint."
+            tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
             tooltipClassName="-left-28 w-56"
           >
             <IconInformation />
