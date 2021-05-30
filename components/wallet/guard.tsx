@@ -6,23 +6,45 @@ import Button from '../button/button'
 const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   props: PropsWithChildren<any>,
 ) => {
-  const { account, chainId, hasWallet, activate } = useWallet()
+  const { account, chainId, hasWallet, activate, error } = useWallet()
+
+  if (error)
+    return (
+      <div className="max-w-4xl mx-auto bg-white border border-purple-100 rounded-2xl shadow-sm p-8">
+        <div className="text-base leading-6 font-bold text-purple-900">
+          {error.name} {error.message}
+        </div>
+      </div>
+    )
 
   if (!hasWallet)
     return (
-      <div>
-        Please install Metamask
-        <Button href="https://metamask.io/download">Download metamask</Button>
+      <div className="max-w-4xl mx-auto bg-white border border-purple-100 rounded-2xl shadow-sm p-8">
+        <div className="text-base leading-6 font-bold text-purple-900 mb-4">
+          Please install Metamask
+        </div>
+        <Button target="_blank" href="https://metamask.io/download">
+          Download metamask
+        </Button>
       </div>
     )
   if (!account)
     return (
-      <div>
-        Please connect Metamask
+      <div className="max-w-4xl mx-auto bg-white border border-purple-100 rounded-2xl shadow-sm p-8">
+        <div className="text-base leading-6 font-bold text-purple-900 mb-4">
+          Please connect Metamask
+        </div>
         <Button onClick={activate}>Activate</Button>
       </div>
     )
-  if (chainId !== chain.id) return <>Please select {chain.name}</>
+  if (chainId !== chain.id)
+    return (
+      <div className="max-w-4xl mx-auto bg-white border border-purple-100 rounded-2xl shadow-sm p-8">
+        <div className="text-base leading-6 font-bold text-purple-900">
+          Please select {chain.name}
+        </div>
+      </div>
+    )
 
   return props.children
 }
