@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { AnchorHTMLAttributes, FunctionComponent } from 'react'
+import { AnchorHTMLAttributes,  FunctionComponent } from 'react'
 
 export type IProps = AnchorHTMLAttributes<{}> & {
   disabled?: boolean
