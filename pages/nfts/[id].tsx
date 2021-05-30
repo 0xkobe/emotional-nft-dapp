@@ -10,12 +10,9 @@ import NFTCard from '../../components/nft/card'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
-import {
-  abi,
-  deployedAddresses,
-  metamaskConnector,
-} from '../../data/smartContract'
+import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
+import useWallet from '../../hooks/useWallet'
 import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
 import { FavCoin, NFT } from '../../types/nft'
@@ -23,11 +20,11 @@ import { FavCoin, NFT } from '../../types/nft'
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
-  const {
-    contract,
-    error: contractError,
-    account, // TODO: this is wrong. useContract should not return the account. useWallet
-  } = useContract<QNFT>(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+  const { contract, error: contractError } = useContract<QNFT>(
+    deployedAddresses.qnft,
+    abi.qnft,
+  )
+  const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
@@ -105,7 +102,7 @@ export default function PageNFT(): JSX.Element {
       setLoading(false)
       setError(undefined)
     }
-  }, [contract, tokenId]) // FIXME: contract is reloaded when the tokenId changes
+  }, [contract, tokenId])
 
   useEffect(() => {
     if (!favCoin) return

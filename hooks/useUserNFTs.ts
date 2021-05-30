@@ -1,13 +1,13 @@
 import { ContractInterface } from '@ethersproject/contracts'
-import { AbstractConnector } from '@web3-react/abstract-connector'
+import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
 import { fetchNFT } from '../lib/nft'
 import { QNFT } from '../types/contracts'
 import { NFT } from '../types/nft'
 import useContract from './useContract'
+import useWallet from './useWallet'
 
 export default function useUserNFTs(
-  connector: AbstractConnector,
   addresses: { [chainId: number]: string },
   abi: ContractInterface,
 ): {
@@ -15,11 +15,14 @@ export default function useUserNFTs(
   isLoading: boolean
   error?: Error
 } {
-  const { contract: qnft, account } = useContract<QNFT>( // FIXME: should not use account from useContract
-    connector,
-    addresses,
-    abi,
-  )
+  // TODO: activate multicall provider with web3
+  //   const provider = new providers.MulticallProvider(
+  //     new JsonRpcProvider(
+  //       'https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e',
+  //     ),
+  //   )
+  const { contract: qnft } = useContract<QNFT>(addresses, abi)
+  const { account } = useWallet()
 
   const [nfts, setNFTs] = useState<NFT[]>([])
   const [error, setError] = useState<Error>()

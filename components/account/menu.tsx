@@ -1,15 +1,12 @@
 import { Menu } from '@headlessui/react'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import useWallet from '../../hooks/useWallet'
 import { shortenAddress } from '../../lib/utils'
 import AccountImage from './image'
 
-const connector = new InjectedConnector({})
-
 const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
-  const { account, activate, deactivate } = useWallet(connector)
+  const { account, activate, deactivate } = useWallet()
 
   if (!account)
     return (
