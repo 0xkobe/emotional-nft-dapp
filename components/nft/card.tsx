@@ -2,26 +2,39 @@ import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes, useState } from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
-import IconDownTrend from '../icon/downtrend'
+import IconAngryTrend from '../icon/angrytrend'
+import IconHappyTrend from '../icon/happytrend'
 import IconNormalTrend from '../icon/normaltrend'
-import IconUptrend from '../icon/uptrend'
+import IconRestTrend from '../icon/resttrend'
+import IconWorryTrend from '../icon/worrytrend'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
   nft: NFT
-  size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
 }
 
 function trendIcon(changePercentage: number): any {
-  if (changePercentage > 0) {
-    return IconUptrend
+  // temporarily we strictly define emotion as specified in https://github.com/Quiver-Protocol/emotional-nft-dapp/issues/8
+  // angry	< -20%
+  // worry	[-20%, -10%]
+  // normal	[-10%, +15%]
+  // rest	[+15%, +30%]
+  // happy	>+30%
+  if (changePercentage < -20) {
+    return IconAngryTrend
   }
-  if (changePercentage < 0) {
-    return IconDownTrend
+  if (changePercentage < -10) {
+    return IconWorryTrend
   }
-  return IconNormalTrend
+  if (changePercentage < 15) {
+    return IconNormalTrend
+  }
+  if (changePercentage < 30) {
+    return IconRestTrend
+  }
+  return IconHappyTrend
 }
 
 export function capitalizeFirstLetter(str: string): string {
@@ -113,7 +126,6 @@ export function gradient(emotion: Emotion): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
-  size,
   isDesign,
   className,
 }: IProps) => {
@@ -129,7 +141,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     <div className={classNames('flex flex-col mb-auto space-y-8', className)}>
       <div
         className={classNames(
-          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8',
+          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8 hover:shadow-md',
           gradient(emotion),
         )}
       >
