@@ -41,15 +41,8 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = useRouter()
 
   // init wallet
-  const {
-    account,
-    activate,
-    signer,
-    signTypedDataV4,
-    chainId: metamaskChainId,
-    hasWallet,
-  } = useWallet()
-  
+  const { account, activate, signer, signTypedDataV4 } = useWallet()
+
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
 
@@ -532,57 +525,8 @@ export default function Mint(): JSX.Element {
     ][mintStep]()
   }
 
-  // FIXME: move this logic and UI to a better place
-  const [modalContent, setModalContent] = useState<JSX.Element>()
-
-  useEffect(() => {
-    if (hasWallet === undefined) return
-    if (hasWallet) return
-    setModalContent(<>Please install Metamask</>)
-    return () => {
-      setModalContent(undefined)
-    }
-  }, [hasWallet])
-
-  useEffect(() => {
-    if (!hasWallet) return // give priority to hasWallet error
-    console.log('account', account)
-    if (account) return
-    setModalContent(
-      <>
-        Please connect Metamask:
-        <a
-          onClick={() => activate()}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium my-3 rounded-xl  hover:text-gray-700 hover:bg-gray-200 border"
-        >
-          Connect
-        </a>
-      </>,
-    )
-    return () => {
-      setModalContent(undefined)
-    }
-  }, [hasWallet, account, activate])
-
-  useEffect(() => {
-    if (!metamaskChainId) return
-    if (metamaskChainId !== chain.id)
-      setModalContent(<>wrong chain selected. please switch to {chain.name}</>)
-
-    return () => {
-      setModalContent(undefined)
-    }
-  }, [metamaskChainId])
-
   return (
     <>
-      <Modal
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown={!!modalContent}
-      >
-        {modalContent}
-      </Modal>
       <Head>
         <title>Mint NFT</title>
       </Head>
