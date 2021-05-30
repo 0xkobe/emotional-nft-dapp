@@ -31,7 +31,8 @@ const ModalSucceed: FunctionComponent<IProps> = ({
               Transaction Succeeded
             </span>
             <span className="text-sm leading-5 font-normal text-gray-500 text-center">
-              Token successfully created with <span className="font-semibold">id {nftId}</span>
+              Token successfully created with{' '}
+              <span className="font-semibold">id {nftId}</span>
             </span>
           </div>
         </div>

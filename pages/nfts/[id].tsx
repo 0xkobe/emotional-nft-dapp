@@ -194,9 +194,7 @@ export default function PageNFT(): JSX.Element {
                       console.log('here')
                       setIsPreview(true)
                     }}
-                    action={
-                      <IconCardPreview />
-                    }
+                    action={<IconCardPreview />}
                   />
                   <div>
                     <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">

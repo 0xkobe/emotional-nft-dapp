@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { Emotion, NFT } from '../../types/nft'
 import IconClose from '../icon/close'
@@ -18,7 +17,7 @@ const NFTPreview: FunctionComponent<IProps> = ({
   onModalClose,
   onRequestClose,
 }: IProps) => {
-  const emotions = Object.values(Emotion);
+  const emotions = Object.values(Emotion)
   return (
     <Modal
       isShown={isShown}
@@ -31,20 +30,18 @@ const NFTPreview: FunctionComponent<IProps> = ({
             NFT Emotions Preview
           </span>
           <span onClick={onModalClose}>
-            <IconClose className="text-gray-400 cursor-pointer"/>
+            <IconClose className="text-gray-400 cursor-pointer" />
           </span>
         </div>
         <div className="flex flex-row space-x-8">
-          {
-            emotions.map(emotion => (
-              <NFTCard
-                key={emotion}
-                size="small"
-                nft={nft}
-                defaultEmotion={emotion}
-              />
-            ))
-          }
+          {emotions.map((emotion) => (
+            <NFTCard
+              key={emotion}
+              size="small"
+              nft={nft}
+              defaultEmotion={emotion}
+            />
+          ))}
         </div>
       </div>
     </Modal>

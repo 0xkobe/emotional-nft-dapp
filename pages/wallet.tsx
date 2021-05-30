@@ -103,9 +103,7 @@ export default function Wallet(): JSX.Element {
                       className="cursor-pointer hover:shadow"
                       changePercentage={pricechanges[i]}
                       nft={nft}
-                      action={
-                        <IconCardView />
-                      }
+                      action={<IconCardView />}
                     />
                   </a>
                 </Link>
