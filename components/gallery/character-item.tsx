@@ -18,7 +18,7 @@ const CharacterItem: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         className,
-        character.currentSupply >= character.maxSupply ? 'opacity-25' : ''
+        character.currentSupply >= character.maxSupply ? 'opacity-25' : '',
       )}
       onClick={() => {
         if (character.currentSupply < character.maxSupply)

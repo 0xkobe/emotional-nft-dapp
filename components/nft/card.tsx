@@ -3,16 +3,15 @@ import { FunctionComponent, HTMLAttributes, useState } from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
 import IconAngryTrend from '../icon/angrytrend'
-import IconWorryTrend from '../icon/worrytrend'
+import IconHappyTrend from '../icon/happytrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconRestTrend from '../icon/resttrend'
-import IconHappyTrend from '../icon/happytrend'
+import IconWorryTrend from '../icon/worrytrend'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
   nft: NFT
-  size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
 }
 
@@ -127,7 +126,6 @@ export function gradient(emotion: Emotion): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
-  size,
   isDesign,
   className,
 }: IProps) => {
