@@ -26,12 +26,7 @@ import {
   skins,
   tokenMultiplier,
 } from '../data/nft'
-import {
-  abi,
-  deployedAddresses,
-  metamaskConnector,
-  remoteConnector,
-} from '../data/smartContract'
+import { abi, deployedAddresses } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
 import { createNFTOffChain } from '../lib/nft'
@@ -46,31 +41,16 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = useRouter()
 
   // init wallet
-  const {
-    account,
-    chainId: walletChainId,
-    activate,
-    signer,
-    signTypedDataV4,
-  } = useWallet(metamaskConnector)
+  const { account, activate, signer, signTypedDataV4 } = useWallet()
 
   // init QNFT smart contract
-  const { contract: qnft } = useContract<QNFT>(
-    remoteConnector,
-    deployedAddresses.qnft,
-    abi.qnft,
-  )
+  const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
 
   // init QSTK smart contract
-  const { contract: qstk } = useContract<QStk>(
-    remoteConnector,
-    deployedAddresses.qstk,
-    abi.qstk,
-  )
+  const { contract: qstk } = useContract<QStk>(deployedAddresses.qstk, abi.qstk)
 
   // init qAirdrop smart contract
   const { contract: qAirdrop } = useContract<QAirdrop>(
-    remoteConnector,
     deployedAddresses.qAirdrop,
     abi.qAirdrop,
   )
@@ -286,16 +266,6 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!isMinting) return
     if (!account) return // don't sign if account is not set
-    if (!walletChainId) return
-
-    // check chain id
-    if (walletChainId !== chain.id) {
-      setError(
-        `Wrong Ethereum network selected. Please open Metamask and switch to ${chain.name}`,
-      )
-      setIsMinting(false)
-      return
-    }
 
     // generate signature
     console.log('Signing metadata using Metamask...')
@@ -328,7 +298,6 @@ export default function Mint(): JSX.Element {
     nftDescription,
     nftName,
     signTypedDataV4,
-    walletChainId,
     account,
   ])
 
@@ -574,7 +543,6 @@ export default function Mint(): JSX.Element {
           <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
-                size="big"
                 isDesign
                 nft={{
                   tokenId: BigNumber.from(1), // random value
@@ -604,9 +572,11 @@ export default function Mint(): JSX.Element {
               properties={summary}
               mintPrice={`${bnToText(nftPrice)} ETH`}
             >
-              <Button disabled={isDisabled()} onClick={handleSubmit}>
-                {mintSummaryBtnName}
-              </Button>
+              <span className="cursor-pointer">
+                <Button disabled={isDisabled()} onClick={handleSubmit}>
+                  {mintSummaryBtnName}
+                </Button>
+              </span>
             </MintSummary>
           </aside>
         </div>

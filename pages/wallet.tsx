@@ -8,11 +8,7 @@ import IconCardView from '../components/icon/cardview'
 import NFTCard from '../components/nft/card'
 import Title from '../components/title/title'
 import { favCoins } from '../data/favCoins'
-import {
-  abi,
-  deployedAddresses,
-  metamaskConnector,
-} from '../data/smartContract'
+import { abi, deployedAddresses } from '../data/smartContract'
 import useUserNFTs from '../hooks/useUserNFTs'
 import { NFT } from '../types/nft'
 
@@ -21,7 +17,7 @@ export default function Wallet(): JSX.Element {
     nfts,
     error: contractError,
     isLoading,
-  } = useUserNFTs(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+  } = useUserNFTs(deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
   const [pricechanges, setPricechanges] = useState<number[]>([])
@@ -100,7 +96,7 @@ export default function Wallet(): JSX.Element {
                   <a>
                     <NFTCard
                       key={i}
-                      className="cursor-pointer hover:shadow"
+                      className="cursor-pointer"
                       changePercentage={pricechanges[i]}
                       nft={nft}
                       action={<IconCardView />}

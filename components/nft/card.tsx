@@ -12,10 +12,10 @@ import NFTEmotions from './emotions'
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
   nft: NFT
-  size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
   defaultEmotion?: Emotion
   action?: ReactNode
+  size?: string
 }
 
 function trendIconFromEmotion(emotion: Emotion): any {
@@ -124,10 +124,10 @@ export function gradient(emotion: Emotion): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
-  size,
   isDesign,
   defaultEmotion,
   action,
+  size,
   className,
   ...props
 }: IProps) => {
@@ -158,7 +158,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     >
       <div
         className={classNames(
-          'flex flex-col border-2 border-purple-300 rounded-2xl shadow space-y-8',
+          'flex flex-col border-2 border-purple-300 rounded-2xl shadow space-y-8 hover:shadow-md',
           size !== 'big' ? 'p-6' : 'p-8',
           gradient(emotion),
         )}
@@ -223,7 +223,7 @@ const NFTCard: FunctionComponent<IProps> = ({
         </div>
         {!!action && (
           <>
-            <div className="absolute -top-8 left-0 bottom-0 right-0 opacity-0 hover:opacity-100 hover:bg-opacity-75 bg-white flex justify-center items-center">
+            <div className="absolute -top-8 left-0 bottom-0 right-0 opacity-0 hover:opacity-100 hover:bg-opacity-75 bg-white flex justify-center items-center rounded-2xl">
               {action}
             </div>
           </>
