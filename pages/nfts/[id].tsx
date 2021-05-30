@@ -179,8 +179,7 @@ export default function PageNFT(): JSX.Element {
             <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <NFTCard
-                  size="big"
-                  className="cursor-pointer hover:shadow"
+                  className="cursor-pointer"
                   changePercentage={changePercentage}
                   nft={nft}
                 />
@@ -208,9 +207,6 @@ export default function PageNFT(): JSX.Element {
                   </h3>
 
                   <div className="flex flex-col space-y-4">
-                    <span className="text-base leading-6 font-medium text-gray-500">
-                      Design Properties
-                    </span>
                     <div className="grid grid-cols-4 gap-8">
                       {favCoin && (
                         <IconText

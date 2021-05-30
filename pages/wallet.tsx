@@ -95,7 +95,7 @@ export default function Wallet(): JSX.Element {
                   <a>
                     <NFTCard
                       key={i}
-                      className="cursor-pointer hover:shadow"
+                      className="cursor-pointer"
                       changePercentage={pricechanges[i]}
                       nft={nft}
                     />

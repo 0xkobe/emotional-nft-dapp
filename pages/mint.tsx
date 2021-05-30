@@ -49,7 +49,7 @@ export default function Mint(): JSX.Element {
     chainId: metamaskChainId,
     hasWallet,
   } = useWallet()
-
+  
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
 
@@ -599,7 +599,6 @@ export default function Mint(): JSX.Element {
           <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
-                size="big"
                 isDesign
                 nft={{
                   tokenId: BigNumber.from(1), // random value
@@ -629,9 +628,11 @@ export default function Mint(): JSX.Element {
               properties={summary}
               mintPrice={`${bnToText(nftPrice)} ETH`}
             >
-              <Button disabled={isDisabled()} onClick={handleSubmit}>
-                {mintSummaryBtnName}
-              </Button>
+              <span className="cursor-pointer">
+                <Button disabled={isDisabled()} onClick={handleSubmit}>
+                  {mintSummaryBtnName}
+                </Button>
+              </span>
             </MintSummary>
           </aside>
         </div>
