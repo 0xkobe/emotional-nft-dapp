@@ -13,6 +13,7 @@ const Button: FunctionComponent<IProps> = (props) => {
         props.disabled
           ? 'bg-white border border-purple-100 text-purple-100'
           : 'bg-purple-700 text-white hover:bg-purple-900 hover:shadow-md',
+        (props.onClick || props.href) && 'cursor-pointer',
         props.className,
       )}
       {...props}
