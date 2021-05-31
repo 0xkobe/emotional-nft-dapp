@@ -1,13 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
-import React,{ FunctionComponent,HTMLAttributes,useState } from 'react'
-import { tokenMultiplier,verifier } from '../../data/nft'
+import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
+import { tokenMultiplier, verifier } from '../../data/nft'
 import {
-bnToInput,
-bnToText,
-inputToBn,
-lockDurationToString,
-verifyAirdropKey
+  bnToInput,
+  bnToText,
+  inputToBn,
+  lockDurationToString,
+  verifyAirdropKey,
 } from '../../lib/utils'
 import { VerifyAirdropKeyResponse } from '../../types/airdrop'
 import { QAirdrop } from '../../types/contracts'
@@ -236,7 +236,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             <img src="/quiver.svg" />
           </div>
           <span className="text-sm leading-5 font-semibold text-purple-900">
-            {bnToInput(qstkAmount.add(airdropAmount))} QSTK
+            {bnToText(qstkAmount.add(airdropAmount))} QSTK
           </span>
         </div>
       </div>
