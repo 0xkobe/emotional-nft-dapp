@@ -79,7 +79,7 @@ export default function Wallet(): JSX.Element {
         </div>
         <div className="bg-white border border-purple-50 shadow p-8 rounded-2xl flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
-            <span className="text-base leading-6 font-bold text-gray-500">
+            <span className="text-base leading-6 font-bold text-purple-900">
               Your NFT's Collection
             </span>
             <div>
