@@ -70,10 +70,10 @@ const AllocationWizard: FunctionComponent<IProps> = ({
     setAirdropKeyError('')
   }
 
-  const onChangeQstkAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQstkAmountInput(e.target.value)
+  const onChangeQstkAmountInput = (value: string) => {
+    setQstkAmountInput(value)
     try {
-      const bn = inputToBn(e.target.value)
+      const bn = inputToBn(value)
       if (bn.lt(lockOption.minAmount)) {
         setQstkAmountError('lower than min')
       } else if (bn.gt(lockOption.maxAmount)) {
@@ -139,7 +139,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               unit="QSTK"
               value={qstkAmountInput}
               isError={qstkAmountError != ''}
-              onChange={onChangeQstkAmountInput}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChangeQstkAmountInput(e.target.value)
+              }
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500">
@@ -149,7 +151,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               <a
                 className="text-xs leading-4 font-normal text-black cursor-pointer"
                 onClick={() =>
-                  setQstkAmountInput(bnToInput(lockOption.maxAmount))
+                  onChangeQstkAmountInput(bnToInput(lockOption.maxAmount))
                 }
               >
                 MAX
