@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useState } from 'react'
+import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
 import IconAngryTrend from '../icon/angrytrend'
@@ -8,6 +8,7 @@ import IconNormalTrend from '../icon/normaltrend'
 import IconRestTrend from '../icon/resttrend'
 import IconWorryTrend from '../icon/worrytrend'
 import NFTEmotions from './emotions'
+import Tooltip from '../tooltip/tooltip'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
@@ -157,7 +158,12 @@ const NFTCard: FunctionComponent<IProps> = ({
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
             {!isDesign && <TrendIcon className="w-6 h-4" />}
-            <img className="w-8 h-8" src={favCoin.meta.icon} />
+            <Tooltip
+              tooltip={favCoin.meta.name}
+              tooltipClassName="-left-14 w-28 text-center"
+            >
+              <img className="w-8 h-8" src={favCoin.meta.icon} />
+            </Tooltip>
           </div>
         </div>
         <div

@@ -12,8 +12,10 @@ import {
 import { VerifyAirdropKeyResponse } from '../../types/airdrop'
 import { QAirdrop } from '../../types/contracts'
 import { LockOption } from '../../types/nft'
+import IconInformation from '../icon/information'
 import Input from '../input/input'
 import Select from '../select/select'
+import Tooltip from '../tooltip/tooltip'
 
 export type IProps = HTMLAttributes<{}> & {
   qAirdrop?: QAirdrop
@@ -100,8 +102,14 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   return (
     <div className={classNames(className, 'flex flex-col space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
-          QSTK Token Remaining
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+          <span>QSTK Token Remaining</span>
+          <Tooltip
+            tooltip="QSTK tokens allocated for NFT sale are restricted and no more tokens will be provided for discounted purchase."
+            tooltipClassName="-left-28 w-56"
+          >
+            <IconInformation />
+          </Tooltip>
         </div>
         <div className="flex flex-col space-y-2">
           <div className="text-sm leading-5 font-normal text-gray-500">
@@ -180,8 +188,14 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col space-y-4 w-full">
-        <div className="text-base leading-6 font-medium text-gray-500">
-          Free Allocation Key
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+          <span>Whitelist key (Airdrop key)</span>
+          <Tooltip
+            tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
+            tooltipClassName="-left-28 w-56"
+          >
+            <IconInformation />
+          </Tooltip>
         </div>
         <div className="flex flex-col space-y-2">
           <Input
@@ -206,8 +220,14 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
-          Total Token to Receive
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+          <span>Total Token to Receive</span>
+          <Tooltip
+            tooltip="The total QSTK amount you receive is defined by “QSTK you purchase + the amount allocated for your whitelist key”."
+            tooltipClassName="-left-28 w-56"
+          >
+            <IconInformation />
+          </Tooltip>
         </div>
         <div className="flex flex-row space-x-2 items-center">
           <div className="flex w-8 h-8 p-2 bg-white rounded-2xl border border-solid border-gray-200">
