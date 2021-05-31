@@ -1,5 +1,11 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, ReactNode, useState } from 'react'
+import {
+  FunctionComponent,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
 import IconAngryTrend from '../icon/angrytrend'
@@ -7,8 +13,8 @@ import IconHappyTrend from '../icon/happytrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconRestTrend from '../icon/resttrend'
 import IconWorryTrend from '../icon/worrytrend'
-import NFTEmotions from './emotions'
 import Tooltip from '../tooltip/tooltip'
+import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
@@ -19,21 +25,39 @@ export type IProps = HTMLAttributes<any> & {
   size?: string
 }
 
-function trendIconFromEmotion(emotion: Emotion): any {
+function trendIconFromEmotion(emotion: Emotion, size?: string) {
   switch (emotion) {
     case Emotion.Happy:
-      return IconHappyTrend
+      return (
+        <IconHappyTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconHappyTrend>
+      )
     case Emotion.Rest:
-      return IconRestTrend
+      return (
+        <IconRestTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconRestTrend>
+      )
     case Emotion.Normal:
-      return IconNormalTrend
+      return (
+        <IconNormalTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconNormalTrend>
+      )
     case Emotion.Worry:
-      return IconWorryTrend
+      return (
+        <IconWorryTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconWorryTrend>
+      )
     case Emotion.Angry:
-      return IconAngryTrend
+      return (
+        <IconAngryTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconAngryTrend>
+      )
   }
-
-  return IconNormalTrend
 }
 
 export function capitalizeFirstLetter(str: string): string {
@@ -132,15 +156,15 @@ const NFTCard: FunctionComponent<IProps> = ({
   className,
   ...props
 }: IProps) => {
-  const [emotion, setEmotion] = useState(
-    isDesign
-      ? Emotion.Normal
-      : defaultEmotion || emotionFromPriceChange(changePercentage || 0),
-  )
-  const TrendIcon = trendIconFromEmotion(emotion)
-  const favCoin = getFavCoin(nft.favCoinId)
-  const backgroundSrc = getBackgroundImage(nft.backgroundId)
-  const character = getCharacter(nft.characterId)
+  const [emotion, setEmotion] = useState(Emotion.Normal)
+
+  useEffect(() => {
+    setEmotion(
+      isDesign
+        ? Emotion.Normal
+        : defaultEmotion || emotionFromPriceChange(changePercentage || 0),
+    )
+  }, [isDesign, defaultEmotion, changePercentage])
 
   return (
     <div
@@ -176,16 +200,15 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            {!isDesign && (
-              <TrendIcon
-                className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
-              />
-            )}
+            {!isDesign && trendIconFromEmotion(emotion)}
             <Tooltip
-              tooltip={favCoin.meta.name}
+              tooltip={getFavCoin(nft.favCoinId).meta.name}
               tooltipClassName="-left-14 w-28 text-center"
             >
-              <img className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')} src={favCoin.meta.icon} />
+              <img
+                className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')}
+                src={getFavCoin(nft.favCoinId).meta.icon}
+              />
             </Tooltip>
           </div>
         </div>
@@ -195,14 +218,14 @@ const NFTCard: FunctionComponent<IProps> = ({
           )}
         >
           <div className="mt-full"></div>
-          {backgroundSrc && (
+          {getBackgroundImage(nft.backgroundId) && (
             <img
               className={classNames('absolute top-0 right-0 left-0 bottom-0')}
-              src={backgroundSrc}
+              src={getBackgroundImage(nft.backgroundId)}
             />
           )}
           <img
-            src={character.emotions[emotion]}
+            src={getCharacter(nft.characterId).emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
@@ -221,7 +244,7 @@ const NFTCard: FunctionComponent<IProps> = ({
               size !== 'big' ? 'text-xs leading-4' : 'text-sm leading-5',
             )}
           >
-            [ {character.skin.toUpperCase()} ]
+            [ {getCharacter(nft.characterId).skin.toUpperCase()} ]
           </span>
         </div>
         {!!action && (
