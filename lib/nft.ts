@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import createHttpError from 'http-errors'
 import { favCoins } from '../data/favCoins'
 import { backgrounds, characters, lockOptions } from '../data/nft'
 import { APINftCreateRequest } from '../types/api'
@@ -22,6 +23,9 @@ export const fetchNFT = async (
   // // fetch info on-chain
   const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
 
+  if (nftDataOnChain.createdAt.isZero())
+    throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
+
   // fetch info off-chain from database
   const { data, error } = await supabase
     .from('nft')
@@ -29,7 +33,7 @@ export const fetchNFT = async (
     .eq('id', nftDataOnChain.metaId.toString())
   if (error) throw error
   if (!data || data?.length === 0)
-    throw new Error(
+    throw new createHttpError.NotFound(
       `metadata with id "${nftDataOnChain.metaId.toString()}" not found`,
     )
   const nftDataOffChain = data.pop() as NFTOffChain
