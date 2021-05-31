@@ -200,7 +200,7 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            {!isDesign && trendIconFromEmotion(emotion)}
+            {!isDesign && trendIconFromEmotion(emotion, size)}
             <Tooltip
               tooltip={getFavCoin(nft.favCoinId).meta.name}
               tooltipClassName="-left-14 w-28 text-center"
