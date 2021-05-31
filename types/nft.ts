@@ -2,11 +2,11 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Creature, FavCoinEnum, Skin } from './metadata'
 
 export enum Emotion {
-  Happy = 'happy',
-  Rest = 'rest',
-  Normal = 'normal',
-  Worry = 'worry',
   Angry = 'angry',
+  Worry = 'worry',
+  Normal = 'normal',
+  Rest = 'rest',
+  Happy = 'happy',
 }
 
 export type Artist = {
