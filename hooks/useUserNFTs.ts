@@ -14,12 +14,6 @@ export default function useUserNFTs(
   isLoading: boolean
   error?: Error
 } {
-  // TODO: activate multicall provider with web3
-  //   const provider = new providers.MulticallProvider(
-  //     new JsonRpcProvider(
-  //       'https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e',
-  //     ),
-  //   )
   const { contract: qnft } = useContract<QNFT>(address, abi)
   const { account } = useWallet()
 

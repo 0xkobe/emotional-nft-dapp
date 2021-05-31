@@ -23,10 +23,7 @@ import { NFT } from '../../types/nft'
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
-  const { contract, error: contractError } = useContract<QNFT>(
-    deployedAddresses.qnft,
-    abi.qnft,
-  )
+  const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
   const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -165,7 +162,6 @@ export default function PageNFT(): JSX.Element {
         </div>
 
         {isLoading && <div>...loading</div>}
-        {contractError && <div>contract: {contractError.toString()}</div>}
         {error && <div>meta: {error.toString()}</div>}
 
         {nft && (
