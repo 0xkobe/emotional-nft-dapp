@@ -1,6 +1,6 @@
 import { ContractInterface } from '@ethersproject/contracts'
 import { useEffect, useState } from 'react'
-import { fetchNFT } from '../lib/nft'
+import { fetchNFTs } from '../lib/nft'
 import { QNFT } from '../types/contracts'
 import { NFT } from '../types/nft'
 import useContract from './useContract'
@@ -32,12 +32,12 @@ export default function useUserNFTs(
     try {
       const userNFTCount = await qnft.balanceOf(account)
       const userNFTIndex = Array.from(Array(userNFTCount.toNumber()).keys())
-      const nfts = await Promise.all(
-        userNFTIndex.map(async (index) => {
-          const tokenId = await qnft.tokenOfOwnerByIndex(account, index)
-          return fetchNFT(qnft, tokenId)
-        }),
+      const nftsId = await Promise.all(
+        userNFTIndex.map(async (index) =>
+          qnft.tokenOfOwnerByIndex(account, index),
+        ),
       )
+      const nfts = await fetchNFTs(qnft, nftsId)
       setNFTs(nfts)
     } catch (e) {
       setError(e)
