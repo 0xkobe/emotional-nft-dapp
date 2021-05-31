@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import createHttpError from 'http-errors'
 import { favCoins } from '../data/favCoins'
 import { backgrounds, characters, lockOptions } from '../data/nft'
 import { APINftCreateRequest } from '../types/api'
@@ -22,6 +23,9 @@ export const fetchNFT = async (
   // // fetch info on-chain
   const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
 
+  if (nftDataOnChain.createdAt.isZero())
+    throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
+
   // fetch info off-chain from database
   const { data, error } = await supabase
     .from('nft')
@@ -29,7 +33,7 @@ export const fetchNFT = async (
     .eq('id', nftDataOnChain.metaId.toString())
   if (error) throw error
   if (!data || data?.length === 0)
-    throw new Error(
+    throw new createHttpError.NotFound(
       `metadata with id "${nftDataOnChain.metaId.toString()}" not found`,
     )
   const nftDataOffChain = data.pop() as NFTOffChain
@@ -102,12 +106,20 @@ export const createNFTOffChain = async (
     body: JSON.stringify(data),
     method: 'POST',
   })
+  let body
+  try {
+    body = await res.json()
+  } catch (error) {
+    console.error(error)
+  }
   if (!res.ok) {
-    const error = (await res.json()).error
-    if (error)
-      throw new Error(`an error occurred while creating metadata: ${error}`)
+    if (body.error) {
+      throw new Error(
+        `an error occurred while creating metadata: ${body.error}`,
+      )
+    }
     throw new Error(`an unknown error occurred while creating metadata`)
   }
-  const metaId = (await res.json()).metaId
+  const metaId = body.metaId
   return metaId
 }
