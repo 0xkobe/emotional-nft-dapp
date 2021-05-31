@@ -1,48 +1,24 @@
+import { providers } from '@0xsequence/multicall'
 import { Contract, ContractInterface } from '@ethersproject/contracts'
-import { Web3Provider } from '@ethersproject/providers'
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import { useWeb3React } from '@web3-react/core'
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
+import { providers as ethersProviders } from 'ethers'
 import { useEffect, useState } from 'react'
+import { chain } from '../data/chains'
+
+const provider = new providers.MulticallProvider(
+  new ethersProviders.StaticJsonRpcProvider(chain.remoteProvider),
+)
 
 export default function useContract<T extends Contract>(
-  connector: AbstractConnector,
-  addresses: { [chainId: number]: string },
+  address: string,
   abi: ContractInterface,
-): Web3ReactContextInterface<Web3Provider> & {
+): {
   contract?: T
-  error?: Error
 } {
-  // should this context be injected?
-  const context = useWeb3React<Web3Provider>()
-  const { library, chainId, activate } = context
-
   const [contract, setContract] = useState<T>()
-  const [error, setError] = useState<Error>()
 
-  // activate the connector on init
   useEffect(() => {
-    void activate(connector, console.error, true)
-  }, [activate, connector])
+    setContract(new Contract(address, abi, provider) as T)
+  }, [])
 
-  // init the contract
-  useEffect(() => {
-    setError(undefined)
-    if (!library) return
-    if (!chainId) return
-    if (!(chainId in addresses)) {
-      setError(new Error(`no contract for the network "${chainId}"`))
-      return
-    }
-    const contract = new Contract(addresses[chainId], abi, library)
-    console.log(`Reload contract: ${contract.address}`)
-    setContract(contract as T)
-
-    return () => {
-      setError(undefined)
-      setContract(undefined)
-    }
-  }, [library, chainId, addresses, abi])
-
-  return { ...context, contract, error }
+  return { contract }
 }

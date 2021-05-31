@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import createHttpError from 'http-errors'
 import { favCoins } from '../data/favCoins'
 import { backgrounds, characters, lockOptions } from '../data/nft'
 import { APINftCreateRequest } from '../types/api'
@@ -14,31 +15,53 @@ import {
 } from '../types/nft'
 import { supabase } from './supabase'
 
-// fetches NFT from on-chain, metadata from off-chain, and fetch related local data
-export const fetchNFT = async (
+// fetches NFTs from on-chain, metadata from off-chain, and fetch related local data
+export const fetchNFTs = async (
   qnftContract: QNFT,
-  tokenId: BigNumber,
-): Promise<NFT> => {
+  tokenIds: BigNumber[],
+): Promise<NFT[]> => {
   // // fetch info on-chain
-  const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
+  const nftsDataOnChain = await Promise.all(
+    tokenIds.map(async (tokenId) => {
+      const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
+
+      if (nftDataOnChain.createdAt.isZero())
+        throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
+
+      return nftDataOnChain
+    }),
+  )
 
   // fetch info off-chain from database
   const { data, error } = await supabase
     .from('nft')
     .select('*')
-    .eq('id', nftDataOnChain.metaId.toString())
-  if (error) throw error
-  if (!data || data?.length === 0)
-    throw new Error(
-      `metadata with id "${nftDataOnChain.metaId.toString()}" not found`,
+    .in(
+      'id',
+      nftsDataOnChain.map((x) => x.metaId.toString()),
     )
-  const nftDataOffChain = data.pop() as NFTOffChain
+  if (error) throw error
+  if (!data) throw new createHttpError.NotFound(`no nft not found`)
+  if (data.length !== nftsDataOnChain.length)
+    throw new createHttpError.BadRequest(`some nft have not been found`)
+  const nftsDataOffChain = data as NFTOffChain[]
 
-  return {
+  // return data
+  return nftsDataOnChain.map((nftDataOnChain, i) => ({
     ...nftDataOnChain,
-    ...nftDataOffChain,
-    tokenId,
-  }
+    ...nftsDataOffChain[i],
+    tokenId: tokenIds[i],
+  }))
+}
+
+export const fetchNFT = async (
+  qnftContract: QNFT,
+  tokenId: BigNumber,
+): Promise<NFT> => {
+  const nfts = await fetchNFTs(qnftContract, [tokenId])
+  if (nfts.length === 0)
+    throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
+  return nfts[0]
 }
 
 // character
@@ -102,12 +125,20 @@ export const createNFTOffChain = async (
     body: JSON.stringify(data),
     method: 'POST',
   })
+  let body
+  try {
+    body = await res.json()
+  } catch (error) {
+    console.error(error)
+  }
   if (!res.ok) {
-    const error = (await res.json()).error
-    if (error)
-      throw new Error(`an error occurred while creating metadata: ${error}`)
+    if (body.error) {
+      throw new Error(
+        `an error occurred while creating metadata: ${body.error}`,
+      )
+    }
     throw new Error(`an unknown error occurred while creating metadata`)
   }
-  const metaId = (await res.json()).metaId
+  const metaId = body.metaId
   return metaId
 }

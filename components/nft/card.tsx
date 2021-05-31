@@ -1,27 +1,63 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, useState } from 'react'
+import {
+  FunctionComponent,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
-import IconDownTrend from '../icon/downtrend'
+import IconAngryTrend from '../icon/angrytrend'
+import IconHappyTrend from '../icon/happytrend'
 import IconNormalTrend from '../icon/normaltrend'
-import IconUptrend from '../icon/uptrend'
+import IconRestTrend from '../icon/resttrend'
+import IconWorryTrend from '../icon/worrytrend'
+import Tooltip from '../tooltip/tooltip'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
   nft: NFT
-  size?: 'big' | 'medium' | 'small'
   isDesign?: boolean
+  defaultEmotion?: Emotion
+  action?: ReactNode
+  size?: string
 }
 
-function trendIcon(changePercentage: number): any {
-  if (changePercentage > 0) {
-    return IconUptrend
+function trendIconFromEmotion(emotion: Emotion, size?: string) {
+  switch (emotion) {
+    case Emotion.Happy:
+      return (
+        <IconHappyTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconHappyTrend>
+      )
+    case Emotion.Rest:
+      return (
+        <IconRestTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconRestTrend>
+      )
+    case Emotion.Normal:
+      return (
+        <IconNormalTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconNormalTrend>
+      )
+    case Emotion.Worry:
+      return (
+        <IconWorryTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconWorryTrend>
+      )
+    case Emotion.Angry:
+      return (
+        <IconAngryTrend
+          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+        ></IconAngryTrend>
+      )
   }
-  if (changePercentage < 0) {
-    return IconDownTrend
-  }
-  return IconNormalTrend
 }
 
 export function capitalizeFirstLetter(str: string): string {
@@ -113,30 +149,50 @@ export function gradient(emotion: Emotion): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
-  size,
   isDesign,
+  defaultEmotion,
+  action,
+  size,
   className,
+  ...props
 }: IProps) => {
-  const [emotion, setEmotion] = useState(
-    isDesign ? Emotion.Normal : emotionFromPriceChange(changePercentage || 0),
-  )
-  const TrendIcon = trendIcon(changePercentage || 0)
-  const favCoin = getFavCoin(nft.favCoinId)
-  const backgroundSrc = getBackgroundImage(nft.backgroundId)
-  const character = getCharacter(nft.characterId)
+  const [emotion, setEmotion] = useState(Emotion.Normal)
+
+  useEffect(() => {
+    setEmotion(
+      isDesign
+        ? Emotion.Normal
+        : defaultEmotion || emotionFromPriceChange(changePercentage || 0),
+    )
+  }, [isDesign, defaultEmotion, changePercentage])
 
   return (
-    <div className={classNames('flex flex-col mb-auto space-y-8', className)}>
+    <div
+      className={classNames(
+        'relative flex flex-col mb-auto space-y-8',
+        size
+          ? size === 'big'
+            ? 'w-96'
+            : size === 'medium'
+            ? 'w-64'
+            : 'w-52'
+          : '',
+        className,
+      )}
+      {...props}
+    >
       <div
         className={classNames(
-          'flex flex-col p-8 border-2 border-purple-300 rounded-2xl shadow space-y-8',
+          'flex flex-col border-2 border-purple-300 rounded-2xl shadow space-y-8 hover:shadow-md',
+          size !== 'big' ? 'p-6' : 'p-8',
           gradient(emotion),
         )}
       >
         <div className="flex flex-row justify-between">
           <div
             className={classNames(
-              'px-2 py-1 rounded-full',
+              'px-2 py-1 rounded-full font-medium',
+              size !== 'big' ? 'text-xs leading-4' : 'text-base leading-6',
               bgColorFromEmotion(emotion),
               colorFromEmotion(emotion),
             )}
@@ -144,8 +200,16 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            {!isDesign && <TrendIcon className="w-6 h-4" />}
-            <img className="w-8 h-8" src={favCoin.meta.icon} />
+            {!isDesign && trendIconFromEmotion(emotion, size)}
+            <Tooltip
+              tooltip={getFavCoin(nft.favCoinId).meta.name}
+              tooltipClassName="-left-14 w-28 text-center"
+            >
+              <img
+                className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')}
+                src={getFavCoin(nft.favCoinId).meta.icon}
+              />
+            </Tooltip>
           </div>
         </div>
         <div
@@ -154,25 +218,42 @@ const NFTCard: FunctionComponent<IProps> = ({
           )}
         >
           <div className="mt-full"></div>
-          {backgroundSrc && (
+          {getBackgroundImage(nft.backgroundId) && (
             <img
               className={classNames('absolute top-0 right-0 left-0 bottom-0')}
-              src={backgroundSrc}
+              src={getBackgroundImage(nft.backgroundId)}
             />
           )}
           <img
-            src={character.emotions[emotion]}
+            src={getCharacter(nft.characterId).emotions[emotion]}
             className={classNames('absolute top-0 right-0 left-0 bottom-0')}
           />
         </div>
         <div className="flex flex-col space-y-1">
-          <span className="text-xl leading-7 font-bold text-purple-900">
+          <span
+            className={classNames(
+              'font-bold text-purple-900',
+              size !== 'big' ? 'text-base leading-6' : 'text-xl leading-7',
+            )}
+          >
             {nft.name || 'My Emotional NFT'}
           </span>
-          <span className="text-sm leading-5 font-normal text-gray-500 mt-1">
-            [ {character.skin.toUpperCase()} ]
+          <span
+            className={classNames(
+              'font-normal text-gray-500 mt-1',
+              size !== 'big' ? 'text-xs leading-4' : 'text-sm leading-5',
+            )}
+          >
+            [ {getCharacter(nft.characterId).skin.toUpperCase()} ]
           </span>
         </div>
+        {!!action && (
+          <>
+            <div className="absolute -top-8 left-0 bottom-0 right-0 opacity-0 hover:opacity-100 hover:bg-opacity-75 bg-white flex justify-center items-center rounded-2xl">
+              {action}
+            </div>
+          </>
+        )}
       </div>
       {isDesign && (
         <NFTEmotions

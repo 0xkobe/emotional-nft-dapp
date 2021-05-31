@@ -3,19 +3,23 @@ import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useCallback, useEffect, useState } from 'react'
 
-export default function useWallet(connector: InjectedConnector): {
+const connector = new InjectedConnector({})
+
+export default function useWallet(): {
   signer: JsonRpcSigner | undefined
   activate: () => Promise<void>
   deactivate: () => void
-  chainId?: number
   account?: null | string
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
+  chainId?: number
+  hasWallet?: boolean
 } {
   const context = useWeb3React<Web3Provider>()
-  const { library, activate: activateProvider, account } = context
+  const { library, activate: activateProvider, account, chainId } = context
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
+  const [hasWallet, setHasWallet] = useState<boolean>()
 
   // activate wallet if already authorized
   useEffect(() => {
@@ -36,7 +40,7 @@ export default function useWallet(connector: InjectedConnector): {
     if (account) return Promise.resolve() // if account is already available, no need to activate metamask again
     console.log('Activate provider...')
     return activateProvider(connector, undefined, true)
-  }, [account, activateProvider, connector])
+  }, [account, activateProvider])
 
   const signTypedDataV4 = useCallback(
     (payload: any) => {
@@ -49,13 +53,18 @@ export default function useWallet(connector: InjectedConnector): {
     [library, account],
   )
 
+  useEffect(() => {
+    setHasWallet(!!(window as any).ethereum)
+  }, []) //only execute once
+
   return {
     signer,
     activate,
-    chainId: context.chainId,
     account: context.account,
     error: context.error,
     deactivate: context.deactivate,
     signTypedDataV4,
+    chainId,
+    hasWallet,
   }
 }

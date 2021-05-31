@@ -21,13 +21,14 @@ const CharacterItem: FunctionComponent<IProps> = ({
         character.currentSupply >= character.maxSupply ? 'opacity-25' : '',
       )}
       onClick={() => {
-        onChange && onChange()
+        if (character.currentSupply < character.maxSupply)
+          onChange && onChange()
       }}
     >
       <div className="w-18 h-18 mb-2">
         <img
           className={classNames(
-            'rounded-2xl hover:shadow-md',
+            'rounded-2xl hover:shadow-md cursor-pointer',
             selected
               ? 'border-2 border-purple-700'
               : 'border border-purple-100',

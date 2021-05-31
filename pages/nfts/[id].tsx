@@ -5,29 +5,26 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
+import IconCardPreview from '../../components/icon/cardpreview'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
+import NFTPreview from '../../components/nft/preview'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
-import {
-  abi,
-  deployedAddresses,
-  metamaskConnector,
-} from '../../data/smartContract'
+import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
+import useWallet from '../../hooks/useWallet'
+import { fetchPercentages } from '../../lib/coingecko'
 import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
-import { FavCoin, NFT } from '../../types/nft'
+import { NFT } from '../../types/nft'
 
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
-  const {
-    contract,
-    error: contractError,
-    account, // TODO: this is wrong. useContract should not return the account. useWallet
-  } = useContract<QNFT>(metamaskConnector, deployedAddresses.qnft, abi.qnft)
+  const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
+  const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
@@ -35,6 +32,7 @@ export default function PageNFT(): JSX.Element {
   const [changePercentage, setChangePercentage] = useState(0)
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
+  const [isPreview, setIsPreview] = useState(false)
 
   const tokenId = useMemo(() => {
     if (!router.isReady) return undefined
@@ -76,22 +74,6 @@ export default function PageNFT(): JSX.Element {
     [],
   )
 
-  const fetchPercentage = useCallback(async (favCoin: FavCoin) => {
-    if (!favCoin) return 0
-    if (!favCoin.meta.coingeckoId) return 0
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
-    )
-    const response = await res.json()
-    if ('error' in response)
-      throw new Error(`an error occurred while fetching coingecko pricefeed`)
-    if (!res.ok)
-      throw new Error(
-        `an unknown error occurred while fetching coingecko pricefeed`,
-      )
-    return response[0].price_change_percentage_24h || 0
-  }, [])
-
   useEffect(() => {
     if (!contract) return
     if (!tokenId) return
@@ -105,15 +87,21 @@ export default function PageNFT(): JSX.Element {
       setLoading(false)
       setError(undefined)
     }
-  }, [contract, tokenId]) // FIXME: contract is reloaded when the tokenId changes
+  }, [contract, tokenId])
 
   useEffect(() => {
-    if (!favCoin) return
-    fetchPercentage(favCoin).then(setChangePercentage).catch(setError)
+    if (!nft) return
+    fetchPercentages([nft])
+      .then((x) => {
+        const p = x.pop()
+        if (!p) return setError(new Error('failed to load percentage'))
+        setChangePercentage(p)
+      })
+      .catch(setError)
     return () => {
       setChangePercentage(0)
     }
-  }, [favCoin, fetchPercentage])
+  }, [nft])
 
   useEffect(() => {
     if (!contract) return
@@ -174,92 +162,105 @@ export default function PageNFT(): JSX.Element {
         </div>
 
         {isLoading && <div>...loading</div>}
-        {contractError && <div>contract: {contractError.toString()}</div>}
         {error && <div>meta: {error.toString()}</div>}
 
         {nft && (
-          <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <NFTCard
-                  size="big"
-                  className="cursor-pointer hover:shadow"
-                  changePercentage={changePercentage}
-                  nft={nft}
-                />
-                <div>
-                  <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
-                    {nft.name}
-                  </h1>
-                  {item('Minter', nft.author)}
+          <>
+            <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <NFTCard
+                    size="big"
+                    className="cursor-pointer"
+                    changePercentage={changePercentage}
+                    nft={nft}
+                    onClick={() => {
+                      console.log('here')
+                      setIsPreview(true)
+                    }}
+                    action={<IconCardPreview />}
+                  />
+                  <div>
+                    <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
+                      {nft.name}
+                    </h1>
+                    {item('Minter', nft.author)}
 
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Artists
-                  </h3>
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
+                      Artists
+                    </h3>
 
-                  {item('Animal', getCharacter(nft.characterId).artist.name)}
-                  {item('Background', backgrounds[nft.backgroundId].name)}
+                    {item('Animal', getCharacter(nft.characterId).artist.name)}
+                    {item('Background', backgrounds[nft.backgroundId].name)}
 
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Design Properties
-                  </h3>
-
-                  <div className="flex flex-col space-y-4">
-                    <span className="text-base leading-6 font-medium text-gray-500">
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                       Design Properties
-                    </span>
-                    <div className="grid grid-cols-4 gap-8">
-                      {favCoin && (
-                        <IconText
-                          text={favCoin.meta.name}
-                          icon={favCoin.meta.icon}
-                        />
-                      )}
-                      {character && (
-                        <IconText
-                          text={character.name}
-                          icon={character.emotions.normal}
-                        />
-                      )}
-                      {skin && <IconText text={skin.skin} icon={skin.icon} />}
-                      {background && (
-                        <IconText
-                          text={background.name}
-                          icon={background.image}
-                        />
-                      )}
+                    </h3>
+
+                    <div className="flex flex-col space-y-4">
+                      <div className="grid grid-cols-4 gap-8">
+                        {favCoin && (
+                          <IconText
+                            text={favCoin.meta.name}
+                            icon={favCoin.meta.icon}
+                          />
+                        )}
+                        {character && (
+                          <IconText
+                            text={character.name}
+                            icon={character.emotions.normal}
+                          />
+                        )}
+                        {skin && <IconText text={skin.skin} icon={skin.icon} />}
+                        {background && (
+                          <IconText
+                            text={background.name}
+                            icon={background.image}
+                          />
+                        )}
+                      </div>
                     </div>
+
+                    <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
+                      Description
+                    </h3>
+
+                    <p className="text-sm leading-5 font-normal text-purple-900">
+                      {nft.description}
+                    </p>
                   </div>
-
-                  <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
-                    Description
-                  </h3>
-
-                  <p className="text-sm leading-5 font-normal text-purple-900">
-                    {nft.description}
-                  </p>
                 </div>
               </div>
+              <aside>
+                <Allocation
+                  lockAmount={nft.lockAmount}
+                  unlockTime={new Date(nft.unlockTime * 1000)}
+                />
+                <NFTActions
+                  className="mt-8"
+                  onTransfer={() => {
+                    console.log('transfer')
+                  }}
+                  onEdit={() => {
+                    console.log('edit')
+                  }}
+                  onUpgrade={() => {
+                    console.log('upgrade')
+                  }}
+                />
+              </aside>
             </div>
-            <aside>
-              <Allocation
-                lockAmount={nft.lockAmount}
-                unlockTime={new Date(nft.unlockTime * 1000)}
-              />
-              <NFTActions
-                className="mt-8"
-                onTransfer={() => {
-                  console.log('transfer')
-                }}
-                onEdit={() => {
-                  console.log('edit')
-                }}
-                onUpgrade={() => {
-                  console.log('upgrade')
-                }}
-              />
-            </aside>
-          </div>
+            <NFTPreview
+              nft={nft}
+              isShown={isPreview}
+              onModalClose={() => {
+                setIsPreview(false)
+              }}
+              onRequestClose={() => {
+                setIsPreview(false)
+              }}
+            />
+          </>
         )}
       </div>
     </>

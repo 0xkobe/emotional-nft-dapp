@@ -288,10 +288,6 @@ const verifier = '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
 const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
 const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
 const qstkPrice = parseEther('0.000005') // in ETH
-const nftBaseURL = 'https://emotional-nft-dapp.netlify.app/api/nfts/'
-const nftAPIURL = process.env.NEXT_API_URL
-  ? process.env.NEXT_API_URL
-  : 'http://localhost:3000/api/nfts/'
 
 ////////////// latest configurations update for v1 sale //////////////
 // totalSupply: '2000000000',
@@ -321,6 +317,4 @@ export {
   nonTokenMultiplier,
   tokenMultiplier,
   qstkPrice,
-  nftBaseURL,
-  nftAPIURL,
 }

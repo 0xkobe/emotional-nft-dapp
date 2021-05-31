@@ -1,25 +1,21 @@
 import { ContractInterface } from '@ethersproject/contracts'
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useEffect, useState } from 'react'
-import { fetchNFT } from '../lib/nft'
+import { fetchNFTs } from '../lib/nft'
 import { QNFT } from '../types/contracts'
 import { NFT } from '../types/nft'
 import useContract from './useContract'
+import useWallet from './useWallet'
 
 export default function useUserNFTs(
-  connector: AbstractConnector,
-  addresses: { [chainId: number]: string },
+  address: string,
   abi: ContractInterface,
 ): {
   nfts: NFT[]
   isLoading: boolean
   error?: Error
 } {
-  const { contract: qnft, account } = useContract<QNFT>( // FIXME: should not use account from useContract
-    connector,
-    addresses,
-    abi,
-  )
+  const { contract: qnft } = useContract<QNFT>(address, abi)
+  const { account } = useWallet()
 
   const [nfts, setNFTs] = useState<NFT[]>([])
   const [error, setError] = useState<Error>()
@@ -30,12 +26,12 @@ export default function useUserNFTs(
     try {
       const userNFTCount = await qnft.balanceOf(account)
       const userNFTIndex = Array.from(Array(userNFTCount.toNumber()).keys())
-      const nfts = await Promise.all(
-        userNFTIndex.map(async (index) => {
-          const tokenId = await qnft.tokenOfOwnerByIndex(account, index)
-          return fetchNFT(qnft, tokenId)
-        }),
+      const nftsId = await Promise.all(
+        userNFTIndex.map(async (index) =>
+          qnft.tokenOfOwnerByIndex(account, index),
+        ),
       )
+      const nfts = await fetchNFTs(qnft, nftsId)
       setNFTs(nfts)
     } catch (e) {
       setError(e)
