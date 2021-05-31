@@ -103,9 +103,13 @@ export const createNFTOffChain = async (
     method: 'POST',
   })
   if (!res.ok) {
-    const error = (await res.json()).error
-    if (error)
-      throw new Error(`an error occurred while creating metadata: ${error}`)
+    try {
+      const error = (await res.json()).error
+      if (error)
+        throw new Error(`an error occurred while creating metadata: ${error}`)
+    } catch (error) {
+      console.error(error)
+    }
     throw new Error(`an unknown error occurred while creating metadata`)
   }
   const metaId = (await res.json()).metaId
