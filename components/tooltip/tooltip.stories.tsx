@@ -10,5 +10,5 @@ const Template: Story<IProps> = (args) => <Tooltip {...args}>My title</Tooltip>
 
 export const Default = Template.bind({})
 Default.args = {
-  tooltip: '123'
+  tooltip: '123',
 }

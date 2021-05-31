@@ -7,8 +7,8 @@ import IconHappyTrend from '../icon/happytrend'
 import IconNormalTrend from '../icon/normaltrend'
 import IconRestTrend from '../icon/resttrend'
 import IconWorryTrend from '../icon/worrytrend'
-import NFTEmotions from './emotions'
 import Tooltip from '../tooltip/tooltip'
+import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
   changePercentage?: number // percentage of changes
@@ -185,7 +185,10 @@ const NFTCard: FunctionComponent<IProps> = ({
               tooltip={favCoin.meta.name}
               tooltipClassName="-left-14 w-28 text-center"
             >
-              <img className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')} src={favCoin.meta.icon} />
+              <img
+                className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')}
+                src={favCoin.meta.icon}
+              />
             </Tooltip>
           </div>
         </div>

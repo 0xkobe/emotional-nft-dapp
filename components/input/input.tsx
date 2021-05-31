@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent,InputHTMLAttributes } from 'react'
+import { FunctionComponent, InputHTMLAttributes } from 'react'
 
 export type IProps = InputHTMLAttributes<{}> & {
   unit?: string
