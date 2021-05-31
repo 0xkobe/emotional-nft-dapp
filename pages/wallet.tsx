@@ -77,7 +77,7 @@ export default function Wallet(): JSX.Element {
           <Title>Your Investor Space</Title>
           <LockedTokenStat lockAmount={lockAmount} />
         </div>
-        <div className="bg-white border border-purple-50 shadow p-8 rounded-2xl flex flex-col w-full space-y-8">
+        <div className="bg-white border border-purple-100 shadow-sm p-8 rounded-2xl flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
             <span className="text-base leading-6 font-bold text-purple-900">
               Your NFT's Collection

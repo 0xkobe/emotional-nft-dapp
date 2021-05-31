@@ -17,7 +17,7 @@ const MintSummary: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         className,
-        'bg-white shadow border border-purple-100 p-4 rounded-2xl',
+        'bg-white shadow-sm border border-purple-100 p-4 rounded-2xl',
       )}
     >
       <div className="p-4">
