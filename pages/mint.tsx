@@ -89,7 +89,7 @@ export default function Mint(): JSX.Element {
   // fetch remaining free allocation
   useEffect(() => {
     qstk
-      ?.balanceOf(deployedAddresses.qAirdrop[chain.id])
+      ?.balanceOf(deployedAddresses.qAirdrop)
       .then((x) => {
         setAvailableFreeAllocation(x)
       })

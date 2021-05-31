@@ -1,4 +1,4 @@
-export const chains: {
+const chains: {
   [key: number]: {
     id: number
     name: string
@@ -24,7 +24,7 @@ export const chains: {
   },
 }
 
-export const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
   ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)
   : 3 // default is ropsten
 

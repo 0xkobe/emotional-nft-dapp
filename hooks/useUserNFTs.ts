@@ -1,5 +1,4 @@
 import { ContractInterface } from '@ethersproject/contracts'
-import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
 import { fetchNFT } from '../lib/nft'
 import { QNFT } from '../types/contracts'
@@ -8,7 +7,7 @@ import useContract from './useContract'
 import useWallet from './useWallet'
 
 export default function useUserNFTs(
-  addresses: { [chainId: number]: string },
+  address: string,
   abi: ContractInterface,
 ): {
   nfts: NFT[]
@@ -21,7 +20,7 @@ export default function useUserNFTs(
   //       'https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e',
   //     ),
   //   )
-  const { contract: qnft } = useContract<QNFT>(addresses, abi)
+  const { contract: qnft } = useContract<QNFT>(address, abi)
   const { account } = useWallet()
 
   const [nfts, setNFTs] = useState<NFT[]>([])

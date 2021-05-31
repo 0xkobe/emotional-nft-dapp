@@ -12,11 +12,14 @@ export default function useWallet(): {
   account?: null | string
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
+  chainId?: number
+  hasWallet?: boolean
 } {
   const context = useWeb3React<Web3Provider>()
-  const { library, activate: activateProvider, account } = context
+  const { library, activate: activateProvider, account, chainId } = context
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
+  const [hasWallet, setHasWallet] = useState<boolean>()
 
   // activate wallet if already authorized
   useEffect(() => {
@@ -50,6 +53,10 @@ export default function useWallet(): {
     [library, account],
   )
 
+  useEffect(() => {
+    setHasWallet(!!(window as any).ethereum)
+  }, []) //only execute once
+
   return {
     signer,
     activate,
@@ -57,5 +64,7 @@ export default function useWallet(): {
     error: context.error,
     deactivate: context.deactivate,
     signTypedDataV4,
+    chainId,
+    hasWallet,
   }
 }
