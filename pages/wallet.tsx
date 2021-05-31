@@ -83,7 +83,9 @@ export default function Wallet(): JSX.Element {
               Your NFT's Collection
             </span>
             <div>
-              <Button href="/mint">Mint new NFT</Button>
+              <Button link href="/mint">
+                Mint new NFT
+              </Button>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
