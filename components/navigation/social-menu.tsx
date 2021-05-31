@@ -1,6 +1,6 @@
 import { Menu } from '@headlessui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/outline'
-import { FunctionComponent,HTMLAttributes } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 
 const social = [{ href: 'https://t.me/quiverprotocolchat', text: 'Telegram' }]
 

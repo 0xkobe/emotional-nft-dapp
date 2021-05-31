@@ -1,6 +1,6 @@
 import { ContractInterface } from '@ethersproject/contracts'
 import { useEffect, useState } from 'react'
-import { fetchNFT } from '../lib/nft'
+import { fetchNFTs } from '../lib/nft'
 import { QNFT } from '../types/contracts'
 import { NFT } from '../types/nft'
 import useContract from './useContract'
@@ -14,12 +14,6 @@ export default function useUserNFTs(
   isLoading: boolean
   error?: Error
 } {
-  // TODO: activate multicall provider with web3
-  //   const provider = new providers.MulticallProvider(
-  //     new JsonRpcProvider(
-  //       'https://ropsten.infura.io/v3/8c13a2d22a304ff5955ca3c0d4c9d90e',
-  //     ),
-  //   )
   const { contract: qnft } = useContract<QNFT>(address, abi)
   const { account } = useWallet()
 
@@ -32,12 +26,12 @@ export default function useUserNFTs(
     try {
       const userNFTCount = await qnft.balanceOf(account)
       const userNFTIndex = Array.from(Array(userNFTCount.toNumber()).keys())
-      const nfts = await Promise.all(
-        userNFTIndex.map(async (index) => {
-          const tokenId = await qnft.tokenOfOwnerByIndex(account, index)
-          return fetchNFT(qnft, tokenId)
-        }),
+      const nftsId = await Promise.all(
+        userNFTIndex.map(async (index) =>
+          qnft.tokenOfOwnerByIndex(account, index),
+        ),
       )
+      const nfts = await fetchNFTs(qnft, nftsId)
       setNFTs(nfts)
     } catch (e) {
       setError(e)

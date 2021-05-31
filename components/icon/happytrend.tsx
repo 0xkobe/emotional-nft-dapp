@@ -4,7 +4,7 @@ type IProps = {
   className?: string
 }
 
-const IconUptrend: FunctionComponent<IProps> = (props) => {
+const IconHappyTrend: FunctionComponent<IProps> = (props) => {
   return (
     <svg
       className={props.className}
@@ -22,4 +22,4 @@ const IconUptrend: FunctionComponent<IProps> = (props) => {
   )
 }
 
-export default IconUptrend
+export default IconHappyTrend
