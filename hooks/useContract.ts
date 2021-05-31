@@ -1,28 +1,24 @@
+import { providers } from '@0xsequence/multicall'
 import { Contract, ContractInterface } from '@ethersproject/contracts'
-import { Web3Provider } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
+import { providers as ethersProviders } from 'ethers'
 import { useEffect, useState } from 'react'
+import { chain } from '../data/chains'
+
+const provider = new providers.MulticallProvider(
+  new ethersProviders.StaticJsonRpcProvider(chain.remoteProvider),
+)
 
 export default function useContract<T extends Contract>(
   address: string,
   abi: ContractInterface,
 ): {
   contract?: T
-  error?: Error
 } {
-  const { library, error } = useWeb3React<Web3Provider>()
   const [contract, setContract] = useState<T>()
 
-  // init the contract
   useEffect(() => {
-    if (!library) return
-    const contract = new Contract(address, abi, library)
-    setContract(contract as T)
+    setContract(new Contract(address, abi, provider) as T)
+  }, [])
 
-    return () => {
-      setContract(undefined)
-    }
-  }, [library, address, abi])
-
-  return { contract, error }
+  return { contract }
 }

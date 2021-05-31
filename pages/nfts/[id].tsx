@@ -15,17 +15,15 @@ import { backgrounds, skins } from '../../data/nft'
 import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
 import useWallet from '../../hooks/useWallet'
+import { fetchPercentages } from '../../lib/coingecko'
 import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
 import { QNFT } from '../../types/contracts'
-import { FavCoin, NFT } from '../../types/nft'
+import { NFT } from '../../types/nft'
 
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
-  const { contract, error: contractError } = useContract<QNFT>(
-    deployedAddresses.qnft,
-    abi.qnft,
-  )
+  const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
   const { account } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -76,22 +74,6 @@ export default function PageNFT(): JSX.Element {
     [],
   )
 
-  const fetchPercentage = useCallback(async (favCoin: FavCoin) => {
-    if (!favCoin) return 0
-    if (!favCoin.meta.coingeckoId) return 0
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${favCoin.meta.coingeckoId}&price_change_percentage=24h`,
-    )
-    const response = await res.json()
-    if ('error' in response)
-      throw new Error(`an error occurred while fetching coingecko pricefeed`)
-    if (!res.ok)
-      throw new Error(
-        `an unknown error occurred while fetching coingecko pricefeed`,
-      )
-    return response[0].price_change_percentage_24h || 0
-  }, [])
-
   useEffect(() => {
     if (!contract) return
     if (!tokenId) return
@@ -108,12 +90,18 @@ export default function PageNFT(): JSX.Element {
   }, [contract, tokenId])
 
   useEffect(() => {
-    if (!favCoin) return
-    fetchPercentage(favCoin).then(setChangePercentage).catch(setError)
+    if (!nft) return
+    fetchPercentages([nft])
+      .then((x) => {
+        const p = x.pop()
+        if (!p) return setError(new Error('failed to load percentage'))
+        setChangePercentage(p)
+      })
+      .catch(setError)
     return () => {
       setChangePercentage(0)
     }
-  }, [favCoin, fetchPercentage])
+  }, [nft])
 
   useEffect(() => {
     if (!contract) return
@@ -174,7 +162,6 @@ export default function PageNFT(): JSX.Element {
         </div>
 
         {isLoading && <div>...loading</div>}
-        {contractError && <div>contract: {contractError.toString()}</div>}
         {error && <div>meta: {error.toString()}</div>}
 
         {nft && (
