@@ -23,7 +23,7 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
     "calcMintPrice(uint32,uint32,uint32,uint256,uint256)": FunctionFragment;
     "characterCount()": FunctionFragment;
     "characterMaxSupply(uint32)": FunctionFragment;
-    "characterPrices(uint32)": FunctionFragment;
+    "characterPrice(uint32)": FunctionFragment;
     "favCoinPrices(uint32)": FunctionFragment;
     "favCoinsCount()": FunctionFragment;
     "lockOptionLockDuration(uint32)": FunctionFragment;
@@ -57,7 +57,7 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "characterPrices",
+    functionFragment: "characterPrice",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -122,7 +122,7 @@ interface IQNFTSettingsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "characterPrices",
+    functionFragment: "characterPrice",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,7 +240,7 @@ export class IQNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    characterPrices(
+    characterPrice(
       characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -255,7 +255,7 @@ export class IQNFTSettings extends BaseContract {
     lockOptionLockDuration(
       lockOptionId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[number]>;
 
     lockOptionsCount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -298,7 +298,7 @@ export class IQNFTSettings extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  characterPrices(
+  characterPrice(
     characterId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -313,7 +313,7 @@ export class IQNFTSettings extends BaseContract {
   lockOptionLockDuration(
     lockOptionId: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<number>;
 
   lockOptionsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -356,7 +356,7 @@ export class IQNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    characterPrices(
+    characterPrice(
       characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -371,7 +371,7 @@ export class IQNFTSettings extends BaseContract {
     lockOptionLockDuration(
       lockOptionId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<number>;
 
     lockOptionsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -411,7 +411,7 @@ export class IQNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    characterPrices(
+    characterPrice(
       characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -464,7 +464,7 @@ export class IQNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    characterPrices(
+    characterPrice(
       characterId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

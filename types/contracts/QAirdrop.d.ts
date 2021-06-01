@@ -26,7 +26,7 @@ interface QAirdropInterface extends ethers.utils.Interface {
     "claimQStk(address,uint256,bytes)": FunctionFragment;
     "claimed(bytes)": FunctionFragment;
     "getMessageHash(address,uint256)": FunctionFragment;
-    "initialize(address,address,address[])": FunctionFragment;
+    "initialize(address,address)": FunctionFragment;
     "removeWhitelistedContract(address)": FunctionFragment;
     "setAirdropClaimable(bool)": FunctionFragment;
     "setSettings(address)": FunctionFragment;
@@ -57,7 +57,7 @@ interface QAirdropInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, string[]]
+    values: [string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "removeWhitelistedContract",
@@ -209,7 +209,6 @@ export class QAirdrop extends BaseContract {
     initialize(
       _settings: string,
       _verifier: string,
-      _whitelistedContracts: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -282,7 +281,6 @@ export class QAirdrop extends BaseContract {
   initialize(
     _settings: string,
     _verifier: string,
-    _whitelistedContracts: string[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -355,7 +353,6 @@ export class QAirdrop extends BaseContract {
     initialize(
       _settings: string,
       _verifier: string,
-      _whitelistedContracts: string[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -445,7 +442,6 @@ export class QAirdrop extends BaseContract {
     initialize(
       _settings: string,
       _verifier: string,
-      _whitelistedContracts: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -522,7 +518,6 @@ export class QAirdrop extends BaseContract {
     initialize(
       _settings: string,
       _verifier: string,
-      _whitelistedContracts: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -1,19 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
-import { bnToText, formatDate, lockDurationToString } from '../../lib/utils'
+import { bnToText, formatDate, formatDuration } from '../../lib/utils'
 import PropertyView from '../mint-summary/property-view'
 
 export type IProps = HTMLAttributes<{}> & {
   lockAmount: BigNumber
-  createdAt: Date
-  lockDuration: number
+  unlockTime: Date
 }
 
 const Allocation: FunctionComponent<IProps> = ({
   lockAmount,
-  createdAt,
-  lockDuration,
+  unlockTime,
   className,
 }: IProps) => {
   const properties = [
@@ -22,11 +20,10 @@ const Allocation: FunctionComponent<IProps> = ({
       value: 'QSTK',
     },
     { key: 'Amount', value: bnToText(lockAmount) },
-    { key: 'Subscription', value: formatDate(createdAt) },
-    { key: 'Lock period', value: lockDurationToString(lockDuration) },
+    { key: 'Remaining', value: formatDuration(unlockTime.getTime() - Date.now()) },
     {
       key: 'Redemption',
-      value: formatDate(new Date(createdAt.getTime() + lockDuration * 1000)),
+      value: formatDate(unlockTime),
     },
   ]
 

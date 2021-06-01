@@ -48,9 +48,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "lockDuration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
@@ -60,6 +60,12 @@
       }
     ],
     "name": "AddLockOption",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "EndMint",
     "type": "event"
   },
   {
@@ -81,29 +87,15 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "nonTokenPriceMultiplier",
+        "name": "tokenPriceMultiplier",
         "type": "uint256"
-      }
-    ],
-    "name": "SetNonTokenPriceMultiplier",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "tokenPriceMultiplier",
+        "name": "nonTokenPriceMultiplier",
         "type": "uint256"
-      }
-    ],
-    "name": "SetTokenPriceMultiplier",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -111,7 +103,7 @@
         "type": "uint256"
       }
     ],
-    "name": "SetUpgradePriceMultiplier",
+    "name": "SetPriceMultipliers",
     "type": "event"
   },
   {
@@ -308,9 +300,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "lockDuration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
@@ -379,9 +371,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_lockDuration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "internalType": "uint8",
@@ -483,7 +475,7 @@
         "type": "uint32"
       }
     ],
-    "name": "characterPrices",
+    "name": "characterPrice",
     "outputs": [
       {
         "internalType": "uint256",
@@ -492,6 +484,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "endMint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -532,6 +531,31 @@
         "internalType": "address",
         "name": "_settings",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_qstkPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenPriceMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_nonTokenPriceMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_upgradePriceMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_nftSaleDuration",
+        "type": "uint32"
       }
     ],
     "name": "initialize",
@@ -550,9 +574,9 @@
     "name": "lockOptionLockDuration",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -579,9 +603,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "lockDuration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "internalType": "uint8",
@@ -719,12 +743,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_nonTokenPriceMultiplier",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "_onlyAirdropUsers",
+        "type": "bool"
       }
     ],
-    "name": "setNonTokenPriceMultiplier",
+    "name": "setOnlyAirdropUsers",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -732,12 +756,22 @@
   {
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "_onlyAirdropUsers",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_tokenPriceMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_nonTokenPriceMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_upgradePriceMultiplier",
+        "type": "uint256"
       }
     ],
-    "name": "setOnlyAirdropUsers",
+    "name": "setPriceMultipliers",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -758,38 +792,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_tokenPriceMultiplier",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTokenPriceMultiplier",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bool",
         "name": "_allow",
         "type": "bool"
       }
     ],
     "name": "setTransferAllowedAfterRedeem",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_upgradePriceMultiplier",
-        "type": "uint256"
-      }
-    ],
-    "name": "setUpgradePriceMultiplier",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1001,9 +1009,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_lockDuration",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "internalType": "uint8",

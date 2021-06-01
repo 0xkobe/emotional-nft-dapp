@@ -60,8 +60,9 @@ export default async (
           value: nft.favCoinId,
         },
         {
-          trait_type: Traits.LockPeriod,
-          value: nft.lockDuration.toNumber(),
+          display_type: DisplayType.Date,
+          trait_type: Traits.UnlockTime,
+          value: nft.unlockTime,
         },
         {
           trait_type: Traits.LockAmount,
@@ -74,11 +75,6 @@ export default async (
         {
           trait_type: Traits.CreatorWallet,
           value: nft.creator,
-        },
-        {
-          display_type: DisplayType.Date,
-          trait_type: Traits.CreatedDate,
-          value: nft.createdAt.toNumber(),
         },
         {
           trait_type: Traits.Withdrawn,

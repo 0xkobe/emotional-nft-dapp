@@ -39,6 +39,19 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address payable",
+        name: "multisig",
+        type: "address",
+      },
+    ],
+    name: "withdrawETH",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
 
 export class IQNFT__factory {

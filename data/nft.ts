@@ -250,7 +250,7 @@ const charactersSupply = [
 const lockOptions: LockOption[] = [
   {
     id: LockPeriod.SixMonths,
-    duration: 6 * 30 * 86400, // 6 months
+    duration: 15552000, // 6 months
     description: '6 months',
     discount: 10, // percentage
     minAmount: parseEther('1000'), // 1K QSTK
@@ -258,16 +258,16 @@ const lockOptions: LockOption[] = [
   },
   {
     id: LockPeriod.TwelveMonths,
-    duration: 12 * 30 * 86400, // 12 months
+    duration: 31104000, // 12 months
     description: '12 months',
     discount: 20, // percentage
     minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('200000'), // 200K QSTK
   },
   {
-    id: LockPeriod.OneCentury,
-    duration: 100 * 12 * 30 * 86400, // 1 century
-    description: '1 century',
+    id: LockPeriod.OneDecade,
+    duration: 311040000, // 1 decade
+    description: '1 decade',
     discount: 30, // percentage
     minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('400000'), // 400K QSTK

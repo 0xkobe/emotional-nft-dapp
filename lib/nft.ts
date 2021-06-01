@@ -25,7 +25,7 @@ export const fetchNFTs = async (
     tokenIds.map(async (tokenId) => {
       const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
 
-      if (nftDataOnChain.createdAt.isZero())
+      if (nftDataOnChain.unlockTime === 0)
         throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
 
       return nftDataOnChain
@@ -132,11 +132,10 @@ export const createNFTOffChain = async (
     console.error(error)
   }
   if (!res.ok) {
-    if (body.error) {
+    if (body?.error)
       throw new Error(
         `an error occurred while creating metadata: ${body.error}`,
       )
-    }
     throw new Error(`an unknown error occurred while creating metadata`)
   }
   const metaId = body.metaId

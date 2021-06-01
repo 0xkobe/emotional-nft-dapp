@@ -1,4 +1,4 @@
-import { Background, Creature, FavCoinEnum, LockPeriod, Skin } from './metadata'
+import { Background, Creature, FavCoinEnum, Skin } from './metadata'
 import { Emotion } from './nft'
 
 export type APIResponseError = {
@@ -44,8 +44,9 @@ export type APINftMetadataResponse = {
       value: FavCoinEnum
     },
     {
-      trait_type: Traits.LockPeriod
-      value: LockPeriod
+      display_type: DisplayType.Date
+      trait_type: Traits.UnlockTime
+      value: number
     },
     {
       trait_type: Traits.LockAmount
@@ -58,11 +59,6 @@ export type APINftMetadataResponse = {
     {
       trait_type: Traits.CreatorWallet
       value: string
-    },
-    {
-      display_type: DisplayType.Date
-      trait_type: Traits.CreatedDate
-      value: number
     },
     {
       trait_type: Traits.Withdrawn
@@ -81,10 +77,10 @@ export enum Traits {
   Background = 'Background',
   FavCoin = 'Favorite Coin',
   LockPeriod = 'Lock Period',
+  UnlockTime = 'Unlock Time',
   LockAmount = 'Lock Amount',
   CreatorName = "Creator's Name",
   CreatorWallet = "Creator's Address",
-  CreatedDate = 'Created Date',
   Withdrawn = 'Withdrawn',
   DefaultEmotion = 'Default Emotion',
 }

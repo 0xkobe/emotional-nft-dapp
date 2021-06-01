@@ -192,12 +192,6 @@ export default function PageNFT(): JSX.Element {
                       {nft.name}
                     </h1>
                     {item('Minter', nft.author)}
-                    {item(
-                      'Created',
-                      new Date(
-                        1000 * nft.createdAt.toNumber(),
-                      ).toLocaleDateString(),
-                    )}
 
                     <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
                       Artists
@@ -247,8 +241,7 @@ export default function PageNFT(): JSX.Element {
               <aside>
                 <Allocation
                   lockAmount={nft.lockAmount}
-                  createdAt={new Date(nft.createdAt.toNumber() * 1000)}
-                  lockDuration={nft.lockDuration.toNumber()}
+                  unlockTime={new Date(nft.unlockTime * 1000)}
                 />
                 <NFTActions
                   className="mt-8"

@@ -9,7 +9,7 @@ import type { IQSettings, IQSettingsInterface } from "../IQSettings";
 const _abi = [
   {
     inputs: [],
-    name: "foundationWallet",
+    name: "getFoundationWallet",
     outputs: [
       {
         internalType: "address",
@@ -22,7 +22,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "manager",
+    name: "getManager",
     outputs: [
       {
         internalType: "address",
@@ -35,7 +35,59 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "qstk",
+    name: "getQAirdrop",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getQNft",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getQNftGov",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getQNftSettings",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getQStk",
     outputs: [
       {
         internalType: "address",

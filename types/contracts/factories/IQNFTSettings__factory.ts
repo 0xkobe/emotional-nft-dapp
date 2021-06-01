@@ -96,7 +96,7 @@ const _abi = [
         type: "uint32",
       },
     ],
-    name: "characterPrices",
+    name: "characterPrice",
     outputs: [
       {
         internalType: "uint256",
@@ -150,9 +150,9 @@ const _abi = [
     name: "lockOptionLockDuration",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "uint32",
         name: "",
-        type: "uint256",
+        type: "uint32",
       },
     ],
     stateMutability: "view",

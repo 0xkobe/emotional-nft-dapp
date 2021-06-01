@@ -128,5 +128,5 @@ export enum Background {
 export enum LockPeriod {
   SixMonths = 0,
   TwelveMonths = 1,
-  OneCentury = 2,
+  OneDecade = 2,
 }

@@ -17,9 +17,8 @@ Angry.args = {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
-    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    unlockTime: Date.now() + 311040000,
     lockAmount: BigNumber.from(10),
-    createdAt: BigNumber.from(Date.now()),
     withdrawn: false,
     metaId: 1, // random id
     author: 'gopher', // author name
@@ -39,9 +38,8 @@ Happy.args = {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
-    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    unlockTime: Date.now() + 311040000,
     lockAmount: BigNumber.from(10),
-    createdAt: BigNumber.from(Date.now()),
     withdrawn: false,
     metaId: 1, // random id
     author: 'gopher', // author name
@@ -61,9 +59,8 @@ Normal.args = {
     tokenId: BigNumber.from(1), // random value
     characterId: 12,
     favCoinId: 58,
-    lockDuration: BigNumber.from(100 * 12 * 30 * 86400),
+    unlockTime: Date.now() + 311040000,
     lockAmount: BigNumber.from(10),
-    createdAt: BigNumber.from(Date.now()),
     withdrawn: false,
     metaId: 1, // random id
     author: 'gopher', // author name

@@ -43,25 +43,6 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
         "name": "_user",
         "type": "address"
       }
@@ -241,6 +222,11 @@
         "internalType": "uint256",
         "name": "_totalSupply",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_settings",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -281,19 +267,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -307,10 +280,29 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_settings",
+        "type": "address"
+      }
+    ],
+    "name": "setSettings",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "settings",
+    "outputs": [
+      {
+        "internalType": "contract IQSettings",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -389,19 +381,6 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }

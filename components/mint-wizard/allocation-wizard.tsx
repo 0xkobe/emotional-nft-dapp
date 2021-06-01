@@ -6,7 +6,6 @@ import {
   bnToInput,
   bnToText,
   inputToBn,
-  lockDurationToString,
   verifyAirdropKey,
 } from '../../lib/utils'
 import { VerifyAirdropKeyResponse } from '../../types/airdrop'
@@ -172,7 +171,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               placeholder=""
               options={lockOptions.map((option) => {
                 return {
-                  text: `${lockDurationToString(option.duration)} - ${(
+                  text: `${option.description} - ${(
                     100 -
                     ((100 - option.discount) * tokenMultiplier) / 100
                   ).toFixed(0)}%`,

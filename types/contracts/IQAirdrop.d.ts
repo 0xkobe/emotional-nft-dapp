@@ -102,7 +102,7 @@ export class IQAirdrop extends BaseContract {
       _qstkAmount: BigNumberish,
       _signature: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
   };
 
   filters: {};

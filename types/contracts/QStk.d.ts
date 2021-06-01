@@ -28,17 +28,16 @@ interface QStkInterface extends ethers.utils.Interface {
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(uint256)": FunctionFragment;
+    "initialize(uint256,address)": FunctionFragment;
     "isBlacklisted(address)": FunctionFragment;
     "name()": FunctionFragment;
-    "owner()": FunctionFragment;
     "removeBlacklistedUser(address)": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
+    "setSettings(address)": FunctionFragment;
+    "settings()": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -65,22 +64,19 @@ interface QStkInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [BigNumberish]
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "isBlacklisted",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "removeBlacklistedUser",
     values: [string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
+  encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -93,10 +89,6 @@ interface QStkInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [string]
   ): string;
 
   decodeFunctionResult(
@@ -121,15 +113,15 @@ interface QStkInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "removeBlacklistedUser",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "setSettings",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -140,22 +132,16 @@ interface QStkInterface extends ethers.utils.Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
 
   events: {
     "AddBlacklistedUser(address)": EventFragment;
     "Approval(address,address,uint256)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
     "RemoveBlacklistedUser(address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AddBlacklistedUser"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RemoveBlacklistedUser"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
@@ -239,6 +225,7 @@ export class QStk extends BaseContract {
 
     initialize(
       _totalSupply: BigNumberish,
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -246,16 +233,17 @@ export class QStk extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
     removeBlacklistedUser(
       _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    renounceOwnership(
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    settings(overrides?: CallOverrides): Promise<[string]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -271,11 +259,6 @@ export class QStk extends BaseContract {
       sender: string,
       recipient: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -315,6 +298,7 @@ export class QStk extends BaseContract {
 
   initialize(
     _totalSupply: BigNumberish,
+    _settings: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -322,16 +306,17 @@ export class QStk extends BaseContract {
 
   name(overrides?: CallOverrides): Promise<string>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
   removeBlacklistedUser(
     _user: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  renounceOwnership(
+  setSettings(
+    _settings: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  settings(overrides?: CallOverrides): Promise<string>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -347,11 +332,6 @@ export class QStk extends BaseContract {
     sender: string,
     recipient: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -388,6 +368,7 @@ export class QStk extends BaseContract {
 
     initialize(
       _totalSupply: BigNumberish,
+      _settings: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -395,14 +376,14 @@ export class QStk extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<string>;
 
-    owner(overrides?: CallOverrides): Promise<string>;
-
     removeBlacklistedUser(
       _user: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
+
+    settings(overrides?: CallOverrides): Promise<string>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -420,11 +401,6 @@ export class QStk extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
   };
 
   filters: {
@@ -439,14 +415,6 @@ export class QStk extends BaseContract {
     ): TypedEventFilter<
       [string, string, BigNumber],
       { owner: string; spender: string; value: BigNumber }
-    >;
-
-    OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null
-    ): TypedEventFilter<
-      [string, string],
-      { previousOwner: string; newOwner: string }
     >;
 
     RemoveBlacklistedUser(
@@ -499,6 +467,7 @@ export class QStk extends BaseContract {
 
     initialize(
       _totalSupply: BigNumberish,
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -506,16 +475,17 @@ export class QStk extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
     removeBlacklistedUser(
       _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    renounceOwnership(
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    settings(overrides?: CallOverrides): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -531,11 +501,6 @@ export class QStk extends BaseContract {
       sender: string,
       recipient: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -579,6 +544,7 @@ export class QStk extends BaseContract {
 
     initialize(
       _totalSupply: BigNumberish,
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -589,16 +555,17 @@ export class QStk extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     removeBlacklistedUser(
       _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    renounceOwnership(
+    setSettings(
+      _settings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    settings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -614,11 +581,6 @@ export class QStk extends BaseContract {
       sender: string,
       recipient: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
