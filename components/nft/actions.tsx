@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes } from 'react'
+import { FunctionComponent,HTMLAttributes } from 'react'
 
 export type IProps = HTMLAttributes<any> & {
   onTransfer: () => void
@@ -12,10 +12,10 @@ const NFTActions: FunctionComponent<IProps> = ({ className }: IProps) => {
     <div
       className={classNames(
         className,
-        'flex flex-col w-72 p-8 mb-auto bg-white shadow border border-purple-100 p-8 rounded-2xl space-y-8',
+        'flex flex-col w-72 p-8 mb-auto bg-white -sm border border-purple-100 rounded-2xl',
       )}
     >
-      <span className="text-base leading-6 font-bold text-gray-500">
+      <span className="text-base leading-6 font-bold text-purple-900 mb-8">
         NFT Actions
       </span>
       <div className="flex flex-col space-y-4">

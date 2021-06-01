@@ -8,7 +8,8 @@ import MintSummary from '../components/mint-summary/mint-summary'
 import AllocationWizard from '../components/mint-wizard/allocation-wizard'
 import DesignWizard from '../components/mint-wizard/design-wizard'
 import StoryWizard from '../components/mint-wizard/story-wizard'
-import Modal from '../components/modal/modal'
+import ModalError from '../components/modal/modal-error'
+import ModalMetamask from '../components/modal/modal-metamask'
 import ModalProcessing from '../components/modal/modal-processing'
 import ModalSucceed from '../components/modal/modal-succeed'
 import NFTCard from '../components/nft/card'
@@ -448,28 +449,30 @@ export default function Mint(): JSX.Element {
       )
     }
     return (
-      <Modal
+      <ModalMetamask
+        title="Metamask Data"
+        content={
+          <>
+            Please fill the information in your metamask account in order to
+            continue the Mint process
+          </>
+        }
         onRequestClose={() => console.error('cannot close this modal')}
         onModalClose={() => console.error('cannot close this modal')}
-        isShown={true}
-      >
-        Check metamask
-      </Modal>
+        isShown
+      ></ModalMetamask>
     )
   }
 
   function errorUI() {
     if (!error) return
     return (
-      <Modal
+      <ModalError
         onRequestClose={() => setError(undefined)}
         onModalClose={() => console.log('modal close')}
         isShown={true}
-      >
-        An error occurred:
-        <br />
-        {error}
-      </Modal>
+        error={error}
+      />
     )
   }
 
@@ -543,7 +546,7 @@ export default function Mint(): JSX.Element {
           <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
-                isDesign
+                previewEmotion
                 nft={{
                   tokenId: BigNumber.from(1), // random value
                   characterId: characterId,

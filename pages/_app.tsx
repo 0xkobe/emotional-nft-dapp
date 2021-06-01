@@ -16,14 +16,10 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Navigation route={route} className="mb-4" />
-      <div className="max-w-7xl mx-auto relative min-h-screen flex flex-col">
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 flex items-stretch overflow-hidden">
-            <WalletGuard>
-              <Component {...pageProps} />
-            </WalletGuard>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto flex flex-col">
+        <WalletGuard>
+          <Component {...pageProps} />
+        </WalletGuard>
       </div>
     </Web3ReactProvider>
   )

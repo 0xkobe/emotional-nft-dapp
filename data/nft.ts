@@ -272,15 +272,6 @@ const lockOptions: LockOption[] = [
     minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('400000'), // 400K QSTK
   },
-  {
-    // FIXME: for dev only. the lockperiod on smart contract are not the same as previous one
-    id: LockPeriod.ThirtyMinutes,
-    duration: 1800,
-    description: '30 min',
-    discount: 2, // percentage
-    minAmount: parseEther('1000'), // 1K QSTK
-    maxAmount: parseEther('400000'), // 400K QSTK
-  },
 ]
 
 const verifier = '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'

@@ -6,6 +6,8 @@ export const fetchPercentages = async (nfts: NFT[]): Promise<number[]> => {
     .map((nft) => getFavCoin(nft.favCoinId).meta.coingeckoId)
     .filter((x) => x) as string[] // have to force ts type even with filter
 
+  if (coingeckoIds.length === 0) return []
+
   const res = await fetch(
     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&price_change_percentage=24h&ids=${coingeckoIds.join(
       ',',

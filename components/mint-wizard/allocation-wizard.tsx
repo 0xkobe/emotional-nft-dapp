@@ -70,10 +70,10 @@ const AllocationWizard: FunctionComponent<IProps> = ({
     setAirdropKeyError('')
   }
 
-  const onChangeQstkAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQstkAmountInput(e.target.value)
+  const onChangeQstkAmountInput = (value: string) => {
+    setQstkAmountInput(value)
     try {
-      const bn = inputToBn(e.target.value)
+      const bn = inputToBn(value)
       if (bn.lt(lockOption.minAmount)) {
         setQstkAmountError('lower than min')
       } else if (bn.gt(lockOption.maxAmount)) {
@@ -102,7 +102,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   return (
     <div className={classNames(className, 'flex flex-col space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
           <span>QSTK Token Remaining</span>
           <Tooltip
             tooltip="QSTK tokens allocated for NFT sale are restricted and no more tokens will be provided for discounted purchase."
@@ -129,7 +129,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
 
       <div className="flex flex-row space-x-8">
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">
+          <div className="text-base leading-6 font-medium text-purple-900">
             Amount to mint
           </div>
           <div className="flex flex-col space-y-2">
@@ -139,7 +139,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               unit="QSTK"
               value={qstkAmountInput}
               isError={qstkAmountError != ''}
-              onChange={onChangeQstkAmountInput}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChangeQstkAmountInput(e.target.value)
+              }
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500">
@@ -147,9 +149,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
                 {bnToText(lockOption.maxAmount)}
               </span>
               <a
-                className="text-xs leading-4 font-normal text-black cursor-pointer"
+                className="text-xs leading-4 font-normal text-purple-700 cursor-pointer"
                 onClick={() =>
-                  setQstkAmountInput(bnToInput(lockOption.maxAmount))
+                  onChangeQstkAmountInput(bnToInput(lockOption.maxAmount))
                 }
               >
                 MAX
@@ -161,7 +163,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
           </div>
         </div>
         <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-gray-500">
+          <div className="text-base leading-6 font-medium text-purple-900">
             Lock Period Discount
           </div>
           <div className="flex flex-col space-y-2">
@@ -188,7 +190,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col space-y-4 w-full">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
           <span>Whitelist key (Airdrop key)</span>
           <Tooltip
             tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
@@ -220,7 +222,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
       <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-gray-500">
+        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
           <span>Total Token to Receive</span>
           <Tooltip
             tooltip="The total QSTK amount you receive is defined by “QSTK you purchase + the amount allocated for your whitelist key”."
@@ -233,8 +235,8 @@ const AllocationWizard: FunctionComponent<IProps> = ({
           <div className="flex w-8 h-8 p-2 bg-white rounded-2xl border border-solid border-gray-200">
             <img src="/quiver.svg" />
           </div>
-          <span className="text-sm leading-5 font-semibold text-gray-500">
-            {bnToInput(qstkAmount.add(airdropAmount))} QSTK
+          <span className="text-sm leading-5 font-semibold text-purple-900">
+            {bnToText(qstkAmount.add(airdropAmount))} QSTK
           </span>
         </div>
       </div>

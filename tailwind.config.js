@@ -9,6 +9,12 @@ module.exports = {
         primary: colors.black,
         purple: {
           50: '#FCFCFF',
+          100: '#F2F0FF',
+          300: '#D7D1FE',
+          500: '#7863FF',
+          700: '#5540DB',
+          800: '#4635B5',
+          900: '#231B5C',
         },
       },
     },

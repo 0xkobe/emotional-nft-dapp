@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import IconCardPreview from '../../components/icon/cardpreview'
+import ModalError from '../../components/modal/modal-error'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import NFTPreview from '../../components/nft/preview'
@@ -94,7 +95,7 @@ export default function PageNFT(): JSX.Element {
     fetchPercentages([nft])
       .then((x) => {
         const p = x.pop()
-        if (!p) return setError(new Error('failed to load percentage'))
+        if (!p) return
         setChangePercentage(p)
       })
       .catch(setError)
@@ -162,7 +163,14 @@ export default function PageNFT(): JSX.Element {
         </div>
 
         {isLoading && <div>...loading</div>}
-        {error && <div>meta: {error.toString()}</div>}
+        {error && (
+          <ModalError
+            error={error}
+            onRequestClose={() => setError(undefined)}
+            onModalClose={() => setError(undefined)}
+            isShown={true}
+          />
+        )}
 
         {nft && (
           <>
@@ -170,7 +178,6 @@ export default function PageNFT(): JSX.Element {
               <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <NFTCard
-                    size="big"
                     className="cursor-pointer"
                     changePercentage={changePercentage}
                     nft={nft}

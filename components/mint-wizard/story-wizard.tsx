@@ -24,7 +24,7 @@ const StoryWizard: FunctionComponent<IProps> = ({
   return (
     <div className={classNames(className, 'flex flex-col w-96 space-y-8')}>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
+        <div className="text-base leading-6 font-medium text-purple-900">
           NFT name
         </div>
         <Input
@@ -36,7 +36,7 @@ const StoryWizard: FunctionComponent<IProps> = ({
         />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
+        <div className="text-base leading-6 font-medium text-purple-900">
           Minter Name
         </div>
         <Input
@@ -48,7 +48,7 @@ const StoryWizard: FunctionComponent<IProps> = ({
         />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="text-base leading-6 font-medium text-gray-500">
+        <div className="text-base leading-6 font-medium text-purple-900">
           NFT Description
         </div>
         <TextArea
