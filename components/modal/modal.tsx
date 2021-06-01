@@ -16,6 +16,7 @@ export type IProps = HTMLAttributes<{}> & {
   onModalClose: () => void
 }
 
+// TODO: recreate with https://headlessui.dev/react/dialog and tailwind
 const Modal: FunctionComponent<IProps> = ({
   isShown,
   children,
