@@ -62,7 +62,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
       <div className="max-w-7xl mx-auto relative flex flex-col md:flex-row px-2 sm:px-6 lg:px-8 py-4">
         <div>End of sale in</div>
         <div className="ml-3 -mt-1">
-          <span className="relative bg-purple-50 p-1 rounded-md">
+          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
             {dd}
             <span
               className="absolute -bottom-3.5 left-0 right-0 text-center"
@@ -72,7 +72,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
             </span>
           </span>{' '}
           :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md">
+          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
             {`0${hh}`.slice(-2)}
             <span
               className="absolute -bottom-3.5 left-0 right-0 text-center"
@@ -82,7 +82,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
             </span>
           </span>{' '}
           :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md">
+          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
             {`0${mm}`.slice(-2)}
             <span
               className="absolute -bottom-3.5 left-0 right-0 text-center"
@@ -92,7 +92,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
             </span>
           </span>{' '}
           :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md">
+          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
             {`0${ss}`.slice(-2)}
             <span
               className="absolute -bottom-3.5 left-0 right-0 text-center"
