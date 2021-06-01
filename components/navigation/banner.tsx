@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react'
+import { FunctionComponent, HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
-import { bnToText } from '../../lib/utils'
+import { bnToText, formatNumber } from '../../lib/utils'
 import { QNFT } from '../../types/contracts'
 import IconClose from '../icon/close'
 
@@ -12,42 +12,63 @@ export type IProps = HTMLAttributes<any> & {
 
 const Banner: FunctionComponent<IProps> = (props) => {
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
-  const [nftLeft, setNftLeft] = useState<BigNumber>()
   const [nftSupply, setNftSupply] = useState<BigNumber>()
+  const [nftMaxSupply, setNftMaxSupply] = useState<BigNumber>()
   const [qstkLeft, setQstkLeft] = useState<BigNumber>()
-  const [qstkSupply, setQstkSupply] = useState<BigNumber>()
+  const [dd, setDD] = useState(0)
+  const [hh, setHH] = useState(0)
+  const [mm, setMM] = useState(0)
+  const [ss, setSS] = useState(0)
 
   useEffect(() => {
     if (!qnft) return
-    // TODO: get correct values
-    qnft.callStatic.remainingQstk().then(setQstkLeft)
-    qnft.callStatic.totalSupply().then(setQstkSupply)
-    qnft.callStatic.maxSupply().then(setNftSupply)
-    qnft.callStatic.totalSupply().then(setNftLeft)
+    void qnft.callStatic.remainingQstk().then(setQstkLeft)
+    void qnft.callStatic.maxSupply().then(setNftMaxSupply)
+    void qnft.callStatic.totalSupply().then(setNftSupply)
   }, [qnft])
+
+  const updateTimeCounter = useCallback(() => {
+    let msec = 1624035600000 - new Date().getTime() // 1624035600000 : June 19th 0h 0m 0s
+    const dd = Math.floor(msec / 1000 / 60 / 60 / 24)
+    msec -= dd * 1000 * 60 * 60 * 24
+    const hh = Math.floor(msec / 1000 / 60 / 60)
+    msec -= hh * 1000 * 60 * 60
+    const mm = Math.floor(msec / 1000 / 60)
+    msec -= mm * 1000 * 60
+    const ss = Math.floor(msec / 1000)
+    setDD(dd)
+    setHH(hh)
+    setMM(mm)
+    setSS(ss)
+    setTimeout(() => {
+      updateTimeCounter()
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      updateTimeCounter()
+    }, 1000);
+  }, [updateTimeCounter])
 
   return (
     <div className="bg-purple-100 text-purple-900 text-xs leading-4 font-normal">
       <div className="max-w-7xl mx-auto relative flex flex-col md:flex-row px-2 sm:px-6 lg:px-8 py-4">
-        <div>End of sale in 14d 12h 60mn</div>
+        <div>End of sale in {dd}d {hh}h {mm}mn {ss}s</div>
         <div className="md:ml-10">
           Remaining NFTs{' '}
           <span className="text-purple-700">
-            {nftLeft ? bnToText(nftLeft) : 'n/a'}
+            {nftMaxSupply && nftSupply ? formatNumber(nftMaxSupply.sub(nftSupply)) : 'n/a'}
           </span>{' '}
           on a supply of{' '}
           <span className="text-purple-700">
-            {nftSupply ? bnToText(nftSupply) : 'n/a'}
+            {nftMaxSupply ? formatNumber(nftMaxSupply) : 'n/a'}
           </span>
         </div>
         <div className="md:ml-10">
           Remaining QSTK to mint{' '}
           <span className="text-purple-700">
             {qstkLeft ? bnToText(qstkLeft) : ''}
-          </span>{' '}
-          on a supply of{' '}
-          <span className="text-purple-700">
-            {qstkSupply ? bnToText(qstkSupply) : ''}
           </span>
         </div>
         <div className="flex-grow"></div>
