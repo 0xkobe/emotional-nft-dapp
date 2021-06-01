@@ -548,7 +548,7 @@ export default function Mint(): JSX.Element {
                   tokenId: BigNumber.from(1), // random value
                   characterId: characterId,
                   favCoinId: coinIndex,
-                  unlockTime: Date.now() + lockOptions[lockOptionId].duration,
+                  unlockTime: Date.now() / 1000 + lockOptions[lockOptionId].duration,
                   lockAmount: qstkAmount.add(airdropAmount),
                   withdrawn: false,
                   metaId: 0, // zero as none

@@ -71,10 +71,10 @@ export type NFTOffChain = {
 export type NFTOnChain = {
   characterId: number
   favCoinId: number
-  metaId: number
   unlockTime: number
   lockAmount: BigNumber
   withdrawn: boolean
+  metaId: number
 }
 
 export type NFT = NFTOffChain &
