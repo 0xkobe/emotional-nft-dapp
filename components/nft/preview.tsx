@@ -35,7 +35,7 @@ const NFTPreview: FunctionComponent<IProps> = ({
         </div>
         <div className="flex flex-row space-x-8">
           {emotions.map((emotion) => (
-            <NFTCard key={emotion} small nft={nft} defaultEmotion={emotion} />
+            <NFTCard key={emotion} small nft={nft} forceEmotion={emotion} />
           ))}
         </div>
       </div>

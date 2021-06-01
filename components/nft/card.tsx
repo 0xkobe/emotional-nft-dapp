@@ -17,12 +17,12 @@ import Tooltip from '../tooltip/tooltip'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
-  changePercentage?: number // percentage of changes
   nft: NFT
-  isDesign?: boolean
-  defaultEmotion?: Emotion
   action?: ReactNode
   small?: boolean
+  changePercentage?: number // percentage of changes
+  previewEmotion?: boolean
+  forceEmotion?: Emotion
 }
 
 function trendIconFromEmotion(emotion: Emotion, small: boolean) {
@@ -149,8 +149,8 @@ export function gradient(emotion: Emotion): string {
 const NFTCard: FunctionComponent<IProps> = ({
   changePercentage,
   nft,
-  isDesign,
-  defaultEmotion,
+  previewEmotion,
+  forceEmotion,
   action,
   small,
   className,
@@ -159,12 +159,12 @@ const NFTCard: FunctionComponent<IProps> = ({
   const [emotion, setEmotion] = useState(Emotion.Normal)
 
   useEffect(() => {
-    setEmotion(
-      isDesign
-        ? Emotion.Normal
-        : defaultEmotion || emotionFromPriceChange(changePercentage || 0),
-    )
-  }, [isDesign, defaultEmotion, changePercentage])
+    if (forceEmotion) return setEmotion(forceEmotion)
+    if (previewEmotion) return setEmotion(Emotion.Normal)
+    if (changePercentage)
+      return setEmotion(emotionFromPriceChange(changePercentage))
+    setEmotion(Emotion.Normal)
+  }, [previewEmotion, forceEmotion, changePercentage])
 
   return (
     <div
@@ -194,7 +194,7 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            {!isDesign && trendIconFromEmotion(emotion, !!small)}
+            {trendIconFromEmotion(emotion, !!small)}
             <Tooltip
               tooltip={getFavCoin(nft.favCoinId).meta.name}
               tooltipClassName="-left-14 w-28 text-center"
@@ -249,7 +249,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           </>
         )}
       </div>
-      {isDesign && (
+      {previewEmotion && (
         <NFTEmotions
           current={emotion}
           onChange={(e) => {
