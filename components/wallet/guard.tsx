@@ -1,7 +1,7 @@
 import { FunctionComponent, PropsWithChildren } from 'react'
 import { chain } from '../../data/chains'
 import useWallet from '../../hooks/useWallet'
-import ModalMetamask from '../modal/modal-metamask'
+import Metamask from '../metamask/metamask'
 
 const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   props: PropsWithChildren<any>,
@@ -10,24 +10,24 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
 
   if (error)
     return (
-      <ModalMetamask
+      <Metamask
+        className="bg-white border border-purple-100 rounded-2xl p-8"
         title={error.name}
         content={<>{error.message}</>}
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown
-      >
-      </ModalMetamask>
+      ></Metamask>
     )
 
   if (!hasWallet)
     return (
-      <ModalMetamask
+      <Metamask
+        className="bg-white border border-purple-100 rounded-2xl p-8"
         title="You Need an Ethereum Wallet"
-        content={<>To use Quiver Emotional NFTs DApp you need to install a MetaMask wallet.</>}
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown
+        content={
+          <>
+            To use Quiver Emotional NFTs DApp you need to install a MetaMask
+            wallet.
+          </>
+        }
       >
         <a
           className="text-sm leading-5 font-medium shadow rounded-2xl px-8 py-3 w-full text-center block bg-purple-700 text-white"
@@ -36,16 +36,19 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
         >
           Get MetaMask
         </a>
-      </ModalMetamask>
+      </Metamask>
     )
   if (!account)
     return (
-      <ModalMetamask
+      <Metamask
+        className="bg-white border border-purple-100 rounded-2xl p-8"
         title="Connect to Your Wallet"
-        content={<>To use Quiver Emotional NFTs DApp you need to sign in to your MetaMask wallet.</>}
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown
+        content={
+          <>
+            To use Quiver Emotional NFTs DApp you need to sign in to your
+            MetaMask wallet.
+          </>
+        }
       >
         <a
           onClick={() => activate()}
@@ -53,18 +56,15 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
         >
           Sign In
         </a>
-      </ModalMetamask>
+      </Metamask>
     )
   if (chainId !== chain.id)
     return (
-      <ModalMetamask
+      <Metamask
+        className="bg-white border border-purple-100 rounded-2xl p-8"
         title="Wrong network"
         content={<>Wrong chain selected. please switch to {chain.name}</>}
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
-        isShown
-      >
-      </ModalMetamask>
+      ></Metamask>
     )
 
   return props.children
