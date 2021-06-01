@@ -271,7 +271,7 @@ const lockOptions: LockOption[] = [
     discount: 30, // percentage
     minAmount: parseEther('1000'), // 1K QSTK
     maxAmount: parseEther('400000'), // 400K QSTK
-  }
+  },
 ]
 
 const verifier = '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
