@@ -132,11 +132,10 @@ export const createNFTOffChain = async (
     console.error(error)
   }
   if (!res.ok) {
-    if (body.error) {
+    if (body?.error)
       throw new Error(
         `an error occurred while creating metadata: ${body.error}`,
       )
-    }
     throw new Error(`an unknown error occurred while creating metadata`)
   }
   const metaId = body.metaId
