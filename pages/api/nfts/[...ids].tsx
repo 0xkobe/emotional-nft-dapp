@@ -60,6 +60,7 @@ export default async (
           value: nft.favCoinId,
         },
         {
+          display_type: DisplayType.Date,
           trait_type: Traits.UnlockTime,
           value: nft.unlockTime,
         },

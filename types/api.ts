@@ -1,4 +1,4 @@
-import { Background, Creature, FavCoinEnum, LockPeriod, Skin } from './metadata'
+import { Background, Creature, FavCoinEnum, Skin } from './metadata'
 import { Emotion } from './nft'
 
 export type APIResponseError = {
@@ -44,6 +44,7 @@ export type APINftMetadataResponse = {
       value: FavCoinEnum
     },
     {
+      display_type: DisplayType.Date
       trait_type: Traits.UnlockTime
       value: number
     },

@@ -25,7 +25,7 @@ export const fetchNFTs = async (
     tokenIds.map(async (tokenId) => {
       const nftDataOnChain = (await qnftContract.nftData(tokenId)) as NFTOnChain
 
-      if (nftDataOnChain.unlockTime == 0)
+      if (nftDataOnChain.unlockTime === 0)
         throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
 
       return nftDataOnChain
