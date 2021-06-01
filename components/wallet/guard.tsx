@@ -63,7 +63,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
       <Metamask
         className="bg-white border border-purple-100 rounded-2xl p-8"
         title="Wrong network"
-        content={<>Wrong chain selected. please switch to {chain.name}</>}
+        content={<>Wrong chain selected. Please switch to {chain.name}</>}
       ></Metamask>
     )
 
