@@ -11,6 +11,7 @@ import StoryWizard from '../components/mint-wizard/story-wizard'
 import Modal from '../components/modal/modal'
 import ModalProcessing from '../components/modal/modal-processing'
 import ModalSucceed from '../components/modal/modal-succeed'
+import ModalMetamask from '../components/modal/modal-metamask'
 import NFTCard from '../components/nft/card'
 import Stepper from '../components/stepper/stepper'
 import Title from '../components/title/title'
@@ -448,13 +449,14 @@ export default function Mint(): JSX.Element {
       )
     }
     return (
-      <Modal
+      <ModalMetamask
+        title="Metamask Data"
+        content={<>Please fill the information in your metamask account in order to continue the Mint process</>}
         onRequestClose={() => console.error('cannot close this modal')}
         onModalClose={() => console.error('cannot close this modal')}
-        isShown={true}
+        isShown
       >
-        Check metamask
-      </Modal>
+      </ModalMetamask>
     )
   }
 

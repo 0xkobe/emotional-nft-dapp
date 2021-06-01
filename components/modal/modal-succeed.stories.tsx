@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import ModalSucceed, { IProps } from './modal-succeed'
 
 export default {
-  title: 'ModalSucceed/ModalSucceed',
+  title: 'Modal/ModalSucceed',
   component: ModalSucceed,
 } as Meta<IProps>
 
