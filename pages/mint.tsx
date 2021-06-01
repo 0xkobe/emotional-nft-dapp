@@ -546,7 +546,7 @@ export default function Mint(): JSX.Element {
           <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
-                isDesign
+                previewEmotion
                 nft={{
                   tokenId: BigNumber.from(1), // random value
                   characterId: characterId,
