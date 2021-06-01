@@ -129,5 +129,4 @@ export enum LockPeriod {
   SixMonths = 0,
   TwelveMonths = 1,
   OneCentury = 2,
-  ThirtyMinutes = 3, // FIXME: for dev only
 }
