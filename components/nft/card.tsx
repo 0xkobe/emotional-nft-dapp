@@ -22,39 +22,39 @@ export type IProps = HTMLAttributes<any> & {
   isDesign?: boolean
   defaultEmotion?: Emotion
   action?: ReactNode
-  size?: string
+  small?: boolean
 }
 
-function trendIconFromEmotion(emotion: Emotion, size?: string) {
+function trendIconFromEmotion(emotion: Emotion, small: boolean) {
   switch (emotion) {
     case Emotion.Happy:
       return (
         <IconHappyTrend
-          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+          className={classNames(small ? 'w-4' : 'w-6 h-4')}
         ></IconHappyTrend>
       )
     case Emotion.Rest:
       return (
         <IconRestTrend
-          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+          className={classNames(small ? 'w-4' : 'w-6 h-4')}
         ></IconRestTrend>
       )
     case Emotion.Normal:
       return (
         <IconNormalTrend
-          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+          className={classNames(small ? 'w-4' : 'w-6 h-4')}
         ></IconNormalTrend>
       )
     case Emotion.Worry:
       return (
         <IconWorryTrend
-          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+          className={classNames(small ? 'w-4' : 'w-6 h-4')}
         ></IconWorryTrend>
       )
     case Emotion.Angry:
       return (
         <IconAngryTrend
-          className={classNames(size !== 'big' ? 'w-4' : 'w-6 h-4')}
+          className={classNames(small ? 'w-4' : 'w-6 h-4')}
         ></IconAngryTrend>
       )
   }
@@ -152,7 +152,7 @@ const NFTCard: FunctionComponent<IProps> = ({
   isDesign,
   defaultEmotion,
   action,
-  size,
+  small,
   className,
   ...props
 }: IProps) => {
@@ -170,13 +170,7 @@ const NFTCard: FunctionComponent<IProps> = ({
     <div
       className={classNames(
         'relative flex flex-col mb-auto space-y-8',
-        size
-          ? size === 'big'
-            ? 'w-96'
-            : size === 'medium'
-            ? 'w-64'
-            : 'w-52'
-          : '',
+        small && 'w-52',
         className,
       )}
       {...props}
@@ -184,7 +178,7 @@ const NFTCard: FunctionComponent<IProps> = ({
       <div
         className={classNames(
           'flex flex-col border-2 border-purple-300 rounded-2xl shadow space-y-8 hover:shadow-md',
-          size !== 'big' ? 'p-6' : 'p-8',
+          small ? 'p-6' : 'p-8',
           gradient(emotion),
         )}
       >
@@ -192,7 +186,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           <div
             className={classNames(
               'px-2 py-1 rounded-full font-medium',
-              size !== 'big' ? 'text-xs leading-4' : 'text-base leading-6',
+              small ? 'text-xs leading-4' : 'text-base leading-6',
               bgColorFromEmotion(emotion),
               colorFromEmotion(emotion),
             )}
@@ -200,13 +194,13 @@ const NFTCard: FunctionComponent<IProps> = ({
             {capitalizeFirstLetter(emotion)}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
-            {!isDesign && trendIconFromEmotion(emotion, size)}
+            {!isDesign && trendIconFromEmotion(emotion, !!small)}
             <Tooltip
               tooltip={getFavCoin(nft.favCoinId).meta.name}
               tooltipClassName="-left-14 w-28 text-center"
             >
               <img
-                className={classNames(size !== 'big' ? 'w-6 h-6' : 'w-8 h-8')}
+                className={classNames(small ? 'w-6 h-6' : 'w-8 h-8')}
                 src={getFavCoin(nft.favCoinId).meta.icon}
               />
             </Tooltip>
@@ -233,7 +227,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           <span
             className={classNames(
               'font-bold text-purple-900',
-              size !== 'big' ? 'text-base leading-6' : 'text-xl leading-7',
+              small ? 'text-base leading-6' : 'text-xl leading-7',
             )}
           >
             {nft.name || 'My Emotional NFT'}
@@ -241,7 +235,7 @@ const NFTCard: FunctionComponent<IProps> = ({
           <span
             className={classNames(
               'font-normal text-gray-500 mt-1',
-              size !== 'big' ? 'text-xs leading-4' : 'text-sm leading-5',
+              small ? 'text-xs leading-4' : 'text-sm leading-5',
             )}
           >
             [ {getCharacter(nft.characterId).skin.toUpperCase()} ]
