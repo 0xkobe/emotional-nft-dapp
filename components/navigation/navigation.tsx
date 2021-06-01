@@ -16,14 +16,20 @@ const navigation = [
 ]
 
 const Logo = () => (
-  <a href="/" className="flex-shrink-0 flex items-center">
-    <img
-      className="block lg:hidden h-8 w-auto"
-      src="https://quiverprotocol.com/icon.svg"
-      alt="Quiver"
-    />
-    <img className="hidden lg:block h-8 w-auto" src="/logo.svg" alt="Quiver" />
-  </a>
+  <Link href="/">
+    <a className="flex-shrink-0 flex items-center">
+      <img
+        className="block lg:hidden h-8 w-auto"
+        src="https://quiverprotocol.com/icon.svg"
+        alt="Quiver"
+      />
+      <img
+        className="hidden lg:block h-8 w-auto"
+        src="/logo.svg"
+        alt="Quiver"
+      />
+    </a>
+  </Link>
 )
 
 const Navigation: FunctionComponent<IProps> = (props) => {
@@ -34,7 +40,7 @@ const Navigation: FunctionComponent<IProps> = (props) => {
           <div className="max-w-7xl mx-auto relative flex flex-col px-2 sm:px-6 lg:px-8">
             <div className="relative flex justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-purple-400 hover:text-purple-500 hover:bg-purple-100 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-purple-500">
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
@@ -76,8 +82,8 @@ const Navigation: FunctionComponent<IProps> = (props) => {
                     className={classNames(
                       'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
                       x.href === props.route
-                        ? 'bg-primary-50 border-primary-500 text-primary-700'
-                        : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
+                        ? 'bg-purple-50 border-purple-500 text-purple-700'
+                        : 'border-transparent text-purple-500 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700',
                     )}
                   >
                     {x.text}

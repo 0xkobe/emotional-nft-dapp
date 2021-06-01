@@ -35,7 +35,7 @@ const Allocation: FunctionComponent<IProps> = ({
       <div
         className={classNames(
           className,
-          'bg-white shadow border border-purple-100 p-8 rounded-2xl',
+          'bg-white shadow-sm border border-purple-100 p-8 rounded-2xl',
         )}
       >
         <div className="text-base leading-6 font-bold text-purple-900 mb-8">

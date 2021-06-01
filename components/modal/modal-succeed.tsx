@@ -1,4 +1,5 @@
 import React, { FunctionComponent, HTMLAttributes } from 'react'
+import Button from '../button/button'
 import IconCheck from '../icon/check'
 import Modal from './modal'
 
@@ -36,12 +37,9 @@ const ModalSucceed: FunctionComponent<IProps> = ({
             </span>
           </div>
         </div>
-        <div className="flex flex-row items-center w-80 p-4 space-x-4 bg-green-50 rounded-2xl">
-          <span>🎉</span>
-          <span className="text-sm leading-5 font-medium text-green-500">
-            You will be redirected in a few seconds to your Investor Space
-          </span>
-        </div>
+        <Button link href={`/nfts/${nftId}`}>
+          View your NFT
+        </Button>
       </div>
     </Modal>
   )

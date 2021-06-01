@@ -8,7 +8,7 @@ const Title: FunctionComponent<IProps> = ({ children, className }: IProps) => {
     <div
       className={classNames(
         className,
-        'text-xl leading-7 font-bold text-purple-900',
+        'text-2xl leading-8 font-bold text-purple-900',
       )}
     >
       {children}
