@@ -28,9 +28,9 @@ const Banner: FunctionComponent<IProps> = (props) => {
 
   useEffect(() => {
     if (!qnft) return
-    void qnft.callStatic.remainingQstk().then(setQstkLeft)
-    void qnft.callStatic.maxSupply().then(setNftMaxSupply)
-    void qnft.callStatic.totalSupply().then(setNftSupply)
+    qnft.remainingQstk().then(setQstkLeft).catch(console.error)
+    qnft.maxSupply().then(setNftMaxSupply).catch(console.error)
+    qnft.totalSupply().then(setNftSupply).catch(console.error)
   }, [qnft])
 
   const updateTimeCounter = useCallback(() => {
