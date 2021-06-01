@@ -28,13 +28,19 @@ export function lockDurationToString(duration: number): string {
 }
 
 // format number with comma
-export function formatNumber(n: number | BigNumber): string {
-  return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+export function formatNumber(n: number | BigNumber | string): string {
+  return n
+    .toString()
+    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+    .replace(/.0$/, '')
 }
 
 // format big number to user friendly text
 export function bnToText(n: BigNumber): string {
-  return utils.formatEther(n).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+  return utils
+    .formatEther(n)
+    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+    .replace(/.0$/, '')
 }
 
 // format big number to user friendly input - can add comma later if needed
@@ -51,7 +57,7 @@ export function inputToBn(s: string): BigNumber {
 export const verifyAirdropKey = (
   verifier: string,
   address: string,
-  airdropKey: string
+  airdropKey: string,
 ): VerifyAirdropKeyResponse => {
   try {
     const keyBuffer = Buffer.from(airdropKey, 'base64')
@@ -59,26 +65,32 @@ export const verifyAirdropKey = (
       return {
         isValid: false,
         amount: BigNumber.from(0),
-        signature: ''
+        signature: '',
       }
     }
 
     const amountBuffer = keyBuffer.slice(0, 16)
     const signature = keyBuffer.slice(16)
-    const messageHash = ethers.utils.solidityKeccak256(['address', 'uint256'], [address, `0x${amountBuffer.toString('hex')}`])
+    const messageHash = ethers.utils.solidityKeccak256(
+      ['address', 'uint256'],
+      [address, `0x${amountBuffer.toString('hex')}`],
+    )
     // messageHash starts with '0x'
-    const res = ethers.utils.verifyMessage(Buffer.from(messageHash.slice(2), 'hex'), signature)
+    const res = ethers.utils.verifyMessage(
+      Buffer.from(messageHash.slice(2), 'hex'),
+      signature,
+    )
 
     return {
       isValid: res === verifier,
       amount: BigNumber.from(amountBuffer),
-      signature: '0x' + signature.toString('hex')
+      signature: '0x' + signature.toString('hex'),
     }
   } catch (e) {
     return {
       isValid: false,
       amount: BigNumber.from(0),
-      signature: ''
+      signature: '',
     }
   }
 }

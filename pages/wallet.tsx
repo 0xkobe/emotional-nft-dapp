@@ -45,13 +45,15 @@ export default function Wallet(): JSX.Element {
           <Title>Your Investor Space</Title>
           <LockedTokenStat lockAmount={lockAmount} />
         </div>
-        <div className="bg-white border border-purple-50 shadow p-8 rounded-2xl flex flex-col w-full space-y-8">
+        <div className="bg-white border border-purple-100 shadow-sm p-8 rounded-2xl flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
-            <span className="text-base leading-6 font-bold text-gray-500">
+            <span className="text-base leading-6 font-bold text-purple-900">
               Your NFT's Collection
             </span>
             <div>
-              <Button href="/mint">Mint new NFT</Button>
+              <Button link href="/mint">
+                Mint new NFT
+              </Button>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
