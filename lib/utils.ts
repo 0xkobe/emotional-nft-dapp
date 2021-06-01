@@ -32,19 +32,6 @@ export const formatDuration = (duration: number): string => {
   return `${Math.floor(duration/minute)} Minutes`
 }
 
-export function lockDurationToString(duration: number): string {
-  if (duration === 100 * 12 * 30 * 24 * 3600) {
-    return '1 Decade'
-  }
-  if (duration === 12 * 30 * 24 * 3600) {
-    return '1 Year'
-  }
-  if (duration === 6 * 30 * 24 * 3600) {
-    return '6 Months'
-  }
-  throw new Error('Invalid Lock Duration')
-}
-
 // format number with comma
 export function formatNumber(n: number | BigNumber | string): string {
   return n
