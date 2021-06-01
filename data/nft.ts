@@ -274,7 +274,7 @@ const lockOptions: LockOption[] = [
   },
 ]
 
-const verifier = '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
+const verifier = '0x9f7d81B5Bedfe6bd156227c85e586078CAbD8FC6'
 
 const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
 const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
