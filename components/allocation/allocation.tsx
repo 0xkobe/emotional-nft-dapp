@@ -18,7 +18,7 @@ const Allocation: FunctionComponent<IProps> = ({
 }: IProps) => {
   const properties = [
     {
-      key: 'Coind',
+      key: 'Coin',
       value: 'QSTK',
     },
     { key: 'Amount', value: bnToText(lockAmount) },
