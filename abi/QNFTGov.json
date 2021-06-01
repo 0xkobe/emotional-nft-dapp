@@ -11,14 +11,8 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "ultisig",
+        "name": "multisig",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
     "name": "SafeWithdraw",
@@ -82,12 +76,6 @@
         "internalType": "address",
         "name": "multisig",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
     "name": "WithdrawToGovernanceAddress",
@@ -163,40 +151,24 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "_qnftSettings",
-        "type": "address"
+        "internalType": "uint8",
+        "name": "_voteQuorum",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_minVoteDuration",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_safeVoteEndDuration",
+        "type": "uint32"
       }
     ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "qnft",
-    "outputs": [
-      {
-        "internalType": "contract IQNFT",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "qnftSettings",
-    "outputs": [
-      {
-        "internalType": "contract IQNFTSettings",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -208,32 +180,6 @@
       }
     ],
     "name": "safeWithdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IQNFTSettings",
-        "name": "_qnftSettings",
-        "type": "address"
-      }
-    ],
-    "name": "setNFTSettings",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IQNFT",
-        "name": "_qnft",
-        "type": "address"
-      }
-    ],
-    "name": "setQNft",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -196,7 +196,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IQSettings",
+        "internalType": "address",
         "name": "_settings",
         "type": "address"
       }

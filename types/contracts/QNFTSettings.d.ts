@@ -29,9 +29,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     "characterCount()": FunctionFragment;
     "characterMaxSupply(uint32)": FunctionFragment;
     "characterPrice(uint32)": FunctionFragment;
+    "endMint()": FunctionFragment;
     "favCoinPrices(uint32)": FunctionFragment;
     "favCoinsCount()": FunctionFragment;
-    "initialize(address)": FunctionFragment;
+    "initialize(address,uint256,uint256,uint256,uint256,uint32)": FunctionFragment;
     "lockOptionLockDuration(uint32)": FunctionFragment;
     "lockOptions(uint256)": FunctionFragment;
     "lockOptionsCount()": FunctionFragment;
@@ -44,12 +45,10 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     "onlyAirdropUsers()": FunctionFragment;
     "pauseMint()": FunctionFragment;
     "qstkPrice()": FunctionFragment;
-    "setNonTokenPriceMultiplier(uint256)": FunctionFragment;
     "setOnlyAirdropUsers(bool)": FunctionFragment;
+    "setPriceMultipliers(uint256,uint256,uint256)": FunctionFragment;
     "setSettings(address)": FunctionFragment;
-    "setTokenPriceMultiplier(uint256)": FunctionFragment;
     "setTransferAllowedAfterRedeem(bool)": FunctionFragment;
-    "setUpgradePriceMultiplier(uint256)": FunctionFragment;
     "settings()": FunctionFragment;
     "startMint()": FunctionFragment;
     "tokenPriceMultiplier()": FunctionFragment;
@@ -104,6 +103,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "characterPrice",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "endMint", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "favCoinPrices",
     values: [BigNumberish]
@@ -112,7 +112,17 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "favCoinsCount",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "lockOptionLockDuration",
     values: [BigNumberish]
@@ -156,25 +166,17 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "pauseMint", values?: undefined): string;
   encodeFunctionData(functionFragment: "qstkPrice", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "setNonTokenPriceMultiplier",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setOnlyAirdropUsers",
     values: [boolean]
   ): string;
-  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "setTokenPriceMultiplier",
-    values: [BigNumberish]
+    functionFragment: "setPriceMultipliers",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setSettings", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setTransferAllowedAfterRedeem",
     values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setUpgradePriceMultiplier",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(functionFragment: "startMint", values?: undefined): string;
@@ -265,6 +267,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     functionFragment: "characterPrice",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "endMint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "favCoinPrices",
     data: BytesLike
@@ -314,11 +317,11 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "pauseMint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "qstkPrice", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setNonTokenPriceMultiplier",
+    functionFragment: "setOnlyAirdropUsers",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setOnlyAirdropUsers",
+    functionFragment: "setPriceMultipliers",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -326,15 +329,7 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setTokenPriceMultiplier",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "setTransferAllowedAfterRedeem",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setUpgradePriceMultiplier",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
@@ -392,10 +387,9 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
     "AddCharacters(uint256[],uint256)": EventFragment;
     "AddFavCoinPrices(uint256[])": EventFragment;
     "AddLockOption(uint256,uint256,uint32,uint8)": EventFragment;
+    "EndMint()": EventFragment;
     "PauseMint(uint256)": EventFragment;
-    "SetNonTokenPriceMultiplier(uint256)": EventFragment;
-    "SetTokenPriceMultiplier(uint256)": EventFragment;
-    "SetUpgradePriceMultiplier(uint256)": EventFragment;
+    "SetPriceMultipliers(uint256,uint256,uint256)": EventFragment;
     "StartMint(uint256)": EventFragment;
     "UnpauseMint(uint256)": EventFragment;
     "UpdateCharacterMaxSupplies(uint32,uint32,uint256)": EventFragment;
@@ -411,10 +405,9 @@ interface QNFTSettingsInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "AddCharacters"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AddFavCoinPrices"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "AddLockOption"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EndMint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PauseMint"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetNonTokenPriceMultiplier"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetTokenPriceMultiplier"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SetUpgradePriceMultiplier"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetPriceMultipliers"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StartMint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UnpauseMint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdateCharacterMaxSupplies"): EventFragment;
@@ -523,6 +516,10 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    endMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     favCoinPrices(
       _favCoinId: BigNumberish,
       overrides?: CallOverrides
@@ -532,6 +529,11 @@ export class QNFTSettings extends BaseContract {
 
     initialize(
       _settings: string,
+      _qstkPrice: BigNumberish,
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
+      _nftSaleDuration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -574,13 +576,15 @@ export class QNFTSettings extends BaseContract {
 
     qstkPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    setNonTokenPriceMultiplier(
-      _nonTokenPriceMultiplier: BigNumberish,
+    setOnlyAirdropUsers(
+      _onlyAirdropUsers: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setOnlyAirdropUsers(
-      _onlyAirdropUsers: boolean,
+    setPriceMultipliers(
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -589,18 +593,8 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setTokenPriceMultiplier(
-      _tokenPriceMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setTransferAllowedAfterRedeem(
       _allow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setUpgradePriceMultiplier(
-      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -722,6 +716,10 @@ export class QNFTSettings extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  endMint(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   favCoinPrices(
     _favCoinId: BigNumberish,
     overrides?: CallOverrides
@@ -731,6 +729,11 @@ export class QNFTSettings extends BaseContract {
 
   initialize(
     _settings: string,
+    _qstkPrice: BigNumberish,
+    _tokenPriceMultiplier: BigNumberish,
+    _nonTokenPriceMultiplier: BigNumberish,
+    _upgradePriceMultiplier: BigNumberish,
+    _nftSaleDuration: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -773,13 +776,15 @@ export class QNFTSettings extends BaseContract {
 
   qstkPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-  setNonTokenPriceMultiplier(
-    _nonTokenPriceMultiplier: BigNumberish,
+  setOnlyAirdropUsers(
+    _onlyAirdropUsers: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setOnlyAirdropUsers(
-    _onlyAirdropUsers: boolean,
+  setPriceMultipliers(
+    _tokenPriceMultiplier: BigNumberish,
+    _nonTokenPriceMultiplier: BigNumberish,
+    _upgradePriceMultiplier: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -788,18 +793,8 @@ export class QNFTSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setTokenPriceMultiplier(
-    _tokenPriceMultiplier: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setTransferAllowedAfterRedeem(
     _allow: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setUpgradePriceMultiplier(
-    _upgradePriceMultiplier: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -921,6 +916,8 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    endMint(overrides?: CallOverrides): Promise<void>;
+
     favCoinPrices(
       _favCoinId: BigNumberish,
       overrides?: CallOverrides
@@ -928,7 +925,15 @@ export class QNFTSettings extends BaseContract {
 
     favCoinsCount(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialize(_settings: string, overrides?: CallOverrides): Promise<void>;
+    initialize(
+      _settings: string,
+      _qstkPrice: BigNumberish,
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
+      _nftSaleDuration: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     lockOptionLockDuration(
       _lockOptionId: BigNumberish,
@@ -967,30 +972,22 @@ export class QNFTSettings extends BaseContract {
 
     qstkPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setNonTokenPriceMultiplier(
-      _nonTokenPriceMultiplier: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setOnlyAirdropUsers(
       _onlyAirdropUsers: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
-
-    setTokenPriceMultiplier(
+    setPriceMultipliers(
       _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setSettings(_settings: string, overrides?: CallOverrides): Promise<void>;
 
     setTransferAllowedAfterRedeem(
       _allow: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setUpgradePriceMultiplier(
-      _upgradePriceMultiplier: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1088,21 +1085,24 @@ export class QNFTSettings extends BaseContract {
       }
     >;
 
+    EndMint(): TypedEventFilter<[], {}>;
+
     PauseMint(
       pausedAt?: null
     ): TypedEventFilter<[BigNumber], { pausedAt: BigNumber }>;
 
-    SetNonTokenPriceMultiplier(
-      nonTokenPriceMultiplier?: null
-    ): TypedEventFilter<[BigNumber], { nonTokenPriceMultiplier: BigNumber }>;
-
-    SetTokenPriceMultiplier(
-      tokenPriceMultiplier?: null
-    ): TypedEventFilter<[BigNumber], { tokenPriceMultiplier: BigNumber }>;
-
-    SetUpgradePriceMultiplier(
+    SetPriceMultipliers(
+      tokenPriceMultiplier?: null,
+      nonTokenPriceMultiplier?: null,
       upgradePriceMultiplier?: null
-    ): TypedEventFilter<[BigNumber], { upgradePriceMultiplier: BigNumber }>;
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, BigNumber],
+      {
+        tokenPriceMultiplier: BigNumber;
+        nonTokenPriceMultiplier: BigNumber;
+        upgradePriceMultiplier: BigNumber;
+      }
+    >;
 
     StartMint(
       startedAt?: null
@@ -1231,6 +1231,10 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    endMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     favCoinPrices(
       _favCoinId: BigNumberish,
       overrides?: CallOverrides
@@ -1240,6 +1244,11 @@ export class QNFTSettings extends BaseContract {
 
     initialize(
       _settings: string,
+      _qstkPrice: BigNumberish,
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
+      _nftSaleDuration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1275,13 +1284,15 @@ export class QNFTSettings extends BaseContract {
 
     qstkPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setNonTokenPriceMultiplier(
-      _nonTokenPriceMultiplier: BigNumberish,
+    setOnlyAirdropUsers(
+      _onlyAirdropUsers: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setOnlyAirdropUsers(
-      _onlyAirdropUsers: boolean,
+    setPriceMultipliers(
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1290,18 +1301,8 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setTokenPriceMultiplier(
-      _tokenPriceMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setTransferAllowedAfterRedeem(
       _allow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setUpgradePriceMultiplier(
-      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1418,6 +1419,10 @@ export class QNFTSettings extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    endMint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     favCoinPrices(
       _favCoinId: BigNumberish,
       overrides?: CallOverrides
@@ -1427,6 +1432,11 @@ export class QNFTSettings extends BaseContract {
 
     initialize(
       _settings: string,
+      _qstkPrice: BigNumberish,
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
+      _nftSaleDuration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1464,13 +1474,15 @@ export class QNFTSettings extends BaseContract {
 
     qstkPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    setNonTokenPriceMultiplier(
-      _nonTokenPriceMultiplier: BigNumberish,
+    setOnlyAirdropUsers(
+      _onlyAirdropUsers: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setOnlyAirdropUsers(
-      _onlyAirdropUsers: boolean,
+    setPriceMultipliers(
+      _tokenPriceMultiplier: BigNumberish,
+      _nonTokenPriceMultiplier: BigNumberish,
+      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1479,18 +1491,8 @@ export class QNFTSettings extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setTokenPriceMultiplier(
-      _tokenPriceMultiplier: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setTransferAllowedAfterRedeem(
       _allow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setUpgradePriceMultiplier(
-      _upgradePriceMultiplier: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

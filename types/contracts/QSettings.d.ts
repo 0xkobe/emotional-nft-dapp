@@ -21,33 +21,62 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface QSettingsInterface extends ethers.utils.Interface {
   functions: {
-    "admin()": FunctionFragment;
-    "foundation()": FunctionFragment;
-    "foundationWallet()": FunctionFragment;
-    "initialize(address,address,address,address,address)": FunctionFragment;
-    "manager()": FunctionFragment;
-    "qstk()": FunctionFragment;
+    "getAdmin()": FunctionFragment;
+    "getFoundation()": FunctionFragment;
+    "getFoundationWallet()": FunctionFragment;
+    "getManager()": FunctionFragment;
+    "getQAirdrop()": FunctionFragment;
+    "getQNft()": FunctionFragment;
+    "getQNftGov()": FunctionFragment;
+    "getQNftSettings()": FunctionFragment;
+    "getQStk()": FunctionFragment;
+    "initialize(address,address,address,address)": FunctionFragment;
+    "setAddresses(address,address,address,address,address)": FunctionFragment;
     "setAdmin(address)": FunctionFragment;
     "setFoundation(address)": FunctionFragment;
     "setFoundationWallet(address)": FunctionFragment;
     "setManager(address)": FunctionFragment;
+    "setQAirdrop(address)": FunctionFragment;
+    "setQNft(address)": FunctionFragment;
+    "setQNftGov(address)": FunctionFragment;
+    "setQNftSettings(address)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "admin", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getAdmin", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "foundation",
+    functionFragment: "getFoundation",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "foundationWallet",
+    functionFragment: "getFoundationWallet",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "getManager",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getQAirdrop",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "getQNft", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getQNftGov",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getQNftSettings",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "getQStk", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "initialize",
+    values: [string, string, string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAddresses",
     values: [string, string, string, string, string]
   ): string;
-  encodeFunctionData(functionFragment: "manager", values?: undefined): string;
-  encodeFunctionData(functionFragment: "qstk", values?: undefined): string;
   encodeFunctionData(functionFragment: "setAdmin", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setFoundation",
@@ -58,16 +87,40 @@ interface QSettingsInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "setManager", values: [string]): string;
+  encodeFunctionData(functionFragment: "setQAirdrop", values: [string]): string;
+  encodeFunctionData(functionFragment: "setQNft", values: [string]): string;
+  encodeFunctionData(functionFragment: "setQNftGov", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "setQNftSettings",
+    values: [string]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "foundation", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getAdmin", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "foundationWallet",
+    functionFragment: "getFoundation",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getFoundationWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getManager", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getQAirdrop",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getQNft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getQNftGov", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getQNftSettings",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getQStk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "manager", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "qstk", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAddresses",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setFoundation",
@@ -78,6 +131,16 @@ interface QSettingsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setManager", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setQAirdrop",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setQNft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setQNftGov", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setQNftSettings",
+    data: BytesLike
+  ): Result;
 
   events: {
     "SetAdmin(address)": EventFragment;
@@ -136,24 +199,40 @@ export class QSettings extends BaseContract {
   interface: QSettingsInterface;
 
   functions: {
-    admin(overrides?: CallOverrides): Promise<[string]>;
+    getAdmin(overrides?: CallOverrides): Promise<[string]>;
 
-    foundation(overrides?: CallOverrides): Promise<[string]>;
+    getFoundation(overrides?: CallOverrides): Promise<[string]>;
 
-    foundationWallet(overrides?: CallOverrides): Promise<[string]>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<[string]>;
+
+    getManager(overrides?: CallOverrides): Promise<[string]>;
+
+    getQAirdrop(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNft(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<[string]>;
+
+    getQStk(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
       _admin: string,
       _manager: string,
       _foundation: string,
       _foundationWallet: string,
-      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    manager(overrides?: CallOverrides): Promise<[string]>;
-
-    qstk(overrides?: CallOverrides): Promise<[string]>;
+    setAddresses(
+      _qstk: string,
+      _qAirdrop: string,
+      _qNftSettings: string,
+      _qNftGov: string,
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     setAdmin(
       _admin: string,
@@ -174,26 +253,62 @@ export class QSettings extends BaseContract {
       _manager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setQAirdrop(
+      _qAirdrop: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setQNft(
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setQNftGov(
+      _qNftGov: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setQNftSettings(
+      _qNftSettings: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
-  admin(overrides?: CallOverrides): Promise<string>;
+  getAdmin(overrides?: CallOverrides): Promise<string>;
 
-  foundation(overrides?: CallOverrides): Promise<string>;
+  getFoundation(overrides?: CallOverrides): Promise<string>;
 
-  foundationWallet(overrides?: CallOverrides): Promise<string>;
+  getFoundationWallet(overrides?: CallOverrides): Promise<string>;
+
+  getManager(overrides?: CallOverrides): Promise<string>;
+
+  getQAirdrop(overrides?: CallOverrides): Promise<string>;
+
+  getQNft(overrides?: CallOverrides): Promise<string>;
+
+  getQNftGov(overrides?: CallOverrides): Promise<string>;
+
+  getQNftSettings(overrides?: CallOverrides): Promise<string>;
+
+  getQStk(overrides?: CallOverrides): Promise<string>;
 
   initialize(
     _admin: string,
     _manager: string,
     _foundation: string,
     _foundationWallet: string,
-    _qstk: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  manager(overrides?: CallOverrides): Promise<string>;
-
-  qstk(overrides?: CallOverrides): Promise<string>;
+  setAddresses(
+    _qstk: string,
+    _qAirdrop: string,
+    _qNftSettings: string,
+    _qNftGov: string,
+    _qNft: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setAdmin(
     _admin: string,
@@ -215,25 +330,61 @@ export class QSettings extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setQAirdrop(
+    _qAirdrop: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setQNft(
+    _qNft: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setQNftGov(
+    _qNftGov: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setQNftSettings(
+    _qNftSettings: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
-    admin(overrides?: CallOverrides): Promise<string>;
+    getAdmin(overrides?: CallOverrides): Promise<string>;
 
-    foundation(overrides?: CallOverrides): Promise<string>;
+    getFoundation(overrides?: CallOverrides): Promise<string>;
 
-    foundationWallet(overrides?: CallOverrides): Promise<string>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<string>;
+
+    getManager(overrides?: CallOverrides): Promise<string>;
+
+    getQAirdrop(overrides?: CallOverrides): Promise<string>;
+
+    getQNft(overrides?: CallOverrides): Promise<string>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<string>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<string>;
+
+    getQStk(overrides?: CallOverrides): Promise<string>;
 
     initialize(
       _admin: string,
       _manager: string,
       _foundation: string,
       _foundationWallet: string,
-      _qstk: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    manager(overrides?: CallOverrides): Promise<string>;
-
-    qstk(overrides?: CallOverrides): Promise<string>;
+    setAddresses(
+      _qstk: string,
+      _qAirdrop: string,
+      _qNftSettings: string,
+      _qNftGov: string,
+      _qNft: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setAdmin(_admin: string, overrides?: CallOverrides): Promise<void>;
 
@@ -248,6 +399,17 @@ export class QSettings extends BaseContract {
     ): Promise<void>;
 
     setManager(_manager: string, overrides?: CallOverrides): Promise<void>;
+
+    setQAirdrop(_qAirdrop: string, overrides?: CallOverrides): Promise<void>;
+
+    setQNft(_qNft: string, overrides?: CallOverrides): Promise<void>;
+
+    setQNftGov(_qNftGov: string, overrides?: CallOverrides): Promise<void>;
+
+    setQNftSettings(
+      _qNftSettings: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -273,24 +435,40 @@ export class QSettings extends BaseContract {
   };
 
   estimateGas: {
-    admin(overrides?: CallOverrides): Promise<BigNumber>;
+    getAdmin(overrides?: CallOverrides): Promise<BigNumber>;
 
-    foundation(overrides?: CallOverrides): Promise<BigNumber>;
+    getFoundation(overrides?: CallOverrides): Promise<BigNumber>;
 
-    foundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getManager(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQAirdrop(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNft(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQStk(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       _admin: string,
       _manager: string,
       _foundation: string,
       _foundationWallet: string,
-      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    manager(overrides?: CallOverrides): Promise<BigNumber>;
-
-    qstk(overrides?: CallOverrides): Promise<BigNumber>;
+    setAddresses(
+      _qstk: string,
+      _qAirdrop: string,
+      _qNftSettings: string,
+      _qNftGov: string,
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     setAdmin(
       _admin: string,
@@ -309,29 +487,67 @@ export class QSettings extends BaseContract {
 
     setManager(
       _manager: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setQAirdrop(
+      _qAirdrop: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setQNft(
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setQNftGov(
+      _qNftGov: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setQNftSettings(
+      _qNftSettings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getAdmin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    foundation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getFoundation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    foundationWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getFoundationWallet(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQAirdrop(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQStk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
       _admin: string,
       _manager: string,
       _foundation: string,
       _foundationWallet: string,
-      _qstk: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    manager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    qstk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    setAddresses(
+      _qstk: string,
+      _qAirdrop: string,
+      _qNftSettings: string,
+      _qNftGov: string,
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setAdmin(
       _admin: string,
@@ -350,6 +566,26 @@ export class QSettings extends BaseContract {
 
     setManager(
       _manager: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setQAirdrop(
+      _qAirdrop: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setQNft(
+      _qNft: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setQNftGov(
+      _qNftGov: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setQNftSettings(
+      _qNftSettings: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

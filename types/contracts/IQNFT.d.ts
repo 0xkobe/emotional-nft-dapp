@@ -11,6 +11,7 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
+  Overrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -22,6 +23,7 @@ interface IQNFTInterface extends ethers.utils.Interface {
   functions: {
     "qstkBalances(address)": FunctionFragment;
     "totalAssignedQstk()": FunctionFragment;
+    "withdrawETH(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -32,6 +34,7 @@ interface IQNFTInterface extends ethers.utils.Interface {
     functionFragment: "totalAssignedQstk",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "withdrawETH", values: [string]): string;
 
   decodeFunctionResult(
     functionFragment: "qstkBalances",
@@ -39,6 +42,10 @@ interface IQNFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "totalAssignedQstk",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawETH",
     data: BytesLike
   ): Result;
 
@@ -92,16 +99,28 @@ export class IQNFT extends BaseContract {
     qstkBalances(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     totalAssignedQstk(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    withdrawETH(
+      multisig: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   qstkBalances(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   totalAssignedQstk(overrides?: CallOverrides): Promise<BigNumber>;
 
+  withdrawETH(
+    multisig: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     qstkBalances(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     totalAssignedQstk(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdrawETH(multisig: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
@@ -110,6 +129,11 @@ export class IQNFT extends BaseContract {
     qstkBalances(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     totalAssignedQstk(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdrawETH(
+      multisig: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -119,5 +143,10 @@ export class IQNFT extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     totalAssignedQstk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdrawETH(
+      multisig: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

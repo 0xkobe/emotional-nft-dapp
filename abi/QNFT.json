@@ -72,61 +72,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftStartId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "characterIds",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "favCoinId",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "metaStartId",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "lockDuration",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "mintAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "count",
-        "type": "uint256"
-      }
-    ],
-    "name": "BulkMintNFTs",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
@@ -310,19 +255,6 @@
     "type": "fallback"
   },
   {
-    "inputs": [],
-    "name": "airdrop",
-    "outputs": [
-      {
-        "internalType": "contract IQAirdrop",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -377,18 +309,13 @@
         "type": "uint32"
       },
       {
-        "internalType": "uint32",
-        "name": "_metaId",
-        "type": "uint32"
+        "internalType": "uint32[]",
+        "name": "_metaIds",
+        "type": "uint32[]"
       },
       {
         "internalType": "uint256",
         "name": "_lockAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_count",
         "type": "uint256"
       }
     ],
@@ -430,38 +357,10 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "governance",
-    "outputs": [
-      {
-        "internalType": "contract IQNFTGov",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
         "name": "_settings",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_nftSettings",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_governance",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airdrop",
         "type": "address"
       },
       {
@@ -689,19 +588,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "nftSettings",
-    "outputs": [
-      {
-        "internalType": "contract IQNFTSettings",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -710,19 +596,6 @@
       }
     ],
     "name": "ownerOf",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "qstk",
     "outputs": [
       {
         "internalType": "address",
@@ -819,19 +692,6 @@
   {
     "inputs": [
       {
-        "internalType": "contract IQAirdrop",
-        "name": "_airdrop",
-        "type": "address"
-      }
-    ],
-    "name": "setAirdrop",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "operator",
         "type": "address"
@@ -850,38 +710,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IQNFTGov",
-        "name": "_governance",
-        "type": "address"
-      }
-    ],
-    "name": "setGovernance",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "_maxSupply",
         "type": "uint256"
       }
     ],
     "name": "setMaxSupply",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IQNFTSettings",
-        "name": "_nftSettings",
-        "type": "address"
-      }
-    ],
-    "name": "setNFTSettings",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1110,6 +944,19 @@
     "name": "upgradeNftCoin",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "_multisig",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

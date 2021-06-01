@@ -20,24 +20,54 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IQSettingsInterface extends ethers.utils.Interface {
   functions: {
-    "foundationWallet()": FunctionFragment;
-    "manager()": FunctionFragment;
-    "qstk()": FunctionFragment;
+    "getFoundationWallet()": FunctionFragment;
+    "getManager()": FunctionFragment;
+    "getQAirdrop()": FunctionFragment;
+    "getQNft()": FunctionFragment;
+    "getQNftGov()": FunctionFragment;
+    "getQNftSettings()": FunctionFragment;
+    "getQStk()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "foundationWallet",
+    functionFragment: "getFoundationWallet",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "manager", values?: undefined): string;
-  encodeFunctionData(functionFragment: "qstk", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getManager",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getQAirdrop",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "getQNft", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getQNftGov",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getQNftSettings",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "getQStk", values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: "foundationWallet",
+    functionFragment: "getFoundationWallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "manager", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "qstk", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getManager", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getQAirdrop",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getQNft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getQNftGov", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getQNftSettings",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getQStk", data: BytesLike): Result;
 
   events: {};
 }
@@ -86,42 +116,84 @@ export class IQSettings extends BaseContract {
   interface: IQSettingsInterface;
 
   functions: {
-    foundationWallet(overrides?: CallOverrides): Promise<[string]>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<[string]>;
 
-    manager(overrides?: CallOverrides): Promise<[string]>;
+    getManager(overrides?: CallOverrides): Promise<[string]>;
 
-    qstk(overrides?: CallOverrides): Promise<[string]>;
+    getQAirdrop(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNft(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<[string]>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<[string]>;
+
+    getQStk(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  foundationWallet(overrides?: CallOverrides): Promise<string>;
+  getFoundationWallet(overrides?: CallOverrides): Promise<string>;
 
-  manager(overrides?: CallOverrides): Promise<string>;
+  getManager(overrides?: CallOverrides): Promise<string>;
 
-  qstk(overrides?: CallOverrides): Promise<string>;
+  getQAirdrop(overrides?: CallOverrides): Promise<string>;
+
+  getQNft(overrides?: CallOverrides): Promise<string>;
+
+  getQNftGov(overrides?: CallOverrides): Promise<string>;
+
+  getQNftSettings(overrides?: CallOverrides): Promise<string>;
+
+  getQStk(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    foundationWallet(overrides?: CallOverrides): Promise<string>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<string>;
 
-    manager(overrides?: CallOverrides): Promise<string>;
+    getManager(overrides?: CallOverrides): Promise<string>;
 
-    qstk(overrides?: CallOverrides): Promise<string>;
+    getQAirdrop(overrides?: CallOverrides): Promise<string>;
+
+    getQNft(overrides?: CallOverrides): Promise<string>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<string>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<string>;
+
+    getQStk(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
 
   estimateGas: {
-    foundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
+    getFoundationWallet(overrides?: CallOverrides): Promise<BigNumber>;
 
-    manager(overrides?: CallOverrides): Promise<BigNumber>;
+    getManager(overrides?: CallOverrides): Promise<BigNumber>;
 
-    qstk(overrides?: CallOverrides): Promise<BigNumber>;
+    getQAirdrop(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNft(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getQStk(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    foundationWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getFoundationWallet(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    manager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    qstk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getQAirdrop(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNftGov(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQNftSettings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getQStk(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }
