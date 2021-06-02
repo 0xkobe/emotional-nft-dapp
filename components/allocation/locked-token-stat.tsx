@@ -30,8 +30,7 @@ const LockedTokenStat: FunctionComponent<IProps> = ({
           Your Locked Token
         </span>
         <span className="text-xl leading-7 font-semibold text-purple-900">
-          {!lockAmount && '-'}
-          {lockAmount && <>{bnToText(lockAmount)} QSTK</>}
+          {lockAmount ? <>{bnToText(lockAmount)} QSTK</> : '-'}
         </span>
       </div>
     </div>
