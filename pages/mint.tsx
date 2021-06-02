@@ -85,41 +85,23 @@ export default function Mint(): JSX.Element {
 
   // fetch remaining qstk
   useEffect(() => {
-    qnft
-      ?.remainingQstk()
-      .then((x) => {
-        setAvailableMintAmount(x)
-      })
-      .catch((error) => {
-        console.error('error during fetch of remaining qstk', error)
-      })
+    if (!qnft) return
+    qnft.remainingQstk().then(setAvailableMintAmount).catch(setError)
   }, [qnft])
 
   // fetch remaining free allocation
   useEffect(() => {
+    if (!qstk) return
     qstk
-      ?.balanceOf(deployedAddresses.qAirdrop)
-      .then((x) => {
-        setAvailableFreeAllocation(x)
-      })
-      .catch((error) => {
-        console.error('error during fetch of remaining free allocation', error)
-      })
+      .balanceOf(deployedAddresses.qAirdrop)
+      .then(setAvailableFreeAllocation)
+      .catch(setError)
   }, [qstk])
 
   // fetch onlyAirdropUsers in qnftSettings
   useEffect(() => {
-    qnftSettings
-      ?.onlyAirdropUsers()
-      .then((x) => {
-        setOnlyAirdropUsers(x)
-      })
-      .catch((error) => {
-        console.error(
-          'error during fetch of onlyAirdropUsers qnftSettings',
-          error,
-        )
-      })
+    if (!qnftSettings) return
+    qnftSettings.onlyAirdropUsers().then(setOnlyAirdropUsers).catch(setError)
   }, [qnftSettings])
 
   const freeAllocationAmount = useMemo(() => {
