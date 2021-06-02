@@ -115,7 +115,10 @@ export default function Mint(): JSX.Element {
         setOnlyAirdropUsers(x)
       })
       .catch((error) => {
-        console.error('error during fetch of onlyAirdropUsers qnftSettings', error)
+        console.error(
+          'error during fetch of onlyAirdropUsers qnftSettings',
+          error,
+        )
       })
   }, [qnftSettings])
 
@@ -124,29 +127,32 @@ export default function Mint(): JSX.Element {
   }, [airdropAmount, airdropClaimed])
 
   // fetch characters supply function
-  const getCharactersSupply = useCallback(async (qnft: QNFT, characters: Character[]) => {
-    const requestCharactersSupply = []
-    for (let i = 0; i < characters.length; i++) {
-      requestCharactersSupply.push(
-        qnft
-          .nftCountByCharacter(characters[i].id)
-          .then((val): number => val.toNumber()),
+  const getCharactersSupply = useCallback(
+    async (qnft: QNFT, characters: Character[]) => {
+      const requestCharactersSupply = []
+      for (let i = 0; i < characters.length; i++) {
+        requestCharactersSupply.push(
+          qnft
+            .nftCountByCharacter(characters[i].id)
+            .then((val): number => val.toNumber()),
+        )
+      }
+      const resCharactersSupply: number[] = await Promise.all(
+        requestCharactersSupply,
       )
-    }
-    const resCharactersSupply: number[] = await Promise.all(
-      requestCharactersSupply,
-    )
-    setCharactersData(
-      characters.map((character, index) => ({
-        ...character,
-        maxSupply: charactersSupply[character.id],
-        currentSupply: resCharactersSupply[index],
-      })),
-    )
-    if (characterId !== 25 && characterId !== 26) {
-      setCharacterId(characterId - characterId % 5 + skinIndex)
-    }
-  }, [skinIndex]) // Shouldn't put characterId as a callback dependency
+      setCharactersData(
+        characters.map((character, index) => ({
+          ...character,
+          maxSupply: charactersSupply[character.id],
+          currentSupply: resCharactersSupply[index],
+        })),
+      )
+      if (characterId !== 25 && characterId !== 26) {
+        setCharacterId(characterId - (characterId % 5) + skinIndex)
+      }
+    },
+    [skinIndex],
+  ) // Shouldn't put characterId as a callback dependency
 
   // reload characters supply when skin changes
   useEffect(() => {
@@ -162,15 +168,11 @@ export default function Mint(): JSX.Element {
   }, [getCharactersSupply, qnft, skinIndex])
 
   const characterPrice = useMemo(() => {
-    return characters[characterId].mintPrice
-      .mul(nonTokenMultiplier)
-      .div(100)
+    return characters[characterId].mintPrice.mul(nonTokenMultiplier).div(100)
   }, [characterId])
 
   const favcoinPrice = useMemo(() => {
-    return favCoins[coinIndex].mintPrice
-      .mul(nonTokenMultiplier)
-      .div(100)
+    return favCoins[coinIndex].mintPrice.mul(nonTokenMultiplier).div(100)
   }, [coinIndex])
 
   const tokenPrice = useMemo(() => {
@@ -258,7 +260,19 @@ export default function Mint(): JSX.Element {
     }
 
     return mintSummaryProperties
-  }, [characterId, skinIndex, coinIndex, backgroundIndex, mintStep, nftName, minterName, nftDescription, qstkAmount, lockOptionId, freeAllocationAmount])
+  }, [
+    characterId,
+    skinIndex,
+    coinIndex,
+    backgroundIndex,
+    mintStep,
+    nftName,
+    minterName,
+    nftDescription,
+    qstkAmount,
+    lockOptionId,
+    freeAllocationAmount,
+  ])
 
   // calculate mint summary button name
   const mintSummaryBtnName = useMemo(() => {
@@ -368,27 +382,27 @@ export default function Mint(): JSX.Element {
     const qnftWithSigner = qnft.connect(signer)
     const mintPromise = airdropSignature
       ? qnftWithSigner.mintNftForAirdropUser(
-        characterId,
-        coinIndex,
-        lockOptionId,
-        metaId,
-        qstkAmount,
-        airdropAmount,
-        airdropSignature,
-        {
-          value: nftPrice,
-        },
-      )
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          airdropAmount,
+          airdropSignature,
+          {
+            value: nftPrice,
+          },
+        )
       : qnftWithSigner.mintNft(
-        characterId,
-        coinIndex,
-        lockOptionId,
-        metaId,
-        qstkAmount,
-        {
-          value: nftPrice,
-        },
-      )
+          characterId,
+          coinIndex,
+          lockOptionId,
+          metaId,
+          qstkAmount,
+          {
+            value: nftPrice,
+          },
+        )
 
     mintPromise
       .then((tx) => {
@@ -551,7 +565,7 @@ export default function Mint(): JSX.Element {
         lockOptionId === undefined ||
         qstkAmount === undefined ||
         qstkAmount.eq(0) ||
-        onlyAirdropUsers && !airdropSignature
+        (onlyAirdropUsers && !airdropSignature),
     ][mintStep]()
   }
 
@@ -578,7 +592,8 @@ export default function Mint(): JSX.Element {
                   tokenId: BigNumber.from(1), // random value
                   characterId: characterId,
                   favCoinId: coinIndex,
-                  unlockTime: Date.now() / 1000 + lockOptions[lockOptionId].duration,
+                  unlockTime:
+                    Date.now() / 1000 + lockOptions[lockOptionId].duration,
                   lockAmount: qstkAmount.add(freeAllocationAmount),
                   withdrawn: false,
                   metaId: 0, // zero as none
