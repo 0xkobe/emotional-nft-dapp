@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Button from '../components/button/button'
 import MintSummary from '../components/mint-summary/mint-summary'
 import AllocationWizard from '../components/mint-wizard/allocation-wizard'
@@ -25,6 +25,7 @@ import {
   nonTokenMultiplier,
   qstkPrice,
   skins,
+  specialIds,
   tokenMultiplier,
 } from '../data/nft'
 import { abi, deployedAddresses } from '../data/smartContract'
@@ -35,7 +36,7 @@ import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
 import { QAirdrop, QNFT, QNFTSettings, QStk } from '../types/contracts'
 import { Skin } from '../types/metadata'
-import { Character, Emotion } from '../types/nft'
+import { Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
 
 export default function Mint(): JSX.Element {
@@ -108,46 +109,34 @@ export default function Mint(): JSX.Element {
     return airdropClaimed ? BigNumber.from(0) : airdropAmount
   }, [airdropAmount, airdropClaimed])
 
-  // fetch characters supply function
-  const getCharactersSupply = useCallback(
-    async (qnft: QNFT, characters: Character[]) => {
-      const requestCharactersSupply = []
-      for (let i = 0; i < characters.length; i++) {
-        requestCharactersSupply.push(
-          qnft
-            .nftCountByCharacter(characters[i].id)
-            .then((val): number => val.toNumber()),
-        )
-      }
-      const resCharactersSupply: number[] = await Promise.all(
-        requestCharactersSupply,
-      )
-      setCharactersData(
-        characters.map((character, index) => ({
-          ...character,
-          maxSupply: charactersSupply[character.id],
-          currentSupply: resCharactersSupply[index],
-        })),
-      )
-      if (characterId !== 25 && characterId !== 26) {
-        setCharacterId(characterId - (characterId % 5) + skinIndex)
-      }
-    },
-    [skinIndex],
-  ) // Shouldn't put characterId as a callback dependency
-
-  // reload characters supply when skin changes
   useEffect(() => {
-    if (!qnft) return
-    const filteredCharacters = characters.filter(
+    if (characterId === specialIds.Minotaur) return
+    if (characterId === specialIds.Fish) return
+    setCharacterId(characterId - (characterId % skins.length) + skinIndex)
+  }, [skinIndex]) // Shouldn't put characterId as a callback dependency
+
+  const filteredCharacters = useMemo(() => {
+    return characters.filter(
       (character) =>
         character.skin === skins[skinIndex].skin ||
         character.skin === Skin.None,
     )
-    getCharactersSupply(qnft, filteredCharacters).catch((error) => {
-      console.error('getCharactersSupply error', error)
-    })
-  }, [getCharactersSupply, qnft, skinIndex])
+  }, [skinIndex])
+
+  useEffect(() => {
+    if (!qnft) return
+    Promise.all(filteredCharacters.map((x) => qnft.nftCountByCharacter(x.id)))
+      .then((resCharactersSupply) => {
+        setCharactersData(
+          filteredCharacters.map((character, index) => ({
+            ...character,
+            maxSupply: charactersSupply[character.id],
+            currentSupply: resCharactersSupply[index].toNumber(),
+          })),
+        )
+      })
+      .catch(setError)
+  }, [qnft, filteredCharacters])
 
   const characterPrice = useMemo(() => {
     return characters[characterId].mintPrice.mul(nonTokenMultiplier).div(100)

@@ -2,6 +2,11 @@ import { parseEther } from '@ethersproject/units'
 import { Creature, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, LockOption } from '../types/nft'
 
+export const specialIds = {
+  Minotaur: 25,
+  Fish: 26,
+}
+
 const backgrounds = [
   {
     id: 0,
@@ -211,7 +216,7 @@ for (const animalIndex in animals) {
 }
 
 characters.push({
-  id: 25,
+  id: specialIds.Minotaur,
   name: 'Minotaur',
   artist: artists.clive,
   creature: Creature.Minotaur,
@@ -227,7 +232,7 @@ characters.push({
 })
 
 characters.push({
-  id: 26,
+  id: specialIds.Fish,
   name: 'Fish',
   artist: artists.debbie,
   creature: Creature.Fish,
