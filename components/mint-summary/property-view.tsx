@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 
 export type KeyValue = {
@@ -14,14 +15,22 @@ export type IProps = HTMLAttributes<{}> & {
   value: Property
 }
 
-const PropertyView: FunctionComponent<IProps> = ({ value }: IProps) => {
+const PropertyView: FunctionComponent<IProps> = ({
+  value,
+  className,
+}: IProps) => {
   // TODO: Mint summary description to 1 line with ellipsis
   // since there are few fields that are long that could break whole style,
   // we need to make everything to not overflow specific number of letters in short description
   // and reduce them into ellipsis
   return (
     <>
-      <div className="text-sm leading-5 font-medium text-purple-900 mb-2 mt-4">
+      <div
+        className={classNames(
+          'text-sm leading-5 font-medium text-purple-900 mb-2',
+          className,
+        )}
+      >
         {value.title}
       </div>
       {value.keyValues.map((keyValue) => {
