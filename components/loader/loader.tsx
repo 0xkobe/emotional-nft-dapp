@@ -1,11 +1,19 @@
-import React, { FunctionComponent, HTMLAttributes } from 'react'
+import React, {
+  FunctionComponent,
+  HTMLAttributes,
+  PropsWithChildren,
+} from 'react'
 import IconSpinner from '../icon/spinner'
 
 export type IProps = HTMLAttributes<{}> & {
-  text?: string
+  title?: string
+  content?: JSX.Element
 }
 
-const Loader: FunctionComponent<IProps> = ({ text }: IProps) => {
+const Loader: FunctionComponent<IProps> = ({
+  title,
+  children,
+}: PropsWithChildren<any>) => {
   return (
     <div className="flex flex-col space-y-8 w-80 text-center mx-auto">
       <div className="flex justify-center">
@@ -13,8 +21,9 @@ const Loader: FunctionComponent<IProps> = ({ text }: IProps) => {
       </div>
       <div className="flex flex-col space-y-4">
         <h1 className="text-lg leading-6 font-semibold text-purple-900">
-          {text || 'Loading...'}
+          {title || 'Loading...'}
         </h1>
+        {children}
       </div>
     </div>
   )
