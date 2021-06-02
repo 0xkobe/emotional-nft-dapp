@@ -272,7 +272,6 @@ export default function Mint(): JSX.Element {
     if (!account) return // don't sign if account is not set
 
     // generate signature
-    console.log('Signing metadata using Metamask...')
     signTypedDataV4(
       payloadForSignatureEIP712v4(
         chain.id,
@@ -282,17 +281,13 @@ export default function Mint(): JSX.Element {
         nftName,
       ),
     )
-      .then((signature) => {
-        console.log('signature', signature)
-        setSignature(signature)
-      })
+      .then(setSignature)
       .catch((error) => {
         console.error('sign metadata error', error)
         setError(error.message)
         setIsMinting(false)
       })
     return () => {
-      console.log('setSignature(undefined)')
       setSignature(undefined)
     }
   }, [
@@ -310,7 +305,6 @@ export default function Mint(): JSX.Element {
     if (!signature) return
     if (!account) return
     // save meta
-    console.log('Saving metadata on backend...')
     // TODO: we could update the modal to display a loader
     createNFTOffChain(
       signature,
@@ -338,7 +332,6 @@ export default function Mint(): JSX.Element {
     if (!qnft) return
     if (!signer) return
     if (!metaId) return
-    console.log('Signing and sending transaction using Metamask...')
 
     const qnftWithSigner = qnft.connect(signer)
     const mintPromise = airdropSignature
@@ -389,7 +382,6 @@ export default function Mint(): JSX.Element {
   // wait for receipt
   useEffect(() => {
     if (!tx) return
-    console.log('Waiting for tx to be mined...')
     tx.wait()
       .then(setReceipt)
       .catch((error) => {
@@ -398,7 +390,6 @@ export default function Mint(): JSX.Element {
         setIsMinting(false)
       })
     return () => {
-      console.log('setReceipt(undefined)')
       setReceipt(undefined)
     }
   }, [tx])
@@ -411,7 +402,6 @@ export default function Mint(): JSX.Element {
     )
     const tokenId = transferEvent?.args?.tokenId
     if (!tokenId) throw new Error('tokenId is falsy')
-    console.log('Tx mined with success. Token id:', tokenId.toString())
     return tokenId.toString()
   }, [receipt])
 
