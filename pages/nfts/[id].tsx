@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import BackButton from '../../components/button/back-button'
 import IconCardPreview from '../../components/icon/cardpreview'
+import Loader from '../../components/loader/loader'
 import ModalError from '../../components/modal/modal-error'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
@@ -162,7 +163,8 @@ export default function PageNFT(): JSX.Element {
           />
         </div>
 
-        {isLoading && <div>...loading</div>}
+        {isLoading && <Loader />}
+
         {error && (
           <ModalError
             error={error}
