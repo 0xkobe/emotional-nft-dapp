@@ -19,7 +19,7 @@ export default function Wallet(): JSX.Element {
     abi.qnft,
   )
 
-  const [lockAmount, setLockAmount] = useState(BigNumber.from(0))
+  const [lockAmount, setLockAmount] = useState<BigNumber>()
   const [priceChanges, setPriceChanges] = useState<number[]>([])
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Wallet(): JSX.Element {
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
         <div className="flex flex-row items-center justify-between">
           <Title>Your Investor Space</Title>
-          <LockedTokenStat lockAmount={lockAmount} isLoading={isLoading} />
+          <LockedTokenStat lockAmount={lockAmount} />
         </div>
         <div className="bg-white border border-purple-100 shadow-sm p-8 rounded-2xl flex flex-col w-full space-y-8">
           <div className="flex flex-row items-center justify-between">
