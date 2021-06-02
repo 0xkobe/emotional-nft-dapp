@@ -24,11 +24,12 @@ export type IProps = HTMLAttributes<{}> & {
   lockOptions: LockOption[]
   lockOptionId: number
   qstkAmount: BigNumber
-  airdropAmount: BigNumber
+  freeAllocationAmount: BigNumber
   setLockOptionId: (id: number) => void
   setQstkAmount: (amount: BigNumber) => void
   setAirdropAmount: (amount: BigNumber) => void
   setAirdropSignature: (signature?: string) => void
+  setAirdropClaimed: (isClaimed: boolean) => void
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
@@ -40,11 +41,12 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   className,
   lockOptionId,
   qstkAmount,
-  airdropAmount,
+  freeAllocationAmount,
   setLockOptionId,
   setQstkAmount,
   setAirdropAmount,
   setAirdropSignature,
+  setAirdropClaimed,
 }: IProps) => {
   const lockOption = lockOptions[lockOptionId]
 
@@ -58,12 +60,8 @@ const AllocationWizard: FunctionComponent<IProps> = ({
     result: VerifyAirdropKeyResponse,
   ) => {
     if (!qAirdrop) return
-    const isUsed = await qAirdrop.claimed(result.signature)
-    if (isUsed) {
-      setAirdropAmount(BigNumber.from(0))
-      setAirdropSignature(undefined)
-      setAirdropKeyError('the airdrop key was already used')
-    }
+    const isClaimed = await qAirdrop.claimed(result.signature)
+    setAirdropClaimed(isClaimed)
     setAirdropAmount(result.amount)
     setAirdropSignature(result.signature)
     setAirdropKeyError('')
@@ -211,7 +209,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               <span className="mr-2">🎉</span>
               Congratulations, you are eligible to
               <span className="ml-1 font-semibold">
-                {bnToText(airdropAmount)} QSTK
+                {bnToText(freeAllocationAmount)} QSTK
               </span>
             </span>
           )}
@@ -235,7 +233,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             <img src="/quiver.svg" />
           </div>
           <span className="text-sm leading-5 font-semibold text-purple-900">
-            {bnToText(qstkAmount.add(airdropAmount))} QSTK
+            {bnToText(qstkAmount.add(freeAllocationAmount))} QSTK
           </span>
         </div>
       </div>

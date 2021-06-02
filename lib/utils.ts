@@ -19,18 +19,18 @@ export const formatDuration = (duration: number): string => {
   const month = 30 * day
   const year = 12 * month
   if (duration > year) { // more than 1 year
-    return `${Math.floor(duration/year)} years and ${Math.floor((duration%year)/month)} months`
+    return `${Math.floor(duration / year)} years and ${Math.floor((duration % year) / month)} months`
   }
   if (duration > month) { // more than 1 month
-    return `${Math.floor(duration/month)} months and ${Math.floor((duration%month)/day)} days`
+    return `${Math.floor(duration / month)} months and ${Math.floor((duration % month) / day)} days`
   }
   if (duration > day) { // more than 1 day
-    return `${Math.floor(duration/day)} days and ${Math.floor((duration%day)/hour)} hours`
+    return `${Math.floor(duration / day)} days and ${Math.floor((duration % day) / hour)} hours`
   }
   if (duration > hour) { // more than 1 hour
-    return `${Math.floor(duration/hour)} hours and ${Math.floor((duration%hour)/minute)} minutes`
+    return `${Math.floor(duration / hour)} hours and ${Math.floor((duration % hour) / minute)} minutes`
   }
-  return `${Math.floor(duration/minute)} minutes and ${Math.floor((duration%minute)/second)} seconds`
+  return `${Math.floor(duration / minute)} minutes and ${Math.floor((duration % minute) / second)} seconds`
 }
 
 // format number with comma
@@ -56,7 +56,7 @@ export function bnToInput(n: BigNumber): string {
 
 // format various types of user input to big number
 export function inputToBn(s: string): BigNumber {
-  return utils.parseEther(s)
+  return utils.parseEther(s.replaceAll(',', ''))
 }
 
 // verify airdrop key - off chain

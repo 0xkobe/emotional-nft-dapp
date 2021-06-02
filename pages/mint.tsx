@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ContractReceipt, ContractTransaction } from '@ethersproject/contracts'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '../components/button/button'
 import MintSummary from '../components/mint-summary/mint-summary'
 import AllocationWizard from '../components/mint-wizard/allocation-wizard'
@@ -71,6 +71,7 @@ export default function Mint(): JSX.Element {
   const [lockOptionId, setLockOptionId] = useState(0)
   const [airdropAmount, setAirdropAmount] = useState(BigNumber.from(0))
   const [airdropSignature, setAirdropSignature] = useState<string>()
+  const [airdropClaimed, setAirdropClaimed] = useState(false)
   const [availableMintAmount, setAvailableMintAmount] = useState<BigNumber>()
   const [availableFreeAllocation, setAvailableFreeAllocation] =
     useState<BigNumber>()
@@ -99,21 +100,12 @@ export default function Mint(): JSX.Element {
       })
   }, [qstk])
 
-  // reload characters supply when skin changes
-  useEffect(() => {
-    if (!qnft) return
-    const filteredCharacters = characters.filter(
-      (character) =>
-        character.skin === skins[skinIndex].skin ||
-        character.skin === Skin.None,
-    )
-    getCharactersSupply(qnft, filteredCharacters).catch((error) => {
-      console.error('getCharactersSupply error', error)
-    })
-  }, [qnft, skinIndex])
+  const freeAllocationAmount = useMemo(() => {
+    return airdropClaimed ? BigNumber.from(0) : airdropAmount
+  }, [airdropAmount, airdropClaimed])
 
   // fetch characters supply function
-  const getCharactersSupply = async (qnft: QNFT, characters: Character[]) => {
+  const getCharactersSupply = useCallback(async (qnft: QNFT, characters: Character[]) => {
     const requestCharactersSupply = []
     for (let i = 0; i < characters.length; i++) {
       requestCharactersSupply.push(
@@ -132,7 +124,23 @@ export default function Mint(): JSX.Element {
         currentSupply: resCharactersSupply[index],
       })),
     )
-  }
+    if (characterId !== 25 && characterId !== 26) {
+      setCharacterId(characterId - characterId % 5 + skinIndex)
+    }
+  }, [skinIndex]) // Shouldn't put characterId as a callback dependency
+
+  // reload characters supply when skin changes
+  useEffect(() => {
+    if (!qnft) return
+    const filteredCharacters = characters.filter(
+      (character) =>
+        character.skin === skins[skinIndex].skin ||
+        character.skin === Skin.None,
+    )
+    getCharactersSupply(qnft, filteredCharacters).catch((error) => {
+      console.error('getCharactersSupply error', error)
+    })
+  }, [getCharactersSupply, qnft, skinIndex])
 
   // calculate nft price
   const nftPrice = useMemo(() => {
@@ -141,14 +149,14 @@ export default function Mint(): JSX.Element {
       .mul(nonTokenMultiplier)
       .div(100)
     const tokenPrice = qstkAmount
-      .add(airdropAmount)
+      .add(freeAllocationAmount)
       .mul(qstkPrice)
       .mul(100 - lockOptions[lockOptionId].discount)
       .mul(tokenMultiplier)
       .div(10000)
       .div(BigNumber.from(10).pow(18))
     return nonTokenPrice.add(tokenPrice)
-  }, [airdropAmount, characterId, coinIndex, lockOptionId, qstkAmount])
+  }, [characterId, coinIndex, freeAllocationAmount, lockOptionId, qstkAmount])
 
   // calculate summary
   const summary = useMemo(() => {
@@ -210,30 +218,18 @@ export default function Mint(): JSX.Element {
           },
           {
             key: 'Free allocation',
-            value: bnToText(airdropAmount),
+            value: bnToText(freeAllocationAmount),
           },
           {
             key: 'Total to receive',
-            value: bnToText(qstkAmount.add(airdropAmount)),
+            value: bnToText(qstkAmount.add(freeAllocationAmount)),
           },
         ],
       })
     }
 
     return mintSummaryProperties
-  }, [
-    mintStep,
-    characterId,
-    skinIndex,
-    coinIndex,
-    backgroundIndex,
-    nftName,
-    minterName,
-    nftDescription,
-    qstkAmount,
-    lockOptionId,
-    airdropAmount,
-  ])
+  }, [characterId, skinIndex, coinIndex, backgroundIndex, mintStep, nftName, minterName, nftDescription, qstkAmount, lockOptionId, freeAllocationAmount])
 
   // calculate mint summary button name
   const mintSummaryBtnName = useMemo(() => {
@@ -343,27 +339,27 @@ export default function Mint(): JSX.Element {
     const qnftWithSigner = qnft.connect(signer)
     const mintPromise = airdropSignature
       ? qnftWithSigner.mintNftForAirdropUser(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          airdropAmount,
-          airdropSignature,
-          {
-            value: nftPrice,
-          },
-        )
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaId,
+        qstkAmount,
+        airdropAmount,
+        airdropSignature,
+        {
+          value: nftPrice,
+        },
+      )
       : qnftWithSigner.mintNft(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          {
-            value: nftPrice,
-          },
-        )
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaId,
+        qstkAmount,
+        {
+          value: nftPrice,
+        },
+      )
 
     mintPromise
       .then((tx) => {
@@ -505,11 +501,12 @@ export default function Mint(): JSX.Element {
         lockOptions={lockOptions}
         lockOptionId={lockOptionId}
         qstkAmount={qstkAmount}
-        airdropAmount={airdropAmount}
+        freeAllocationAmount={freeAllocationAmount}
         setLockOptionId={setLockOptionId}
         setQstkAmount={setQstkAmount}
         setAirdropAmount={setAirdropAmount}
         setAirdropSignature={setAirdropSignature}
+        setAirdropClaimed={setAirdropClaimed}
       />,
     ][mintStep]
   }
@@ -552,7 +549,7 @@ export default function Mint(): JSX.Element {
                   characterId: characterId,
                   favCoinId: coinIndex,
                   unlockTime: Date.now() / 1000 + lockOptions[lockOptionId].duration,
-                  lockAmount: qstkAmount.add(airdropAmount),
+                  lockAmount: qstkAmount.add(freeAllocationAmount),
                   withdrawn: false,
                   metaId: 0, // zero as none
                   author: minterName,
