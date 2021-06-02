@@ -6,11 +6,13 @@ import LockIcon from '../icon/lock'
 
 export type IProps = HTMLAttributes<{}> & {
   lockAmount: BigNumber
+  isLoading?: boolean
 }
 
 const LockedTokenStat: FunctionComponent<IProps> = ({
   lockAmount,
   className,
+  isLoading,
 }: IProps) => {
   return (
     <div
@@ -30,7 +32,8 @@ const LockedTokenStat: FunctionComponent<IProps> = ({
           Your Locked Token
         </span>
         <span className="text-xl leading-7 font-semibold text-purple-900">
-          {bnToText(lockAmount)} QSTK
+          {isLoading && '-'}
+          {!isLoading && <>{bnToText(lockAmount)} QSTK</>}
         </span>
       </div>
     </div>
