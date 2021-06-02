@@ -84,6 +84,7 @@ export default function Mint(): JSX.Element {
       })
       .catch((error) => {
         console.error('error during fetch of remaining qstk', error)
+        setError('error during fetch of remaining qstk')
       })
   }, [qnft])
 
@@ -96,6 +97,7 @@ export default function Mint(): JSX.Element {
       })
       .catch((error) => {
         console.error('error during fetch of remaining free allocation', error)
+        setError('error during fetch of remaining free allocation')
       })
   }, [qstk])
 
@@ -109,6 +111,7 @@ export default function Mint(): JSX.Element {
     )
     getCharactersSupply(qnft, filteredCharacters).catch((error) => {
       console.error('getCharactersSupply error', error)
+      setError('error during fetch of remaining supply')
     })
   }, [qnft, skinIndex])
 
@@ -308,6 +311,7 @@ export default function Mint(): JSX.Element {
     if (!account) return
     // save meta
     console.log('Saving metadata on backend...')
+    // TODO: we could update the modal to display a loader
     createNFTOffChain(
       signature,
       chain.id,
@@ -318,17 +322,13 @@ export default function Mint(): JSX.Element {
       nftName,
       Emotion.Normal, // FIXME: make the user choose the default emotion
     )
-      .then((metaId) => {
-        console.log('metaId', metaId)
-        setMetaId(metaId)
-      })
+      .then(setMetaId)
       .catch((error) => {
         console.error('metadata error', error)
         setError(error.message)
         setIsMinting(false)
       })
     return () => {
-      console.log('setMetaId(undefined)')
       setMetaId(undefined)
     }
   }, [signature, account, minterName, backgroundIndex, nftDescription, nftName])
@@ -365,18 +365,12 @@ export default function Mint(): JSX.Element {
           },
         )
 
-    mintPromise
-      .then((tx) => {
-        console.log('Tx signed and broadcasted with success', tx.hash)
-        setTx(tx)
-      })
-      .catch((error) => {
-        console.error('sign and broadcast tx error', error)
-        setError(error.error?.message || error.message)
-        setIsMinting(false)
-      })
+    mintPromise.then(setTx).catch((error) => {
+      console.error('sign and broadcast tx error', error)
+      setError(error.error?.message || error.message)
+      setIsMinting(false)
+    })
     return () => {
-      console.log('setTx(undefined)')
       setTx(undefined)
     }
   }, [
@@ -397,10 +391,7 @@ export default function Mint(): JSX.Element {
     if (!tx) return
     console.log('Waiting for tx to be mined...')
     tx.wait()
-      .then((receipt) => {
-        console.log('receipt', receipt)
-        setReceipt(receipt)
-      })
+      .then(setReceipt)
       .catch((error) => {
         console.error('receipt error', error)
         setError(error.message)
@@ -441,8 +432,8 @@ export default function Mint(): JSX.Element {
     if (tx) {
       return (
         <ModalProcessing
-          onRequestClose={() => console.error('cannot close this modal')}
-          onModalClose={() => console.error('cannot close this modal')}
+          onRequestClose={() => {}}
+          onModalClose={() => {}}
           isShown={true}
           transactionHash={tx.hash}
         />
@@ -457,8 +448,8 @@ export default function Mint(): JSX.Element {
             continue the Mint process
           </>
         }
-        onRequestClose={() => console.error('cannot close this modal')}
-        onModalClose={() => console.error('cannot close this modal')}
+        onRequestClose={() => {}}
+        onModalClose={() => {}}
         isShown
       ></ModalMetamask>
     )
@@ -469,7 +460,7 @@ export default function Mint(): JSX.Element {
     return (
       <ModalError
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => console.log('modal close')}
+        onModalClose={() => {}}
         isShown={true}
         error={error}
       />
@@ -551,7 +542,8 @@ export default function Mint(): JSX.Element {
                   tokenId: BigNumber.from(1), // random value
                   characterId: characterId,
                   favCoinId: coinIndex,
-                  unlockTime: Date.now() / 1000 + lockOptions[lockOptionId].duration,
+                  unlockTime:
+                    Date.now() / 1000 + lockOptions[lockOptionId].duration,
                   lockAmount: qstkAmount.add(airdropAmount),
                   withdrawn: false,
                   metaId: 0, // zero as none
