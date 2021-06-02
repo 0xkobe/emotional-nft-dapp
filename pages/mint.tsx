@@ -33,7 +33,7 @@ import useWallet from '../hooks/useWallet'
 import { createNFTOffChain } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
-import { QAirdrop, QNFT, QStk } from '../types/contracts'
+import { QAirdrop, QNFT, QNFTSettings, QStk } from '../types/contracts'
 import { Skin } from '../types/metadata'
 import { Character, Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
@@ -56,6 +56,12 @@ export default function Mint(): JSX.Element {
     abi.qAirdrop,
   )
 
+  // init qNFTSettings smart contract
+  const { contract: qnftSettings } = useContract<QNFTSettings>(
+    deployedAddresses.qnftSettings,
+    abi.qnftSettings,
+  )
+
   // form variables
   const [error, setError] = useState<string>()
   const [mintStep, setMintStep] = useState(0)
@@ -75,6 +81,7 @@ export default function Mint(): JSX.Element {
   const [availableMintAmount, setAvailableMintAmount] = useState<BigNumber>()
   const [availableFreeAllocation, setAvailableFreeAllocation] =
     useState<BigNumber>()
+  const [onlyAirdropUsers, setOnlyAirdropUsers] = useState(false)
 
   // fetch remaining qstk
   useEffect(() => {
@@ -99,6 +106,18 @@ export default function Mint(): JSX.Element {
         console.error('error during fetch of remaining free allocation', error)
       })
   }, [qstk])
+
+  // fetch onlyAirdropUsers in qnftSettings
+  useEffect(() => {
+    qnftSettings
+      ?.onlyAirdropUsers()
+      .then((x) => {
+        setOnlyAirdropUsers(x)
+      })
+      .catch((error) => {
+        console.error('error during fetch of onlyAirdropUsers qnftSettings', error)
+      })
+  }, [qnftSettings])
 
   const freeAllocationAmount = useMemo(() => {
     return airdropClaimed ? BigNumber.from(0) : airdropAmount
@@ -521,7 +540,8 @@ export default function Mint(): JSX.Element {
       () =>
         lockOptionId === undefined ||
         qstkAmount === undefined ||
-        qstkAmount.eq(0),
+        qstkAmount.eq(0) ||
+        onlyAirdropUsers && !airdropSignature
     ][mintStep]()
   }
 
