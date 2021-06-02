@@ -161,21 +161,31 @@ export default function Mint(): JSX.Element {
     })
   }, [getCharactersSupply, qnft, skinIndex])
 
-  // calculate nft price
-  const nftPrice = useMemo(() => {
-    const nonTokenPrice = characters[characterId].mintPrice
-      .add(favCoins[coinIndex].mintPrice)
+  const characterPrice = useMemo(() => {
+    return characters[characterId].mintPrice
       .mul(nonTokenMultiplier)
       .div(100)
-    const tokenPrice = qstkAmount
+  }, [characterId])
+
+  const favcoinPrice = useMemo(() => {
+    return favCoins[coinIndex].mintPrice
+      .mul(nonTokenMultiplier)
+      .div(100)
+  }, [coinIndex])
+
+  const tokenPrice = useMemo(() => {
+    return qstkAmount
       .add(freeAllocationAmount)
       .mul(qstkPrice)
       .mul(100 - lockOptions[lockOptionId].discount)
       .mul(tokenMultiplier)
       .div(10000)
       .div(BigNumber.from(10).pow(18))
-    return nonTokenPrice.add(tokenPrice)
-  }, [characterId, coinIndex, freeAllocationAmount, lockOptionId, qstkAmount])
+  }, [freeAllocationAmount, lockOptionId, qstkAmount])
+
+  const nftPrice = useMemo(() => {
+    return characterPrice.add(favcoinPrice).add(tokenPrice)
+  }, [characterPrice, favcoinPrice, tokenPrice])
 
   // calculate summary
   const summary = useMemo(() => {
@@ -587,6 +597,9 @@ export default function Mint(): JSX.Element {
           <aside>
             <MintSummary
               properties={summary}
+              characterPrice={`${bnToText(characterPrice)} ETH`}
+              favcoinPrice={`${bnToText(favcoinPrice)} ETH`}
+              tokenPrice={`${bnToText(tokenPrice)} ETH`}
               mintPrice={`${bnToText(nftPrice)} ETH`}
             >
               <span className="cursor-pointer">

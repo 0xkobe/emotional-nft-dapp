@@ -4,11 +4,17 @@ import PropertyView, { Property } from './property-view'
 
 export type IProps = HTMLAttributes<{}> & {
   properties: Property[]
+  characterPrice: string
+  favcoinPrice: string
+  tokenPrice: string
   mintPrice: string
 }
 
 const MintSummary: FunctionComponent<IProps> = ({
   properties,
+  characterPrice,
+  favcoinPrice,
+  tokenPrice,
   mintPrice,
   className,
   children,
@@ -27,11 +33,30 @@ const MintSummary: FunctionComponent<IProps> = ({
         {properties.map((property) => {
           return <PropertyView key={property.title} value={property} />
         })}
-      </div>
-      <div className="mt-4 rounded-2xl bg-purple-50 p-4">
-        <div className="grid grid-cols-2 gap-2 mb-4">
+        <div className="mt-4 text-sm leading-5 font-medium text-purple-900 mb-2">
+          NFT Mint Price
+        </div>
+        <div className="grid grid-cols-2 gap-2 mb-6">
+          <div className="text-xs leading-4 text-gray-500">
+            Character Price
+          </div>
+          <div className="text-xs leading-4 font-bold text-gray-500 text-right">
+            {characterPrice}
+          </div>
+          <div className="text-xs leading-4 text-gray-500">
+            Favcoin Price
+          </div>
+          <div className="text-xs leading-4 font-bold text-gray-500 text-right">
+            {favcoinPrice}
+          </div>
+          <div className="text-xs leading-4 text-gray-500">
+            Token Price
+          </div>
+          <div className="text-xs leading-4 font-bold text-gray-500 text-right">
+            {tokenPrice}
+          </div>
           <div className="text-sm leading-5 font-semibold text-purple-900">
-            NFT Mint Price
+            Total
           </div>
           <div className="text-sm leading-5 font-semibold text-purple-700 text-right">
             {mintPrice}
