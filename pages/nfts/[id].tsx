@@ -206,28 +206,33 @@ export default function PageNFT(): JSX.Element {
                       Design Properties
                     </h3>
 
-                    <div className="flex flex-col space-y-4">
-                      <div className="grid grid-cols-4 gap-8">
-                        {favCoin && (
-                          <IconText
-                            text={favCoin.meta.name}
-                            icon={favCoin.meta.icon}
-                          />
-                        )}
-                        {character && (
-                          <IconText
-                            text={character.name}
-                            icon={character.emotions.normal}
-                          />
-                        )}
-                        {skin && <IconText text={skin.skin} icon={skin.icon} />}
-                        {background && (
-                          <IconText
-                            text={background.name}
-                            icon={background.image}
-                          />
-                        )}
-                      </div>
+                    <div className="flex flex-row justify-between space-x-3 content-center">
+                      {favCoin && (
+                        <IconText
+                          text={favCoin.meta.name}
+                          icon={favCoin.meta.icon}
+                          fullRounded
+                        />
+                      )}
+                      {character && (
+                        <IconText
+                          text={character.name}
+                          icon={character.emotions.normal}
+                        />
+                      )}
+                      {skin && (
+                        <IconText
+                          text={skin.skin}
+                          icon={skin.icon}
+                          fullRounded
+                        />
+                      )}
+                      {background && (
+                        <IconText
+                          text={background.name}
+                          icon={background.image}
+                        />
+                      )}
                     </div>
 
                     <h3 className="text-base leading-6 font-medium text-purple-900 mt-8 mb-4">
