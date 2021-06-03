@@ -41,11 +41,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
             </>
           }
         >
-          <Button
-            onClick={() => {
-              activate(injectedConnector).catch(setError)
-            }}
-          >
+          <Button onClick={() => activate(injectedConnector).catch(setError)}>
             Metamask
           </Button>
           <Button
