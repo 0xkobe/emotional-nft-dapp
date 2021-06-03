@@ -12,6 +12,7 @@ import Title from '../components/title/title'
 import { abi, deployedAddresses } from '../data/smartContract'
 import useUserNFTs from '../hooks/useUserNFTs'
 import { fetchPercentages } from '../lib/coingecko'
+import { getCharacter } from '../lib/nft'
 
 export default function Wallet(): JSX.Element {
   const { nfts, error, isLoading } = useUserNFTs(
@@ -78,7 +79,11 @@ export default function Wallet(): JSX.Element {
                     key={i}
                     className="cursor-pointer"
                     changePercentage={priceChanges[i]}
-                    nft={nft}
+                    characterId={nft.characterId}
+                    favCoinId={nft.favCoinId}
+                    backgroundId={nft.backgroundId}
+                    skin={getCharacter(nft.characterId).skin}
+                    name={nft.name}
                     action={<IconCardView />}
                   />
                 </a>

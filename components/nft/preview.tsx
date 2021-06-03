@@ -1,4 +1,5 @@
 import { FunctionComponent, HTMLAttributes } from 'react'
+import { getCharacter } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
 import IconClose from '../icon/close'
 import Modal from '../modal/modal'
@@ -35,7 +36,16 @@ const NFTPreview: FunctionComponent<IProps> = ({
         </div>
         <div className="flex flex-row space-x-8">
           {emotions.map((emotion) => (
-            <NFTCard key={emotion} small nft={nft} forceEmotion={emotion} />
+            <NFTCard
+              key={emotion}
+              small
+              forceEmotion={emotion}
+              characterId={nft.characterId}
+              favCoinId={nft.favCoinId}
+              backgroundId={nft.backgroundId}
+              skin={getCharacter(nft.characterId).skin}
+              name={nft.name}
+            />
           ))}
         </div>
       </div>

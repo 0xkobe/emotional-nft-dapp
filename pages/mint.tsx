@@ -79,10 +79,10 @@ export default function Mint(): JSX.Element {
   // form variables
   const [error, setError] = useState<string>()
   const [mintStep, setMintStep] = useState(0)
-  const [characterId, setCharacterId] = useState(0)
+  const [characterId, setCharacterId] = useState<number>()
   const [skinIndex, setSkinIndex] = useState(0)
   const [coinIndex, setCoinIndex] = useState(0)
-  const [backgroundIndex, setBackgroundIndex] = useState(0)
+  const [backgroundIndex, setBackgroundIndex] = useState<number>()
   const [charactersData, setCharactersData] = useState([] as CharacterOption[])
   const [nftName, setNftName] = useState('')
   const [minterName, setMinterName] = useState('')
@@ -151,6 +151,7 @@ export default function Mint(): JSX.Element {
   }, [airdropAmount, airdropClaimed])
 
   useEffect(() => {
+    if (characterId === undefined) return
     if (characterId === specialIds.Minotaur) return
     if (characterId === specialIds.Fish) return
     setCharacterId(characterId - (characterId % skins.length) + skinIndex)
@@ -179,7 +180,19 @@ export default function Mint(): JSX.Element {
       .catch(setError)
   }, [qnft, filteredCharacters])
 
+  // unselect character if its supply is 0
+  useEffect(() => {
+    const characterData = charactersData.find(
+      (character) => character.id === characterId,
+    )
+    if (!characterData) return
+    const availableSupply =
+      characterData.maxSupply - characterData.currentSupply
+    if (availableSupply === 0) setCharacterId(undefined)
+  }, [charactersData, characterId])
+
   const characterPrice = useMemo(() => {
+    if (characterId === undefined) return BigNumber.from(0)
     return characters[characterId].mintPrice.mul(nonTokenMultiplier).div(100)
   }, [characterId])
 
@@ -209,7 +222,8 @@ export default function Mint(): JSX.Element {
         keyValues: [
           {
             key: 'Animal',
-            value: characters[characterId].name,
+            value:
+              characterId === undefined ? '-' : characters[characterId].name,
           },
           {
             key: 'Skin',
@@ -221,7 +235,10 @@ export default function Mint(): JSX.Element {
           },
           {
             key: 'Background',
-            value: backgrounds[backgroundIndex].name,
+            value:
+              backgroundIndex === undefined
+                ? '-'
+                : backgrounds[backgroundIndex].name,
           },
         ],
       },
@@ -335,6 +352,7 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!isMinting) return
     if (!account) return // don't sign if account is not set
+    if (backgroundIndex == undefined) return
 
     // generate signature
     signTypedDataV4(
@@ -371,6 +389,7 @@ export default function Mint(): JSX.Element {
   useEffect(() => {
     if (!signature) return
     if (!account) return
+    if (backgroundIndex == undefined) return
     // TODO: we could update the modal to display a loader
 
     // save bulk meta
@@ -438,6 +457,7 @@ export default function Mint(): JSX.Element {
     if (!signer) return
     if (!metaIds) return
     if (metaIds.length === 0) return
+    if (characterId === undefined) return
 
     const qnftWithSigner = qnft.connect(signer)
     let mintPromise
@@ -646,25 +666,11 @@ export default function Mint(): JSX.Element {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
                 previewEmotion
-                nft={{
-                  tokenId: BigNumber.from(1), // random value
-                  characterId: characterId,
-                  favCoinId: coinIndex,
-                  unlockTime:
-                    Date.now() / 1000 + lockOptions[lockOptionId].duration,
-                  lockAmount: qstkAmount.add(freeAllocationAmount),
-                  withdrawn: false,
-                  metaId: 0, // zero as none
-                  author: minterName,
-                  backgroundId: backgroundIndex,
-                  description: nftDescription,
-                  name: nftName, // nft name
-                  chainId: chain.id,
-                  creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
-                  defaultEmotion: Emotion.Normal,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                }}
+                characterId={characterId}
+                favCoinId={coinIndex}
+                backgroundId={backgroundIndex}
+                skin={skins[skinIndex].skin}
+                name={nftName} // nft name
               />
               {step()}
             </div>

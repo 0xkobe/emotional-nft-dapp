@@ -4,7 +4,7 @@ import BackgroundItem from './background-item'
 
 export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   backgrounds: BackgroundOption[]
-  selectedIndex: number
+  selectedIndex?: number
   onChange: (index: number) => void
 }
 

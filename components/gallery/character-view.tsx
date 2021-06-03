@@ -4,7 +4,7 @@ import CharacterItem from './character-item'
 
 export type IProps = Omit<HTMLAttributes<{}>, 'onChange'> & {
   characters: CharacterOption[]
-  selectedCharacterId: number
+  selectedCharacterId?: number
   onChange: (index: number) => void
 }
 
