@@ -88,7 +88,11 @@ const Select: FunctionComponent<IProps> = ({
       )}
       ref={wrapperRef}
     >
-      <SecondaryButton onClick={toggleDropdown} className="inline-flex w-full justify-between" shadow>
+      <SecondaryButton
+        onClick={toggleDropdown}
+        className="inline-flex w-full justify-between"
+        shadow
+      >
         {(!canSearch || !isOpen) && (
           <>
             <div>
