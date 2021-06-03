@@ -4,6 +4,7 @@ export function payloadForSignatureEIP712v4(
   backgroundId: number,
   description: string,
   name: string,
+  bulkMintNumber?: number,
 ) {
   const typedData = {
     types: {
@@ -32,6 +33,7 @@ export function payloadForSignatureEIP712v4(
       backgroundId,
       description,
       name,
+      bulkMintNumber,
     },
   }
   return typedData

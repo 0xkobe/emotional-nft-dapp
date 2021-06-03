@@ -30,6 +30,10 @@ export type IProps = HTMLAttributes<{}> & {
   setAirdropAmount: (amount: BigNumber) => void
   setAirdropSignature: (signature?: string) => void
   setAirdropClaimed: (isClaimed: boolean) => void
+
+  // bulk mint
+  bulkMintIsActive?: boolean
+  setBulkMintNumber?: (number: number) => void
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
@@ -47,6 +51,10 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   setAirdropAmount,
   setAirdropSignature,
   setAirdropClaimed,
+
+  // bulk mint
+  bulkMintIsActive,
+  setBulkMintNumber,
 }: IProps) => {
   const lockOption = lockOptions[lockOptionId]
 
@@ -186,57 +194,87 @@ const AllocationWizard: FunctionComponent<IProps> = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-4 w-full">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
-          <span>Whitelist key (Airdrop key)</span>
-          <Tooltip
-            tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
-            tooltipClassName="-left-28 w-56"
-          >
-            <IconInformation />
-          </Tooltip>
-        </div>
-        <div className="flex flex-col space-y-2">
-          <Input
-            className="w-full"
-            placeholder="000000000000003..."
-            value={airdropKey}
-            onChange={onChangeAirdropKey}
-            isError={airdropKeyError !== '' && airdropKey !== ''}
-          />
-          {airdropKeyError === '' && airdropKey && (
-            <span className="text-xs leading-4 font-normal text-gray-500">
-              <span className="mr-2">🎉</span>
-              Congratulations, you are eligible to
-              <span className="ml-1 font-semibold">
-                {bnToText(freeAllocationAmount)} QSTK
-              </span>
-            </span>
-          )}
-          {airdropKeyError !== '' && airdropKey && (
-            <div className="text-red-500 text-xs">{airdropKeyError}</div>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
-          <span>Total Token to Receive</span>
-          <Tooltip
-            tooltip="The total QSTK amount you receive is defined by “QSTK you purchase + the amount allocated for your whitelist key”."
-            tooltipClassName="-left-28 w-56"
-          >
-            <IconInformation />
-          </Tooltip>
-        </div>
-        <div className="flex flex-row space-x-2 items-center">
-          <div className="flex w-8 h-8 p-2 bg-white rounded-2xl border border-solid border-gray-200">
-            <img src="/quiver.svg" />
+      {!bulkMintIsActive && (
+        <>
+          <div className="flex flex-col space-y-4 w-full">
+            <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
+              <span>Whitelist key (Airdrop key)</span>
+              <Tooltip
+                tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
+                tooltipClassName="-left-28 w-56"
+              >
+                <IconInformation />
+              </Tooltip>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Input
+                className="w-full"
+                placeholder="000000000000003..."
+                value={airdropKey}
+                onChange={onChangeAirdropKey}
+                isError={airdropKeyError !== '' && airdropKey !== ''}
+              />
+              {airdropKeyError === '' && airdropKey && (
+                <span className="text-xs leading-4 font-normal text-gray-500">
+                  <span className="mr-2">🎉</span>
+                  Congratulations, you are eligible to
+                  <span className="ml-1 font-semibold">
+                    {bnToText(freeAllocationAmount)} QSTK
+                  </span>
+                </span>
+              )}
+              {airdropKeyError !== '' && airdropKey && (
+                <div className="text-red-500 text-xs">{airdropKeyError}</div>
+              )}
+            </div>
           </div>
-          <span className="text-sm leading-5 font-semibold text-purple-900">
-            {bnToText(qstkAmount.add(freeAllocationAmount))} QSTK
-          </span>
+          <div className="flex flex-col w-full p-4 bg-gray-50 rounded-2xl space-y-4">
+            <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
+              <span>Total Token to Receive</span>
+              <Tooltip
+                tooltip="The total QSTK amount you receive is defined by “QSTK you purchase + the amount allocated for your whitelist key”."
+                tooltipClassName="-left-28 w-56"
+              >
+                <IconInformation />
+              </Tooltip>
+            </div>
+            <div className="flex flex-row space-x-2 items-center">
+              <div className="flex w-8 h-8 p-2 bg-white rounded-2xl border border-solid border-gray-200">
+                <img src="/quiver.svg" />
+              </div>
+              <span className="text-sm leading-5 font-semibold text-purple-900">
+                {bnToText(qstkAmount.add(freeAllocationAmount))} QSTK
+              </span>
+            </div>
+          </div>
+        </>
+      )}
+
+      {bulkMintIsActive && (
+        <div className="flex flex-col space-y-4 w-full">
+          <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
+            <span>Number of NFT to mint</span>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Input
+              className="w-full"
+              type="number"
+              step="1"
+              min="1"
+              placeholder="1"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const number = parseInt(e.target.value)
+                if (
+                  setBulkMintNumber &&
+                  !Number.isNaN(number) &&
+                  Number.isInteger(number)
+                )
+                  setBulkMintNumber(number)
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

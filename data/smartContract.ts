@@ -3,6 +3,7 @@ import { chain } from './chains'
 export const abi = {
   qnft: require('../abi/QNFT.json'),
   qnftSettings: require('../abi/QNFTSettings.json'),
+  qSettings: require('../abi/QSettings.json'),
   qstk: require('../abi/QStk.json'),
   qAirdrop: require('../abi/QAirdrop.json'),
 }
