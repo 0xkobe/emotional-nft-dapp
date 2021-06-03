@@ -1,10 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
-import BackButton from '../../components/button/back-button'
+import SecondaryButton from '../../components/button/secondary-button'
+import IconBack from '../../components/icon/back'
 import IconCardPreview from '../../components/icon/cardpreview'
 import Loader from '../../components/loader/loader'
 import ModalError from '../../components/modal/modal-error'
@@ -138,13 +138,12 @@ export default function PageNFT(): JSX.Element {
         <title>NFT</title> {/* What do you think of adding nft name here? */}
       </Head>
 
-      <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-12">
-        <div className="flex flex-row justify-between">
-          <Link href="/wallet">
-            <a>
-              <BackButton text="Back to your space" />
-            </a>
-          </Link>
+      <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4">
+        <div className="flex flex-row justify-between mb-8">
+          <SecondaryButton link href="/wallet" shadow>
+            <IconBack className="inline-block mr-2" />
+            <span>Back to your space</span>
+          </SecondaryButton>
           <Pagination
             hasPrev={tokenIndex ? tokenIndex > 0 : false}
             hasNext={

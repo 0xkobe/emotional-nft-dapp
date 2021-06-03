@@ -9,15 +9,15 @@ const IconBack: FunctionComponent<IProps> = (props) => {
   return (
     <svg
       className={classNames(props.className)}
-      width="20"
-      height="10"
-      viewBox="0 0 20 10"
+      width="14"
+      height="8"
+      viewBox="0 0 14 8"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M5 9L1 5M1 5L5 1M1 5L19 5"
-        stroke="#6B7280"
+        d="M3.66667 6.66671L1 4.00004M1 4.00004L3.66667 1.33337M1 4.00004L13 4.00004"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
