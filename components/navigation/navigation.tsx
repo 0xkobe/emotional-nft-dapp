@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import AccountMenu from '../account/menu'
+import SecondaryButton from '../button/secondary-button'
 import SocialMenu from './social-menu'
 
 export type IProps = HTMLAttributes<any> & {
@@ -48,22 +49,19 @@ const Navigation: FunctionComponent<IProps> = (props) => {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex-1 flex items-center justify-center sm:items-center sm:justify-start">
                 <Logo />
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-2">
                   {navigation.map((x) => (
-                    <Link key={x.href} href={x.href}>
-                      <a
-                        className={classNames(
-                          'inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow',
-                          x.href === props.route
-                            ? 'text-purple-700 border-purple-700 bg-purple-50 shadow'
-                            : 'text-purple-900 border-purple-100',
-                        )}
-                      >
-                        {x.text}
-                      </a>
-                    </Link>
+                    <SecondaryButton
+                      key={x.href}
+                      href={x.href}
+                      link
+                      shadow
+                      active={x.href === props.route}
+                    >
+                      {x.text}
+                    </SecondaryButton>
                   ))}
                 </div>
               </div>
