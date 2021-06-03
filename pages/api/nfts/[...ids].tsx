@@ -1,22 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { StaticJsonRpcProvider } from '@ethersproject/providers'
 import createHttpError, { isHttpError } from 'http-errors'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { chain } from '../../../data/chains'
 import { abi, deployedAddresses } from '../../../data/smartContract'
 import { fetchNFT, getCharacter } from '../../../lib/nft'
+import { remoteProvider } from '../../../lib/remote-provider'
 import { APINftMetadataResponse, DisplayType, Traits } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
-
-// init ethereum provider
-const provider = new StaticJsonRpcProvider({
-  allowGzip: true,
-  url: chain.remoteProvider,
-})
-
-// // init smart contract
-const qnft = new Contract(deployedAddresses.qnft, abi.qnft, provider) as QNFT
 
 export default async (
   req: NextApiRequest,
@@ -32,6 +22,12 @@ export default async (
     const tokenId = BigNumber.from(ids[0])
 
     // fetch nft
+    // // init smart contract
+    const qnft = new Contract(
+      deployedAddresses.qnft,
+      abi.qnft,
+      remoteProvider,
+    ) as QNFT
     const nft = await fetchNFT(qnft, tokenId)
     const character = getCharacter(nft.characterId)
 

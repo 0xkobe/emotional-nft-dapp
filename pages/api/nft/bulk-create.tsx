@@ -1,10 +1,9 @@
 import { Contract } from '@ethersproject/contracts'
 import { recoverTypedSignature_v4 } from 'eth-sig-util'
-import { providers as ethersProviders } from 'ethers'
 import createHttpError, { isHttpError } from 'http-errors'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { chain } from '../../../data/chains'
 import { abi, deployedAddresses } from '../../../data/smartContract'
+import { remoteProvider } from '../../../lib/remote-provider'
 import { payloadForSignatureEIP712v4 } from '../../../lib/signature'
 import { supabase } from '../../../lib/supabase'
 import {
@@ -13,8 +12,6 @@ import {
 } from '../../../types/api'
 import { QSettings } from '../../../types/contracts'
 import { NFTOffChain } from '../../../types/nft'
-
-const provider = new ethersProviders.StaticJsonRpcProvider(chain.remoteProvider)
 
 export default async (
   req: NextApiRequest,
@@ -68,7 +65,7 @@ export default async (
     const qSettings = new Contract(
       deployedAddresses.qSettings,
       abi.qSettings,
-      provider,
+      remoteProvider,
     ) as QSettings
     const manager = await qSettings.getManager()
 
