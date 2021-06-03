@@ -18,19 +18,33 @@ export const formatDuration = (duration: number): string => {
   const day = 24 * hour
   const month = 30 * day
   const year = 12 * month
-  if (duration > year) { // more than 1 year
-    return `${Math.floor(duration / year)} years and ${Math.floor((duration % year) / month)} months`
+  if (duration > year) {
+    // more than 1 year
+    return `${Math.floor(duration / year)} years and ${Math.floor(
+      (duration % year) / month,
+    )} months`
   }
-  if (duration > month) { // more than 1 month
-    return `${Math.floor(duration / month)} months and ${Math.floor((duration % month) / day)} days`
+  if (duration > month) {
+    // more than 1 month
+    return `${Math.floor(duration / month)} months and ${Math.floor(
+      (duration % month) / day,
+    )} days`
   }
-  if (duration > day) { // more than 1 day
-    return `${Math.floor(duration / day)} days and ${Math.floor((duration % day) / hour)} hours`
+  if (duration > day) {
+    // more than 1 day
+    return `${Math.floor(duration / day)} days and ${Math.floor(
+      (duration % day) / hour,
+    )} hours`
   }
-  if (duration > hour) { // more than 1 hour
-    return `${Math.floor(duration / hour)} hours and ${Math.floor((duration % hour) / minute)} minutes`
+  if (duration > hour) {
+    // more than 1 hour
+    return `${Math.floor(duration / hour)} hours and ${Math.floor(
+      (duration % hour) / minute,
+    )} minutes`
   }
-  return `${Math.floor(duration / minute)} minutes and ${Math.floor((duration % minute) / second)} seconds`
+  return `${Math.floor(duration / minute)} minutes and ${Math.floor(
+    (duration % minute) / second,
+  )} seconds`
 }
 
 // format number with comma
@@ -51,7 +65,7 @@ export function bnToText(n: BigNumber): string {
 
 // format big number to user friendly input - can add comma later if needed
 export function bnToInput(n: BigNumber): string {
-  return utils.formatEther(n)
+  return utils.formatEther(n).replace(/.0$/, '')
 }
 
 // format various types of user input to big number

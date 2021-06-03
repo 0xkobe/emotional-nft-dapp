@@ -1,6 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
-import React, { FunctionComponent, HTMLAttributes, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FunctionComponent,
+  HTMLAttributes,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { tokenMultiplier, verifier } from '../../data/nft'
 import {
   bnToInput,
@@ -8,7 +15,6 @@ import {
   inputToBn,
   verifyAirdropKey,
 } from '../../lib/utils'
-import { VerifyAirdropKeyResponse } from '../../types/airdrop'
 import { QAirdrop } from '../../types/contracts'
 import { LockOption } from '../../types/nft'
 import IconInformation from '../icon/information'
@@ -34,6 +40,10 @@ export type IProps = HTMLAttributes<{}> & {
   // bulk mint
   bulkMintIsActive?: boolean
   setBulkMintNumber?: (number: number) => void
+
+  // airdrop key
+  airdropKey?: string
+  setAirdropKey: (key: string) => void
 }
 
 const AllocationWizard: FunctionComponent<IProps> = ({
@@ -55,54 +65,56 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   // bulk mint
   bulkMintIsActive,
   setBulkMintNumber,
+
+  // airdrop key
+  airdropKey, // e.g. 000000000000003643aa64798604000006ad9f847018909faf08411804c204b32b93530117370faeb41860e1dcb3ed2d24ce720350208bafa2aad3e2ce150daa98bce085b79b5050f69579aa0caa82ce1c
+  setAirdropKey,
 }: IProps) => {
   const lockOption = lockOptions[lockOptionId]
 
-  const [qstkAmountInput, setQstkAmountInput] = useState('')
-  const [qstkAmountError, setQstkAmountError] = useState('')
-  // e.g. 000000000000003643aa64798604000006ad9f847018909faf08411804c204b32b93530117370faeb41860e1dcb3ed2d24ce720350208bafa2aad3e2ce150daa98bce085b79b5050f69579aa0caa82ce1c
-  const [airdropKey, setAirdropKey] = useState('')
   const [airdropKeyError, setAirdropKeyError] = useState('')
 
-  const validateAirdropKeyOnChain = async (
-    result: VerifyAirdropKeyResponse,
-  ) => {
-    if (!qAirdrop) return
-    const isClaimed = await qAirdrop.claimed(result.signature)
-    setAirdropClaimed(isClaimed)
-    setAirdropAmount(result.amount)
-    setAirdropSignature(result.signature)
-    setAirdropKeyError('')
-  }
+  const airdropResult = useMemo(() => {
+    if (!account) return null
+    if (!airdropKey) return null
+    return verifyAirdropKey(verifier, account, airdropKey)
+  }, [account, airdropKey])
 
-  const onChangeQstkAmountInput = (value: string) => {
-    setQstkAmountInput(value)
-    try {
-      const bn = inputToBn(value)
-      if (bn.lt(lockOption.minAmount)) {
-        setQstkAmountError('lower than min')
-      } else if (bn.gt(lockOption.maxAmount)) {
-        setQstkAmountError('bigger than max')
-      } else {
-        setQstkAmountError('')
-        setQstkAmount(bn)
-      }
-    } catch (err) {
-      setQstkAmountError(err.message)
+  const qstkAmountError = useMemo(() => {
+    if (!qstkAmount) return null
+    if (qstkAmount.lt(lockOption.minAmount)) {
+      return 'lower than min'
     }
-  }
+    if (qstkAmount.gt(lockOption.maxAmount)) {
+      return 'bigger than max'
+    }
+    return null
+  }, [qstkAmount])
 
-  const onChangeAirdropKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAirdropKey(e.target.value)
-    if (!account) return
-    const result = verifyAirdropKey(verifier, account, e.target.value)
-    if (!result.isValid) {
+  const qstkAmountInput = useMemo(() => {
+    if (!qstkAmount) return ''
+    if (qstkAmount.eq(0)) return ''
+    return bnToInput(qstkAmount)
+  }, [qstkAmount])
+
+  useEffect(() => {
+    if (!qAirdrop) return
+    if (!airdropResult) return
+    if (!airdropResult.isValid) {
       setAirdropAmount(BigNumber.from(0))
       setAirdropKeyError('invalid airdrop key')
-    } else {
-      void validateAirdropKeyOnChain(result)
+      return
     }
-  }
+    qAirdrop
+      .claimed(airdropResult.signature)
+      .then((isClaimed) => {
+        setAirdropClaimed(isClaimed)
+        setAirdropAmount(airdropResult.amount)
+        setAirdropSignature(airdropResult.signature)
+        setAirdropKeyError('')
+      })
+      .catch(setAirdropKeyError)
+  }, [setAirdropAmount, setAirdropKeyError, qAirdrop, airdropResult])
 
   return (
     <div className={classNames(className, 'flex flex-col space-y-8')}>
@@ -142,11 +154,16 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               className="w-full"
               placeholder="Amount"
               unit="QSTK"
+              type="number"
+              min={bnToInput(lockOption.minAmount)}
+              max={bnToInput(lockOption.maxAmount)}
               value={qstkAmountInput}
-              isError={qstkAmountError != ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onChangeQstkAmountInput(e.target.value)
-              }
+              isError={!!qstkAmountError}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                try {
+                  setQstkAmount(inputToBn(e.target.value))
+                } catch (e) {}
+              }}
             />
             <div className="flex flex-row justify-between">
               <span className="text-xs leading-4 font-normal text-gray-500">
@@ -155,14 +172,12 @@ const AllocationWizard: FunctionComponent<IProps> = ({
               </span>
               <a
                 className="text-xs leading-4 font-normal text-purple-700 cursor-pointer"
-                onClick={() =>
-                  onChangeQstkAmountInput(bnToInput(lockOption.maxAmount))
-                }
+                onClick={() => setQstkAmount(lockOption.maxAmount)}
               >
                 MAX
               </a>
             </div>
-            {qstkAmountError != '' && (
+            {qstkAmountError && (
               <div className="text-red-500 text-xs">{qstkAmountError}</div>
             )}
           </div>
@@ -211,7 +226,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
                 className="w-full"
                 placeholder="000000000000003..."
                 value={airdropKey}
-                onChange={onChangeAirdropKey}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setAirdropKey(e.target.value)
+                }
                 isError={airdropKeyError !== '' && airdropKey !== ''}
               />
               {airdropKeyError === '' && airdropKey && (
