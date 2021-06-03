@@ -12,25 +12,23 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   const { account, chainId, activate, error: walletError } = useWallet()
   const [error, setError] = useState<Error>()
 
-  const modalError =
-    (walletError && (
-      <ModalError
-        error={walletError}
-        isShown
-        onRequestClose={() => setError(undefined)}
-      ></ModalError>
-    )) ||
-    (error && (
-      <ModalError
-        error={error}
-        isShown
-        onRequestClose={() => setError(undefined)}
-      ></ModalError>
-    ))
   if (!account)
     return (
       <>
-        {modalError}
+        {walletError && (
+          <ModalError
+            error={walletError}
+            isShown
+            onRequestClose={() => setError(undefined)}
+          ></ModalError>
+        )}
+        {error && (
+          <ModalError
+            error={error}
+            isShown
+            onRequestClose={() => setError(undefined)}
+          ></ModalError>
+        )}
         <Metamask
           className="bg-white border border-purple-100 rounded-2xl p-8"
           title="Connect Your Wallet"
