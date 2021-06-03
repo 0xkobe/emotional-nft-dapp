@@ -6,6 +6,7 @@ export type IProps = AnchorHTMLAttributes<{}> & {
   link?: boolean
   disabled?: boolean
   shadow?: boolean
+  active?: boolean
 }
 
 const SecondaryButton: FunctionComponent<IProps> = ({
@@ -14,6 +15,7 @@ const SecondaryButton: FunctionComponent<IProps> = ({
   link,
   disabled,
   shadow,
+  active,
   className,
   ...rest
 }) => {
@@ -21,7 +23,10 @@ const SecondaryButton: FunctionComponent<IProps> = ({
     return (
       <a
         className={classNames(
-          'text-xs leading-4 font-medium rounded-xl px-3 py-2 text-center bg-white text-purple-900 border border-purple-100 hover:border-purple-700 hover:text-purple-700',
+          'text-xs leading-4 font-medium rounded-xl px-3 py-2 text-center bg-white border hover:border-purple-700 hover:text-purple-700',
+          active
+            ? 'border-purple-700 text-purple-700 bg-purple-50'
+            : 'text-purple-900 border border-purple-100',
           shadow && 'shadow-sm hover:shadow-md',
           (onClick || href) && 'cursor-pointer',
           className,

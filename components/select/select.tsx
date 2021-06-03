@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
+import SecondaryButton from '../button/secondary-button'
 import IconChevron from '../icon/chevron'
 
 export type Option = {
@@ -87,12 +88,7 @@ const Select: FunctionComponent<IProps> = ({
       )}
       ref={wrapperRef}
     >
-      <div
-        className={classNames(
-          'flex flex-row w-full items-center justify-between h-10 p-2 pr-8 border border-solid border-purple-100 rounded-2xl shadow hover:shadow-md text-sm leading-5 font-normal text-purple-900 focus:ring-2 ring-purple-400',
-        )}
-        onClick={toggleDropdown}
-      >
+      <SecondaryButton onClick={toggleDropdown} className="inline-flex w-full justify-between" shadow>
         {(!canSearch || !isOpen) && (
           <>
             <div>
@@ -106,7 +102,7 @@ const Select: FunctionComponent<IProps> = ({
             </div>
             <IconChevron
               className={classNames(
-                'absolute top-4 right-4 transition duration-400 transition-transform fill-current text-purple-700',
+                'mt-2 duration-400 transition-transform fill-current text-purple-700',
                 isOpen ? 'transform rotate-180' : '',
               )}
             />
@@ -125,7 +121,7 @@ const Select: FunctionComponent<IProps> = ({
             }
           />
         )}
-      </div>
+      </SecondaryButton>
       {isOpen && filteredOptions.length > 0 && (
         <div className="absolute left-0 max-h-48 min-w-full z-50 border border-purple-400 overflow-auto">
           {filteredOptions.map(({ option, index }) => {
