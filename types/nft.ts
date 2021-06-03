@@ -84,7 +84,7 @@ export type NFTOnChain = {
   metaId: number
 }
 
-export type NFT = NFTOffChain &
+export type NFT = Omit<NFTOffChain, 'id'> &
   NFTOnChain & {
     tokenId: BigNumber
   }

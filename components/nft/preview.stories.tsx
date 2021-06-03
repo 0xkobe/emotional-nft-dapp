@@ -28,5 +28,7 @@ Default.args = {
     chainId: 3,
     creator: '0x0992', // creator wallet
     defaultEmotion: Emotion.Angry,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 }
