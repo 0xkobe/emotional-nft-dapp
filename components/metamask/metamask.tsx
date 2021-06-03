@@ -20,7 +20,7 @@ const Metamask: FunctionComponent<IProps> = ({
       )}
     >
       <div className="flex justify-center">
-        <img src="/metamask.png" />
+        <img src="/ethereum.svg" />
       </div>
       <div className="flex flex-col space-y-4">
         <h1 className="text-lg leading-6 font-semibold text-purple-900">

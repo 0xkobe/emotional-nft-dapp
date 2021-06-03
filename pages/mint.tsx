@@ -553,14 +553,15 @@ export default function Mint(): JSX.Element {
     }
     return (
       <ModalMetamask
-        title="Metamask Data"
+        title="Continue on Wallet"
         content={
           <>
-            Please fill the information in your metamask account in order to
+            Please open your Ethereum wallet and follow the instructions to
             continue the Mint process
           </>
         }
         isShown
+        onRequestClose={() => setIsMinting(false)}
       ></ModalMetamask>
     )
   }
