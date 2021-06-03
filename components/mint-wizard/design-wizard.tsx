@@ -11,13 +11,13 @@ import Tooltip from '../tooltip/tooltip'
 
 export type IProps = HTMLAttributes<{}> & {
   charactersData: CharacterOption[]
-  characterId: number
+  characterId?: number
   setCharacterId: (index: number) => void
   skinIndex: number
   setSkinIndex: (index: number) => void
   coinIndex: number
   setCoinIndex: (index: number) => void
-  backgroundIndex: number
+  backgroundIndex?: number
   setBackgroundIndex: (index: number) => void
 }
 
