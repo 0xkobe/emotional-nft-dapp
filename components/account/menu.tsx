@@ -12,7 +12,7 @@ const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
   if (!account)
     return (
       <span className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border text-purple-900 border-purple-100">
-        No account
+        No Wallet
       </span>
     )
 
