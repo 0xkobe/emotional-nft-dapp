@@ -146,7 +146,7 @@ export default function Mint(): JSX.Element {
     if (characterId === specialIds.Minotaur) return
     if (characterId === specialIds.Fish) return
     setCharacterId(characterId - (characterId % skins.length) + skinIndex)
-  }, [skinIndex]) // Shouldn't put characterId as a callback dependency
+  }, [characterId, skinIndex])
 
   const filteredCharacters = useMemo(() => {
     return characters.filter(
