@@ -12,8 +12,8 @@ import styles from './modal.module.css'
 export type IProps = HTMLAttributes<{}> & {
   isShown?: boolean
   children: ReactNode
-  onRequestClose: () => void
-  onModalClose: () => void
+  onRequestClose?: () => void
+  onModalClose?: () => void
 }
 
 // TODO: recreate with https://headlessui.dev/react/dialog and tailwind
@@ -26,13 +26,13 @@ const Modal: FunctionComponent<IProps> = ({
   const [closeRequestSent, setCloseRequest] = useState(false)
   useEffect(() => {
     if (closeRequestSent && isShown === false) {
-      onModalClose()
+      if (onModalClose) onModalClose()
     }
   }, [isShown, closeRequestSent, onModalClose])
 
   const requestClose = () => {
     setCloseRequest(true)
-    onRequestClose()
+    if (onRequestClose) onRequestClose()
   }
 
   useKeyDown('Escape', () => isShown && requestClose())

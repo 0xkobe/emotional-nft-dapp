@@ -6,8 +6,8 @@ export type IProps = HTMLAttributes<{}> & {
   title: string
   content: JSX.Element
   isShown?: boolean
-  onRequestClose: () => void
-  onModalClose: () => void
+  onRequestClose?: () => void
+  onModalClose?: () => void
 }
 
 const ModalMetamask: FunctionComponent<IProps> = ({

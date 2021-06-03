@@ -5,8 +5,8 @@ import Modal from './modal'
 export type IProps = HTMLAttributes<{}> & {
   error: Error | string
   isShown?: boolean
-  onRequestClose: () => void
-  onModalClose: () => void
+  onRequestClose?: () => void
+  onModalClose?: () => void
 }
 
 const ModalError: FunctionComponent<IProps> = ({
