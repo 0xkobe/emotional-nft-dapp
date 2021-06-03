@@ -647,25 +647,11 @@ export default function Mint(): JSX.Element {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <NFTCard
                 previewEmotion
-                nft={{
-                  tokenId: BigNumber.from(1), // random value
-                  characterId: characterId,
-                  favCoinId: coinIndex,
-                  unlockTime:
-                    Date.now() / 1000 + lockOptions[lockOptionId].duration,
-                  lockAmount: qstkAmount.add(freeAllocationAmount),
-                  withdrawn: false,
-                  metaId: 0, // zero as none
-                  author: minterName,
-                  backgroundId: backgroundIndex,
-                  description: nftDescription,
-                  name: nftName, // nft name
-                  chainId: chain.id,
-                  creator: characters[characterId].artist.wallet, // FIXME: I don't think this is right. this should be the minter address
-                  defaultEmotion: Emotion.Normal,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                }}
+                characterId={characterId}
+                favCoinId={coinIndex}
+                backgroundId={backgroundIndex}
+                skin={skins[skinIndex].skin}
+                name={nftName} // nft name
               />
               {step()}
             </div>

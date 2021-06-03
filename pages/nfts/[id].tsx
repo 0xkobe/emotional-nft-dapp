@@ -181,7 +181,11 @@ export default function PageNFT(): JSX.Element {
                   <NFTCard
                     className="cursor-pointer"
                     changePercentage={changePercentage}
-                    nft={nft}
+                    characterId={nft.characterId}
+                    favCoinId={nft.favCoinId}
+                    backgroundId={nft.backgroundId}
+                    skin={getCharacter(nft.characterId).skin}
+                    name={nft.name}
                     onClick={() => {
                       console.log('here')
                       setIsPreview(true)
