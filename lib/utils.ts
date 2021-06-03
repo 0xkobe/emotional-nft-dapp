@@ -52,7 +52,7 @@ export function formatNumber(n: number | BigNumber | string): string {
   return n
     .toString()
     .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-    .replace(/.0$/, '')
+    .replace(/\.0$/, '')
 }
 
 // format big number to user friendly text
@@ -60,7 +60,7 @@ export function bnToText(n: BigNumber): string {
   return utils
     .formatEther(n)
     .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-    .replace(/.0$/, '')
+    .replace(/\.0$/, '')
 }
 
 // format big number to user friendly input - can add comma later if needed
