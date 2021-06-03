@@ -57,7 +57,7 @@ export type LockOption = {
 }
 
 // Structure used to save the nft data in database
-export type NFTOffChain = {
+export type CreateNFTOffChain = {
   author: string // author name
   backgroundId: number
   description: string
@@ -65,6 +65,13 @@ export type NFTOffChain = {
   chainId: number
   creator: string // creator wallet
   defaultEmotion: Emotion
+}
+
+// Structure used to save the nft data in database
+export type NFTOffChain = CreateNFTOffChain & {
+  id: number
+  createdAt: Date
+  updatedAt: Date
 }
 
 // Structure of the nft data onchain
@@ -77,7 +84,7 @@ export type NFTOnChain = {
   metaId: number
 }
 
-export type NFT = NFTOffChain &
+export type NFT = Omit<NFTOffChain, 'id'> &
   NFTOnChain & {
     tokenId: BigNumber
   }

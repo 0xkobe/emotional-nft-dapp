@@ -38,7 +38,9 @@ CREATE TABLE public.nft (
     "backgroundId" integer NOT NULL,
     creator character varying NOT NULL,
     "chainId" smallint NOT NULL,
-    "defaultEmotion" character varying
+    "defaultEmotion" character varying,
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 

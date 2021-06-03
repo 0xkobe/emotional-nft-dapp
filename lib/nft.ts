@@ -39,18 +39,17 @@ export const fetchNFTs = async (
   )
 
   // fetch info off-chain from database
-  const { data, error } = await supabase
-    .from('nft')
+  const { data: nftsDataOffChain, error } = await supabase
+    .from<NFTOffChain>('nft')
     .select('*')
     .in(
       'id',
       nftsDataOnChain.map((x) => x.metaId.toString()),
     )
   if (error) throw error
-  if (!data) throw new createHttpError.NotFound(`no nft not found`)
-  if (data.length !== nftsDataOnChain.length)
+  if (!nftsDataOffChain) throw new createHttpError.NotFound(`no nft not found`)
+  if (nftsDataOffChain.length !== nftsDataOnChain.length)
     throw new createHttpError.BadRequest(`some nft have not been found`)
-  const nftsDataOffChain = data as NFTOffChain[]
 
   // return data
   return nftsDataOnChain.map((nftDataOnChain, i) => ({

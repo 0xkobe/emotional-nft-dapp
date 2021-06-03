@@ -28,6 +28,8 @@ Angry.args = {
     chainId: 3,
     creator: '0x0992', // creator wallet
     defaultEmotion: Emotion.Angry,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 }
 
@@ -49,6 +51,8 @@ Happy.args = {
     chainId: 3,
     creator: '0x0992', // creator wallet
     defaultEmotion: Emotion.Happy,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 }
 
@@ -70,5 +74,7 @@ Normal.args = {
     chainId: 3,
     creator: '0x0992', // creator wallet
     defaultEmotion: Emotion.Normal,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 }
