@@ -117,6 +117,14 @@ export default function Mint(): JSX.Element {
     }
   }, [account, qSettings, router])
 
+  // logic to check if mint is activated
+  useEffect(() => {
+    if (!qnftSettings) return
+    if (!qnftSettings.mintStarted()) setError('Mint is currently not started')
+    if (qnftSettings.mintPaused()) setError('Mint is currently paused')
+    if (qnftSettings.mintFinished()) setError('Mint is finished')
+  }, [qnftSettings])
+
   // fetch remaining qstk
   useEffect(() => {
     if (!qnft) return
