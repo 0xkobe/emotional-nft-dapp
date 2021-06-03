@@ -37,8 +37,8 @@ const Pagination: FunctionComponent<IProps> = ({
           if (hasNext) onNext()
         }}
       >
-        <span>Next</span>
-        <IconNext className="inline-block ml-2" />
+        <span className="mr-2">Next</span>
+        <IconNext className="inline-block" />
       </SecondaryButton>
     </div>
   )
