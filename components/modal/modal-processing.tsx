@@ -6,8 +6,8 @@ import Modal from './modal'
 export type IProps = HTMLAttributes<{}> & {
   transactionHash: string
   isShown?: boolean
-  onRequestClose: () => void
-  onModalClose: () => void
+  onRequestClose?: () => void
+  onModalClose?: () => void
 }
 
 const ModalProcessing: FunctionComponent<IProps> = ({

@@ -20,7 +20,10 @@ const Allocation: FunctionComponent<IProps> = ({
       value: 'QSTK',
     },
     { key: 'Amount', value: bnToText(lockAmount) },
-    { key: 'Remaining', value: formatDuration(unlockTime.getTime() - Date.now()) },
+    {
+      key: 'Remaining',
+      value: formatDuration(unlockTime.getTime() - Date.now()),
+    },
     {
       key: 'Redemption',
       value: formatDate(unlockTime),

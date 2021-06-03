@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { AnchorHTMLAttributes, FunctionComponent } from 'react'
+import SecondaryButton from '../button/secondary-button'
 import IconNext from '../icon/next'
 import IconPrev from '../icon/prev'
 
@@ -18,41 +19,27 @@ const Pagination: FunctionComponent<IProps> = ({
   onNext,
 }: IProps) => {
   return (
-    <div className={classNames(className, 'flex flex-row space-x-8')}>
-      <div
-        className={classNames(
-          'flex flex-row space-x-3 items-center cursor-pointer',
-          hasPrev ? 'text-gray-500' : 'text-gray-200 cursor-not-allowed',
-        )}
+    <div className={classNames(className, 'flex flex-row space-x-4')}>
+      <SecondaryButton
+        shadow
+        disabled={!hasPrev}
         onClick={() => {
           if (hasPrev) onPrev()
         }}
       >
-        <IconPrev
-          className={classNames(
-            'stroke-current',
-            hasPrev ? 'text-gray-500' : 'text-gray-200',
-          )}
-        />
-        <span className="text-sm leading-5 font-medium">Previous</span>
-      </div>
-      <div
-        className={classNames(
-          'flex flex-row space-x-3 items-center cursor-pointer',
-          hasNext ? 'text-gray-500' : 'text-gray-200 cursor-not-allowed',
-        )}
+        <IconPrev className="inline-block mr-2" />
+        <span>Previous</span>
+      </SecondaryButton>
+      <SecondaryButton
+        shadow
+        disabled={!hasNext}
         onClick={() => {
           if (hasNext) onNext()
         }}
       >
-        <span className="text-sm leading-5 font-medium">Next</span>
-        <IconNext
-          className={classNames(
-            'stroke-current',
-            hasNext ? 'text-gray-500' : 'text-gray-200',
-          )}
-        />
-      </div>
+        <span className="mr-2">Next</span>
+        <IconNext className="inline-block" />
+      </SecondaryButton>
     </div>
   )
 }

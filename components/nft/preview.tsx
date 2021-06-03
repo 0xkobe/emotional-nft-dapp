@@ -7,8 +7,8 @@ import NFTCard from './card'
 export type IProps = HTMLAttributes<any> & {
   nft: NFT
   isShown?: boolean
-  onRequestClose: () => void
-  onModalClose: () => void
+  onRequestClose?: () => void
+  onModalClose?: () => void
 }
 
 const NFTPreview: FunctionComponent<IProps> = ({

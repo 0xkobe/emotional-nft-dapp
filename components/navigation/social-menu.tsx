@@ -1,6 +1,7 @@
 import { Menu } from '@headlessui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/outline'
 import { FunctionComponent, HTMLAttributes } from 'react'
+import SecondaryButton from '../button/secondary-button'
 
 const social = [{ href: 'https://t.me/quiverprotocolchat', text: 'Telegram' }]
 
@@ -8,8 +9,10 @@ const SocialMenu: FunctionComponent<HTMLAttributes<any>> = (props) => (
   <Menu as="div" className="relative" {...props}>
     {({ open }) => (
       <>
-        <Menu.Button className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border text-purple-900 border-purple-100 hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow cursor-pointer">
-          <DotsHorizontalIcon className="w-4 h-4" />
+        <Menu.Button>
+          <SecondaryButton className="inline-flex">
+            <DotsHorizontalIcon className="w-4 h-4" />
+          </SecondaryButton>
         </Menu.Button>
 
         {open && (

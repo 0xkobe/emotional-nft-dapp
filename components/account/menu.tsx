@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import useWallet from '../../hooks/useWallet'
 import { shortenAddress } from '../../lib/utils'
+import SecondaryButton from '../button/secondary-button'
 import AccountImage from './image'
 
 const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
@@ -22,11 +23,13 @@ const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
     <Menu as="div" className="relative inline-block" {...props}>
       {({ open }) => (
         <>
-          <Menu.Button className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border text-purple-900 border-purple-100 hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow">
-            <span className="hidden md:block mr-2">
-              {shortenAddress(account)}
-            </span>
-            <AccountImage className="h-4 w-4" size={16} account={account} />
+          <Menu.Button>
+            <SecondaryButton className="inline-flex">
+              <span className="hidden md:block mr-2">
+                {shortenAddress(account)}
+              </span>
+              <AccountImage className="h-4 w-4" size={16} account={account} />
+            </SecondaryButton>
           </Menu.Button>
           {open && (
             <Menu.Items

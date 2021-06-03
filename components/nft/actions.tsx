@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent,HTMLAttributes } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 
 export type IProps = HTMLAttributes<any> & {
   onTransfer: () => void
