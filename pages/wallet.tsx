@@ -42,7 +42,6 @@ export default function Wallet(): JSX.Element {
         <ModalError
           error={error}
           onRequestClose={() => window.location.reload()}
-          onModalClose={() => {}}
           isShown={true}
         />
       )}

@@ -530,14 +530,7 @@ export default function Mint(): JSX.Element {
       )
     }
     if (tx) {
-      return (
-        <ModalProcessing
-          onRequestClose={() => {}}
-          onModalClose={() => {}}
-          isShown={true}
-          transactionHash={tx.hash}
-        />
-      )
+      return <ModalProcessing isShown={true} transactionHash={tx.hash} />
     }
     return (
       <ModalMetamask
@@ -548,8 +541,6 @@ export default function Mint(): JSX.Element {
             continue the Mint process
           </>
         }
-        onRequestClose={() => {}}
-        onModalClose={() => {}}
         isShown
       ></ModalMetamask>
     )
@@ -560,7 +551,6 @@ export default function Mint(): JSX.Element {
     return (
       <ModalError
         onRequestClose={() => setError(undefined)}
-        onModalClose={() => {}}
         isShown={true}
         error={error}
       />
