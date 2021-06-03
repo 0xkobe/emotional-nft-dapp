@@ -89,7 +89,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
       return 'bigger than max'
     }
     return null
-  }, [qstkAmount])
+  }, [lockOption, qstkAmount])
 
   const qstkAmountInput = useMemo(() => {
     if (!qstkAmount) return ''
@@ -114,7 +114,14 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         setAirdropKeyError('')
       })
       .catch(setAirdropKeyError)
-  }, [setAirdropAmount, setAirdropKeyError, qAirdrop, airdropResult])
+  }, [
+    setAirdropAmount,
+    setAirdropKeyError,
+    qAirdrop,
+    airdropResult,
+    setAirdropClaimed,
+    setAirdropSignature,
+  ])
 
   return (
     <div className={classNames(className, 'flex flex-col space-y-8')}>
