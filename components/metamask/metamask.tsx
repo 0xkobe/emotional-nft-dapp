@@ -31,9 +31,7 @@ const Metamask: FunctionComponent<IProps> = ({
             {content}
           </div>
         )}
-        {children && (
-          <div className="flex flex-col mr-auto ml-auto">{children}</div>
-        )}
+        {children}
       </div>
     </div>
   )

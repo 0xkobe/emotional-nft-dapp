@@ -1,6 +1,7 @@
 import { FunctionComponent, PropsWithChildren } from 'react'
 import { chain } from '../../data/chains'
 import useWallet from '../../hooks/useWallet'
+import Button from '../button/button'
 import Metamask from '../metamask/metamask'
 
 const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
@@ -29,13 +30,9 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
           </>
         }
       >
-        <a
-          className="text-sm leading-5 font-medium shadow rounded-2xl px-8 py-3 w-full text-center block bg-purple-700 text-white"
-          target="_blank"
-          href="https://metamask.io/download"
-        >
+        <Button target="_blank" href="https://metamask.io/download">
           Get MetaMask
-        </a>
+        </Button>
       </Metamask>
     )
   if (!account)
@@ -50,12 +47,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
           </>
         }
       >
-        <a
-          onClick={() => activate()}
-          className="text-sm leading-5 font-medium shadow rounded-2xl px-8 py-3 w-full text-center block bg-purple-700 text-white"
-        >
-          Sign In
-        </a>
+        <Button onClick={() => activate()}>Sign In</Button>
       </Metamask>
     )
   if (chainId !== chain.id)
