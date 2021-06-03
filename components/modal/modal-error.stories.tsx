@@ -1,5 +1,5 @@
-import { Meta,Story } from '@storybook/react'
-import ModalError,{ IProps } from './modal-error'
+import { Meta, Story } from '@storybook/react'
+import ModalError, { IProps } from './modal-error'
 
 export default {
   title: 'Modal/ModalError',
