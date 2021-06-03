@@ -19,6 +19,14 @@ const _deployedAddresses: {
     qnft: string
   }
 } = {
+  1: {
+    qstk: '0xF8BB31D98b815Cb329D51bD262242f036aAe63f8',
+    qSettings: '0xDCE2E6c2848921D17F1120C4908b5906019D4B5f',
+    qAirdrop: '0x16aE3e65B366E2f22F7880779944AeEfc1B9044c',
+    qnftSettings: '0x8b5e8fB32f9d26132995f06FFC681A48d30d32C2',
+    qnftGov: '0x6DC21b5650fb0EF06aD1e8c8669F271cE0EBc3C0',
+    qnft: '0x9478C05534d62E9ee20E3EacE30663b38Cce6F3E',
+  },
   3: {
     qstk: '0x10A5Ab70eDf51eD6c6755230507ce9c4608ba950',
     qSettings: '0x9883db93e4a78C529c0C3126e7F52db3E4b4666E',
