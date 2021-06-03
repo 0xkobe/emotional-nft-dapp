@@ -98,6 +98,7 @@ export default function Mint(): JSX.Element {
   const [onlyAirdropUsers, setOnlyAirdropUsers] = useState(false)
   const [bulkMintIsActive, setBulkMintIsActive] = useState(false)
   const [bulkMintNumber, setBulkMintNumber] = useState<number>()
+  const [airdropKey, setAirdropKey] = useState('')
 
   // logic to activate bulk mint
   useEffect(() => {
@@ -603,6 +604,8 @@ export default function Mint(): JSX.Element {
         setAirdropClaimed={setAirdropClaimed}
         bulkMintIsActive={bulkMintIsActive}
         setBulkMintNumber={setBulkMintNumber}
+        airdropKey={airdropKey}
+        setAirdropKey={setAirdropKey}
       />,
     ][mintStep]
   }
