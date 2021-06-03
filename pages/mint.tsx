@@ -104,14 +104,13 @@ export default function Mint(): JSX.Element {
     if (!router.isReady) return undefined
     if (!router.query.bulk) return undefined
 
-    // qSettings?.getManager().then((manager) => {
-      // console.log('manager', manager)
-      // if (account?.toLowerCase() !== manager.toLowerCase()) {
-        // setError('bulk mint is only available for manager')
-        // return
-      // }
+    qSettings?.getManager().then((manager) => {
+      if (account?.toLowerCase() !== manager.toLowerCase()) {
+        setError('bulk mint is only available for manager')
+        return
+      }
       setBulkMintIsActive(true)
-    // })
+    })
     return () => {
       setBulkMintIsActive(false)
     }
