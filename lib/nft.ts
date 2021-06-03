@@ -2,7 +2,13 @@ import { BigNumber } from '@ethersproject/bignumber'
 import createHttpError from 'http-errors'
 import { favCoins } from '../data/favCoins'
 import { backgrounds, characters, lockOptions } from '../data/nft'
-import { APINftCreateRequest } from '../types/api'
+import {
+  APINftBulkCreateRequest,
+  APINftBulkCreateResponse,
+  APINftCreateRequest,
+  APINftCreateResponse,
+  APIResponseError,
+} from '../types/api'
 import { QNFT } from '../types/contracts'
 import {
   Character,
@@ -104,10 +110,7 @@ export const createNFTOffChain = async (
   description: string,
   name: string,
   emotion: Emotion,
-): Promise<string> => {
-  if (!chainId) throw new Error('chainId is falsy')
-  if (!account) throw new Error('account is falsy')
-
+): Promise<number> => {
   const data: APINftCreateRequest = {
     author,
     backgroundId,
@@ -127,17 +130,56 @@ export const createNFTOffChain = async (
   })
   let body
   try {
-    body = await res.json()
+    body = (await res.json()) as APINftCreateResponse | APIResponseError
   } catch (error) {
-    console.error(error)
-  }
-  if (!res.ok) {
-    if (body?.error)
-      throw new Error(
-        `an error occurred while creating metadata: ${body.error}`,
-      )
     throw new Error(`an unknown error occurred while creating metadata`)
   }
-  const metaId = body.metaId
-  return metaId
+  if ('error' in body)
+    throw new Error(`an error occurred while creating metadata: ${body.error}`)
+  if (!res.ok)
+    throw new Error(`an unknown error occurred while creating metadata`)
+  return body.metaId
+}
+
+// create a bulk of metadata on the API. Returns the created metadata ids.
+export const createBulkNFTOffChain = async (
+  signature: string,
+  chainId: number,
+  account: string,
+  author: string,
+  backgroundId: number,
+  description: string,
+  name: string,
+  emotion: Emotion,
+  bulkMintNumber: number,
+): Promise<number[]> => {
+  const data: APINftBulkCreateRequest = {
+    author,
+    backgroundId,
+    description,
+    name,
+    creator: account,
+    signature,
+    chainId,
+    defaultEmotion: emotion,
+    bulkMintNumber,
+  }
+  const res = await fetch('/api/nft/bulk-create', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    method: 'POST',
+  })
+  let body
+  try {
+    body = (await res.json()) as APINftBulkCreateResponse | APIResponseError
+  } catch (error) {
+    throw new Error(`an unknown error occurred while creating metadata`)
+  }
+  if ('error' in body)
+    throw new Error(`an error occurred while creating metadata: ${body.error}`)
+  if (!res.ok)
+    throw new Error(`an unknown error occurred while creating metadata`)
+  return body.metaIds
 }

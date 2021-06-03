@@ -31,16 +31,23 @@ import {
 import { abi, deployedAddresses } from '../data/smartContract'
 import useContract from '../hooks/useContract'
 import useWallet from '../hooks/useWallet'
-import { createNFTOffChain } from '../lib/nft'
+import { createBulkNFTOffChain, createNFTOffChain } from '../lib/nft'
 import { payloadForSignatureEIP712v4 } from '../lib/signature'
 import { bnToText } from '../lib/utils'
-import { QAirdrop, QNFT, QNFTSettings, QStk } from '../types/contracts'
+import {
+  QAirdrop,
+  QNFT,
+  QNFTSettings,
+  QSettings,
+  QStk,
+} from '../types/contracts'
 import { Skin } from '../types/metadata'
 import { Emotion } from '../types/nft'
 import { CharacterOption } from '../types/options'
 
 export default function Mint(): JSX.Element {
-  const { push: redirect } = useRouter()
+  const router = useRouter()
+  const { push: redirect } = router
 
   // init wallet
   const { account, activate, signer, signTypedDataV4 } = useWallet()
@@ -50,6 +57,12 @@ export default function Mint(): JSX.Element {
 
   // init QSTK smart contract
   const { contract: qstk } = useContract<QStk>(deployedAddresses.qstk, abi.qstk)
+
+  // init QSettings smart contract
+  const { contract: qSettings } = useContract<QSettings>(
+    deployedAddresses.qSettings,
+    abi.qSettings,
+  )
 
   // init qAirdrop smart contract
   const { contract: qAirdrop } = useContract<QAirdrop>(
@@ -83,6 +96,25 @@ export default function Mint(): JSX.Element {
   const [availableFreeAllocation, setAvailableFreeAllocation] =
     useState<BigNumber>()
   const [onlyAirdropUsers, setOnlyAirdropUsers] = useState(false)
+  const [bulkMintIsActive, setBulkMintIsActive] = useState(false)
+  const [bulkMintNumber, setBulkMintNumber] = useState<number>()
+
+  // logic to activate bulk mint
+  useEffect(() => {
+    if (!router.isReady) return undefined
+    if (!router.query.bulk) return undefined
+
+    qSettings?.getManager().then((manager) => {
+      if (account?.toLowerCase() !== manager.toLowerCase()) {
+        setError('bulk mint is only available for manager')
+        return
+      }
+      setBulkMintIsActive(true)
+    })
+    return () => {
+      setBulkMintIsActive(false)
+    }
+  }, [account, qSettings, router])
 
   // fetch remaining qstk
   useEffect(() => {
@@ -228,6 +260,17 @@ export default function Mint(): JSX.Element {
           },
         ],
       })
+      if (bulkMintIsActive) {
+        mintSummaryProperties.push({
+          title: 'Bulk mint',
+          keyValues: [
+            {
+              key: 'Number of NFTs',
+              value: (bulkMintNumber || 0).toString(),
+            },
+          ],
+        })
+      }
     }
 
     return mintSummaryProperties
@@ -243,12 +286,18 @@ export default function Mint(): JSX.Element {
     qstkAmount,
     lockOptionId,
     freeAllocationAmount,
+    bulkMintIsActive,
+    bulkMintNumber,
   ])
 
   // calculate mint summary button name
   const mintSummaryBtnName = useMemo(() => {
-    return ['Validate Design', 'Validate Story', 'Mint my NFT'][mintStep]
-  }, [mintStep])
+    return [
+      'Validate Design',
+      'Validate Story',
+      bulkMintIsActive ? 'Bulk Mint NFT' : 'Mint my NFT',
+    ][mintStep]
+  }, [mintStep, bulkMintIsActive])
 
   // button handle function
   const handleSubmit = () => {
@@ -262,7 +311,7 @@ export default function Mint(): JSX.Element {
   const [receipt, setReceipt] = useState<ContractReceipt>()
   const [tx, setTx] = useState<ContractTransaction>()
   const [signature, setSignature] = useState<string>()
-  const [metaId, setMetaId] = useState<string>()
+  const [metaIds, setMetaIds] = useState<number[]>()
 
   // activate metamask when start minting
   useEffect(() => {
@@ -286,6 +335,7 @@ export default function Mint(): JSX.Element {
         backgroundIndex,
         nftDescription,
         nftName,
+        bulkMintNumber,
       ),
     )
       .then(setSignature)
@@ -305,65 +355,116 @@ export default function Mint(): JSX.Element {
     nftName,
     signTypedDataV4,
     account,
+    bulkMintNumber,
   ])
 
   // create metadata
   useEffect(() => {
     if (!signature) return
     if (!account) return
-    // save meta
     // TODO: we could update the modal to display a loader
-    createNFTOffChain(
-      signature,
-      chain.id,
-      account,
-      minterName,
-      backgroundIndex,
-      nftDescription,
-      nftName,
-      Emotion.Normal, // FIXME: make the user choose the default emotion
-    )
-      .then(setMetaId)
-      .catch((error) => {
-        console.error('metadata error', error)
-        setError(error.message)
+
+    // save bulk meta
+    if (bulkMintIsActive) {
+      if (!bulkMintNumber) {
+        setError('bulk mint error: number of nft to mint is undefined')
         setIsMinting(false)
-      })
-    return () => {
-      setMetaId(undefined)
+        return
+      }
+      createBulkNFTOffChain(
+        signature,
+        chain.id,
+        account,
+        minterName,
+        backgroundIndex,
+        nftDescription,
+        nftName,
+        Emotion.Normal, // FIXME: make the user choose the default emotion
+        bulkMintNumber,
+      )
+        .then(setMetaIds)
+        .catch((error) => {
+          console.error('bulk metadata error', error)
+          setError(error.message)
+          setIsMinting(false)
+        })
+    } else {
+      // save meta
+      createNFTOffChain(
+        signature,
+        chain.id,
+        account,
+        minterName,
+        backgroundIndex,
+        nftDescription,
+        nftName,
+        Emotion.Normal, // FIXME: make the user choose the default emotion
+      )
+        .then((x) => {
+          setMetaIds([x])
+        })
+        .catch((error) => {
+          console.error('metadata error', error)
+          setError(error.message)
+          setIsMinting(false)
+        })
     }
-  }, [signature, account, minterName, backgroundIndex, nftDescription, nftName])
+    return () => {
+      setMetaIds(undefined)
+    }
+  }, [
+    signature,
+    account,
+    minterName,
+    backgroundIndex,
+    nftDescription,
+    nftName,
+    bulkMintIsActive,
+    bulkMintNumber,
+  ])
 
   // sign & broadcast transaction
   useEffect(() => {
     if (!qnft) return
     if (!signer) return
-    if (!metaId) return
+    if (!metaIds) return
+    if (metaIds.length === 0) return
 
     const qnftWithSigner = qnft.connect(signer)
-    const mintPromise = airdropSignature
-      ? qnftWithSigner.mintNftForAirdropUser(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          airdropAmount,
-          airdropSignature,
-          {
-            value: nftPrice,
-          },
-        )
-      : qnftWithSigner.mintNft(
-          characterId,
-          coinIndex,
-          lockOptionId,
-          metaId,
-          qstkAmount,
-          {
-            value: nftPrice,
-          },
-        )
+    let mintPromise
+
+    if (bulkMintIsActive)
+      mintPromise = qnftWithSigner.bulkMintNfts(
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaIds,
+        qstkAmount,
+      )
+    else if (airdropSignature)
+      mintPromise = qnftWithSigner.mintNftForAirdropUser(
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaIds[0],
+        qstkAmount,
+        airdropAmount,
+        airdropSignature,
+        {
+          value: nftPrice,
+        },
+      )
+    else
+      mintPromise = qnftWithSigner.mintNft(
+        characterId,
+        coinIndex,
+        lockOptionId,
+        metaIds[0],
+        qstkAmount,
+        {
+          value: nftPrice,
+        },
+      )
 
     mintPromise.then(setTx).catch((error) => {
       console.error('sign and broadcast tx error', error)
@@ -380,10 +481,11 @@ export default function Mint(): JSX.Element {
     coinIndex,
     lockOptionId,
     qstkAmount,
-    metaId,
+    metaIds,
     nftPrice,
     airdropSignature,
     airdropAmount,
+    bulkMintIsActive,
   ])
 
   // wait for receipt
@@ -499,6 +601,8 @@ export default function Mint(): JSX.Element {
         setAirdropAmount={setAirdropAmount}
         setAirdropSignature={setAirdropSignature}
         setAirdropClaimed={setAirdropClaimed}
+        bulkMintIsActive={bulkMintIsActive}
+        setBulkMintNumber={setBulkMintNumber}
       />,
     ][mintStep]
   }
@@ -521,11 +625,15 @@ export default function Mint(): JSX.Element {
   return (
     <>
       <Head>
-        <title>Mint NFT</title>
+        <title>{bulkMintIsActive ? 'Bulk Mint NFT' : 'Mint NFT'}</title>
       </Head>
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4 space-y-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
-          <Title>Create Your own Quiver Emotional NFT</Title>
+          <Title>
+            {bulkMintIsActive
+              ? 'Bulk Mint NFT'
+              : 'Create Your own Quiver Emotional NFT'}
+          </Title>
           <Stepper
             className="mt-4 md:mt-0"
             step={mintStep}

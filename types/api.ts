@@ -20,6 +20,22 @@ export type APINftCreateResponse = {
   metaId: number
 }
 
+export type APINftBulkCreateRequest = {
+  author: string
+  backgroundId: number
+  description: string
+  name: string
+  creator: string
+  signature: string
+  chainId: number
+  defaultEmotion: Emotion
+  bulkMintNumber: number
+}
+
+export type APINftBulkCreateResponse = {
+  metaIds: number[]
+}
+
 export type APINftMetadataResponse = {
   name: string
   author: string
