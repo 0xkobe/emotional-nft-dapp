@@ -1,54 +1,58 @@
-import { FunctionComponent, PropsWithChildren } from 'react'
+import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import { chain } from '../../data/chains'
 import useWallet from '../../hooks/useWallet'
+import { injectedConnector, walletConnectConnector } from '../../lib/connector'
 import Button from '../button/button'
 import Metamask from '../metamask/metamask'
+import ModalError from '../modal/modal-error'
 
 const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   props: PropsWithChildren<any>,
 ) => {
-  const { account, chainId, hasWallet, activate, error } = useWallet()
+  const { account, chainId, activate, error: walletError } = useWallet()
+  const [error, setError] = useState<Error>()
 
-  if (error)
-    return (
-      <Metamask
-        className="bg-white border border-purple-100 rounded-2xl p-8"
-        title={error.name}
-        content={<>{error.message}</>}
-      ></Metamask>
-    )
-
-  if (!hasWallet)
-    return (
-      <Metamask
-        className="bg-white border border-purple-100 rounded-2xl p-8"
-        title="You Need an Ethereum Wallet"
-        content={
-          <>
-            To use Quiver Emotional NFTs DApp you need to install a MetaMask
-            wallet.
-          </>
-        }
-      >
-        <Button target="_blank" href="https://metamask.io/download">
-          Get MetaMask
-        </Button>
-      </Metamask>
-    )
+  const modalError =
+    (walletError && (
+      <ModalError
+        error={walletError}
+        isShown
+        onRequestClose={() => setError(undefined)}
+      ></ModalError>
+    )) ||
+    (error && (
+      <ModalError
+        error={error}
+        isShown
+        onRequestClose={() => setError(undefined)}
+      ></ModalError>
+    ))
   if (!account)
     return (
-      <Metamask
-        className="bg-white border border-purple-100 rounded-2xl p-8"
-        title="Connect to Your Wallet"
-        content={
-          <>
-            To use Quiver Emotional NFTs DApp you need to sign in to your
-            MetaMask wallet.
-          </>
-        }
-      >
-        <Button onClick={() => activate()}>Sign In</Button>
-      </Metamask>
+      <>
+        {modalError}
+        <Metamask
+          className="bg-white border border-purple-100 rounded-2xl p-8"
+          title="Connect Your Wallet"
+          content={
+            <>
+              To use Quiver Emotional NFTs DApp you need to connect your
+              Ethereum wallet.
+            </>
+          }
+        >
+          <Button
+            onClick={() => {
+              activate(injectedConnector).catch((error) => setError(error))
+            }}
+          >
+            Metamask
+          </Button>
+          <Button onClick={() => activate(walletConnectConnector)}>
+            WalletConnect
+          </Button>
+        </Metamask>
+      </>
     )
   if (chainId !== chain.id)
     return (

@@ -1,32 +1,32 @@
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import { useCallback, useEffect, useState } from 'react'
-
-const connector = new InjectedConnector({})
+import { injectedConnector } from '../lib/connector'
 
 export default function useWallet(): {
   signer: JsonRpcSigner | undefined
-  activate: () => Promise<void>
+  activate: (connector: AbstractConnector) => Promise<void>
   deactivate: () => void
   account?: null | string
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
   chainId?: number
-  hasWallet?: boolean
 } {
   const context = useWeb3React<Web3Provider>()
   const { library, activate: activateProvider, account, chainId } = context
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
-  const [hasWallet, setHasWallet] = useState<boolean>()
 
   // activate wallet if already authorized
   useEffect(() => {
-    void connector.isAuthorized().then((isAuthorized) => {
-      if (!isAuthorized) return
-      return activateProvider(connector, undefined, true)
-    })
+    injectedConnector
+      .isAuthorized()
+      .then((isAuthorized) => {
+        if (isAuthorized)
+          return activateProvider(injectedConnector, undefined, true)
+      })
+      .catch(console.error)
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   // set signer
@@ -36,11 +36,14 @@ export default function useWallet(): {
     setSigner(library.getSigner(account))
   }, [account, library])
 
-  const activate = useCallback(() => {
-    if (account) return Promise.resolve() // if account is already available, no need to activate metamask again
-    console.log('Activate provider...')
-    return activateProvider(connector, undefined, true)
-  }, [account, activateProvider])
+  const activate = useCallback(
+    (connector: AbstractConnector) => {
+      if (account) return Promise.resolve() // if account is already available, no need to activate again
+      console.log('Activate provider...')
+      return activateProvider(connector, undefined, true)
+    },
+    [account, activateProvider],
+  )
 
   const signTypedDataV4 = useCallback(
     (payload: any) => {
@@ -53,10 +56,6 @@ export default function useWallet(): {
     [library, account],
   )
 
-  useEffect(() => {
-    setHasWallet(!!(window as any).ethereum)
-  }, []) //only execute once
-
   return {
     signer,
     activate,
@@ -65,6 +64,5 @@ export default function useWallet(): {
     deactivate: context.deactivate,
     signTypedDataV4,
     chainId,
-    hasWallet,
   }
 }

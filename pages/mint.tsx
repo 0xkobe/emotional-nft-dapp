@@ -50,7 +50,7 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = router
 
   // init wallet
-  const { account, activate, signer, signTypedDataV4 } = useWallet()
+  const { account, signer, signTypedDataV4 } = useWallet()
 
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
@@ -338,15 +338,6 @@ export default function Mint(): JSX.Element {
   const [tx, setTx] = useState<ContractTransaction>()
   const [signature, setSignature] = useState<string>()
   const [metaIds, setMetaIds] = useState<number[]>()
-
-  // activate metamask when start minting
-  useEffect(() => {
-    if (!isMinting) return
-    activate().catch((error) => {
-      setError('Make sure Metamask is installed and activated')
-      console.error(error)
-    })
-  }, [activate, isMinting])
 
   // sign metadata
   useEffect(() => {
