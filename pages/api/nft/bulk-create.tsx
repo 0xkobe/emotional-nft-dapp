@@ -11,14 +11,13 @@ import {
   APINftBulkCreateResponse,
 } from '../../../types/api'
 import { QSettings } from '../../../types/contracts'
-import { NFTOffChain } from '../../../types/nft'
+import { CreateNFTOffChain, NFTOffChain } from '../../../types/nft'
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
   try {
-    // check body
     const {
       author,
       backgroundId,
@@ -31,6 +30,7 @@ export default async (
       bulkMintNumber,
     } = req.body as APINftBulkCreateRequest
 
+    // check body
     const reqError = []
     if (!signature) reqError.push('signature is empty')
     if (!chainId) reqError.push('chainId is empty')
@@ -62,17 +62,18 @@ export default async (
     if (recovered.toLowerCase() !== creator.toLowerCase())
       throw new createHttpError.Forbidden('signature verification failed')
 
+    // check is manager
     const qSettings = new Contract(
       deployedAddresses.qSettings,
       abi.qSettings,
       remoteProvider,
     ) as QSettings
     const manager = await qSettings.getManager()
-
     if (recovered.toLowerCase() !== manager.toLowerCase())
       throw new createHttpError.Forbidden('sender must be manager')
 
-    const metadatas: NFTOffChain[] = Array.from(
+    // prepare metadata
+    const metadatas: CreateNFTOffChain[] = Array.from(
       Array(bulkMintNumber).keys(),
     ).map(() => ({
       author,
@@ -85,14 +86,16 @@ export default async (
     }))
 
     // create data
-    const { data, error } = await supabase.from('nft').insert(metadatas)
+    const { data: nfts, error } = await supabase
+      .from<NFTOffChain>('nft')
+      .insert(metadatas)
     if (error) throw error
-    if (!data || data?.length === 0)
+    if (!nfts || nfts?.length === 0)
       throw new createHttpError.InternalServerError('could not create resource')
 
     // return response
     const response: APINftBulkCreateResponse = {
-      metaIds: data.map((x) => x.id),
+      metaIds: nfts.map((x) => x.id),
     }
     res.status(201).json(response)
   } catch (error) {

@@ -4,14 +4,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { payloadForSignatureEIP712v4 } from '../../../lib/signature'
 import { supabase } from '../../../lib/supabase'
 import { APINftCreateRequest, APINftCreateResponse } from '../../../types/api'
-import { NFTOffChain } from '../../../types/nft'
+import { CreateNFTOffChain, NFTOffChain } from '../../../types/nft'
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> => {
   try {
-    // check body
     const {
       author,
       backgroundId,
@@ -23,6 +22,7 @@ export default async (
       defaultEmotion,
     } = req.body as APINftCreateRequest
 
+    // check body
     const reqError = []
     if (!signature) reqError.push('signature is empty')
     if (!chainId) reqError.push('chainId is empty')
@@ -51,7 +51,8 @@ export default async (
     if (recovered.toLowerCase() !== creator.toLowerCase())
       throw new createHttpError.Forbidden('signature verification failed')
 
-    const metadata: NFTOffChain = {
+    // prepare metadata
+    const createMetadata: CreateNFTOffChain = {
       author,
       backgroundId,
       description,
@@ -61,12 +62,23 @@ export default async (
       defaultEmotion,
     }
 
+    // check for spam
+    const { error: spamError, count } = await supabase
+      .from<NFTOffChain>('nft')
+      .select('createdAt', { count: 'exact' })
+      .eq('creator', createMetadata.creator)
+      .gt('createdAt', new Date(Date.now() - 30 * 1000).toUTCString()) // 30sec in the past
+    if (spamError) throw spamError
+    if (count && count > 0) throw new createHttpError.TooManyRequests()
+
     // create data
-    const { data, error } = await supabase.from('nft').insert([metadata])
+    const { data: nft, error } = await supabase
+      .from<NFTOffChain>('nft')
+      .insert([createMetadata])
+      .single()
     if (error) throw error
-    if (!data || data?.length === 0)
+    if (!nft)
       throw new createHttpError.InternalServerError('could not create resource')
-    const nft = data.pop()
 
     // return response
     const response: APINftCreateResponse = { metaId: nft.id }
