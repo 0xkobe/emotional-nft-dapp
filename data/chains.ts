@@ -24,8 +24,8 @@ const chains: {
   },
 }
 
-const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
-  ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)
-  : 3 // default is ropsten
+if (!process.env.NEXT_PUBLIC_CHAIN_ID)
+  throw new Error('env NEXT_PUBLIC_CHAIN_ID is not set')
+const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)
 
 export const chain = chains[chainId]
