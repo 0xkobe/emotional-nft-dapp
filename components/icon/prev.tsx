@@ -9,15 +9,15 @@ const IconPrev: FunctionComponent<IProps> = (props) => {
   return (
     <svg
       className={classNames(props.className)}
-      width="9"
-      height="16"
-      viewBox="0 0 9 16"
+      width="7"
+      height="12"
+      viewBox="0 0 7 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      stroke="currentColor"
     >
       <path
-        d="M8 15L1 8L8 1"
+        d="M6 10.6667L1.33333 6.00004L6 1.33337"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

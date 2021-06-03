@@ -9,15 +9,15 @@ const IconNext: FunctionComponent<IProps> = (props) => {
   return (
     <svg
       className={classNames(props.className)}
-      width="9"
-      height="16"
-      viewBox="0 0 9 16"
+      width="7"
+      height="12"
+      viewBox="0 0 7 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      stroke="currentColor"
     >
       <path
-        d="M0.999999 1L8 8L1 15"
+        d="M1 1.33329L5.66667 5.99996L1 10.6666"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
