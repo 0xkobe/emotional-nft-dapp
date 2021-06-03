@@ -172,6 +172,17 @@ export default function Mint(): JSX.Element {
       .catch(setError)
   }, [qnft, filteredCharacters])
 
+  // unselect character if its supply is 0
+  useEffect(() => {
+    const characterData = charactersData.find(
+      (character) => character.id === characterId,
+    )
+    if (!characterData) return
+    const availableSupply =
+      characterData.maxSupply - characterData.currentSupply
+    if (availableSupply === 0) setCharacterId(undefined)
+  }, [charactersData, characterId])
+
   const characterPrice = useMemo(() => {
     if (characterId === undefined) return BigNumber.from(0)
     return characters[characterId].mintPrice.mul(nonTokenMultiplier).div(100)
