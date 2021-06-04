@@ -1,9 +1,11 @@
 # Emotional NFT Dapp
+
 ## Introduction
 
 Emotional NFT is designed to give happiness by giving emotional NFTs on their investment information.
 
 **Specifications**
+
 - [General Spec](https://docs.google.com/document/d/1BtudeihtZReu9nkG1ILO2ixt_sAzf0xNOgYsfoPMqUg/edit)
 - [Technical Spec](https://docs.google.com/document/d/1tAnfPLfWV_P3-qaNuDdLCGsZ_mx3Di1B2tVhEaLGBBA/edit)
 - [Design Spec](https://docs.google.com/document/d/1SlXrz9Fvfe_7YQo6dWa5n7tQ6nliVusnsbx4A-I_CGA/edit)
