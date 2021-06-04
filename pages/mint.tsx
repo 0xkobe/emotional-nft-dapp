@@ -128,19 +128,22 @@ export default function Mint(): JSX.Element {
     qnftSettings
       .mintStarted()
       .then((mintStarted) => {
-        if (!mintStarted) setError('Mint is currently not started')
+        if (!mintStarted) setError('Mint is not running')
+        // if (!mintStarted) setError('Mint is currently not started')
       })
       .catch(setError)
     qnftSettings
       .mintPaused()
       .then((mintPaused) => {
-        if (mintPaused) setError('Mint is currently paused')
+        if (mintPaused) setError('Mint is not running')
+        // if (mintPaused) setError('Mint is currently paused')
       })
       .catch(setError)
     qnftSettings
       .mintFinished()
       .then((mintFinished) => {
-        if (mintFinished) setError('Mint is finished')
+        if (mintFinished) setError('Mint is not running')
+        // if (mintFinished) setError('Mint is finished')
       })
       .catch(setError)
   }, [qnftSettings])
