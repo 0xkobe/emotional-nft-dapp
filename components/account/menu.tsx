@@ -1,4 +1,5 @@
 import { Menu } from '@headlessui/react'
+import { UserCircleIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import useWallet from '../../hooks/useWallet'
@@ -7,16 +8,13 @@ import SecondaryButton from '../button/secondary-button'
 import AccountImage from './image'
 
 const Account: FunctionComponent<HTMLAttributes<any>> = (props) => {
-  const { account, activate, deactivate } = useWallet()
+  const { account, deactivate } = useWallet()
 
   if (!account)
     return (
-      <a
-        onClick={() => activate()}
-        className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border text-purple-900 border-purple-100 hover:text-purple-700 hover:border-purple-700 hover:bg-purple-50 hover:shadow cursor-pointer"
-      >
-        Connect wallet
-      </a>
+      <span className="inline-flex items-center px-3 py-2 text-xs font-medium leading-4 my-3 rounded-xl border text-purple-900 border-purple-100">
+        <UserCircleIcon className="w-4 h-4" />
+      </span>
     )
 
   return (

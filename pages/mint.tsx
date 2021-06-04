@@ -50,7 +50,7 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = router
 
   // init wallet
-  const { account, activate, signer, signTypedDataV4 } = useWallet()
+  const { account, signer, signTypedDataV4, error: walletError } = useWallet()
 
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
@@ -99,6 +99,11 @@ export default function Mint(): JSX.Element {
   const [bulkMintIsActive, setBulkMintIsActive] = useState(false)
   const [bulkMintNumber, setBulkMintNumber] = useState<number>()
   const [airdropKey, setAirdropKey] = useState('')
+
+  // connect walletError to error
+  useEffect(() => {
+    if (walletError) setError(walletError.message)
+  }, [walletError])
 
   // logic to activate bulk mint
   useEffect(() => {
@@ -358,15 +363,6 @@ export default function Mint(): JSX.Element {
   const [signature, setSignature] = useState<string>()
   const [metaIds, setMetaIds] = useState<number[]>()
 
-  // activate metamask when start minting
-  useEffect(() => {
-    if (!isMinting) return
-    activate().catch((error) => {
-      setError('Make sure Metamask is installed and activated')
-      console.error(error)
-    })
-  }, [activate, isMinting])
-
   // sign metadata
   useEffect(() => {
     if (!isMinting) return
@@ -581,14 +577,15 @@ export default function Mint(): JSX.Element {
     }
     return (
       <ModalMetamask
-        title="Metamask Data"
+        title="Continue on Wallet"
         content={
           <>
-            Please fill the information in your metamask account in order to
+            Please open your Ethereum wallet and follow the instructions to
             continue the Mint process
           </>
         }
         isShown
+        onRequestClose={() => setIsMinting(false)}
       ></ModalMetamask>
     )
   }

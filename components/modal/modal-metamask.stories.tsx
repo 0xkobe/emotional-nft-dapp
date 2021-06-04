@@ -10,10 +10,10 @@ const Template: Story<IProps> = (args) => <ModalMetamask {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  title: 'Connect to Your Wallet',
+  title: 'Connect Your Wallet',
   content: (
     <>
-      To use Quiver Emotional NFTs DApp you need to sign in to your MetaMask
+      To use Quiver Emotional NFTs DApp you need to sign in to your Ethereum
       wallet.
     </>
   ),

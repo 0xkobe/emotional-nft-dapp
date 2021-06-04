@@ -1,32 +1,33 @@
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 import { useCallback, useEffect, useState } from 'react'
-
-const connector = new InjectedConnector({})
+import { injectedConnector } from '../lib/connector'
 
 export default function useWallet(): {
   signer: JsonRpcSigner | undefined
-  activate: () => Promise<void>
+  activate: (connector: AbstractConnector) => void
   deactivate: () => void
   account?: null | string
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
   chainId?: number
-  hasWallet?: boolean
+  hasMetaMask?: boolean
 } {
-  const context = useWeb3React<Web3Provider>()
-  const { library, activate: activateProvider, account, chainId } = context
+  const { library, activate, error, account, chainId, deactivate } =
+    useWeb3React<Web3Provider>()
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
-  const [hasWallet, setHasWallet] = useState<boolean>()
+  const [hasMetaMask, setHasMetaMask] = useState<boolean>()
 
   // activate wallet if already authorized
   useEffect(() => {
-    void connector.isAuthorized().then((isAuthorized) => {
-      if (!isAuthorized) return
-      return activateProvider(connector, undefined, true)
-    })
+    injectedConnector
+      .isAuthorized()
+      .then((isAuthorized) => {
+        if (isAuthorized) return activate(injectedConnector)
+      })
+      .catch(console.error)
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   // set signer
@@ -36,12 +37,7 @@ export default function useWallet(): {
     setSigner(library.getSigner(account))
   }, [account, library])
 
-  const activate = useCallback(() => {
-    if (account) return Promise.resolve() // if account is already available, no need to activate metamask again
-    console.log('Activate provider...')
-    return activateProvider(connector, undefined, true)
-  }, [account, activateProvider])
-
+  // signTypedDataV4
   const signTypedDataV4 = useCallback(
     (payload: any) => {
       if (!library) throw new Error('library is falsy')
@@ -53,18 +49,19 @@ export default function useWallet(): {
     [library, account],
   )
 
+  // check if metamask is installed
   useEffect(() => {
-    setHasWallet(!!(window as any).ethereum)
+    setHasMetaMask(!!(window as any).ethereum)
   }, []) //only execute once
 
   return {
-    signer,
+    account,
     activate,
-    account: context.account,
-    error: context.error,
-    deactivate: context.deactivate,
-    signTypedDataV4,
     chainId,
-    hasWallet,
+    deactivate,
+    error,
+    signer,
+    signTypedDataV4,
+    hasMetaMask,
   }
 }

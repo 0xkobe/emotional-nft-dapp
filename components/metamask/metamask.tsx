@@ -15,14 +15,14 @@ const Metamask: FunctionComponent<IProps> = ({
   return (
     <div
       className={classNames(
-        'flex flex-col space-y-8 w-80 text-center mx-auto',
+        'flex flex-col w-80 text-center mx-auto',
         className,
       )}
     >
       <div className="flex justify-center">
-        <img src="/metamask.png" />
+        <img src="/ethereum.svg" className="w-24 h-24" />
       </div>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 mt-8">
         <h1 className="text-lg leading-6 font-semibold text-purple-900">
           {title}
         </h1>
