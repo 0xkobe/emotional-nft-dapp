@@ -6,7 +6,9 @@ export default {
   component: SecondaryButton,
 } as Meta<IProps>
 
-const Template: Story<IProps> = (args) => <SecondaryButton {...args}>My button</SecondaryButton>
+const Template: Story<IProps> = (args) => (
+  <SecondaryButton {...args}>My button</SecondaryButton>
+)
 
 export const Default = Template.bind({})
 
