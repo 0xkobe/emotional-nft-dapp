@@ -38,7 +38,7 @@ const CharacterItem: FunctionComponent<IProps> = ({
         />
       </div>
       <div className="text-xs leading-4 font-normal text-gray-500 mb-1">
-        {character.currentSupply}/{character.maxSupply}
+        {character.currentSupply}/{character.maxSupply} left
       </div>
       <div className="text-sm leading-5 font-normal text-purple-900">
         {character.name}
