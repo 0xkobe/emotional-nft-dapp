@@ -1,5 +1,5 @@
 import { parseEther } from '@ethersproject/units'
-import { Creature, LockPeriod, Skin } from '../types/metadata'
+import { BackgroundData, Creature, LockPeriod, Skin } from '../types/metadata'
 import { Artist, Character, Emotion, LockOption } from '../types/nft'
 
 export const specialIds = {
@@ -7,7 +7,7 @@ export const specialIds = {
   Fish: 26,
 }
 
-const backgrounds = [
+const backgrounds: BackgroundData[] = [
   {
     id: 0,
     name: 'Transparent',

@@ -124,6 +124,12 @@ export enum Background {
   RainyNightSky = 8,
 }
 
+export type BackgroundData = {
+  id: number
+  name: string
+  image: string
+}
+
 // https://github.com/QuiverCommunity/quiver-contracts/blob/master/data.md#lockoption-id
 export enum LockPeriod {
   SixMonths = 0,

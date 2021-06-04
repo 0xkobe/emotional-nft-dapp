@@ -10,6 +10,7 @@ import {
   APIResponseError,
 } from '../types/api'
 import { QNFT } from '../types/contracts'
+import { BackgroundData } from '../types/metadata'
 import {
   Character,
   Emotion,
@@ -92,11 +93,16 @@ export const getLockOption = (lockDuration: BigNumber): LockOption => {
 }
 
 // background
-// TODO: update to a more generic getBackground function. Add a new Background type
+// TODO: replace getBackgroundImage by getBackground
 export const getBackgroundImage = (backgroundId: number): string => {
   if (!backgrounds[backgroundId])
     throw new Error(`background with id ${backgroundId} not found`)
   return backgrounds[backgroundId].image
+}
+export const getBackground = (backgroundId: number): BackgroundData => {
+  if (!backgrounds[backgroundId])
+    throw new Error(`background with id ${backgroundId} not found`)
+  return backgrounds[backgroundId]
 }
 
 // create a new metadata on the API. Returns the created metadata id.

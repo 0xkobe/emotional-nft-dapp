@@ -1,11 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
+import { formatUnits } from '@ethersproject/units'
 import createHttpError, { isHttpError } from 'http-errors'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { abi, deployedAddresses } from '../../../data/smartContract'
-import { fetchNFT, getCharacter } from '../../../lib/nft'
+import {
+  fetchNFT,
+  getBackground,
+  getCharacter,
+  getFavCoin,
+} from '../../../lib/nft'
 import { remoteProvider } from '../../../lib/remote-provider'
-import { APINftMetadataResponse, DisplayType, Traits } from '../../../types/api'
+import { APINftMetadataResponse, DisplayType } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
 
 export default async (
@@ -40,44 +46,48 @@ export default async (
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
         {
-          trait_type: Traits.Creature,
+          trait_type: 'Creature',
           value: character.creature,
         },
         {
-          trait_type: Traits.Skin,
+          trait_type: 'Skin',
           value: character.skin,
         },
         {
-          trait_type: Traits.Background,
-          value: nft.backgroundId,
+          trait_type: 'Background',
+          value: getBackground(nft.backgroundId).name,
         },
         {
-          trait_type: Traits.FavCoin,
-          value: nft.favCoinId,
+          trait_type: 'Favorite Coin',
+          value: getFavCoin(nft.favCoinId).meta.name,
         },
         {
           display_type: DisplayType.Date,
-          trait_type: Traits.UnlockTime,
+          trait_type: 'Unlock Date',
           value: nft.unlockTime,
         },
         {
-          trait_type: Traits.LockAmount,
+          trait_type: 'Locked Amount',
+          value: formatUnits(nft.lockAmount) + 'QSTK',
+        },
+        {
+          trait_type: 'Locked Amount Raw',
           value: nft.lockAmount.toString(),
         },
         {
-          trait_type: Traits.CreatorName,
+          trait_type: "Minter's Name",
           value: nft.author,
         },
         {
-          trait_type: Traits.CreatorWallet,
+          trait_type: "Minter's Wallet",
           value: nft.creator,
         },
         {
-          trait_type: Traits.Withdrawn,
-          value: nft.withdrawn,
+          trait_type: 'Withdrawn',
+          value: nft.withdrawn.valueOf(),
         },
         {
-          trait_type: Traits.DefaultEmotion,
+          trait_type: 'Default Emotion',
           value: nft.defaultEmotion,
         },
       ],
