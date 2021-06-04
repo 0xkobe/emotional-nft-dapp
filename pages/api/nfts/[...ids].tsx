@@ -34,8 +34,8 @@ export default async (
     const response: APINftMetadataResponse = {
       author: nft.author,
       description: nft.description,
-      external_url: 'https://openseacreatures.io/' + tokenId, // TODO: replace URL
-      image: character.emotions.normal, // TODO: load from default emotion??
+      external_url: process.env.DEPLOY_PRIME_URL + '/nfts/' + tokenId,
+      image: process.env.DEPLOY_PRIME_URL + character.emotions.normal,
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
