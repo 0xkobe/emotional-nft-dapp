@@ -41,7 +41,7 @@ export default async (
       author: nft.author,
       description: nft.description,
       external_url: process.env.DEPLOY_PRIME_URL + '/nfts/' + tokenId,
-      image: process.env.DEPLOY_PRIME_URL + '/nfts/image/' + tokenId,
+      image: process.env.DEPLOY_PRIME_URL + '/api/nfts/image/' + tokenId,
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
