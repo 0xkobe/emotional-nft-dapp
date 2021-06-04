@@ -4,8 +4,10 @@ import {
   HTMLAttributes,
   ReactNode,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
+import { specialIds } from '../../data/nft'
 import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
 import { Skin } from '../../types/metadata'
 import { Emotion } from '../../types/nft'
@@ -167,6 +169,12 @@ const NFTCard: FunctionComponent<IProps> = ({
 }: IProps) => {
   const [emotion, setEmotion] = useState(Emotion.Normal)
 
+  const specialAnimal = useMemo(() => {
+    return (
+      characterId === specialIds.Minotaur || characterId === specialIds.Fish
+    )
+  }, [characterId])
+
   useEffect(() => {
     if (forceEmotion) return setEmotion(forceEmotion)
     if (previewEmotion) return setEmotion(Emotion.Normal)
@@ -249,7 +257,7 @@ const NFTCard: FunctionComponent<IProps> = ({
               small ? 'text-xs leading-4' : 'text-sm leading-5',
             )}
           >
-            [ {skin} ]
+            [ {specialAnimal ? '-' : skin} ]
           </span>
         </div>
         {!!action && (

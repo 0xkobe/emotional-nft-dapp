@@ -242,7 +242,11 @@ export default function Mint(): JSX.Element {
           },
           {
             key: 'Skin',
-            value: skins[skinIndex].skin,
+            value:
+              characterId === specialIds.Fish ||
+              characterId === specialIds.Minotaur
+                ? '-'
+                : skins[skinIndex].skin,
           },
           {
             key: 'FavCoin',
