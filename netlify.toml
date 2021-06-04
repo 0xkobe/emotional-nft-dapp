@@ -2,3 +2,9 @@
 package = 'netlify-plugin-contextual-env'
   [plugins.inputs]
   mode = 'prefix'
+
+[[plugins]]
+package = "netlify-plugin-inline-functions-env"
+  [plugins.inputs]
+  buildEvent = "onBuild"
+  include = ["NEXT_ADMIN_SUPABASE_KEY"]

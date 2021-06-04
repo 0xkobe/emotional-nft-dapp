@@ -120,9 +120,24 @@ export default function Mint(): JSX.Element {
   // logic to check if mint is activated
   useEffect(() => {
     if (!qnftSettings) return
-    if (!qnftSettings.mintStarted()) setError('Mint is currently not started')
-    if (qnftSettings.mintPaused()) setError('Mint is currently paused')
-    if (qnftSettings.mintFinished()) setError('Mint is finished')
+    qnftSettings
+      .mintStarted()
+      .then((mintStarted) => {
+        if (!mintStarted) setError('Mint is currently not started')
+      })
+      .catch(setError)
+    qnftSettings
+      .mintPaused()
+      .then((mintPaused) => {
+        if (mintPaused) setError('Mint is currently paused')
+      })
+      .catch(setError)
+    qnftSettings
+      .mintFinished()
+      .then((mintFinished) => {
+        if (mintFinished) setError('Mint is finished')
+      })
+      .catch(setError)
   }, [qnftSettings])
 
   // fetch remaining qstk
