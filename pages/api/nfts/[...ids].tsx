@@ -68,11 +68,7 @@ export default async (
         },
         {
           trait_type: 'Locked Amount',
-          value: formatUnits(nft.lockAmount) + 'QSTK',
-        },
-        {
-          trait_type: 'Locked Amount Raw',
-          value: nft.lockAmount.toString(),
+          value: formatUnits(nft.lockAmount) + ' QSTK',
         },
         {
           trait_type: "Minter's Name",
