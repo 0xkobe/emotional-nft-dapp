@@ -32,12 +32,12 @@ export default async (
     const character = getCharacter(nft.characterId)
 
     // load images
-    const backgroundImg = await Jimp.read(
-      process.env.DEPLOY_PRIME_URL + getBackground(nft.backgroundId).image,
-    )
-    const characterImg = await Jimp.read(
-      process.env.DEPLOY_PRIME_URL + character.emotions.normal,
-    )
+    const [backgroundImg, characterImg] = await Promise.all([
+      Jimp.read(
+        process.env.DEPLOY_PRIME_URL + getBackground(nft.backgroundId).image,
+      ),
+      Jimp.read(process.env.DEPLOY_PRIME_URL + character.emotions.normal),
+    ])
 
     // merge the image
     const buffer = await backgroundImg
