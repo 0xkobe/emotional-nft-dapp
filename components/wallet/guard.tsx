@@ -21,6 +21,8 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
 
   // connect walletError to error
   useEffect(() => {
+    if (walletError instanceof UserRejectedRequestErrorInjected) return
+    if (walletError instanceof UserRejectedRequestErrorWalletConnect) return
     if (walletError) setError(walletError)
   }, [walletError])
 
@@ -44,25 +46,8 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
             </>
           }
         >
-          <Button
-            onClick={() =>
-              activate(injectedConnector).catch((error) => {
-                if (error instanceof UserRejectedRequestErrorInjected) return
-                setError(error)
-              })
-            }
-          >
-            Metamask
-          </Button>
-          <Button
-            onClick={() =>
-              activate(walletConnectConnector).catch((error) => {
-                if (error instanceof UserRejectedRequestErrorWalletConnect)
-                  return
-                setError(error)
-              })
-            }
-          >
+          <Button onClick={() => activate(injectedConnector)}>Metamask</Button>
+          <Button onClick={() => activate(walletConnectConnector)}>
             WalletConnect
           </Button>
         </Metamask>

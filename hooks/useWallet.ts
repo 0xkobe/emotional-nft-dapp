@@ -6,7 +6,7 @@ import { injectedConnector } from '../lib/connector'
 
 export default function useWallet(): {
   signer: JsonRpcSigner | undefined
-  activate: (connector: AbstractConnector) => Promise<void>
+  activate: (connector: AbstractConnector) => void
   deactivate: () => void
   account?: null | string
   error?: Error
@@ -23,8 +23,7 @@ export default function useWallet(): {
     injectedConnector
       .isAuthorized()
       .then((isAuthorized) => {
-        if (isAuthorized)
-          return activateProvider(injectedConnector, undefined, true)
+        if (isAuthorized) return activateProvider(injectedConnector)
       })
       .catch(console.error)
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
@@ -40,7 +39,7 @@ export default function useWallet(): {
     (connector: AbstractConnector) => {
       if (account) return Promise.resolve() // if account is already available, no need to activate again
       console.log('Activate provider...')
-      return activateProvider(connector, undefined, true)
+      void activateProvider(connector) // error is throw in context.error
     },
     [account, activateProvider],
   )
