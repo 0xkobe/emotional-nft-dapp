@@ -12,18 +12,20 @@ export default function useWallet(): {
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
   chainId?: number
+  hasMetaMask?: boolean
 } {
-  const context = useWeb3React<Web3Provider>()
-  const { library, activate: activateProvider, account, chainId } = context
+  const { library, activate, error, account, chainId, deactivate } =
+    useWeb3React<Web3Provider>()
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
+  const [hasMetaMask, setHasMetaMask] = useState<boolean>()
 
   // activate wallet if already authorized
   useEffect(() => {
     injectedConnector
       .isAuthorized()
       .then((isAuthorized) => {
-        if (isAuthorized) return activateProvider(injectedConnector)
+        if (isAuthorized) return activate(injectedConnector)
       })
       .catch(console.error)
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
@@ -35,15 +37,7 @@ export default function useWallet(): {
     setSigner(library.getSigner(account))
   }, [account, library])
 
-  const activate = useCallback(
-    (connector: AbstractConnector) => {
-      if (account) return Promise.resolve() // if account is already available, no need to activate again
-      console.log('Activate provider...')
-      void activateProvider(connector) // error is throw in context.error
-    },
-    [account, activateProvider],
-  )
-
+  // signTypedDataV4
   const signTypedDataV4 = useCallback(
     (payload: any) => {
       if (!library) throw new Error('library is falsy')
@@ -55,13 +49,19 @@ export default function useWallet(): {
     [library, account],
   )
 
+  // check if metamask is installed
+  useEffect(() => {
+    setHasMetaMask(!!(window as any).ethereum)
+  }, []) //only execute once
+
   return {
-    signer,
+    account,
     activate,
-    account: context.account,
-    error: context.error,
-    deactivate: context.deactivate,
-    signTypedDataV4,
     chainId,
+    deactivate,
+    error,
+    signer,
+    signTypedDataV4,
+    hasMetaMask,
   }
 }

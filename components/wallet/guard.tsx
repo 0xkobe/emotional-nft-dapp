@@ -16,7 +16,13 @@ import ModalError from '../modal/modal-error'
 const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   props: PropsWithChildren<any>,
 ) => {
-  const { account, chainId, activate, error: walletError } = useWallet()
+  const {
+    account,
+    chainId,
+    activate,
+    error: walletError,
+    hasMetaMask,
+  } = useWallet()
   const [error, setError] = useState<Error>()
 
   // connect walletError to error
@@ -46,13 +52,26 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
             </>
           }
         >
-          <SecondaryButton onClick={() => activate(injectedConnector)}>
-            <img
-              src="/metamask.svg"
-              className="w-5 h-5 inline-block mr-4 align-middle"
-            />
-            Metamask
-          </SecondaryButton>
+          {hasMetaMask ? (
+            <SecondaryButton onClick={() => activate(injectedConnector)}>
+              <img
+                src="/metamask.svg"
+                className="w-5 h-5 inline-block mr-4 align-middle"
+              />
+              Metamask
+            </SecondaryButton>
+          ) : (
+            <SecondaryButton
+              target="_blank"
+              href="https://metamask.io/download"
+            >
+              <img
+                src="/metamask.svg"
+                className="w-5 h-5 inline-block mr-4 align-middle"
+              />
+              Get MetaMask
+            </SecondaryButton>
+          )}
           <SecondaryButton onClick={() => activate(walletConnectConnector)}>
             <img
               src="/walletconnect.svg"
