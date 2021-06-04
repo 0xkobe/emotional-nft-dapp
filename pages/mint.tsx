@@ -50,7 +50,7 @@ export default function Mint(): JSX.Element {
   const { push: redirect } = router
 
   // init wallet
-  const { account, signer, signTypedDataV4 } = useWallet()
+  const { account, signer, signTypedDataV4, error: walletError } = useWallet()
 
   // init QNFT smart contract
   const { contract: qnft } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
@@ -99,6 +99,11 @@ export default function Mint(): JSX.Element {
   const [bulkMintIsActive, setBulkMintIsActive] = useState(false)
   const [bulkMintNumber, setBulkMintNumber] = useState<number>()
   const [airdropKey, setAirdropKey] = useState('')
+
+  // connect walletError to error
+  useEffect(() => {
+    if (walletError) setError(walletError.message)
+  }, [walletError])
 
   // logic to activate bulk mint
   useEffect(() => {

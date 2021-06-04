@@ -26,7 +26,7 @@ export default function PageNFT(): JSX.Element {
   const router = useRouter()
 
   const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
-  const { account } = useWallet()
+  const { account, error: walletError } = useWallet()
 
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
@@ -35,6 +35,11 @@ export default function PageNFT(): JSX.Element {
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
   const [isPreview, setIsPreview] = useState(false)
+
+  // connect walletError to error
+  useEffect(() => {
+    if (walletError) setError(walletError)
+  }, [walletError])
 
   const tokenId = useMemo(() => {
     if (!router.isReady) return undefined
