@@ -1,4 +1,11 @@
-import { FunctionComponent, PropsWithChildren, useState } from 'react'
+import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector'
+import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from 'react'
 import { chain } from '../../data/chains'
 import useWallet from '../../hooks/useWallet'
 import { injectedConnector, walletConnectConnector } from '../../lib/connector'
@@ -12,16 +19,14 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   const { account, chainId, activate, error: walletError } = useWallet()
   const [error, setError] = useState<Error>()
 
+  // connect walletError to error
+  useEffect(() => {
+    if (walletError) setError(walletError)
+  }, [walletError])
+
   if (!account)
     return (
       <>
-        {walletError && (
-          <ModalError
-            error={walletError}
-            isShown
-            onRequestClose={() => setError(undefined)}
-          ></ModalError>
-        )}
         {error && (
           <ModalError
             error={error}
@@ -39,11 +44,24 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
             </>
           }
         >
-          <Button onClick={() => activate(injectedConnector).catch(setError)}>
+          <Button
+            onClick={() =>
+              activate(injectedConnector).catch((error) => {
+                if (error instanceof UserRejectedRequestErrorInjected) return
+                setError(error)
+              })
+            }
+          >
             Metamask
           </Button>
           <Button
-            onClick={() => activate(walletConnectConnector).catch(setError)}
+            onClick={() =>
+              activate(walletConnectConnector).catch((error) => {
+                if (error instanceof UserRejectedRequestErrorWalletConnect)
+                  return
+                setError(error)
+              })
+            }
           >
             WalletConnect
           </Button>
