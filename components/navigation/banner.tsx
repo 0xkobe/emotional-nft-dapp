@@ -34,7 +34,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
   }, [qnft])
 
   const updateTimeCounter = useCallback(() => {
-    let msec = 1624035600000 - new Date().getTime() // 1624035600000 : June 19th 0h 0m 0s
+    let msec = 1624021200000 - Date.now() // June 18th 1pm GMT
     const dd = Math.floor(msec / 1000 / 60 / 60 / 24)
     msec -= dd * 1000 * 60 * 60 * 24
     const hh = Math.floor(msec / 1000 / 60 / 60)
