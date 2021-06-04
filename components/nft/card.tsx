@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import classNames from 'classnames'
 import {
   FunctionComponent,
@@ -20,6 +21,7 @@ import Tooltip from '../tooltip/tooltip'
 import NFTEmotions from './emotions'
 
 export type IProps = HTMLAttributes<any> & {
+  tokenId?: BigNumber
   characterId?: number
   favCoinId: number
   backgroundId?: number
@@ -154,6 +156,7 @@ export function gradient(emotion: Emotion): string {
 }
 
 const NFTCard: FunctionComponent<IProps> = ({
+  tokenId,
   changePercentage,
   characterId,
   favCoinId,
@@ -251,14 +254,15 @@ const NFTCard: FunctionComponent<IProps> = ({
           >
             {name || 'My Emotional NFT'}
           </span>
-          <span
+          <div
             className={classNames(
-              'font-normal text-gray-500 mt-1',
+              'flex flex-row justify-between font-normal text-gray-500 mt-1',
               small ? 'text-xs leading-4' : 'text-sm leading-5',
             )}
           >
-            [ {specialAnimal ? '-' : skin} ]
-          </span>
+            <span>[ {specialAnimal ? '-' : skin} ]</span>
+            {tokenId && <span>#{tokenId.toString()}</span>}
+          </div>
         </div>
         {!!action && (
           <>

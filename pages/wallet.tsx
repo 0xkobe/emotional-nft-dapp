@@ -78,6 +78,7 @@ export default function Wallet(): JSX.Element {
                   <NFTCard
                     key={i}
                     className="cursor-pointer"
+                    tokenId={nft.tokenId}
                     changePercentage={priceChanges[i]}
                     characterId={nft.characterId}
                     favCoinId={nft.favCoinId}

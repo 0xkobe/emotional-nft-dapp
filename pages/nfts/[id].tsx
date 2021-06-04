@@ -185,6 +185,7 @@ export default function PageNFT(): JSX.Element {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <NFTCard
                     className="cursor-pointer"
+                    tokenId={nft.tokenId}
                     changePercentage={changePercentage}
                     characterId={nft.characterId}
                     favCoinId={nft.favCoinId}
