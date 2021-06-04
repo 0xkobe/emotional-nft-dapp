@@ -9,7 +9,7 @@ import {
 import { chain } from '../../data/chains'
 import useWallet from '../../hooks/useWallet'
 import { injectedConnector, walletConnectConnector } from '../../lib/connector'
-import Button from '../button/button'
+import SecondaryButton from '../button/secondary-button'
 import Metamask from '../metamask/metamask'
 import ModalError from '../modal/modal-error'
 
@@ -38,18 +38,20 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
         )}
         <Metamask
           className="bg-white border border-purple-100 rounded-2xl p-8"
-          title="Connect Your Wallet"
+          title="Connect to a Wallet"
           content={
             <>
-              To use Quiver Emotional NFTs DApp you need to connect your
+              To use Quiver Emotional NFTs DApp you need to connect to an
               Ethereum wallet.
             </>
           }
         >
-          <Button onClick={() => activate(injectedConnector)}>Metamask</Button>
-          <Button onClick={() => activate(walletConnectConnector)}>
+          <SecondaryButton onClick={() => activate(injectedConnector)}>
+            Metamask
+          </SecondaryButton>
+          <SecondaryButton onClick={() => activate(walletConnectConnector)}>
             WalletConnect
-          </Button>
+          </SecondaryButton>
         </Metamask>
       </>
     )
