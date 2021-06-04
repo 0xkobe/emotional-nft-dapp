@@ -209,7 +209,7 @@ export default function PageNFT(): JSX.Element {
                       Design Properties
                     </h3>
 
-                    <div className="flex flex-row justify-between space-x-3 content-center">
+                    <div className="space-x-4">
                       {favCoin && (
                         <IconText
                           text={favCoin.meta.name}
