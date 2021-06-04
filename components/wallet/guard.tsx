@@ -47,9 +47,17 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
           }
         >
           <SecondaryButton onClick={() => activate(injectedConnector)}>
+            <img
+              src="/metamask.svg"
+              className="w-5 h-5 inline-block mr-4 align-middle"
+            />
             Metamask
           </SecondaryButton>
           <SecondaryButton onClick={() => activate(walletConnectConnector)}>
+            <img
+              src="/walletconnect.svg"
+              className="w-5 h-5 inline-block mr-4 align-middle"
+            />
             WalletConnect
           </SecondaryButton>
         </Metamask>
