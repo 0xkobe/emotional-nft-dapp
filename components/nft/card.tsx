@@ -267,7 +267,9 @@ const NFTCard: FunctionComponent<IProps> = ({
         {!!action && (
           <>
             <div className="absolute -top-8 left-0 bottom-0 right-0 opacity-0 hover:opacity-100 hover:bg-opacity-75 bg-white flex justify-center items-center rounded-2xl">
-              {action}
+              <div className="bg-purple-700 p-2 rounded-2xl text-white">
+                {action}
+              </div>
             </div>
           </>
         )}

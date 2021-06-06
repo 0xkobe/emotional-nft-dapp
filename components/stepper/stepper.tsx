@@ -1,6 +1,6 @@
+import { CheckIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
-import IconCheck from '../icon/check'
 
 export type IProps = HTMLAttributes<{}> & {
   step: number
@@ -36,7 +36,7 @@ const Stepper: FunctionComponent<IProps> = ({
             )}
           >
             {index < step ? (
-              <IconCheck className="w-4 h-4" />
+              <CheckIcon className="w-4 h-4" />
             ) : (
               '0' + (index + 1)
             )}

@@ -1,6 +1,6 @@
+import { CheckIcon } from '@heroicons/react/outline'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
 import Button from '../button/button'
-import IconCheck from '../icon/check'
 import Modal from './modal'
 
 export type IProps = HTMLAttributes<{}> & {
@@ -25,7 +25,7 @@ const ModalSucceed: FunctionComponent<IProps> = ({
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-5 items-center">
           <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-3xl">
-            <IconCheck className="w-5 h-5 stroke-current text-green-600" />
+            <CheckIcon className="w-5 h-5 stroke-current text-green-600" />
           </div>
           <div className="flex flex-col space-y-2">
             <span className="text-lg leading-6 font-semibold text-purple-900 text-center">

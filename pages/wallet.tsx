@@ -1,10 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { ArrowNarrowRightIcon } from '@heroicons/react/outline'
 import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import LockedTokenStat from '../components/allocation/locked-token-stat'
 import Button from '../components/button/button'
-import IconCardView from '../components/icon/cardview'
 import Loader from '../components/loader/loader'
 import ModalError from '../components/modal/modal-error'
 import NFTCard from '../components/nft/card'
@@ -85,7 +85,7 @@ export default function Wallet(): JSX.Element {
                     backgroundId={nft.backgroundId}
                     skin={getCharacter(nft.characterId).skin}
                     name={nft.name}
-                    action={<IconCardView />}
+                    action={<ArrowNarrowRightIcon className="w-6 h-6" />}
                   />
                 </a>
               </Link>

@@ -1,3 +1,4 @@
+import { InformationCircleIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
 import { favCoins } from '../../data/favCoins'
@@ -5,7 +6,6 @@ import { backgrounds, skins } from '../../data/nft'
 import { CharacterOption } from '../../types/options'
 import BackgroundView from '../gallery/background-view'
 import CharacterView from '../gallery/character-view'
-import IconInformation from '../icon/information'
 import Select from '../select/select'
 import Tooltip from '../tooltip/tooltip'
 
@@ -46,7 +46,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
             tooltip="Select your favorite creature to be appear in your NFT"
             tooltipClassName="-left-20 w-40"
           >
-            <IconInformation />
+            <InformationCircleIcon className="w-4 h-4" />
           </Tooltip>
         </div>
         <CharacterView
@@ -75,7 +75,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
               tooltip="Select one of your favorite coins in the list, upgrade price is expensive and you can select the best one in this step. NFT will track your favorite coin and provide you with changed emotion by 24 hour price changes."
               tooltipClassName="-left-32 w-64"
             >
-              <IconInformation />
+              <InformationCircleIcon className="w-4 h-4" />
             </Tooltip>
           </div>
           <Select

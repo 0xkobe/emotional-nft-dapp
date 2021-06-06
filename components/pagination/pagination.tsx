@@ -1,8 +1,7 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { AnchorHTMLAttributes, FunctionComponent } from 'react'
 import SecondaryButton from '../button/secondary-button'
-import IconNext from '../icon/next'
-import IconPrev from '../icon/prev'
 
 export type IProps = AnchorHTMLAttributes<{}> & {
   hasPrev: boolean
@@ -27,7 +26,7 @@ const Pagination: FunctionComponent<IProps> = ({
           if (hasPrev) onPrev()
         }}
       >
-        <IconPrev className="inline-block mr-2" />
+        <ChevronLeftIcon className="inline-flex w-3 h-3 mr-2" />
         <span>Previous</span>
       </SecondaryButton>
       <SecondaryButton
@@ -38,7 +37,7 @@ const Pagination: FunctionComponent<IProps> = ({
         }}
       >
         <span className="mr-2">Next</span>
-        <IconNext className="inline-block" />
+        <ChevronRightIcon className="inline-flex w-3 h-3" />
       </SecondaryButton>
     </div>
   )

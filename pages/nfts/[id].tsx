@@ -1,11 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { ArrowNarrowLeftIcon, ArrowsExpandIcon } from '@heroicons/react/outline'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../components/allocation/allocation'
 import SecondaryButton from '../../components/button/secondary-button'
-import IconBack from '../../components/icon/back'
-import IconCardPreview from '../../components/icon/cardpreview'
 import Loader from '../../components/loader/loader'
 import ModalError from '../../components/modal/modal-error'
 import NFTActions from '../../components/nft/actions'
@@ -146,7 +145,7 @@ export default function PageNFT(): JSX.Element {
       <div className="flex flex-col w-full px-2 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-row justify-between mb-8">
           <SecondaryButton link href="/wallet" shadow>
-            <IconBack className="inline-block mr-2" />
+            <ArrowNarrowLeftIcon className="inline-flex w-4 h-4 mr-2" />
             <span>Back to your space</span>
           </SecondaryButton>
           <Pagination
@@ -196,7 +195,7 @@ export default function PageNFT(): JSX.Element {
                       console.log('here')
                       setIsPreview(true)
                     }}
-                    action={<IconCardPreview />}
+                    action={<ArrowsExpandIcon className="w-6 h-6" />}
                   />
                   <div>
                     <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
