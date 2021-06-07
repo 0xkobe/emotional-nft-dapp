@@ -25,6 +25,6 @@ export const fetchPercentages = async (nfts: NFT[]): Promise<number[]> => {
     const coingeckoId = getFavCoin(nft.favCoinId).meta.coingeckoId
     if (!coingeckoId) return 0
     const match = body.find((val: any) => val.id === coingeckoId)
-    return match.price_change_percentage_24h || 0
+    return match?.price_change_percentage_24h || 0
   })
 }
