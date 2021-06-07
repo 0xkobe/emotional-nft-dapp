@@ -115,7 +115,11 @@ export const getNftImagePath = (
   join(
     'nft',
     'composite',
-    `${character.name.toLowerCase()}-${character.skin.toLowerCase()}-${emotion}-${background.name
+    `${character.name.toLowerCase().replace(/ /g, '_')}-${character.skin
+      .toLowerCase()
+      .replace(/ /g, '_')}-${emotion
+      .toLocaleLowerCase()
+      .replace(/ /g, '_')}-${background.name
       .toLowerCase()
       .replace(/ /g, '_')}.png`,
   )
