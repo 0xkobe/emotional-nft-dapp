@@ -16,6 +16,11 @@ import { APINftMetadataResponse, DisplayType } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
 import { Emotion } from '../../../types/nft'
 
+const baseUrl =
+  process.env.CONTEXT === 'production'
+    ? process.env.URL
+    : process.env.DEPLOY_PRIME_URL
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -44,11 +49,9 @@ export default async (
     const response: APINftMetadataResponse = {
       author: nft.author,
       description: nft.description,
-      external_url: process.env.DEPLOY_PRIME_URL + '/nfts/' + tokenId,
+      external_url: baseUrl + '/nfts/' + tokenId,
       image:
-        process.env.DEPLOY_PRIME_URL +
-        '/' +
-        getNftImagePath(character, background, Emotion.Normal),
+        baseUrl + '/' + getNftImagePath(character, background, Emotion.Normal),
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
