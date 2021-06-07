@@ -110,11 +110,12 @@ export const getBackground = (backgroundId: number): BackgroundData => {
 export const getNftImagePath = (
   character: Character,
   background: BackgroundData,
+  emotion: Emotion,
 ): string =>
   join(
     'nft',
     'composite',
-    `${character.name.toLowerCase()}-${character.skin.toLowerCase()}-${background.name
+    `${character.name.toLowerCase()}-${character.skin.toLowerCase()}-${emotion}-${background.name
       .toLowerCase()
       .replace(/ /g, '_')}.png`,
   )

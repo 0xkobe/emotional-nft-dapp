@@ -14,6 +14,7 @@ import {
 import { remoteProvider } from '../../../lib/remote-provider'
 import { APINftMetadataResponse, DisplayType } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
+import { Emotion } from '../../../types/nft'
 
 export default async (
   req: NextApiRequest,
@@ -47,7 +48,7 @@ export default async (
       image:
         process.env.DEPLOY_PRIME_URL +
         '/' +
-        getNftImagePath(character, background),
+        getNftImagePath(character, background, Emotion.Normal),
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
