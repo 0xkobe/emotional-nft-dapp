@@ -1,18 +1,16 @@
+require('dotenv').config()
 import { existsSync } from 'fs'
 import Jimp from 'jimp'
 import { join } from 'path'
 import { backgrounds, characters } from '../data/nft'
+import { getNftImagePath } from '../lib/nft'
 
 const main = async () => {
   for (const character of characters) {
     for (const background of backgrounds) {
       const compositePath = join(
         'public',
-        'nft',
-        'composite',
-        `${character.name.toLowerCase()}-${character.skin.toLowerCase()}-${background.name
-          .toLowerCase()
-          .replace(/ /g, '_')}.png`,
+        getNftImagePath(character, background),
       )
 
       // check if image already exist
