@@ -9,10 +9,17 @@ import {
   getBackground,
   getCharacter,
   getFavCoin,
+  getNftImagePath,
 } from '../../../lib/nft'
 import { remoteProvider } from '../../../lib/remote-provider'
 import { APINftMetadataResponse, DisplayType } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
+import { Emotion } from '../../../types/nft'
+
+const baseUrl =
+  process.env.CONTEXT === 'production'
+    ? process.env.URL
+    : process.env.DEPLOY_PRIME_URL
 
 export default async (
   req: NextApiRequest,
@@ -35,13 +42,16 @@ export default async (
       remoteProvider,
     ) as QNFT
     const nft = await fetchNFT(qnft, tokenId)
+
     const character = getCharacter(nft.characterId)
+    const background = getBackground(nft.backgroundId)
 
     const response: APINftMetadataResponse = {
       author: nft.author,
       description: nft.description,
-      external_url: process.env.DEPLOY_PRIME_URL + '/nfts/' + tokenId,
-      image: process.env.DEPLOY_PRIME_URL + character.emotions.normal,
+      external_url: baseUrl + '/nfts/' + tokenId,
+      image:
+        baseUrl + '/' + getNftImagePath(character, background, Emotion.Normal),
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
@@ -55,7 +65,7 @@ export default async (
         },
         {
           trait_type: 'Background',
-          value: getBackground(nft.backgroundId).name,
+          value: background.name,
         },
         {
           trait_type: 'Favorite Coin',

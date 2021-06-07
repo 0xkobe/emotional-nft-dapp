@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run generate-nft-images",
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"{components,pages}/**/*.{ts,tsx}\" --max-warnings 0 && prettier \"{components,pages}/**/*.{ts,tsx}\" --check",
     "format": "prettier \"{components,pages}/**/*.{ts,tsx}\" -w",
     "netlify": "netlify",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "generate-nft-images": "ts-node ./scripts/generate-nft-images.ts"
   },
   "dependencies": {
     "@0xsequence/multicall": "^0.19.3",
@@ -57,6 +59,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.1",
     "husky": "^6.0.0",
+    "jimp": "^0.16.1",
     "netlify-cli": "^3.29.17",
     "postcss": "^8.2.15",
     "prettier": "^2.3.0",
@@ -64,6 +67,7 @@
     "pretty-quick": "^3.1.0",
     "storybook-css-modules-preset": "^1.1.1",
     "tailwindcss": "^2.1.2",
+    "ts-node": "^10.0.0",
     "typescript": "^4.2.4",
     "utf-8-validate": "^5.0.5"
   },

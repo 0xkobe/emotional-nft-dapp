@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import createHttpError from 'http-errors'
+import { join } from 'path'
 import { favCoins } from '../data/favCoins'
 import { backgrounds, characters, lockOptions } from '../data/nft'
 import {
@@ -104,6 +105,24 @@ export const getBackground = (backgroundId: number): BackgroundData => {
     throw new Error(`background with id ${backgroundId} not found`)
   return backgrounds[backgroundId]
 }
+
+// return the path to the generated image combining the character and the background
+export const getNftImagePath = (
+  character: Character,
+  background: BackgroundData,
+  emotion: Emotion,
+): string =>
+  join(
+    'nft',
+    'composite',
+    `${character.name.toLowerCase().replace(/ /g, '_')}-${character.skin
+      .toLowerCase()
+      .replace(/ /g, '_')}-${emotion
+      .toLocaleLowerCase()
+      .replace(/ /g, '_')}-${background.name
+      .toLowerCase()
+      .replace(/ /g, '_')}.png`,
+  )
 
 // create a new metadata on the API. Returns the created metadata id.
 export const createNFTOffChain = async (
