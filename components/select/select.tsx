@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import {
   FunctionComponent,
@@ -8,7 +9,6 @@ import {
 } from 'react'
 import useOnClickOutside from '../../hooks/UI/useOnClickOutside'
 import SecondaryButton from '../button/secondary-button'
-import IconChevron from '../icon/chevron'
 
 export type Option = {
   icon?: string
@@ -104,9 +104,9 @@ const Select: FunctionComponent<IProps> = ({
                 </span>
               )}
             </div>
-            <IconChevron
+            <ChevronDownIcon
               className={classNames(
-                'mt-2 duration-400 transition-transform fill-current text-purple-700',
+                'w-5 h-5 duration-400 transition-transform text-purple-700',
                 isOpen ? 'transform rotate-180' : '',
               )}
             />

@@ -1,7 +1,7 @@
+import { XIcon } from '@heroicons/react/outline'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { getCharacter } from '../../lib/nft'
 import { Emotion, NFT } from '../../types/nft'
-import IconClose from '../icon/close'
 import Modal from '../modal/modal'
 import NFTCard from './card'
 
@@ -31,7 +31,7 @@ const NFTPreview: FunctionComponent<IProps> = ({
             NFT Emotions Preview
           </span>
           <span onClick={onModalClose}>
-            <IconClose className="text-gray-400 cursor-pointer" />
+            <XIcon className="w-4 h-4 text-gray-400 cursor-pointer" />
           </span>
         </div>
         <div className="flex flex-row space-x-8">

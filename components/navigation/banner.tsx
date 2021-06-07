@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { XIcon } from '@heroicons/react/outline'
 import {
   FunctionComponent,
   HTMLAttributes,
@@ -10,7 +11,6 @@ import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
 import { bnToText, formatNumber } from '../../lib/utils'
 import { QNFT } from '../../types/contracts'
-import IconClose from '../icon/close'
 
 export type IProps = HTMLAttributes<any> & {
   close: () => void
@@ -123,7 +123,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
         <div className="flex-grow"></div>
         <div>
           <a onClick={props.close} className="cursor-pointer">
-            <IconClose className="-mt-1" />
+            <XIcon className="w-4 h-4" />
           </a>
         </div>
       </div>

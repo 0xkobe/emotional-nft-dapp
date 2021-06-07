@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { InformationCircleIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import React, {
   ChangeEvent,
@@ -17,7 +18,6 @@ import {
 } from '../../lib/utils'
 import { QAirdrop } from '../../types/contracts'
 import { LockOption } from '../../types/nft'
-import IconInformation from '../icon/information'
 import Input from '../input/input'
 import Select from '../select/select'
 import Tooltip from '../tooltip/tooltip'
@@ -132,7 +132,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             tooltip="QSTK tokens allocated for NFT sale are restricted and no more tokens will be provided for discounted purchase."
             tooltipClassName="-left-28 w-56"
           >
-            <IconInformation />
+            <InformationCircleIcon className="w-4 h-4" />
           </Tooltip>
         </div>
         <div className="flex flex-col space-y-2">
@@ -225,7 +225,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
                 tooltip="Whiltelist key (base64) you receive from the team for your airdrop to get the early access to mint privilege."
                 tooltipClassName="-left-28 w-56"
               >
-                <IconInformation />
+                <InformationCircleIcon className="w-4 h-4" />
               </Tooltip>
             </div>
             <div className="flex flex-col space-y-2">
@@ -259,7 +259,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
                 tooltip="The total QSTK amount you receive is defined by “QSTK you purchase + the amount allocated for your whitelist key”."
                 tooltipClassName="-left-28 w-56"
               >
-                <IconInformation />
+                <InformationCircleIcon className="w-4 h-4" />
               </Tooltip>
             </div>
             <div className="flex flex-row space-x-2 items-center">

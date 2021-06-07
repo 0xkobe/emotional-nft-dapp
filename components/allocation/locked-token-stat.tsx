@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { LockClosedIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
 import { bnToText } from '../../lib/utils'
-import LockIcon from '../icon/lock'
 
 export type IProps = HTMLAttributes<{}> & {
   lockAmount?: BigNumber
@@ -22,7 +22,7 @@ const LockedTokenStat: FunctionComponent<IProps> = ({
       <div className="relative flex w-12 h-12 items-center justify-center rounded-full border border-purple-100">
         <img className="w-6 h-6" src="/quiver.svg" />
         <div className="absolute top-7 left-9 flex w-5 h-5 items-center justify-center rounded-full bg-blue-500 text-white ">
-          <LockIcon className="w-3.5 h-3.5" />
+          <LockClosedIcon className="w-3 h-3" />
         </div>
       </div>
       <div className="flex flex-col mr-4">
