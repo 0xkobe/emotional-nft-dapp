@@ -27,7 +27,6 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
     activate,
     error: walletError,
     hasMetaMask,
-    active,
   } = useWallet()
   const [error, setError] = useState<Error>()
   const [isWalletConnectActivating, setIsWalletConnectActivating] =
@@ -45,7 +44,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
     return () => {
       setIsWalletConnectActivating(false)
     }
-  }, [active, error])
+  }, [error])
 
   function activateWithConnector(connector: AbstractConnector) {
     if (connector instanceof WalletConnectConnector) {
