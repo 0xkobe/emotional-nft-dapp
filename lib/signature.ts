@@ -4,6 +4,7 @@ export function payloadForSignatureEIP712v4(
   backgroundId: number,
   description: string,
   name: string,
+  timestamp: number,
   bulkMintNumber?: number,
 ) {
   const typedData = {
@@ -19,6 +20,7 @@ export function payloadForSignatureEIP712v4(
         { name: 'backgroundId', type: 'uint32' },
         { name: 'description', type: 'string' },
         { name: 'name', type: 'string' },
+        { name: 'timestamp', type: 'uint256' },
       ],
     },
     domain: {
@@ -33,6 +35,7 @@ export function payloadForSignatureEIP712v4(
       backgroundId,
       description,
       name,
+      timestamp,
       bulkMintNumber,
     },
   }

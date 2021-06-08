@@ -20,6 +20,7 @@ export default async (
       signature,
       chainId,
       defaultEmotion,
+      timestamp,
     } = req.body as APINftCreateRequest
 
     // check body
@@ -33,6 +34,11 @@ export default async (
     if (!defaultEmotion) reqError.push('defaultEmotion is empty')
     if (!Number.isInteger(backgroundId))
       reqError.push('backgroundId is not set or not a integer')
+    if (!Number.isInteger(timestamp))
+      reqError.push('timestamp is not set or not a integer')
+    if (Math.floor(Date.now() / 1000) > timestamp + 10 * 60)
+      // timestamp is valid for 10min
+      reqError.push('signature is expired')
 
     if (reqError.length > 0)
       throw new createHttpError.BadRequest(reqError.join(', '))
@@ -45,6 +51,7 @@ export default async (
         backgroundId,
         description,
         name,
+        timestamp,
       ),
       sig: signature,
     })

@@ -13,6 +13,7 @@ export type APINftCreateRequest = {
   signature: string
   chainId: number
   defaultEmotion: Emotion
+  timestamp: number
 }
 
 export type APINftCreateResponse = {
@@ -29,6 +30,7 @@ export type APINftBulkCreateRequest = {
   chainId: number
   defaultEmotion: Emotion
   bulkMintNumber: number
+  timestamp: number
 }
 
 export type APINftBulkCreateResponse = {
