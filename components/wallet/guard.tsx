@@ -48,19 +48,18 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
   }, [active, error])
 
   function activateWithConnector(connector: AbstractConnector) {
-    console.log('activateWithConnector')
-    if (walletConnectConnector instanceof WalletConnectConnector) {
+    if (connector instanceof WalletConnectConnector) {
       setIsWalletConnectActivating(true)
       // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
       // from issue https://github.com/NoahZinsmeister/web3-react/issues/124
       // let's remove this hack when issue is resolved
-      if (walletConnectConnector.walletConnectProvider?.wc?.uri) {
-        walletConnectConnector.walletConnectProvider = undefined
+      if (connector.walletConnectProvider?.wc?.uri) {
+        connector.walletConnectProvider = undefined
       }
     }
-    ;(activate(connector) as any)
+    activate(connector)
       .then(() => setIsWalletConnectActivating(false))
-      .catch(console.error)
+      .catch(setError)
   }
 
   if (!account)
