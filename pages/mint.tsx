@@ -99,6 +99,7 @@ export default function Mint(): JSX.Element {
   const [bulkMintIsActive, setBulkMintIsActive] = useState(false)
   const [bulkMintNumber, setBulkMintNumber] = useState<number>()
   const [airdropKey, setAirdropKey] = useState('')
+  const [timestamp, setTimestamp] = useState<number>()
 
   // connect walletError to error
   useEffect(() => {
@@ -356,6 +357,7 @@ export default function Mint(): JSX.Element {
   const handleSubmit = () => {
     if (isDisabled()) return
     if (mintStep < 2) return setMintStep(mintStep + 1)
+    setTimestamp(Math.floor(Date.now() / 1000))
     setIsMinting(true)
   }
 
@@ -371,6 +373,7 @@ export default function Mint(): JSX.Element {
     if (!isMinting) return
     if (!account) return // don't sign if account is not set
     if (backgroundIndex == undefined) return
+    if (!timestamp) return
 
     // generate signature
     signTypedDataV4(
@@ -380,6 +383,7 @@ export default function Mint(): JSX.Element {
         backgroundIndex,
         nftDescription,
         nftName,
+        timestamp,
         bulkMintNumber,
       ),
     )
@@ -401,6 +405,7 @@ export default function Mint(): JSX.Element {
     signTypedDataV4,
     account,
     bulkMintNumber,
+    timestamp,
   ])
 
   // create metadata
@@ -408,6 +413,7 @@ export default function Mint(): JSX.Element {
     if (!signature) return
     if (!account) return
     if (backgroundIndex == undefined) return
+    if (!timestamp) return
     // TODO: we could update the modal to display a loader
 
     // save bulk meta
@@ -426,6 +432,7 @@ export default function Mint(): JSX.Element {
         nftDescription,
         nftName,
         Emotion.Normal, // FIXME: make the user choose the default emotion
+        timestamp,
         bulkMintNumber,
       )
         .then(setMetaIds)
@@ -445,6 +452,7 @@ export default function Mint(): JSX.Element {
         nftDescription,
         nftName,
         Emotion.Normal, // FIXME: make the user choose the default emotion
+        timestamp,
       )
         .then((x) => {
           setMetaIds([x])
@@ -467,6 +475,7 @@ export default function Mint(): JSX.Element {
     nftName,
     bulkMintIsActive,
     bulkMintNumber,
+    timestamp,
   ])
 
   // sign & broadcast transaction

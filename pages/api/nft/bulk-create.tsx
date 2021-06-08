@@ -28,6 +28,7 @@ export default async (
       chainId,
       defaultEmotion,
       bulkMintNumber,
+      timestamp,
     } = req.body as APINftBulkCreateRequest
 
     // check body
@@ -43,6 +44,11 @@ export default async (
       reqError.push('backgroundId is not set or not a integer')
     if (!Number.isInteger(bulkMintNumber))
       reqError.push('bulkMintNumber is not set or not a integer')
+    if (!Number.isInteger(timestamp))
+      reqError.push('timestamp is not set or not a integer')
+    if (Math.floor(Date.now() / 1000) > timestamp + 10 * 60)
+      // timestamp is valid for 10min
+      reqError.push('signature is expired')
 
     if (reqError.length > 0)
       throw new createHttpError.BadRequest(reqError.join(', '))
@@ -55,6 +61,7 @@ export default async (
         backgroundId,
         description,
         name,
+        timestamp,
         bulkMintNumber,
       ),
       sig: signature,

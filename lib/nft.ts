@@ -134,6 +134,7 @@ export const createNFTOffChain = async (
   description: string,
   name: string,
   emotion: Emotion,
+  timestamp: number,
 ): Promise<number> => {
   const data: APINftCreateRequest = {
     author,
@@ -144,6 +145,7 @@ export const createNFTOffChain = async (
     signature,
     chainId,
     defaultEmotion: emotion,
+    timestamp,
   }
   const res = await fetch('/api/nft/create', {
     headers: {
@@ -175,6 +177,7 @@ export const createBulkNFTOffChain = async (
   description: string,
   name: string,
   emotion: Emotion,
+  timestamp: number,
   bulkMintNumber: number,
 ): Promise<number[]> => {
   const data: APINftBulkCreateRequest = {
@@ -186,6 +189,7 @@ export const createBulkNFTOffChain = async (
     signature,
     chainId,
     defaultEmotion: emotion,
+    timestamp,
     bulkMintNumber,
   }
   const res = await fetch('/api/nft/bulk-create', {
