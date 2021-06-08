@@ -127,25 +127,24 @@ const NFTTransferModal: FunctionComponent<IProps> = ({
         onModalClose={onModalClose}
         onRequestClose={onRequestClose}
       >
-        <div className="flex flex-col space-y-6">
-          <div className="flex flex-col space-y-5 items-center">
+        <div className="flex flex-col max-w-xs">
+          <div className="flex flex-col items-center">
             <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-3xl">
               <ArrowRightIcon className="w-5 h-5 stroke-current text-purple-500" />
             </div>
-            <div className="flex flex-col space-y-2">
-              {/* TODO: implement design correctly. make sure horizontal margin between elements are correct */}
-              <span className="text-lg leading-6 font-semibold text-purple-900 text-center">
+            <div className="flex flex-col">
+              <span className="text-lg leading-6 font-semibold text-purple-900 text-center mt-8">
                 Transfer your NFT
               </span>
-              <span className="text-sm leading-5 font-normal text-gray-500 text-center">
+              <span className="text-sm leading-5 font-normal text-gray-500 text-center mt-2">
                 Transfer this NFT and its QSTK Token allocated to another ETH
                 address
               </span>
-              <span className="text-sm leading-5 font-medium text-purple-900">
+              <span className="text-sm leading-5 font-medium text-purple-900 mt-8">
                 Receiver address
               </span>
               <Input
-                className="w-full"
+                className="mt-2 block"
                 placeholder="0x00000000000000..."
                 value={receiver}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -154,12 +153,13 @@ const NFTTransferModal: FunctionComponent<IProps> = ({
                 isError={!!receiverError}
               />
               {receiverError && (
-                <div className="text-red-500 text-xs">{receiverError}</div>
+                <div className="text-red-500 text-xs mt-1">{receiverError}</div>
               )}
-              <span className="text-sm leading-5 font-normal text-gray-500 text-center">
+              <span className="text-sm leading-5 font-normal text-gray-500 text-left">
                 <Input
                   id="transfer-checkbox-confirmation"
                   type="checkbox"
+                  className="mt-8"
                   checked={confirmTransfer}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     setConfirmTransfer(e.target.checked)
@@ -175,7 +175,11 @@ const NFTTransferModal: FunctionComponent<IProps> = ({
               </span>
             </div>
           </div>
-          <Button disabled={!formIsFilled} onClick={handleSubmit}>
+          <Button
+            disabled={!formIsFilled}
+            onClick={handleSubmit}
+            className="mt-8"
+          >
             Validate transfer
           </Button>
         </div>
