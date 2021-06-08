@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent,HTMLAttributes,ReactNode } from 'react'
+import { FunctionComponent, HTMLAttributes, ReactNode } from 'react'
 import { useHover } from '../../hooks/UI/userHover'
 
 export type IProps = HTMLAttributes<{}> & {
