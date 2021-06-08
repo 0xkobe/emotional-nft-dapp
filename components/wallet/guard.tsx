@@ -49,6 +49,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
 
   function activateWithConnector(connector: AbstractConnector) {
     if (connector instanceof WalletConnectConnector) {
+      if (isWalletConnectActivating) return
       setIsWalletConnectActivating(true)
       // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
       // from issue https://github.com/NoahZinsmeister/web3-react/issues/124
@@ -106,6 +107,7 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
           )}
           <SecondaryButton
             onClick={() => activateWithConnector(walletConnectConnector)}
+            disabled={isWalletConnectActivating}
           >
             {isWalletConnectActivating ? (
               <IconSpinner className="w-5 h-5 inline-block" />
