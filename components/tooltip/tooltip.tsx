@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent, HTMLAttributes, ReactNode } from 'react'
+import { FunctionComponent,HTMLAttributes,ReactNode } from 'react'
 import { useHover } from '../../hooks/UI/userHover'
 
 export type IProps = HTMLAttributes<{}> & {
@@ -18,7 +18,7 @@ const Tooltip: FunctionComponent<IProps> = ({
   return (
     <div className={classNames(className, 'relative')}>
       <div ref={ref}>{children}</div>
-      {isHover && (
+      {isHover && tooltip && (
         <div className="absolute left-2/4 top-1 w-0 h-full">
           <div className="relative h-full">
             <div

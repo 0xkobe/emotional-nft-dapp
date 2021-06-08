@@ -279,11 +279,7 @@ export default function PageNFT(): JSX.Element {
                   </span>
                   <div className="flex flex-col space-y-4">
                     <Tooltip
-                      tooltip={
-                        canTransfer
-                          ? 'Transfer this token to another address'
-                          : 'You cannot transfer this token'
-                      }
+                      tooltip={!canTransfer && 'You cannot transfer this token'}
                     >
                       <SecondaryButton
                         className="block"
@@ -296,17 +292,13 @@ export default function PageNFT(): JSX.Element {
                       </SecondaryButton>
                     </Tooltip>
 
-                    <Tooltip tooltip="Feature coming soon">
-                      <SecondaryButton disabled className="block">
-                        Edition (coming soon)
-                      </SecondaryButton>
-                    </Tooltip>
+                    <SecondaryButton disabled className="block">
+                      Edition (coming soon)
+                    </SecondaryButton>
 
-                    <Tooltip tooltip="Feature coming soon">
-                      <SecondaryButton disabled className="block">
-                        Upgrade (coming soon)
-                      </SecondaryButton>
-                    </Tooltip>
+                    <SecondaryButton disabled className="block">
+                      Upgrade (coming soon)
+                    </SecondaryButton>
                   </div>
                 </div>
               </aside>
