@@ -1,5 +1,8 @@
 import { UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector'
-import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
+import {
+  UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
+  WalletConnectConnector,
+} from '@web3-react/walletconnect-connector'
 import {
   FunctionComponent,
   PropsWithChildren,
@@ -72,7 +75,20 @@ const WalletGuard: FunctionComponent<PropsWithChildren<any>> = (
               Get MetaMask
             </SecondaryButton>
           )}
-          <SecondaryButton onClick={() => activate(walletConnectConnector)}>
+          <SecondaryButton
+            onClick={() => {
+              // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
+              // from issue https://github.com/NoahZinsmeister/web3-react/issues/124
+              // let's remove this hack when issue is resolved
+              if (
+                walletConnectConnector instanceof WalletConnectConnector &&
+                walletConnectConnector.walletConnectProvider?.wc?.uri
+              ) {
+                walletConnectConnector.walletConnectProvider = undefined
+              }
+              activate(walletConnectConnector)
+            }}
+          >
             <img
               src="/walletconnect.svg"
               className="w-5 h-5 inline-block mr-4 align-middle"
