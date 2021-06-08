@@ -8,13 +8,14 @@ export default function useWallet(): {
   signer: JsonRpcSigner | undefined
   activate: (connector: AbstractConnector) => void
   deactivate: () => void
+  active: boolean
   account?: null | string
   error?: Error
   signTypedDataV4: (payload: any) => Promise<string>
   chainId?: number
   hasMetaMask?: boolean
 } {
-  const { library, activate, error, account, chainId, deactivate } =
+  const { library, activate, active, error, account, chainId, deactivate } =
     useWeb3React<Web3Provider>()
 
   const [signer, setSigner] = useState<JsonRpcSigner>()
@@ -57,6 +58,7 @@ export default function useWallet(): {
   return {
     account,
     activate,
+    active,
     chainId,
     deactivate,
     error,
