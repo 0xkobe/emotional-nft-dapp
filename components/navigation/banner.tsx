@@ -60,49 +60,57 @@ const Banner: FunctionComponent<IProps> = (props) => {
   return (
     <div className="bg-purple-100 text-purple-900 text-xs leading-4 font-normal">
       <div className="max-w-7xl mx-auto relative flex flex-col md:flex-row px-2 sm:px-6 lg:px-8 py-4">
-        <div>End of sale in</div>
-        <div className="ml-3 -mt-1">
-          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
-            {dd}
-            <span
-              className="absolute -bottom-3.5 left-0 right-0 text-center"
-              style={{ fontSize: '6px' }}
-            >
-              Days
+        <div className="relative flex flex-row">
+          <div>End of sale in</div>
+          <div className="ml-3 -mt-1">
+            <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
+              {dd}
+              <span
+                className="absolute -bottom-3.5 left-0 right-0 text-center"
+                style={{ fontSize: '6px' }}
+              >
+                Days
+              </span>
+            </span>{' '}
+            :{' '}
+            <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
+              {`0${hh}`.slice(-2)}
+              <span
+                className="absolute -bottom-3.5 left-0 right-0 text-center"
+                style={{ fontSize: '6px' }}
+              >
+                Hours
+              </span>
+            </span>{' '}
+            :{' '}
+            <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
+              {`0${mm}`.slice(-2)}
+              <span
+                className="absolute -bottom-3.5 left-0 right-0 text-center"
+                style={{ fontSize: '6px' }}
+              >
+                Min
+              </span>
+            </span>{' '}
+            :{' '}
+            <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
+              {`0${ss}`.slice(-2)}
+              <span
+                className="absolute -bottom-3.5 left-0 right-0 text-center"
+                style={{ fontSize: '6px' }}
+              >
+                Sec
+              </span>
             </span>
-          </span>{' '}
-          :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
-            {`0${hh}`.slice(-2)}
-            <span
-              className="absolute -bottom-3.5 left-0 right-0 text-center"
-              style={{ fontSize: '6px' }}
-            >
-              Hours
-            </span>
-          </span>{' '}
-          :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
-            {`0${mm}`.slice(-2)}
-            <span
-              className="absolute -bottom-3.5 left-0 right-0 text-center"
-              style={{ fontSize: '6px' }}
-            >
-              Min
-            </span>
-          </span>{' '}
-          :{' '}
-          <span className="relative bg-purple-50 p-1 rounded-md w-6 text-center inline-block">
-            {`0${ss}`.slice(-2)}
-            <span
-              className="absolute -bottom-3.5 left-0 right-0 text-center"
-              style={{ fontSize: '6px' }}
-            >
-              Sec
-            </span>
-          </span>
+          </div>
+          <div className="flex-grow"></div>
+          <div className="md:hidden">
+            <a onClick={props.close} className="cursor-pointer">
+              <XIcon className="w-4 h-4" />
+            </a>
+          </div>
         </div>
-        <div className="md:ml-10">
+        <div className="mt-6 md:mt-0 md:ml-10">
           Remaining NFTs{' '}
           <span className="text-purple-700">
             {nftMaxSupply && nftSupply
@@ -121,7 +129,7 @@ const Banner: FunctionComponent<IProps> = (props) => {
           </span>
         </div>
         <div className="flex-grow"></div>
-        <div>
+        <div className="hidden md:block">
           <a onClick={props.close} className="cursor-pointer">
             <XIcon className="w-4 h-4" />
           </a>
