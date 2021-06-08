@@ -1,13 +1,13 @@
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
+import { Web3ReactManagerFunctions } from '@web3-react/core/dist/types'
 import { useCallback, useEffect, useState } from 'react'
 import { injectedConnector } from '../lib/connector'
 
 export default function useWallet(): {
   signer: JsonRpcSigner | undefined
-  activate: (connector: AbstractConnector) => void
-  deactivate: () => void
+  activate: Web3ReactManagerFunctions['activate']
+  deactivate: Web3ReactManagerFunctions['deactivate']
   active: boolean
   account?: null | string
   error?: Error
