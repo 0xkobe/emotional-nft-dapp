@@ -16,12 +16,10 @@ const Tooltip: FunctionComponent<IProps> = ({
   const [ref, isHover] = useHover<HTMLDivElement>()
 
   return (
-    <div className={classNames(className, 'relative inline-flex')}>
-      <div ref={ref} className="cursor-pointer">
-        {children}
-      </div>
+    <div className={classNames(className, 'relative')}>
+      <div ref={ref}>{children}</div>
       {isHover && (
-        <div className="absolute left-2/4 w-0 h-full">
+        <div className="absolute left-2/4 top-1 w-0 h-full">
           <div className="relative h-full">
             <div
               className={classNames(
