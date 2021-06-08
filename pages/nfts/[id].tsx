@@ -10,6 +10,7 @@ import ModalError from '../../components/modal/modal-error'
 import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import NFTPreview from '../../components/nft/preview'
+import NFTTransferModal from '../../components/nft/transfer'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
 import { backgrounds, skins } from '../../data/nft'
@@ -34,6 +35,7 @@ export default function PageNFT(): JSX.Element {
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
   const [isPreview, setIsPreview] = useState(false)
+  const [showTransferModal, setShowTransferModal] = useState(false)
 
   // connect walletError to error
   useEffect(() => {
@@ -168,6 +170,13 @@ export default function PageNFT(): JSX.Element {
 
         {isLoading && <Loader />}
 
+        {showTransferModal && nft && (
+          <NFTTransferModal
+            tokenId={nft.tokenId}
+            onRequestClose={() => setShowTransferModal(false)}
+          ></NFTTransferModal>
+        )}
+
         {error && (
           <ModalError
             error={error}
@@ -260,9 +269,7 @@ export default function PageNFT(): JSX.Element {
                 />
                 <NFTActions
                   className="mt-8"
-                  onTransfer={() => {
-                    console.log('transfer')
-                  }}
+                  onTransfer={() => setShowTransferModal(true)}
                   onEdit={() => {
                     console.log('edit')
                   }}

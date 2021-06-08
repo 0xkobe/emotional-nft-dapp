@@ -7,7 +7,10 @@ export type IProps = HTMLAttributes<any> & {
   onUpgrade: () => void
 }
 
-const NFTActions: FunctionComponent<IProps> = ({ className }: IProps) => {
+const NFTActions: FunctionComponent<IProps> = ({
+  className,
+  onTransfer,
+}: IProps) => {
   return (
     <div
       className={classNames(
@@ -19,8 +22,12 @@ const NFTActions: FunctionComponent<IProps> = ({ className }: IProps) => {
         NFT Actions
       </span>
       <div className="flex flex-col space-y-4">
-        <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg cursor-not-allowed">
-          Transfer (coming soon)
+        {/* TODO: implement button design correctly */}
+        <span
+          className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg  cursor-pointer"
+          onClick={onTransfer}
+        >
+          Transfer
         </span>
         <span className="px-8 py-2 border border-gray-200 text-sm leading-5 font-medium text-gray-300 text-center rounded-lg cursor-not-allowed">
           Edition (coming soon)
