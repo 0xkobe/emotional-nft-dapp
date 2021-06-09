@@ -36,7 +36,10 @@ export const fetchNFTs = async (
       if (nftDataOnChain.unlockTime === 0)
         throw new createHttpError.NotFound(`nft with id "${tokenId}" not found`)
 
-      return nftDataOnChain
+      return {
+        ...nftDataOnChain,
+        tokenId,
+      }
     }),
   )
 
@@ -54,11 +57,20 @@ export const fetchNFTs = async (
     throw new createHttpError.BadRequest(`some nft have not been found`)
 
   // return data
-  return nftsDataOnChain.map((nftDataOnChain, i) => ({
-    ...nftDataOnChain,
-    ...nftsDataOffChain[i],
-    tokenId: tokenIds[i],
-  }))
+  return nftsDataOnChain
+    .map((onChain) => {
+      const offChain = nftsDataOffChain.find(
+        (offChain) => offChain.id === onChain.metaId,
+      )
+      if (!offChain)
+        throw new Error(`meta with id "${onChain.metaId}" not found`)
+      return {
+        ...onChain,
+        ...offChain,
+        tokenId: onChain.tokenId,
+      }
+    })
+    .sort((a, b) => a.tokenId.sub(b.tokenId).toNumber())
 }
 
 export const fetchNFT = async (
