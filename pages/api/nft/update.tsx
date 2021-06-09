@@ -89,6 +89,15 @@ export default async (
         'metaId provided is not the same as on chain metaId',
       )
 
+    // check for spam
+    const { error: spamError, count } = await supabase
+      .from<NFTOffChain>('nft')
+      .select('updatedAt', { count: 'exact' })
+      .eq('id', metaId)
+      .gt('updatedAt', new Date(Date.now() - 30 * 1000).toUTCString()) // 30sec in the past
+    if (spamError) throw spamError
+    if (count && count > 0) throw new createHttpError.TooManyRequests()
+
     // prepare metadata
     const updateMetadata: UpdateNFTOffChain = {
       author,
@@ -98,16 +107,8 @@ export default async (
       chainId,
       creator: signer.toLowerCase(),
       defaultEmotion,
+      updatedAt: new Date(),
     }
-
-    // check for spam
-    const { error: spamError, count } = await supabase
-      .from<NFTOffChain>('nft')
-      .select('updatedAt', { count: 'exact' })
-      .eq('id', metaId)
-      .gt('updatedAt', new Date(Date.now() - 30 * 1000).toUTCString()) // 30sec in the past
-    if (spamError) throw spamError
-    if (count && count > 0) throw new createHttpError.TooManyRequests()
 
     // update data
     const { error } = await supabase

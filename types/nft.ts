@@ -77,10 +77,7 @@ export type CreateNFTOffChain = Omit<
 >
 
 // Structure used to update the nft data in database
-export type UpdateNFTOffChain = Omit<
-  NFTOffChain,
-  'id' | 'createdAt' | 'updatedAt'
->
+export type UpdateNFTOffChain = Omit<NFTOffChain, 'id' | 'createdAt'>
 
 // Structure of the nft data onchain
 export type NFTOnChain = {
