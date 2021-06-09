@@ -10,6 +10,7 @@ const Template: Story<IProps> = (args) => <MintSummary {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
+  title: 'Mint Summary',
   properties: [
     {
       title: 'Design Properties',
@@ -71,5 +72,13 @@ Default.args = {
       ],
     },
   ],
-  mintPrice: '1.4761 ETH',
+  prices: {
+    title: 'NFT Mint Price',
+    keyValues: [
+      { key: 'Character', value: '1.0 ETH' },
+      { key: 'FavCoin', value: '0.4761 ETH' },
+      { key: 'Token', value: '0.0 ETH' },
+    ],
+  },
+  totalPrice: '1.4761 ETH',
 }
