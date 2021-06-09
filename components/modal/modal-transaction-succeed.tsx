@@ -3,7 +3,10 @@ import React, { FunctionComponent, HTMLAttributes } from 'react'
 import Button from '../button/button'
 import Modal from './modal'
 
+// TODO: replace ModalSucceed by this modal
+
 export type IProps = HTMLAttributes<{}> & {
+  title: string
   text: JSX.Element
   href: string
   buttonText: JSX.Element
@@ -12,6 +15,7 @@ export type IProps = HTMLAttributes<{}> & {
 }
 
 const ModalTransactionSucceed: FunctionComponent<IProps> = ({
+  title,
   text,
   href,
   buttonText,
@@ -27,7 +31,7 @@ const ModalTransactionSucceed: FunctionComponent<IProps> = ({
           </div>
           <div className="flex flex-col space-y-2">
             <span className="text-lg leading-6 font-semibold text-purple-900 text-center">
-              Transaction Succeeded
+              {title}
             </span>
             <span className="text-sm leading-5 font-normal text-gray-500 text-center">
               {text}

@@ -188,6 +188,7 @@ const NFTTransferModal: FunctionComponent<IProps> = ({
   if (receipt) {
     return (
       <ModalTransactionSucceed
+        title="Transaction Succeeded"
         text={<>Token successfully transferred</>}
         buttonText={<>Go to the Investor Space</>}
         href={`/wallet`}
