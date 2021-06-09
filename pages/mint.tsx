@@ -674,6 +674,7 @@ export default function Mint(): JSX.Element {
         setBulkMintNumber={setBulkMintNumber}
         airdropKey={airdropKey}
         setAirdropKey={setAirdropKey}
+        tokenPriceMultiplier={tokenPriceMultiplier || BigNumber.from(0)}
       />,
     ][mintStep]
   }
