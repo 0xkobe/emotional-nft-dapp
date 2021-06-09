@@ -22,11 +22,9 @@ import {
   characters,
   charactersSupply,
   lockOptions,
-  nonTokenMultiplier,
   qstkPrice,
   skins,
   specialIds,
-  tokenMultiplier,
 } from '../data/nft'
 import { abi, deployedAddresses } from '../data/smartContract'
 import useContract from '../hooks/useContract'
@@ -100,6 +98,9 @@ export default function Mint(): JSX.Element {
   const [bulkMintNumber, setBulkMintNumber] = useState<number>()
   const [airdropKey, setAirdropKey] = useState('')
   const [timestamp, setTimestamp] = useState<number>()
+  const [nonTokenPriceMultiplier, setNonTokenPriceMultiplier] =
+    useState<BigNumber>()
+  const [tokenPriceMultiplier, setTokenPriceMultiplier] = useState<BigNumber>()
 
   // connect walletError to error
   useEffect(() => {
@@ -122,6 +123,22 @@ export default function Mint(): JSX.Element {
       setBulkMintIsActive(false)
     }
   }, [account, qSettings, router])
+
+  // fetch nonTokenPriceMultiplier
+  useEffect(() => {
+    qnftSettings
+      ?.nonTokenPriceMultiplier()
+      .then(setNonTokenPriceMultiplier)
+      .catch(setError)
+  }, [qnftSettings])
+
+  // fetch tokenPriceMultiplier
+  useEffect(() => {
+    qnftSettings
+      ?.tokenPriceMultiplier()
+      .then(setTokenPriceMultiplier)
+      .catch(setError)
+  }, [qnftSettings])
 
   // logic to check if mint is activated
   useEffect(() => {
@@ -216,23 +233,28 @@ export default function Mint(): JSX.Element {
   }, [charactersData, characterId])
 
   const characterPrice = useMemo(() => {
-    if (characterId === undefined) return BigNumber.from(0)
-    return characters[characterId].mintPrice.mul(nonTokenMultiplier).div(100)
-  }, [characterId])
+    if (characterId === undefined || !nonTokenPriceMultiplier)
+      return BigNumber.from(0)
+    return characters[characterId].mintPrice
+      .mul(nonTokenPriceMultiplier)
+      .div(100)
+  }, [characterId, nonTokenPriceMultiplier])
 
   const favcoinPrice = useMemo(() => {
-    return favCoins[coinIndex].mintPrice.mul(nonTokenMultiplier).div(100)
-  }, [coinIndex])
+    if (!nonTokenPriceMultiplier) return BigNumber.from(0)
+    return favCoins[coinIndex].mintPrice.mul(nonTokenPriceMultiplier).div(100)
+  }, [coinIndex, nonTokenPriceMultiplier])
 
   const tokenPrice = useMemo(() => {
+    if (!tokenPriceMultiplier) return BigNumber.from(0)
     return qstkAmount
       .add(freeAllocationAmount)
       .mul(qstkPrice)
       .mul(100 - lockOptions[lockOptionId].discount)
-      .mul(tokenMultiplier)
+      .mul(tokenPriceMultiplier)
       .div(10000)
       .div(BigNumber.from(10).pow(18))
-  }, [freeAllocationAmount, lockOptionId, qstkAmount])
+  }, [freeAllocationAmount, lockOptionId, qstkAmount, tokenPriceMultiplier])
 
   const nftPrice = useMemo(() => {
     return characterPrice.add(favcoinPrice).add(tokenPrice)
