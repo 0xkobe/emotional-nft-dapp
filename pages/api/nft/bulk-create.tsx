@@ -55,7 +55,7 @@ export default async (
 
     // check signature
     const recovered = recoverTypedSignature_v4({
-      data: payloadForSignatureEIP712v4(
+      data: payloadForSignatureEIP712v4({
         chainId,
         author,
         backgroundId,
@@ -63,7 +63,7 @@ export default async (
         name,
         timestamp,
         bulkMintNumber,
-      ),
+      }),
       sig: signature,
     })
     if (recovered.toLowerCase() !== creator.toLowerCase())
@@ -77,7 +77,7 @@ export default async (
     ) as QSettings
     const manager = await qSettings.getManager()
     if (recovered.toLowerCase() !== manager.toLowerCase())
-      throw new createHttpError.Forbidden('sender must be manager')
+      throw new createHttpError.Forbidden('signer must be manager')
 
     // prepare metadata
     const metadatas: CreateNFTOffChain[] = Array.from(

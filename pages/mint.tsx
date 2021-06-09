@@ -389,15 +389,15 @@ export default function Mint(): JSX.Element {
 
     // generate signature
     signTypedDataV4(
-      payloadForSignatureEIP712v4(
-        chain.id,
-        minterName,
-        backgroundIndex,
-        nftDescription,
-        nftName,
+      payloadForSignatureEIP712v4({
+        chainId: chain.id,
+        author: minterName,
+        backgroundId: backgroundIndex,
+        description: nftDescription,
+        name: nftName,
         timestamp,
         bulkMintNumber,
-      ),
+      }),
     )
       .then(setSignature)
       .catch((error) => {
