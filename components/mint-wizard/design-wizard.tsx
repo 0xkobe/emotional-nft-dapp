@@ -64,9 +64,9 @@ const DesignWizard: FunctionComponent<IProps> = ({
           />
         </div>
       )}
-      <div className="flex flex-row space-x-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {skinIndex !== undefined && setSkinIndex && (
-          <div className="flex flex-col space-y-4 w-1/2">
+          <div className="flex flex-col space-y-4">
             <div className="text-base leading-6 font-medium text-purple-900">
               Animal Skin
             </div>
@@ -80,7 +80,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
           </div>
         )}
         {defaultEmotion && setDefaultEmotion && (
-          <div className="flex flex-col space-y-4 w-1/2">
+          <div className="flex flex-col space-y-4">
             <div className="text-base leading-6 font-medium text-purple-900">
               Default emotion
             </div>
@@ -99,7 +99,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
             />
           </div>
         )}
-        <div className="flex flex-col space-y-4 w-1/2">
+        <div className="flex flex-col space-y-4">
           <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
             <span>Favorite Coin</span>
             <Tooltip
