@@ -344,6 +344,18 @@ export default function Mint(): JSX.Element {
     bulkMintNumber,
   ])
 
+  // calculate prices
+  const prices = useMemo(() => {
+    return {
+      title: 'NFT Mint Price',
+      keyValues: [
+        { key: 'Character', value: `${bnToText(characterPrice)} ETH` },
+        { key: 'FavCoin', value: `${bnToText(favcoinPrice)} ETH` },
+        { key: 'Token', value: `${bnToText(tokenPrice)} ETH` },
+      ],
+    }
+  }, [characterPrice, favcoinPrice, tokenPrice])
+
   // calculate mint summary button name
   const mintSummaryBtnName = useMemo(() => {
     return [
@@ -705,11 +717,10 @@ export default function Mint(): JSX.Element {
           </div>
           <aside>
             <MintSummary
+              title="Mint Summary"
               properties={summary}
-              characterPrice={`${bnToText(characterPrice)} ETH`}
-              favcoinPrice={`${bnToText(favcoinPrice)} ETH`}
-              tokenPrice={`${bnToText(tokenPrice)} ETH`}
-              mintPrice={`${bnToText(nftPrice)} ETH`}
+              prices={prices}
+              totalPrice={`${bnToText(nftPrice)} ETH`}
             >
               <span className="cursor-pointer">
                 <Button disabled={isDisabled()} onClick={handleSubmit}>

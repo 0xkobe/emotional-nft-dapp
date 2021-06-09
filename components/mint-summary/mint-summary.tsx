@@ -3,19 +3,17 @@ import { FunctionComponent, HTMLAttributes } from 'react'
 import PropertyView, { Property } from './property-view'
 
 export type IProps = HTMLAttributes<{}> & {
+  title: string
   properties: Property[]
-  characterPrice: string
-  favcoinPrice: string
-  tokenPrice: string
-  mintPrice: string
+  prices: Property
+  totalPrice: string
 }
 
 const MintSummary: FunctionComponent<IProps> = ({
+  title,
   properties,
-  characterPrice,
-  favcoinPrice,
-  tokenPrice,
-  mintPrice,
+  prices,
+  totalPrice,
   className,
   children,
 }: IProps) => {
@@ -28,7 +26,7 @@ const MintSummary: FunctionComponent<IProps> = ({
     >
       <div className="p-4">
         <div className="text-base leading-6 font-bold text-purple-900 mb-8">
-          Mint Summary
+          {title}
         </div>
         {properties.map((property) => {
           return (
@@ -41,22 +39,13 @@ const MintSummary: FunctionComponent<IProps> = ({
         })}
       </div>
       <div className="mt-4 rounded-2xl bg-purple-50 p-4">
-        <PropertyView
-          value={{
-            title: 'NFT Mint Price',
-            keyValues: [
-              { key: 'Character', value: characterPrice },
-              { key: 'Favcoin', value: favcoinPrice },
-              { key: 'Token', value: tokenPrice },
-            ],
-          }}
-        />
+        <PropertyView value={prices} />
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="text-sm leading-5 font-semibold text-purple-900">
             Total
           </div>
           <div className="text-sm leading-5 font-semibold text-purple-700 text-right">
-            {mintPrice}
+            {totalPrice}
           </div>
         </div>
         {children}
