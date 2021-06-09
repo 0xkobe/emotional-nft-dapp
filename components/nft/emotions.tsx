@@ -24,7 +24,7 @@ const NFTEmotions: FunctionComponent<IProps> = ({
       <span className="text-sm leading-5 font-medium text-purple-900">
         Preview the NFT Emotions
       </span>
-      <div className="flex flex-row space-x-4">
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
         {emotions.map((emotion) => {
           return (
             <span
@@ -33,7 +33,7 @@ const NFTEmotions: FunctionComponent<IProps> = ({
                 bgColorFromEmotion(emotion),
                 colorFromEmotion(emotion),
                 borderColorFromEmotion(emotion),
-                'py-1 px-2 text-xs leading-none font-normal rounded-2xl cursor-pointer',
+                'py-1 px-2 text-center text-xs leading-none font-normal rounded-2xl cursor-pointer',
                 emotion === current ? 'border' : '',
               )}
               onClick={() => {

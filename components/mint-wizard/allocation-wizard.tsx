@@ -151,8 +151,8 @@ const AllocationWizard: FunctionComponent<IProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-row space-x-8">
-        <div className="flex flex-col space-y-4 w-1/2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="flex flex-col space-y-4">
           <div className="text-base leading-6 font-medium text-purple-900">
             Amount to mint
           </div>
@@ -189,7 +189,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
             )}
           </div>
         </div>
-        <div className="flex flex-col space-y-4 w-1/2">
+        <div className="flex flex-col space-y-4">
           <div className="text-base leading-6 font-medium text-purple-900">
             Lock Period Discount
           </div>

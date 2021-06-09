@@ -22,7 +22,7 @@ const StoryWizard: FunctionComponent<IProps> = ({
   onNftDescriptionChange,
 }: IProps) => {
   return (
-    <div className={classNames(className, 'flex flex-col w-96 space-y-8')}>
+    <div className={classNames(className, 'flex flex-col space-y-8')}>
       <div className="flex flex-col space-y-4">
         <div className="text-base leading-6 font-medium text-purple-900">
           NFT name
