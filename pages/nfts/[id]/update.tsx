@@ -364,7 +364,13 @@ export default function Update(): JSX.Element {
       )
     }
     if (tx) {
-      return <ModalProcessing isShown={true} transactionHash={tx.hash} />
+      return (
+        <ModalProcessing
+          title="Processing the edition"
+          isShown={true}
+          transactionHash={tx.hash}
+        />
+      )
     }
     if (metadataUpdated && favCoinPrice.eq(0)) {
       return (
@@ -436,8 +442,8 @@ export default function Update(): JSX.Element {
             <ArrowNarrowLeftIcon className="inline-flex w-4 h-4 mr-2" />
             <span>Cancel</span>
           </SecondaryButton>
-          {/* TODO: FIX position of title */}
-          <Title>Edit your NFT</Title>
+          <Title className="ml-8">Edit your NFT</Title>
+          <span className="flex-grow"></span>
           <Stepper
             className="mt-4 md:mt-0"
             currentStep={step}
