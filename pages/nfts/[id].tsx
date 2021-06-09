@@ -24,6 +24,7 @@ import { NFT } from '../../types/nft'
 
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
+  const { push: redirect } = router
 
   const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
   const { account, error: walletError } = useWallet()
@@ -73,6 +74,12 @@ export default function PageNFT(): JSX.Element {
     if (!nft) return false
     if (!account) return false
     return nft.creator.toLowerCase() === account.toLowerCase() && !nft.withdrawn
+  }, [nft, account])
+
+  const canUpdate = useMemo(() => {
+    if (!nft) return false
+    if (!account) return false
+    return nft.creator.toLowerCase() === account.toLowerCase()
   }, [nft, account])
 
   const fetchOwnerTokenIds = useCallback(
@@ -292,8 +299,14 @@ export default function PageNFT(): JSX.Element {
                       </SecondaryButton>
                     </Tooltip>
 
-                    <SecondaryButton disabled className="block">
-                      Edition (coming soon)
+                    <SecondaryButton
+                      className="block"
+                      onClick={() =>
+                        canUpdate && redirect(`/nfts/update/${nft?.tokenId}`)
+                      }
+                      disabled={!canUpdate}
+                    >
+                      Edition
                     </SecondaryButton>
 
                     <SecondaryButton disabled className="block">

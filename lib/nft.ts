@@ -8,6 +8,7 @@ import {
   APINftBulkCreateResponse,
   APINftCreateRequest,
   APINftCreateResponse,
+  APINftUpdateRequest,
   APIResponseError,
 } from '../types/api'
 import { QNFT } from '../types/contracts'
@@ -222,4 +223,27 @@ export const createBulkNFTOffChain = async (
   if (!res.ok)
     throw new Error(`an unknown error occurred while creating metadata`)
   return body.metaIds
+}
+
+// update metadata on the API
+export const updateNFTOffChain = async (
+  data: APINftUpdateRequest,
+): Promise<void> => {
+  const res = await fetch('/api/nft/update', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    method: 'POST',
+  })
+  let body
+  try {
+    body = (await res.json()) as APIResponseError
+  } catch (error) {
+    throw new Error(`an unknown error occurred while updating metadata`)
+  }
+  if ('error' in body)
+    throw new Error(`an error occurred while updating metadata: ${body.error}`)
+  if (!res.ok)
+    throw new Error(`an unknown error occurred while updating metadata`)
 }
