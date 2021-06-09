@@ -16,6 +16,7 @@ const IconText: FunctionComponent<IProps> = ({
   return (
     <Tooltip
       tooltip={text}
+      className="inline-flex"
       tooltipClassName="text-center transform -translate-x-1/2"
     >
       <img

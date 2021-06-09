@@ -7,11 +7,12 @@ import Allocation from '../../components/allocation/allocation'
 import SecondaryButton from '../../components/button/secondary-button'
 import Loader from '../../components/loader/loader'
 import ModalError from '../../components/modal/modal-error'
-import NFTActions from '../../components/nft/actions'
 import NFTCard from '../../components/nft/card'
 import NFTPreview from '../../components/nft/preview'
+import NFTTransferModal from '../../components/nft/transfer'
 import Pagination from '../../components/pagination/pagination'
 import IconText from '../../components/text/icon-text'
+import Tooltip from '../../components/tooltip/tooltip'
 import { backgrounds, skins } from '../../data/nft'
 import { abi, deployedAddresses } from '../../data/smartContract'
 import useContract from '../../hooks/useContract'
@@ -34,6 +35,7 @@ export default function PageNFT(): JSX.Element {
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
   const [isPreview, setIsPreview] = useState(false)
+  const [showTransferModal, setShowTransferModal] = useState(false)
 
   // connect walletError to error
   useEffect(() => {
@@ -66,6 +68,12 @@ export default function PageNFT(): JSX.Element {
     if (!nft) return null
     return backgrounds[nft.backgroundId]
   }, [nft])
+
+  const canTransfer = useMemo(() => {
+    if (!nft) return false
+    if (!account) return false
+    return nft.creator.toLowerCase() === account.toLowerCase() && !nft.withdrawn
+  }, [nft, account])
 
   const fetchOwnerTokenIds = useCallback(
     async (qnft: QNFT, account: string) => {
@@ -168,6 +176,13 @@ export default function PageNFT(): JSX.Element {
 
         {isLoading && <Loader />}
 
+        {showTransferModal && nft && (
+          <NFTTransferModal
+            tokenId={nft.tokenId}
+            onRequestClose={() => setShowTransferModal(false)}
+          ></NFTTransferModal>
+        )}
+
         {error && (
           <ModalError
             error={error}
@@ -258,18 +273,34 @@ export default function PageNFT(): JSX.Element {
                   lockAmount={nft.lockAmount}
                   unlockTime={new Date(nft.unlockTime * 1000)}
                 />
-                <NFTActions
-                  className="mt-8"
-                  onTransfer={() => {
-                    console.log('transfer')
-                  }}
-                  onEdit={() => {
-                    console.log('edit')
-                  }}
-                  onUpgrade={() => {
-                    console.log('upgrade')
-                  }}
-                />
+                <div className="flex flex-col mt-8 p-8 mb-auto bg-white -sm border border-purple-100 rounded-2xl">
+                  <span className="text-base leading-6 font-bold text-purple-900 mb-8">
+                    NFT Actions
+                  </span>
+                  <div className="flex flex-col space-y-4">
+                    <Tooltip
+                      tooltip={!canTransfer && 'You cannot transfer this token'}
+                    >
+                      <SecondaryButton
+                        className="block"
+                        onClick={() =>
+                          canTransfer && setShowTransferModal(true)
+                        }
+                        disabled={!canTransfer}
+                      >
+                        Transfer
+                      </SecondaryButton>
+                    </Tooltip>
+
+                    <SecondaryButton disabled className="block">
+                      Edition (coming soon)
+                    </SecondaryButton>
+
+                    <SecondaryButton disabled className="block">
+                      Upgrade (coming soon)
+                    </SecondaryButton>
+                  </div>
+                </div>
               </aside>
             </div>
             <NFTPreview
