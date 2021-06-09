@@ -304,7 +304,12 @@ export default function PageNFT(): JSX.Element {
               </aside>
             </div>
             <NFTPreview
-              nft={nft}
+              tokenId={nft.tokenId}
+              characterId={nft.characterId}
+              favCoinId={nft.favCoinId}
+              backgroundId={nft.backgroundId}
+              skin={getCharacter(nft.characterId).skin}
+              name={nft.name}
               isShown={isPreview}
               onModalClose={() => {
                 setIsPreview(false)
