@@ -45,14 +45,14 @@ export default async (
 
     // check signature
     const recovered = recoverTypedSignature_v4({
-      data: payloadForSignatureEIP712v4(
+      data: payloadForSignatureEIP712v4({
         chainId,
         author,
         backgroundId,
         description,
         name,
         timestamp,
-      ),
+      }),
       sig: signature,
     })
     if (recovered.toLowerCase() !== creator.toLowerCase())
