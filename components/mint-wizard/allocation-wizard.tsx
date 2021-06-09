@@ -9,7 +9,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { tokenMultiplier, verifier } from '../../data/nft'
+import { verifier } from '../../data/nft'
 import {
   bnToInput,
   bnToText,
@@ -31,6 +31,7 @@ export type IProps = HTMLAttributes<{}> & {
   lockOptionId: number
   qstkAmount: BigNumber
   freeAllocationAmount: BigNumber
+  tokenPriceMultiplier: BigNumber
   setLockOptionId: (id: number) => void
   setQstkAmount: (amount: BigNumber) => void
   setAirdropAmount: (amount: BigNumber) => void
@@ -56,6 +57,7 @@ const AllocationWizard: FunctionComponent<IProps> = ({
   lockOptionId,
   qstkAmount,
   freeAllocationAmount,
+  tokenPriceMultiplier,
   setLockOptionId,
   setQstkAmount,
   setAirdropAmount,
@@ -201,7 +203,9 @@ const AllocationWizard: FunctionComponent<IProps> = ({
                 return {
                   text: `${option.description} - ${(
                     100 -
-                    ((100 - option.discount) * tokenMultiplier) / 100
+                    ((100 - option.discount) *
+                      tokenPriceMultiplier.toNumber()) /
+                      100
                   ).toFixed(0)}%`,
                 }
               })}

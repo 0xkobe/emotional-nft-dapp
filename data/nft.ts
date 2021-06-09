@@ -280,26 +280,7 @@ const lockOptions: LockOption[] = [
 ]
 
 const verifier = '0x9f7d81B5Bedfe6bd156227c85e586078CAbD8FC6'
-
-const nonTokenMultiplier = 100 // 100%; TODO: would be good to fetch from contract
-const tokenMultiplier = 80 // 80% on v1 contract as default, it should be changed on v2 to 90% and TODO: it will be good to fetch from contract
 const qstkPrice = parseEther('0.000005') // in ETH
-
-////////////// latest configurations update for v1 sale //////////////
-// totalSupply: '2000000000',
-// airdrop: {
-//   qstkSupply: '50000000',
-//   signer: '0xC241cE39C130963E2D0F7a6CCc0DDab3F84fe1de'
-// },
-// NFT: {
-//   qstkSupply: '80000000', // v1 QSTK supply 80M
-//   maxSupply: '4000', // v1 max supply
-//   baseURL: 'https://emotional-nft-dapp.netlify.app/api/nfts/',
-//   multiplier: {
-//     token: '80', // 20% additional discount on v1 sale
-//     nonToken: '100', // no discount on characters and favcoins
-//   }
-// }
 
 export {
   characters,
@@ -310,7 +291,5 @@ export {
   skins,
   animals,
   verifier,
-  nonTokenMultiplier,
-  tokenMultiplier,
   qstkPrice,
 }
