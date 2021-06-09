@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
 import { favCoins } from '../../data/favCoins'
 import { backgrounds, skins } from '../../data/nft'
+import { Emotion } from '../../types/nft'
 import { CharacterOption } from '../../types/options'
 import BackgroundView from '../gallery/background-view'
 import CharacterView from '../gallery/character-view'
@@ -19,6 +20,8 @@ export type IProps = HTMLAttributes<{}> & {
   setCoinIndex: (index: number) => void
   backgroundIndex?: number
   setBackgroundIndex: (index: number) => void
+  defaultEmotion?: Emotion
+  setDefaultEmotion?: (emotion: Emotion) => void
 }
 
 const DesignWizard: FunctionComponent<IProps> = ({
@@ -31,11 +34,15 @@ const DesignWizard: FunctionComponent<IProps> = ({
     skinIndex,
     coinIndex,
     backgroundIndex,
+    defaultEmotion,
     setCharacterId,
     setSkinIndex,
     setCoinIndex,
     setBackgroundIndex,
+    setDefaultEmotion,
   } = props
+
+  const emotions = Object.values(Emotion)
 
   return (
     <div className={classNames('flex flex-col space-y-8', className)}>
@@ -58,7 +65,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
         </div>
       )}
       <div className="flex flex-row space-x-8">
-        {skinIndex && setSkinIndex && (
+        {skinIndex !== undefined && setSkinIndex && (
           <div className="flex flex-col space-y-4 w-1/2">
             <div className="text-base leading-6 font-medium text-purple-900">
               Animal Skin
@@ -69,6 +76,26 @@ const DesignWizard: FunctionComponent<IProps> = ({
               options={skins.map((val) => ({ icon: val.icon, text: val.skin }))}
               selectedIndex={skinIndex}
               onSelectOption={(_, index: number) => setSkinIndex(index)}
+            />
+          </div>
+        )}
+        {defaultEmotion && setDefaultEmotion && (
+          <div className="flex flex-col space-y-4 w-1/2">
+            <div className="text-base leading-6 font-medium text-purple-900">
+              Default emotion
+            </div>
+            <Select
+              className="w-full"
+              placeholder="Select skin"
+              options={emotions.map((emotion) => ({
+                text: emotion,
+              }))}
+              selectedIndex={emotions.findIndex(
+                (emotion) => emotion === defaultEmotion,
+              )}
+              onSelectOption={(_, index: number) =>
+                setDefaultEmotion(emotions[index])
+              }
             />
           </div>
         )}

@@ -83,6 +83,7 @@ export default function Update(): JSX.Element {
   const [timestamp, setTimestamp] = useState<number>()
   const [upgradePriceMultiplier, setUpgradePriceMultiplier] =
     useState<BigNumber>()
+  const [defaultEmotion, setDefaultEmotion] = useState<Emotion>()
 
   // init nft data
   useEffect(() => {
@@ -103,6 +104,7 @@ export default function Update(): JSX.Element {
     setNftName(nft.name)
     setMinterName(nft.author)
     setNftDescription(nft.description)
+    setDefaultEmotion(nft.defaultEmotion)
   }, [nft])
 
   // connect walletError to error
@@ -266,6 +268,7 @@ export default function Update(): JSX.Element {
     if (backgroundIndex == undefined) return
     if (!timestamp) return
     if (!nft) return
+    if (!defaultEmotion) return
     // TODO: add loader
 
     // update meta
@@ -277,7 +280,7 @@ export default function Update(): JSX.Element {
       backgroundId: backgroundIndex,
       description: nftDescription,
       name: nftName,
-      defaultEmotion: Emotion.Normal, // FIXME: make the user choose the default emotion
+      defaultEmotion,
       timestamp,
       metaId: nft.metaId,
       tokenId: nft.tokenId.toString(),
@@ -302,6 +305,7 @@ export default function Update(): JSX.Element {
     nftName,
     timestamp,
     nft,
+    defaultEmotion,
   ])
 
   // sign & broadcast transaction
@@ -407,6 +411,8 @@ export default function Update(): JSX.Element {
         setCoinIndex={setFavCoinIndex}
         backgroundIndex={backgroundIndex}
         setBackgroundIndex={setBackgroundIndex}
+        defaultEmotion={defaultEmotion}
+        setDefaultEmotion={setDefaultEmotion}
       />,
       <StoryWizard
         nftName={nftName}
@@ -440,12 +446,12 @@ export default function Update(): JSX.Element {
           />
         </div>
         {isLoading && <Loader />}
-        {nft && favCoinIndex !== undefined && (
+        {nft && favCoinIndex !== undefined && defaultEmotion && (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <NFTCard
-                  previewEmotion
+                  defaultEmotion={defaultEmotion}
                   characterId={nft.characterId}
                   favCoinId={favCoinIndex}
                   backgroundId={backgroundIndex}

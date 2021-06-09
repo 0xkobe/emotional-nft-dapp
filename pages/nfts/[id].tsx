@@ -218,6 +218,7 @@ export default function PageNFT(): JSX.Element {
                       setIsPreview(true)
                     }}
                     action={<ArrowsExpandIcon className="w-6 h-6" />}
+                    defaultEmotion={nft.defaultEmotion}
                   />
                   <div>
                     <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">

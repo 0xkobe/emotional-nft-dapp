@@ -31,7 +31,7 @@ export type IProps = HTMLAttributes<any> & {
   small?: boolean
   changePercentage?: number // percentage of changes
   previewEmotion?: boolean
-  forceEmotion?: Emotion
+  defaultEmotion: Emotion
 }
 
 function trendIconFromEmotion(emotion: Emotion, small: boolean) {
@@ -164,7 +164,7 @@ const NFTCard: FunctionComponent<IProps> = ({
   name,
   skin,
   previewEmotion,
-  forceEmotion,
+  defaultEmotion,
   action,
   small,
   className,
@@ -179,12 +179,10 @@ const NFTCard: FunctionComponent<IProps> = ({
   }, [characterId])
 
   useEffect(() => {
-    if (forceEmotion) return setEmotion(forceEmotion)
-    if (previewEmotion) return setEmotion(Emotion.Normal)
     if (changePercentage)
       return setEmotion(emotionFromPriceChange(changePercentage))
-    setEmotion(Emotion.Normal)
-  }, [previewEmotion, forceEmotion, changePercentage])
+    setEmotion(defaultEmotion)
+  }, [changePercentage, defaultEmotion])
 
   return (
     <div

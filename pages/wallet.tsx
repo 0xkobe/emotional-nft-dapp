@@ -86,6 +86,7 @@ export default function Wallet(): JSX.Element {
                     skin={getCharacter(nft.characterId).skin}
                     name={nft.name}
                     action={<ArrowNarrowRightIcon className="w-6 h-6" />}
+                    defaultEmotion={nft.defaultEmotion}
                   />
                 </a>
               </Link>

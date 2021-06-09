@@ -51,7 +51,7 @@ const NFTPreview: FunctionComponent<IProps> = ({
               tokenId={tokenId}
               key={emotion}
               small
-              forceEmotion={emotion}
+              defaultEmotion={emotion}
               characterId={characterId}
               favCoinId={favCoinId}
               backgroundId={backgroundId}

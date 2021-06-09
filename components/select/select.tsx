@@ -12,7 +12,7 @@ import SecondaryButton from '../button/secondary-button'
 
 export type Option = {
   icon?: string
-  text?: string
+  text: string
 }
 
 export type IProps = HTMLAttributes<{}> & {
@@ -76,8 +76,7 @@ const Select: FunctionComponent<IProps> = ({
     }))
     .filter(
       ({ option }) =>
-        !canSearch ||
-        option.text?.toLowerCase().includes(keyword.toLowerCase()),
+        !canSearch || option.text.toLowerCase().includes(keyword.toLowerCase()),
     )
 
   return (
