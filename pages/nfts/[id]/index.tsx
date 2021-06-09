@@ -1,8 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ArrowNarrowLeftIcon,ArrowsExpandIcon } from '@heroicons/react/outline'
+import {
+  ArrowNarrowLeftIcon,
+  ArrowNarrowRightIcon,
+  ArrowsExpandIcon,
+  PencilIcon,
+} from '@heroicons/react/outline'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React,{ useCallback,useEffect,useMemo,useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Allocation from '../../../components/allocation/allocation'
 import SecondaryButton from '../../../components/button/secondary-button'
 import Loader from '../../../components/loader/loader'
@@ -13,12 +18,12 @@ import NFTTransferModal from '../../../components/nft/transfer'
 import Pagination from '../../../components/pagination/pagination'
 import IconText from '../../../components/text/icon-text'
 import Tooltip from '../../../components/tooltip/tooltip'
-import { backgrounds,skins } from '../../../data/nft'
-import { abi,deployedAddresses } from '../../../data/smartContract'
+import { backgrounds, skins } from '../../../data/nft'
+import { abi, deployedAddresses } from '../../../data/smartContract'
 import useContract from '../../../hooks/useContract'
 import useWallet from '../../../hooks/useWallet'
 import { fetchPercentages } from '../../../lib/coingecko'
-import { fetchNFT,getCharacter,getFavCoin } from '../../../lib/nft'
+import { fetchNFT, getCharacter, getFavCoin } from '../../../lib/nft'
 import { QNFT } from '../../../types/contracts'
 import { NFT } from '../../../types/nft'
 
@@ -296,7 +301,7 @@ export default function PageNFT(): JSX.Element {
                         }
                         disabled={!canTransfer}
                       >
-                        {/* TODO: add icon */}
+                        <ArrowNarrowRightIcon className="inline-flex w-4 h-4 mr-2" />
                         Transfer
                       </SecondaryButton>
                     </Tooltip>
@@ -308,7 +313,7 @@ export default function PageNFT(): JSX.Element {
                       }
                       disabled={!canUpdate}
                     >
-                      {/* TODO: add icon */}
+                      <PencilIcon className="inline-flex w-4 h-4 mr-2" />
                       Edition
                     </SecondaryButton>
                   </div>
