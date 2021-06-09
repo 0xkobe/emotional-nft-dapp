@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run generate-nft-images",
+    "postbuild": "npm run generate-nft-images",
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"{components,pages}/**/*.{ts,tsx}\" --max-warnings 0 && prettier \"{components,pages}/**/*.{ts,tsx}\" --check",
