@@ -10,5 +10,6 @@ const Template: Story<IProps> = (args) => <Stepper {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  step: 1,
+  currentStep: 1,
+  steps: ['Step 1', 'Step 2', 'Step 3'],
 }

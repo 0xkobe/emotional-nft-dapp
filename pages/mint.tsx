@@ -685,7 +685,8 @@ export default function Mint(): JSX.Element {
           </Title>
           <Stepper
             className="mt-4 md:mt-0"
-            step={mintStep}
+            currentStep={mintStep}
+            steps={['Design your NFT', 'Give it a Story', 'QSTK Allocation']}
             onChangeStep={setMintStep}
           />
         </div>
