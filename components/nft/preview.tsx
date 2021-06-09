@@ -1,19 +1,30 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { XIcon } from '@heroicons/react/outline'
 import { FunctionComponent, HTMLAttributes } from 'react'
-import { getCharacter } from '../../lib/nft'
-import { Emotion, NFT } from '../../types/nft'
+import { Skin } from '../../types/metadata'
+import { Emotion } from '../../types/nft'
 import Modal from '../modal/modal'
 import NFTCard from './card'
 
 export type IProps = HTMLAttributes<any> & {
-  nft: NFT
+  tokenId?: BigNumber
+  characterId: number
+  favCoinId: number
+  backgroundId?: number
+  skin: Skin
+  name: string
   isShown?: boolean
   onRequestClose?: () => void
   onModalClose?: () => void
 }
 
 const NFTPreview: FunctionComponent<IProps> = ({
-  nft,
+  tokenId,
+  characterId,
+  favCoinId,
+  backgroundId,
+  skin,
+  name,
   isShown,
   onModalClose,
   onRequestClose,
@@ -37,15 +48,15 @@ const NFTPreview: FunctionComponent<IProps> = ({
         <div className="flex flex-row space-x-8">
           {emotions.map((emotion) => (
             <NFTCard
-              tokenId={nft.tokenId}
+              tokenId={tokenId}
               key={emotion}
               small
               forceEmotion={emotion}
-              characterId={nft.characterId}
-              favCoinId={nft.favCoinId}
-              backgroundId={nft.backgroundId}
-              skin={getCharacter(nft.characterId).skin}
-              name={nft.name}
+              characterId={characterId}
+              favCoinId={favCoinId}
+              backgroundId={backgroundId}
+              skin={skin}
+              name={name}
             />
           ))}
         </div>
