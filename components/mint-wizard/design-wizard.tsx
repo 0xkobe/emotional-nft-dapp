@@ -10,11 +10,11 @@ import Select from '../select/select'
 import Tooltip from '../tooltip/tooltip'
 
 export type IProps = HTMLAttributes<{}> & {
-  charactersData: CharacterOption[]
+  charactersData?: CharacterOption[]
   characterId?: number
-  setCharacterId: (index: number) => void
-  skinIndex: number
-  setSkinIndex: (index: number) => void
+  setCharacterId?: (index: number) => void
+  skinIndex?: number
+  setSkinIndex?: (index: number) => void
   coinIndex: number
   setCoinIndex: (index: number) => void
   backgroundIndex?: number
@@ -39,35 +39,39 @@ const DesignWizard: FunctionComponent<IProps> = ({
 
   return (
     <div className={classNames('flex flex-col space-y-8', className)}>
-      <div className="flex flex-col space-y-4">
-        <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
-          <span>Animal Set</span>
-          <Tooltip
-            tooltip="Select your favorite creature to be appear in your NFT"
-            tooltipClassName="-left-20 w-40"
-          >
-            <InformationCircleIcon className="w-4 h-4" />
-          </Tooltip>
-        </div>
-        <CharacterView
-          characters={charactersData}
-          selectedCharacterId={characterId}
-          onChange={(id: number) => setCharacterId(id)}
-        />
-      </div>
-      <div className="flex flex-row space-x-8">
-        <div className="flex flex-col space-y-4 w-1/2">
-          <div className="text-base leading-6 font-medium text-purple-900">
-            Animal Skin
+      {charactersData && setCharacterId && (
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
+            <span>Animal Set</span>
+            <Tooltip
+              tooltip="Select your favorite creature to be appear in your NFT"
+              tooltipClassName="-left-20 w-40"
+            >
+              <InformationCircleIcon className="w-4 h-4" />
+            </Tooltip>
           </div>
-          <Select
-            className="w-full"
-            placeholder="Select skin"
-            options={skins.map((val) => ({ icon: val.icon, text: val.skin }))}
-            selectedIndex={skinIndex}
-            onSelectOption={(_, index: number) => setSkinIndex(index)}
+          <CharacterView
+            characters={charactersData}
+            selectedCharacterId={characterId}
+            onChange={(id: number) => setCharacterId(id)}
           />
         </div>
+      )}
+      <div className="flex flex-row space-x-8">
+        {skinIndex && setSkinIndex && (
+          <div className="flex flex-col space-y-4 w-1/2">
+            <div className="text-base leading-6 font-medium text-purple-900">
+              Animal Skin
+            </div>
+            <Select
+              className="w-full"
+              placeholder="Select skin"
+              options={skins.map((val) => ({ icon: val.icon, text: val.skin }))}
+              selectedIndex={skinIndex}
+              onSelectOption={(_, index: number) => setSkinIndex(index)}
+            />
+          </div>
+        )}
         <div className="flex flex-col space-y-4 w-1/2">
           <div className="flex flex-row items-center space-x-2 text-base leading-6 font-medium text-purple-900">
             <span>Favorite Coin</span>
