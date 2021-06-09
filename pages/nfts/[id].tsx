@@ -295,6 +295,7 @@ export default function PageNFT(): JSX.Element {
                         }
                         disabled={!canTransfer}
                       >
+                        {/* TODO: add icon */}
                         Transfer
                       </SecondaryButton>
                     </Tooltip>
@@ -306,11 +307,8 @@ export default function PageNFT(): JSX.Element {
                       }
                       disabled={!canUpdate}
                     >
+                      {/* TODO: add icon */}
                       Edition
-                    </SecondaryButton>
-
-                    <SecondaryButton disabled className="block">
-                      Upgrade (coming soon)
                     </SecondaryButton>
                   </div>
                 </div>
