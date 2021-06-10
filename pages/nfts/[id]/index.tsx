@@ -1,29 +1,35 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ArrowNarrowLeftIcon, ArrowsExpandIcon } from '@heroicons/react/outline'
+import {
+  ArrowNarrowLeftIcon,
+  ArrowNarrowRightIcon,
+  ArrowsExpandIcon,
+  PencilIcon,
+} from '@heroicons/react/outline'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Allocation from '../../components/allocation/allocation'
-import SecondaryButton from '../../components/button/secondary-button'
-import Loader from '../../components/loader/loader'
-import ModalError from '../../components/modal/modal-error'
-import NFTCard from '../../components/nft/card'
-import NFTPreview from '../../components/nft/preview'
-import NFTTransferModal from '../../components/nft/transfer'
-import Pagination from '../../components/pagination/pagination'
-import IconText from '../../components/text/icon-text'
-import Tooltip from '../../components/tooltip/tooltip'
-import { backgrounds, skins } from '../../data/nft'
-import { abi, deployedAddresses } from '../../data/smartContract'
-import useContract from '../../hooks/useContract'
-import useWallet from '../../hooks/useWallet'
-import { fetchPercentages } from '../../lib/coingecko'
-import { fetchNFT, getCharacter, getFavCoin } from '../../lib/nft'
-import { QNFT } from '../../types/contracts'
-import { NFT } from '../../types/nft'
+import Allocation from '../../../components/allocation/allocation'
+import SecondaryButton from '../../../components/button/secondary-button'
+import Loader from '../../../components/loader/loader'
+import ModalError from '../../../components/modal/modal-error'
+import NFTCard from '../../../components/nft/card'
+import NFTPreview from '../../../components/nft/preview'
+import NFTTransferModal from '../../../components/nft/transfer'
+import Pagination from '../../../components/pagination/pagination'
+import IconText from '../../../components/text/icon-text'
+import Tooltip from '../../../components/tooltip/tooltip'
+import { backgrounds, skins } from '../../../data/nft'
+import { abi, deployedAddresses } from '../../../data/smartContract'
+import useContract from '../../../hooks/useContract'
+import useWallet from '../../../hooks/useWallet'
+import { fetchPercentages } from '../../../lib/coingecko'
+import { fetchNFT, getCharacter, getFavCoin } from '../../../lib/nft'
+import { QNFT } from '../../../types/contracts'
+import { NFT } from '../../../types/nft'
 
 export default function PageNFT(): JSX.Element {
   const router = useRouter()
+  const { push: redirect } = router
 
   const { contract } = useContract<QNFT>(deployedAddresses.qnft, abi.qnft)
   const { account, error: walletError } = useWallet()
@@ -73,6 +79,12 @@ export default function PageNFT(): JSX.Element {
     if (!nft) return false
     if (!account) return false
     return nft.creator.toLowerCase() === account.toLowerCase() && !nft.withdrawn
+  }, [nft, account])
+
+  const canUpdate = useMemo(() => {
+    if (!nft) return false
+    if (!account) return false
+    return nft.creator.toLowerCase() === account.toLowerCase()
   }, [nft, account])
 
   const fetchOwnerTokenIds = useCallback(
@@ -211,6 +223,7 @@ export default function PageNFT(): JSX.Element {
                       setIsPreview(true)
                     }}
                     action={<ArrowsExpandIcon className="w-6 h-6" />}
+                    defaultEmotion={nft.defaultEmotion}
                   />
                   <div>
                     <h1 className="text-2xl leading-8 font-bold text-purple-900 mb-8">
@@ -288,16 +301,20 @@ export default function PageNFT(): JSX.Element {
                         }
                         disabled={!canTransfer}
                       >
+                        <ArrowNarrowRightIcon className="inline-flex w-4 h-4 mr-2" />
                         Transfer
                       </SecondaryButton>
                     </Tooltip>
 
-                    <SecondaryButton disabled className="block">
-                      Edition (coming soon)
-                    </SecondaryButton>
-
-                    <SecondaryButton disabled className="block">
-                      Upgrade (coming soon)
+                    <SecondaryButton
+                      className="block"
+                      onClick={() =>
+                        canUpdate && redirect(`/nfts/${nft?.tokenId}/update`)
+                      }
+                      disabled={!canUpdate}
+                    >
+                      <PencilIcon className="inline-flex w-4 h-4 mr-2" />
+                      Edition
                     </SecondaryButton>
                   </div>
                 </div>

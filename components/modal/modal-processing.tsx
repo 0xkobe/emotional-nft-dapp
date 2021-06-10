@@ -4,6 +4,7 @@ import Loader from '../loader/loader'
 import Modal from './modal'
 
 export type IProps = HTMLAttributes<{}> & {
+  title?: string
   transactionHash: string
   isShown?: boolean
   onRequestClose?: () => void
@@ -11,6 +12,7 @@ export type IProps = HTMLAttributes<{}> & {
 }
 
 const ModalProcessing: FunctionComponent<IProps> = ({
+  title,
   isShown,
   onModalClose,
   onRequestClose,
@@ -22,7 +24,7 @@ const ModalProcessing: FunctionComponent<IProps> = ({
       onModalClose={onModalClose}
       onRequestClose={onRequestClose}
     >
-      <Loader title="Processing the Transaction">
+      <Loader title={title || 'Processing the Transaction'}>
         <div className="flex flex-col">
           <span className="text-sm leading-5 font-normal text-gray-500">
             Transaction submitted with hash:

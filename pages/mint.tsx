@@ -734,7 +734,8 @@ export default function Mint(): JSX.Element {
                 favCoinId={coinIndex}
                 backgroundId={backgroundIndex}
                 skin={skins[skinIndex].skin}
-                name={nftName} // nft name
+                name={nftName}
+                defaultEmotion={Emotion.Normal}
               />
               {step()}
             </div>

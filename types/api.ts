@@ -55,3 +55,17 @@ export enum DisplayType {
   BoostPercentage = 'boost_percentage', // can also set optional max_value
   BoostNumber = 'boost_number', // can also set optional max_value
 }
+
+export type APINftUpdateRequest = {
+  metaId: number
+  tokenId: string
+  author: string
+  backgroundId: number
+  description: string
+  name: string
+  signer: string
+  signature: string
+  chainId: number
+  defaultEmotion: Emotion
+  timestamp: number
+}

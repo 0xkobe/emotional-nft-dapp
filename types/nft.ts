@@ -57,22 +57,27 @@ export type LockOption = {
 }
 
 // Structure used to save the nft data in database
-export type CreateNFTOffChain = {
+export type NFTOffChain = {
+  id: number
+  createdAt: Date
+  updatedAt: Date
   author: string // author name
   backgroundId: number
   description: string
   name: string // nft name
   chainId: number
-  creator: string // creator wallet
+  creator: string // creator wallet // TODO: rename to signer or remove
   defaultEmotion: Emotion
 }
 
 // Structure used to save the nft data in database
-export type NFTOffChain = CreateNFTOffChain & {
-  id: number
-  createdAt: Date
-  updatedAt: Date
-}
+export type CreateNFTOffChain = Omit<
+  NFTOffChain,
+  'id' | 'createdAt' | 'updatedAt'
+>
+
+// Structure used to update the nft data in database
+export type UpdateNFTOffChain = Omit<NFTOffChain, 'id' | 'createdAt'>
 
 // Structure of the nft data onchain
 export type NFTOnChain = {

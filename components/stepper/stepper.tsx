@@ -25,7 +25,7 @@ const Stepper: FunctionComponent<IProps> = ({
         <div
           key={step.toString()}
           className={classNames(
-            `flex flex-row w-full sm:w-1/${steps.length} p-4 space-x-4`,
+            `flex flex-row p-4 space-x-4 items-center`,
             index === currentStep ? 'text-black' : 'text-gray-500',
           )}
         >
