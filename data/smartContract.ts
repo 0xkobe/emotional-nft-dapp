@@ -6,6 +6,7 @@ export const abi = {
   qSettings: require('../abi/QSettings.json'),
   qstk: require('../abi/QStk.json'),
   qAirdrop: require('../abi/QAirdrop.json'),
+  qCrowdSale: require('../abi/QCrowdSale.json'),
 }
 
 // from https://github.com/QuiverCommunity/quiver-contracts/blob/master/scripts/settings.json
@@ -18,6 +19,7 @@ const _deployedAddresses: {
     qnftSettings: string
     qnftGov: string
     qnft: string
+    qCrowdSale: string
   }
 } = {
   1: {
@@ -27,6 +29,7 @@ const _deployedAddresses: {
     qnftSettings: '0x8b5e8fB32f9d26132995f06FFC681A48d30d32C2',
     qnftGov: '0x6DC21b5650fb0EF06aD1e8c8669F271cE0EBc3C0',
     qnft: '0x9478C05534d62E9ee20E3EacE30663b38Cce6F3E',
+    qCrowdSale: '',
   },
   3: {
     qstk: '0x10A5Ab70eDf51eD6c6755230507ce9c4608ba950',
@@ -35,6 +38,7 @@ const _deployedAddresses: {
     qnftSettings: '0x7B4003F189E178Df709711e534a8cC3a60D894Bb',
     qnftGov: '0xA58Cc367305A689bdEb3b08977347E290cCBc893',
     qnft: '0x1416708C316C533375B89E439d60595FdF398e48',
+    qCrowdSale: '0xC3252F3f61329CfbcE80fF80D3a156B7c9170884',
   },
   31337: {
     qstk: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
@@ -43,6 +47,7 @@ const _deployedAddresses: {
     qnftSettings: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
     qnftGov: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
     qnft: '0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0',
+    qCrowdSale: '',
   },
 }
 
