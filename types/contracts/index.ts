@@ -14,6 +14,7 @@ export type { IERC721ReceiverUpgradeable } from "./IERC721ReceiverUpgradeable";
 export type { IERC721Upgradeable } from "./IERC721Upgradeable";
 export type { ERC165Upgradeable } from "./ERC165Upgradeable";
 export type { IERC165Upgradeable } from "./IERC165Upgradeable";
+export type { QCrowdSale } from "./QCrowdSale";
 export type { IQAirdrop } from "./IQAirdrop";
 export type { IQNFT } from "./IQNFT";
 export type { IQNFTGov } from "./IQNFTGov";
@@ -41,6 +42,7 @@ export { IERC721ReceiverUpgradeable__factory } from "./factories/IERC721Receiver
 export { IERC721Upgradeable__factory } from "./factories/IERC721Upgradeable__factory";
 export { ERC165Upgradeable__factory } from "./factories/ERC165Upgradeable__factory";
 export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__factory";
+export { QCrowdSale__factory } from "./factories/QCrowdSale__factory";
 export { IQAirdrop__factory } from "./factories/IQAirdrop__factory";
 export { IQNFT__factory } from "./factories/IQNFT__factory";
 export { IQNFTGov__factory } from "./factories/IQNFTGov__factory";

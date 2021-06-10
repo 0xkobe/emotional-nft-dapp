@@ -65,6 +65,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
+      name: "QCrowdSale",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.QCrowdSale__factory>;
+    getContractFactory(
       name: "IQAirdrop",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IQAirdrop__factory>;
