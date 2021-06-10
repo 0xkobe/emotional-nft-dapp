@@ -14,7 +14,6 @@ import {
 import { remoteProvider } from '../../../lib/remote-provider'
 import { APINftMetadataResponse, DisplayType } from '../../../types/api'
 import { QNFT } from '../../../types/contracts'
-import { Emotion } from '../../../types/nft'
 
 const baseUrl =
   process.env.CONTEXT === 'production'
@@ -51,7 +50,9 @@ export default async (
       description: nft.description,
       external_url: baseUrl + '/nfts/' + tokenId,
       image:
-        baseUrl + '/' + getNftImagePath(character, background, Emotion.Normal),
+        baseUrl +
+        '/' +
+        getNftImagePath(character, background, nft.defaultEmotion),
       name: nft.name,
       // background_color // TODO: could be nice to implement using nft.backgroundId
       attributes: [
