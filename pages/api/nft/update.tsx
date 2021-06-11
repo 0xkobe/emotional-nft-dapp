@@ -119,6 +119,18 @@ export default async (
 
     // return response
     res.status(200).json({})
+
+    // update open sea in background
+    fetch(
+      `https://api.opensea.io/asset/${deployedAddresses.qnft}/${tokenId}?force_update=true`,
+    )
+      .then(async (res) => {
+        if (!res.ok)
+          console.error('error during refresh opensea', await res.json())
+      })
+      .catch((error) =>
+        console.error('catch error during refresh opensea', error),
+      )
   } catch (error) {
     if (isHttpError(error))
       // return error in response if http error
