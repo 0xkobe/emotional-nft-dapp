@@ -115,10 +115,10 @@ export default function Mint(): JSX.Element {
           href=""
           buttonText={<>Check my wallet on Etherscan</>}
           onModalClose={() => {
-            setReceipt(undefined)
+            setIsPurchasing(false)
           }}
           onRequestClose={() => {
-            setReceipt(undefined)
+            setIsPurchasing(false)
           }}
         />
       )
