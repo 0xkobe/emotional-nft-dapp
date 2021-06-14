@@ -285,6 +285,7 @@ export default function PageNFT(): JSX.Element {
                 <Allocation
                   lockAmount={nft.lockAmount}
                   unlockTime={new Date(nft.unlockTime * 1000)}
+                  withdrawn={nft.withdrawn}
                 />
                 <div className="flex flex-col mt-8 p-8 mb-auto bg-white -sm border border-purple-100 rounded-2xl">
                   <span className="text-base leading-6 font-bold text-purple-900 mb-8">

@@ -7,12 +7,14 @@ import PropertyView from '../mint-summary/property-view'
 export type IProps = HTMLAttributes<{}> & {
   lockAmount: BigNumber
   unlockTime: Date
+  withdrawn: boolean
 }
 
 const Allocation: FunctionComponent<IProps> = ({
   lockAmount,
   unlockTime,
   className,
+  withdrawn,
 }: IProps) => {
   const properties = [
     {
@@ -27,6 +29,10 @@ const Allocation: FunctionComponent<IProps> = ({
     {
       key: 'Redemption',
       value: formatDate(unlockTime),
+    },
+    {
+      key: 'Withdrawn',
+      value: withdrawn ? 'Yes' : 'No',
     },
   ]
 
