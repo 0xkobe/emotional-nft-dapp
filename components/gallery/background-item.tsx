@@ -24,7 +24,7 @@ const BackgroundItem: FunctionComponent<IProps> = ({
       <div className="w-18 h-18 mb-2">
         <img
           className={classNames(
-            'w-full h-full rounded-2xl hover:shadow-md',
+            'w-full h-full rounded-2xl hover:shadow-md cursor-pointer',
             selected
               ? 'border-2 border-purple-700'
               : 'border border-purple-100',
