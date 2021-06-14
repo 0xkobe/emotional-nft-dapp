@@ -32,9 +32,8 @@ const NFTEmotions: FunctionComponent<IProps> = ({
               className={classNames(
                 bgColorFromEmotion(emotion),
                 colorFromEmotion(emotion),
-                borderColorFromEmotion(emotion),
-                'py-1 px-2 text-center text-xs leading-none font-normal rounded-2xl cursor-pointer',
-                emotion === current ? 'border' : '',
+                emotion === current ? borderColorFromEmotion(emotion) : '',
+                'py-1 px-2 text-center text-xs leading-none font-normal rounded-2xl cursor-pointer border border-transparent',
               )}
               onClick={() => {
                 onChange(emotion)

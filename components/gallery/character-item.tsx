@@ -28,11 +28,10 @@ const CharacterItem: FunctionComponent<IProps> = ({
       <div className="w-18 h-18 mb-2">
         <img
           className={classNames(
-            'rounded-2xl hover:shadow-md cursor-pointer',
+            'rounded-2xl hover:shadow-md border-2 cursor-pointer',
             selected
-              ? 'border-2 border-purple-700'
-              : 'border border-purple-100',
-            selected ? 'shadow-md' : 'shadow-sm',
+              ? 'border-purple-700 shadow-md'
+              : 'border-purple-100 shadow-sm',
           )}
           src={character.emotions.normal}
         />
