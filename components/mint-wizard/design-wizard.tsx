@@ -3,6 +3,8 @@ import classNames from 'classnames'
 import React, { FunctionComponent, HTMLAttributes } from 'react'
 import { favCoins } from '../../data/favCoins'
 import { backgrounds, skins } from '../../data/nft'
+import { getEmotion } from '../../lib/nft'
+import { capitalizeFirstLetter } from '../../lib/utils'
 import { Emotion } from '../../types/nft'
 import { CharacterOption } from '../../types/options'
 import BackgroundView from '../gallery/background-view'
@@ -88,7 +90,7 @@ const DesignWizard: FunctionComponent<IProps> = ({
               className="w-full"
               placeholder="Select skin"
               options={emotions.map((emotion) => ({
-                text: emotion,
+                text: capitalizeFirstLetter(getEmotion(emotion).text),
               }))}
               selectedIndex={emotions.findIndex(
                 (emotion) => emotion === defaultEmotion,

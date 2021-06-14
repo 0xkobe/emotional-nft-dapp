@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import createHttpError from 'http-errors'
 import { join } from 'path'
 import { favCoins } from '../data/favCoins'
-import { backgrounds, characters, lockOptions } from '../data/nft'
+import { backgrounds, characters, emotions, lockOptions } from '../data/nft'
 import {
   APINftBulkCreateRequest,
   APINftBulkCreateResponse,
@@ -16,6 +16,7 @@ import { BackgroundData } from '../types/metadata'
 import {
   Character,
   Emotion,
+  EmotionData,
   FavCoin,
   LockOption,
   NFT,
@@ -117,6 +118,13 @@ export const getBackground = (backgroundId: number): BackgroundData => {
   if (!backgrounds[backgroundId])
     throw new Error(`background with id ${backgroundId} not found`)
   return backgrounds[backgroundId]
+}
+
+// emotion
+export const getEmotion = (emotion: Emotion): EmotionData => {
+  const e = emotions.find((e) => e.emotion === emotion)
+  if (!e) throw new Error(`data of emotion ${emotion} not found`)
+  return e
 }
 
 // return the path to the generated image combining the character and the background

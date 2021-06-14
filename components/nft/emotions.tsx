@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
+import { getEmotion } from '../../lib/nft'
 import { Emotion } from '../../types/nft'
 import {
   bgColorFromEmotion,
@@ -40,7 +41,7 @@ const NFTEmotions: FunctionComponent<IProps> = ({
                 onChange(emotion)
               }}
             >
-              {capitalizeFirstLetter(emotion)}
+              {capitalizeFirstLetter(getEmotion(emotion).text)}
             </span>
           )
         })}

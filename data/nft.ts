@@ -1,6 +1,12 @@
 import { parseEther } from '@ethersproject/units'
 import { BackgroundData, Creature, LockPeriod, Skin } from '../types/metadata'
-import { Artist, Character, Emotion, LockOption } from '../types/nft'
+import {
+  Artist,
+  Character,
+  Emotion,
+  EmotionData,
+  LockOption,
+} from '../types/nft'
 
 export const specialIds = {
   Minotaur: 25,
@@ -282,6 +288,29 @@ const lockOptions: LockOption[] = [
 const verifier = '0x9f7d81B5Bedfe6bd156227c85e586078CAbD8FC6'
 const qstkPrice = parseEther('0.000005') // in ETH
 
+const emotions: EmotionData[] = [
+  {
+    emotion: Emotion.Angry,
+    text: 'angry',
+  },
+  {
+    emotion: Emotion.Worry,
+    text: 'worried',
+  },
+  {
+    emotion: Emotion.Normal,
+    text: 'normal',
+  },
+  {
+    emotion: Emotion.Rest,
+    text: 'resting',
+  },
+  {
+    emotion: Emotion.Happy,
+    text: 'happy',
+  },
+]
+
 export {
   characters,
   charactersSupply,
@@ -292,4 +321,5 @@ export {
   animals,
   verifier,
   qstkPrice,
+  emotions,
 }
