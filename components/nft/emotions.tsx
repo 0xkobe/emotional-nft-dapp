@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { FunctionComponent, HTMLAttributes } from 'react'
 import { getEmotion } from '../../lib/nft'
+import { capitalizeFirstLetter } from '../../lib/utils'
 import { Emotion } from '../../types/nft'
 import {
   bgColorFromEmotion,
   borderColorFromEmotion,
-  capitalizeFirstLetter,
   colorFromEmotion,
 } from './card'
 
