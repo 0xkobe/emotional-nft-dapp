@@ -39,6 +39,7 @@ const ModalProcessing: FunctionComponent<IProps> = ({
           </span>
           <a
             href={chain.explorerUrlForTx(transactionHash)}
+            target="_blank"
             className="text-sm leading-5 font-medium text-purple-700 truncate"
           >
             {chain.explorerUrlForTx(transactionHash)}
