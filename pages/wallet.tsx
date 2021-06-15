@@ -15,27 +15,37 @@ import { fetchPercentages } from '../lib/coingecko'
 import { getCharacter } from '../lib/nft'
 
 export default function Wallet(): JSX.Element {
-  const { nfts, error, isLoading } = useUserNFTs(
-    deployedAddresses.qnft,
-    abi.qnft,
-  )
+  const {
+    nfts,
+    error,
+    isLoading: isLoadingNft,
+  } = useUserNFTs(deployedAddresses.qnft, abi.qnft)
 
   const [lockAmount, setLockAmount] = useState<BigNumber>()
   const [priceChanges, setPriceChanges] = useState<number[]>([])
+  const [isLoading, setLoading] = useState<boolean>(false)
+
+  // connect isLoadingNft to isLoading
+  useEffect(() => {
+    if (isLoadingNft) setLoading(true)
+  }, [isLoadingNft])
 
   useEffect(() => {
-    if (isLoading || error || nfts.length === 0) return
+    if (nfts.length === 0) return
     const sum = nfts.reduce(
       (sum, nft) => sum.add(nft.lockAmount),
       BigNumber.from(0),
     )
     setLockAmount(sum)
-  }, [error, isLoading, nfts])
+  }, [nfts])
 
   useEffect(() => {
-    if (isLoading || error || nfts.length === 0) return
-    fetchPercentages(nfts).then(setPriceChanges).catch(console.error)
-  }, [error, isLoading, nfts])
+    if (nfts.length === 0) return
+    fetchPercentages(nfts)
+      .then(setPriceChanges)
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [nfts])
 
   return (
     <>
@@ -72,25 +82,26 @@ export default function Wallet(): JSX.Element {
           {!isLoading && nfts.length === 0 && <div>No NFTs</div>}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:grid-cols-4">
-            {nfts.map((nft, i) => (
-              <Link key={i} href={`/nfts/${nft.tokenId}`}>
-                <a>
-                  <NFTCard
-                    key={i}
-                    className="cursor-pointer"
-                    tokenId={nft.tokenId}
-                    changePercentage={priceChanges[i]}
-                    characterId={nft.characterId}
-                    favCoinId={nft.favCoinId}
-                    backgroundId={nft.backgroundId}
-                    skin={getCharacter(nft.characterId).skin}
-                    name={nft.name}
-                    action={<ArrowNarrowRightIcon className="w-6 h-6" />}
-                    defaultEmotion={nft.defaultEmotion}
-                  />
-                </a>
-              </Link>
-            ))}
+            {!isLoading &&
+              nfts.map((nft, i) => (
+                <Link key={i} href={`/nfts/${nft.tokenId}`}>
+                  <a>
+                    <NFTCard
+                      key={i}
+                      className="cursor-pointer"
+                      tokenId={nft.tokenId}
+                      changePercentage={priceChanges[i]}
+                      characterId={nft.characterId}
+                      favCoinId={nft.favCoinId}
+                      backgroundId={nft.backgroundId}
+                      skin={getCharacter(nft.characterId).skin}
+                      name={nft.name}
+                      action={<ArrowNarrowRightIcon className="w-6 h-6" />}
+                      defaultEmotion={nft.defaultEmotion}
+                    />
+                  </a>
+                </Link>
+              ))}
           </div>
         </div>
       </div>

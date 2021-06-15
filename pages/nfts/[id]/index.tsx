@@ -37,7 +37,7 @@ export default function PageNFT(): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(false)
   const [nft, setNFT] = useState<NFT>()
   const [error, setError] = useState<Error>()
-  const [changePercentage, setChangePercentage] = useState(0)
+  const [changePercentage, setChangePercentage] = useState<number>()
   const [ownerTokenIds, setOwnerTokenIds] = useState<BigNumber[]>()
   const [tokenIndex, setTokenIndex] = useState<number>() // index of the current token id in the ownerTokenIds array
   const [isPreview, setIsPreview] = useState(false)
@@ -100,34 +100,30 @@ export default function PageNFT(): JSX.Element {
     [],
   )
 
+  // load nft and its price
   useEffect(() => {
     if (!contract) return
     if (!tokenId) return
     setLoading(true)
     fetchNFT(contract, tokenId)
-      .then(setNFT)
+      .then((nft) => {
+        setNFT(nft)
+        return nft
+      })
+      .then((nft) => fetchPercentages([nft]))
+      .then(([percent]) => {
+        if (!percent) return
+        setChangePercentage(percent)
+      })
       .catch(setError)
       .finally(() => setLoading(false))
     return () => {
       setNFT(undefined)
       setLoading(false)
       setError(undefined)
+      setChangePercentage(undefined)
     }
   }, [contract, tokenId])
-
-  useEffect(() => {
-    if (!nft) return
-    fetchPercentages([nft])
-      .then((x) => {
-        const p = x.pop()
-        if (!p) return
-        setChangePercentage(p)
-      })
-      .catch(setError)
-    return () => {
-      setChangePercentage(0)
-    }
-  }, [nft])
 
   useEffect(() => {
     if (!contract) return
@@ -204,7 +200,7 @@ export default function PageNFT(): JSX.Element {
           />
         )}
 
-        {nft && (
+        {nft && !isLoading && (
           <>
             <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 p-8 bg-white border border-purple-100 rounded-2xl shadow-sm">
