@@ -15,7 +15,6 @@ import {
   getEmotion,
   getFavCoin,
 } from '../../lib/nft'
-import { capitalizeFirstLetter } from '../../lib/utils'
 import { Skin } from '../../types/metadata'
 import { Emotion } from '../../types/nft'
 import IconAngryTrend from '../icon/angrytrend'
@@ -211,7 +210,7 @@ const NFTCard: FunctionComponent<IProps> = ({
               colorFromEmotion(emotion),
             )}
           >
-            {capitalizeFirstLetter(getEmotion(emotion).text)}
+            {getEmotion(emotion).text}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
             {trendIconFromEmotion(emotion, !!small)}

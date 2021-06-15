@@ -291,23 +291,23 @@ const qstkPrice = parseEther('0.000005') // in ETH
 const emotions: EmotionData[] = [
   {
     emotion: Emotion.Angry,
-    text: 'angry',
+    text: 'Angry',
   },
   {
     emotion: Emotion.Worry,
-    text: 'worried',
+    text: 'Worried',
   },
   {
     emotion: Emotion.Normal,
-    text: 'normal',
+    text: 'Normal',
   },
   {
     emotion: Emotion.Rest,
-    text: 'resting',
+    text: 'Resting',
   },
   {
     emotion: Emotion.Happy,
-    text: 'happy',
+    text: 'Happy',
   },
 ]
 
