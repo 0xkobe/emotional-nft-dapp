@@ -111,8 +111,7 @@ export default function PageNFT(): JSX.Element {
         return nft
       })
       .then((nft) => fetchPercentages([nft]))
-      .then((percents) => {
-        const percent = percents.pop()
+      .then(([percent]) => {
         if (!percent) return
         setChangePercentage(percent)
       })
