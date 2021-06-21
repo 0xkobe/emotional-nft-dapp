@@ -9,7 +9,12 @@ import {
   useState,
 } from 'react'
 import { specialIds } from '../../data/nft'
-import { getBackgroundImage, getCharacter, getFavCoin } from '../../lib/nft'
+import {
+  getBackgroundImage,
+  getCharacter,
+  getEmotion,
+  getFavCoin,
+} from '../../lib/nft'
 import { Skin } from '../../types/metadata'
 import { Emotion } from '../../types/nft'
 import IconAngryTrend from '../icon/angrytrend'
@@ -67,10 +72,6 @@ function trendIconFromEmotion(emotion: Emotion, small: boolean) {
         ></IconAngryTrend>
       )
   }
-}
-
-export function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 function emotionFromPriceChange(changePercentage: number): Emotion {
@@ -209,7 +210,7 @@ const NFTCard: FunctionComponent<IProps> = ({
               colorFromEmotion(emotion),
             )}
           >
-            {capitalizeFirstLetter(emotion)}
+            {getEmotion(emotion).text}
           </div>
           <div className="flex flex-row items-center justify-center space-x-2">
             {trendIconFromEmotion(emotion, !!small)}

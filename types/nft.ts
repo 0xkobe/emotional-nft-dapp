@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Creature, FavCoinEnum, Skin } from './metadata'
 
+// https://github.com/Quiver-Protocol/quiver-contracts/blob/master/data.md#default-emotion-index
 export enum Emotion {
   Angry = 'angry',
   Worry = 'worry',
@@ -93,3 +94,8 @@ export type NFT = Omit<NFTOffChain, 'id'> &
   NFTOnChain & {
     tokenId: BigNumber
   }
+
+export type EmotionData = {
+  emotion: Emotion
+  text: string
+}
